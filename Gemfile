@@ -9,7 +9,6 @@ gem 'turbolinks'
 # resources
 gem 'therubyracer', platforms: :ruby
 gem 'less', '~> 2'
-# gem 'sass-rails', '~> 4.0.0.rc1'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'jquery-rails', '~> 3'
@@ -18,7 +17,8 @@ gem 'jquery-ui-rails'
 # db
 gem 'sqlite3'
 gem 'mongoid', github: 'mongoid/mongoid', ref: '3d1b8aa48340b79b8481ab96b56e0681433b0bcb'
-gem 'ruby-oci8', '~> 2.1.5'
+gem 'mongoid-grid_fs'
+gem 'ruby-oci8', '2.1.5'
 gem 'activerecord-oracle_enhanced-adapter', '~> 1.5.0'
 gem 'mysql2'
 gem 'safe_attributes'
