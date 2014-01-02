@@ -1,2 +1,34 @@
 <%= render partial: 'new_customers/top' %>
-ITEMS
+<% if @application.billing_items.any? %>
+<div class="text-muted" style="margin-bottom: 16px;">
+  ოპერაციები გამოჩნდება მათი ბილინგის სისტემაში დამატების პარალელურად.
+</div>
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      <th>თარიღი</th>
+      <th>ოპერაცია</th>
+      <th>თანხა</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @application.billing_items.each do |item| %>
+      <tr>
+        <td><%= item.itemdate.strftime('%d/%m/%Y') %></td>
+        <td>
+          <code><%= item.billoperkey %></code>
+          <%= item.operation %>
+        </td>
+        <td style="text-align: right;">
+          <code><%= number_with_precision item.amount, delimiter: ' ', separator: ',', precision: 2 %></code>
+          GEL
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% else %>
+<div class="well">
+  ჯერ არც ერთი ოპერაცია არ არის გატარებული!
+</div>
+<% end %>
