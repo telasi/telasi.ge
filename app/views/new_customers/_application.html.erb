@@ -1,0 +1,121 @@
+<div class="row">
+  <div class="col-sm-6">
+    <div class="page-header">
+      <div class="pull-right">
+        <a href="<%= edit_new_customer_url(id: app.id) %>" class="btn btn-default">
+          <i class="fa fa-pencil"></i>
+          <%= t('models.general.actions.edit') %>
+        </a>
+      </div>
+      <h3>ძირითადი მონაცემები</h3>
+    </div>
+    <%= render partial: 'new_customers/item', locals: { app: app } %>
+    <!-- mobile /email -->
+    <ul class="list-group">
+      <li class="list-group-item">
+        <div class="pull-right">
+          <%= app.formatted_mobile %>
+        </div>
+        <%= t('models.network_new_customer_application.mobile') %>
+      </li>
+      <li class="list-group-item">
+        <div class="pull-right">
+          <%= mail_to app.email %>
+        </div>
+        <%= t('models.network_new_customer_application.email') %>
+      </li>
+    </ul>
+    <!-- address -->
+    <ul class="list-group">
+      <li class="list-group-item">
+        <div class="pull-right">
+          <%= app.address %>
+        </div>
+        <%= t('models.network_new_customer_application.address') %>
+      </li>
+      <li class="list-group-item">
+        <div class="pull-right">
+          <code><%= app.address_code %></code>
+          <%= app.work_address || app.address %>
+        </div>
+        <%= t('models.network_new_customer_application.work_address') %>
+      </li>
+    </ul>
+    <!-- bank account -->
+    <ul class="list-group">
+      <li class="list-group-item">
+        <div class="pull-right">
+          <code><%= app.bank_code %></code>
+          <%= app.bank_account %>
+        </div>
+        <%= t('models.network_new_customer_application.bank_account') %>
+      </li>
+    </ul>
+  </div>
+  <div class="col-sm-6">
+    <div class="page-header">
+      <h3>მიმდინარეობა</h3>
+    </div>
+    <ul class="list-group">
+      <li class="list-group-item">
+        <div class="pull-right">
+          <%= app.stage || '--' %>
+        </div>
+        <%= t('models.network_request_item.stage') %>
+      </li>
+      <li class="list-group-item">
+        <div class="pull-right">
+          <% if app.customer %>
+            <code><%= app.customer.accnumb.to_ka %></code>
+            <%= app.customer.custname.to_ka %>
+          <% else %> -- <% end %>
+        </div>
+        <%= t('models.network_new_customer_application.customer') %>
+      </li>
+    </ul>
+    <ul class="list-group">
+      <li class="list-group-item">
+        <div class="pull-right">
+          <code><%= app.days %></code>
+          <%= t('models.network_new_customer_application.unit_days') %>
+        </div>
+        <%= t('models.network_new_customer_application.days') %>
+      </li>
+      <% ['send_date', 'start_date', 'end_date', 'plan_end_date'].each do |dt| %>
+        <li class="list-group-item">
+          <%= date = app.send dt %>
+          <div class="pull-right">
+            <% if date %>
+              <%= date.strftime('%d/%M/%Y') %>
+            <% else %>
+            --
+            <% end %>
+          </div>
+          <%= t("models.network_new_customer_application.#{dt}") %>
+        </li>
+      <% end %>
+    </ul>
+    <ul class="list-group">
+      <% ['amount', 'paid', 'remaining'].each do |t| %>
+        <li class="list-group-item">
+          <div class="pull-right">
+            <code><%= number_with_precision app.send(t), delimiter: ',', separator: '.', precision: 2 %></code>
+            GEL
+          </div>
+          <%= t("models.network_new_customer_application.#{t}") %>
+        </li>
+      <% end %>
+    </ul>
+    <ul class="list-group">
+      <% ['penalty_first_stage', 'penalty_second_stage', 'penalty_third_stage'].each do |t| %>
+        <li class="list-group-item">
+          <div class="pull-right">
+            <code><%= number_with_precision app.send(t), delimiter: ',', separator: '.', precision: 2 %></code>
+            GEL
+          </div>
+          <%= t("models.network_new_customer_application.#{t}") %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
