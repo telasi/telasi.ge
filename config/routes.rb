@@ -49,11 +49,7 @@ TelasiGe::Application.routes.draw do
     match '/files/:id/upload', action: 'upload_file', as: 'new_customer_upload_file', via: ['get', 'post']
     delete '/files/delete/:id', action: 'delete_file', as: 'new_customer_delete_file'
     post '/confirm/:id/:step', action: 'confirm_step', as: 'new_customer_confirm_step'
-    # get '/payments/:id', action: 'payments', as: 'new_customer_payments'
-    # get '/accounts/:id', action: 'accounts', as: 'new_customer_accounts'
-    # match '/accounts/:id/new', action: 'new_account', as: 'new_customer_new_account', via: ['get', 'post']
-    # match '/accounts/:id/edit/:item_id', action: 'edit_account', as: 'new_customer_edit_account', via: ['get', 'put']
-    # delete '/accounts/:id/delete/:item_id', action: 'delete_account', as: 'new_customer_delete_account'
+    post '/send/:id', action: 'send', as: 'new_customer_send'
   end
 
   namespace 'admin' do

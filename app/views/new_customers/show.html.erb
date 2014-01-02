@@ -24,7 +24,17 @@
       </a>
     </p>
   <% else %>
-    SEND!!!
+    <p>
+      თქვენი განცხადება მზადაა გასაგზავნად!
+      <strong>კიდევ ერთხელ შეამოწმეთ განცხადების პარამეტრები და დოკუმენტები: გაგზავნის შემდეგ თქვენ
+        არ შეგეძლებათ მათი შეცვლა</strong>.
+    </p>
+    <p class="text-center">
+      <a href="<%= new_customer_send_url(id: @application.id) %>" data-method="post" data-confirm="ნამდვილად გინდათ განცხადების გაგზავნა?" class="btn btn-success">
+        <i class="fa fa-share"></i>
+        განცხადების გაგზავნა
+      </a>
+    </p>
   <% end %>
 
   <hr />
