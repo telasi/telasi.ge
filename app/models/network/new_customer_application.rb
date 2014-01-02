@@ -75,7 +75,7 @@ class Network::NewCustomerApplication
   # confirmation flags
   field :doc_project,   type: Mongoid::Boolean, default: false
   field :doc_payment,   type: Mongoid::Boolean, default: false
-  field :accept_terms,  type: Mongoid::Boolean, default: false
+  field :confirm_correctness,  type: Mongoid::Boolean, default: false
 
   embeds_many :items, class_name: 'Network::NewCustomerItem', inverse_of: :application
   has_many :files, class_name: 'Sys::File', as: 'mountable'
@@ -148,7 +148,8 @@ class Network::NewCustomerApplication
 
   def editable_online?; self.status == STATUS_DEFAULT end
   def not_sent?; self.status == STATUS_DEFAULT end
-  def can_send?; self.status == STATUS_DEFAULT and self.files.size > 0 end
+  def docs_are_ok?; self.doc_project and self.doc_payment end
+  def can_send?; self.status == STATUS_DEFAULT and self.docs_are_ok? and self.confirm_correctness end
 
   # შესაძლო სტატუსების ჩამონათვალი მიმდინარე სტატუსიდან.
   def transitions
