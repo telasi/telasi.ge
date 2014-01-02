@@ -36,7 +36,9 @@
           <code><%= (file.file.size / 1000.0).round %></code> kB
         </td>
         <td class="text-center">
-          deletes
+          <a href="<%= new_customer_delete_file_url(id: file.id) %>" data-method="delete" class="btn btn-sm btn-default" data-confirm="<%= t 'models.network_new_customer_application.actions.delete_confirm' %>">
+            <i class="fa fa-trash-o"></i>
+          </a>
         </td>
       </tr>
     <% end %>

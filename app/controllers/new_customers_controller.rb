@@ -78,13 +78,12 @@ class NewCustomersController < ApplicationController
     end
   end
 
-  # def delete_file
-  #   with_application do
-  #     file = @application.files.where(_id: params[:file_id]).first
-  #     file.destroy
-  #     redirect_to new_customer_files_url(id: @application.id), notice: I18n.t('models.network_new_customer_application.actions.delete_complete')
-  #   end
-  # end
+  def delete_file
+    file = Sys::File.find(params[:id])
+    application = file.mountable
+    file.destroy
+    redirect_to new_customer_files_url(id: application.id), notice: I18n.t('models.network_new_customer_application.actions.delete_complete')
+  end
 
   def nav
     @nav = { I18n.t('models.network_new_customer_application.actions.index_page.title') => new_customers_url }
@@ -106,7 +105,7 @@ class NewCustomersController < ApplicationController
       @nav = nav
       yield if block_given?
     else
-      redirect_to new_customer_url, alert: 'not permitted'
+      redirect_to new_customers_url, alert: 'application not found'
     end
   end
 
