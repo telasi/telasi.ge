@@ -3,18 +3,28 @@
 <% if @application.not_sent? %>
   <hr />
 
-  <div class="alert alert-danger">
-    <p>თქვენი განცხადება შექმნილია, თუმცა ის <strong>ჯერ არაა გაგზავნილი</strong> თელასში.</p>
-  </div>
-
-  <% if @application.can_send? %>
-    SEND!!
-  <% else %>
-    <div class="alert alert-info">
-      განცხადების გასაგზავნად საჭიროა მასში <strong>აუცილებელი დოკუმენტის დამატება</strong>.
-      აუცილებელი დოკუმენტების სია
-      <strong><%= link_to 'იხილეთ აქ', new_customer_files_url(id: @application.id) %></strong>.
+  <% if not @application.docs_are_ok? %>
+    <div class="alert alert-danger">
+      განცხადების ჯერ აკლია <strong>აუცილებელი დოკუმენტები</strong>!
+      დოკუმენტების დასამატებლად
+      <strong><%= link_to 'გადადით აქ', new_customer_files_url(id: @application.id) %></strong>.
     </div>
+  <% elsif not @application.can_send? %>
+    <p>
+      თქვენი განცხადება თითქმის მზადაა გასაგზავნად!
+      გთხოვთ კიდევ ერთხელ შეამოწმოთ მისი სისწორე.
+      <strong>თუ თქვენს მიერ შევსებული მონაცემები იქნება არასწორი, თელასი იტოვებს უფლებას
+      უარი განაცხადოს ამ განცხადების მიღებაზე</strong>.
+      თუ თქვენს მიერ მოცემული მონაცემები სწორია, დააჭირეთ დადასტურების ღილაკს.
+    </p>
+    <p class="text-center">
+      <a href="<%= new_customer_confirm_step_url(id: @application.id, step: 'confirm_correctness', tab: 'general') %>" data-method="post" data-confirm="დაადასტურეთ მონაცემების სისწორე!" class="btn btn-success">
+        <i class="fa fa-check"></i>
+        ვადასტურებ მონაცემების სისწორეს
+      </a>
+    </p>
+  <% else %>
+    SEND!!!
   <% end %>
 
   <hr />

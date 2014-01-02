@@ -108,7 +108,8 @@ class NewCustomersController < ApplicationController
     with_application do
       @application.send("#{params[:step]}=", true)
       @application.save
-      redirect_to new_customer_files_url(id: @application.id, notice: 'დადასტურება მიღებულია')
+      url = params[:tab] == 'general' ? new_customer_url(id: @application.id) : new_customer_files_url(id: @application.id)
+      redirect_to url, notice: 'დადასტურება მიღებულია'
     end
   end
 
