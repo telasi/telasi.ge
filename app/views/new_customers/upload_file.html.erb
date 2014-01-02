@@ -1,0 +1,12 @@
+
+  <h1 class="page-header">
+    <%= @title %>
+    <code>#<%= @application.effective_number %></code>
+  </h1>
+  <%= form_for @file, url: request.url do |f| %>
+    <p class="text-info">
+      <%= t 'models.network_new_customer_application.actions.upload_hint' %>
+    </p>
+    <%= f.file_field :file %>
+    <div style="padding-top: 32px;"><%= f.submit @title, class: 'btn btn-primary'  %></div>
+  <% end %> 

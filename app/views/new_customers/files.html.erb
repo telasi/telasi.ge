@@ -1,2 +1,19 @@
 <%= render partial: 'new_customers/top' %>
-FILES
+<div class="text-muted" style="margin-bottom: 16px;">
+  აქ შეგიძლიათ ატვირთოთ თქვენი განცხადების თანდართული დოკუმენტაცია.
+</div>
+<div class="btn-toolbar" style="margin-bottom: 16px;"> 
+  <a href="<%= new_customer_upload_file_url(id: @application.id) %>" class="btn btn-success">
+    <i class="fa fa-plus-circle"></i>
+    დოკუმენტის დამატება
+  </a>
+</div>
+
+<% if @application.files.any? %>
+AAA
+<% else %>
+<div class="well">
+  ჯერ არც ერთი დოკუმენტი არაა წარმოდგენილი.
+  დოკუმენტის დასამატებლად მიაჭირეთ ღილაკს "დოკუმენტის დამატება".
+</div>
+<% end %>

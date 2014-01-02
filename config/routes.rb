@@ -45,14 +45,13 @@ TelasiGe::Application.routes.draw do
     get '/show/:id/messages', action: 'messages', as: 'new_customer_messages'
     get '/show/:id/files', action: 'files', as: 'new_customer_files'
     match '/edit/:id', action: 'edit', as: 'edit_new_customer', via: ['get', 'patch']
+    match '/files/:id/upload', action: 'upload_file', as: 'new_customer_upload_file', via: ['get', 'post']
+    delete '/files/delete/:id', action: 'delete_file', as: 'new_customer_delete_file'
     # get '/payments/:id', action: 'payments', as: 'new_customer_payments'
     # get '/accounts/:id', action: 'accounts', as: 'new_customer_accounts'
     # match '/accounts/:id/new', action: 'new_account', as: 'new_customer_new_account', via: ['get', 'post']
     # match '/accounts/:id/edit/:item_id', action: 'edit_account', as: 'new_customer_edit_account', via: ['get', 'put']
     # delete '/accounts/:id/delete/:item_id', action: 'delete_account', as: 'new_customer_delete_account'
-    # get '/files/:id', action: 'files', as: 'new_customer_files'
-    # match '/files/:id/upload', action: 'upload_file', as: 'new_customer_upload_file', via: ['get', 'post']
-    # delete '/files/:id/delete/:file_id', action: 'delete_file', as: 'new_customer_delete_file'
   end
 
   namespace 'admin' do
