@@ -265,6 +265,8 @@ ka:
       factura_number: ნომერი
     network_new_customer_application:
       number: ნომერი
+      online: ონლაინ?
+      online_hint: არის თუ არა ეს განცხადება შევსებული ონალაინ?
       vat_name: დღგ-ს გადამხდელი?
       rs_name: განმცხადებელი
       rs_tin: პირადი ნომერი ან საიდენტიფიკაციო კოდი
@@ -314,9 +316,9 @@ ka:
       send_date_hint: განცხადების თელასში გამოგზავნის თარიღი
       start_date: დაწყების თარიღი
       start_date_hint: განცხადების დაწყების თარიღი
-      plan_end_date: გეგმიური დასრ.
+      plan_end_date: გეგმიური დასრულება
       plan_end_date_hint: სამუშაოების დასრულების გეგმიური თარიღი
-      end_date: რეალური დასრ.
+      end_date: რეალური დასრულება
       end_date_hint: სამუშაოების დასრულების რეალური თარიღი
       voltage: ძაბვა
       power: სიმძლავრე

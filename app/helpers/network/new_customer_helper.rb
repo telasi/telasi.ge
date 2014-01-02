@@ -262,6 +262,7 @@ module Network::NewCustomerHelper
         end
         t.timestamps
         t.number_field 'payment_id', required: true, max_digits: 0
+        t.boolean_field 'online', required: true
       end
     end
   end

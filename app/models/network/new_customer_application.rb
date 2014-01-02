@@ -28,6 +28,7 @@ class Network::NewCustomerApplication
   include Network::CalculationUtils
 
   belongs_to :user, class_name: 'Sys::User'
+  field :online, type: Mongoid::Boolean, default: false # ონლაინ არის შევსებული?
   field :number,    type: String
   field :payment_id, type: Integer
   field :rs_tin,       type: String
