@@ -5,12 +5,43 @@
 <div class="btn-toolbar" style="margin-bottom: 16px;"> 
   <a href="<%= new_customer_upload_file_url(id: @application.id) %>" class="btn btn-success">
     <i class="fa fa-plus-circle"></i>
-    დოკუმენტის დამატება
+    <%= t 'models.network_new_customer_application.actions.upload' %>
   </a>
 </div>
 
 <% if @application.files.any? %>
-AAA
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>თარიღი, დრო</th>
+      <th>ფაილის დასახელება</th>
+      <th>ფაილის ზომა</th>
+      <th class="text-center"><i class="fa fa-cog"></i></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @application.files.each_with_index do |file, index| %>
+      <tr>
+        <td class="text-right">
+          <%= index + 1 %>
+        </td>
+        <td><%= file.created_at.strftime('%d/%m/%Y %H:%M:%S') %></td>
+        <td>
+          <a href="<%= file.file.to_s  %>">
+            <%= file.file.filename %>
+          </a>
+        </td>
+        <td class="text-right">
+          <code><%= (file.file.size / 1000.0).round %></code> kB
+        </td>
+        <td class="text-center">
+          deletes
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 <% else %>
 <div class="well">
   ჯერ არც ერთი დოკუმენტი არაა წარმოდგენილი.

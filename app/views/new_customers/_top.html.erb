@@ -10,9 +10,9 @@
 <%
   my_links = {
     general: link_to(t('applications.new_customer.general'), new_customer_url(id: @application.id)),
-    items: link_to("#{t('applications.new_customer.items')} &mdash; #{@application.billing_items.count}".html_safe, new_customer_items_url(id: @application.id)),
-    messages: link_to("#{t('applications.new_customer.messages')} &mdash; #{@application.messages.count}".html_safe, new_customer_messages_url(id: @application.id)),
     files: link_to("#{t('applications.new_customer.files')} &mdash; #{@application.files.count}".html_safe, new_customer_files_url(id: @application.id)),
+    messages: link_to("#{t('applications.new_customer.messages')} &mdash; #{@application.messages.count}".html_safe, new_customer_messages_url(id: @application.id)),
+    items: link_to("#{t('applications.new_customer.items')} &mdash; #{@application.billing_items.count}".html_safe, new_customer_items_url(id: @application.id)),
   }
 %>
 <ul class="nav nav-pills nav-justified-x" style="margin-bottom: 16px;">
