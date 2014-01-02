@@ -4,6 +4,10 @@
       <i class="fa fa-print"></i>
       <%= t('models.general.actions.print') %>
     </a>
+    <a href="<%= new_customer_paybill_url(id: @application.id, format: 'pdf') %>" class="btn btn-default">
+      <i class="fa fa-print"></i>
+      საგადახდო დავალება
+    </a>
   </div>
   <h2>განცხადება <code>#<%= @application.effective_number %></code></h2>
 </div>
@@ -22,21 +26,3 @@
     </li>
   <% end %>
 </ul>
-
-<% if @application.not_sent? %>
-  <div class="alert alert-danger">
-    <p>თქვენი განცხადება შექმნილია, თუმცა ის <strong>ჯერ არაა გაგზავნილი</strong> თელასში.</p>
-  </div>
-    <p>
-      თელასში განცხადების გასაგზავნად თქვენ უნდა შეასრულოთ შემდეგი მოთხოვნები:
-    </p>
-    <p>
-      TODO: detailed instructions (project + 1/2 payment)
-    </p>
-  
-  <% if @application.can_send? %>
-    SEND!!
-  <% end %>
-
-  <hr />
-<% end %>

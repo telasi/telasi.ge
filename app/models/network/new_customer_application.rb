@@ -72,6 +72,11 @@ class Network::NewCustomerApplication
   # aviso id
   field :aviso_id, type: Integer
 
+  # confirmation flags
+  field :doc_project,   type: Mongoid::Boolean, default: false
+  field :doc_payment,   type: Mongoid::Boolean, default: false
+  field :accept_terms,  type: Mongoid::Boolean, default: false
+
   embeds_many :items, class_name: 'Network::NewCustomerItem', inverse_of: :application
   has_many :files, class_name: 'Sys::File', as: 'mountable'
   has_many :messages, class_name: 'Sys::SmsMessage', as: 'messageable'

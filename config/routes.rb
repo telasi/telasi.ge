@@ -41,12 +41,14 @@ TelasiGe::Application.routes.draw do
     get '/', action: 'index', as: 'new_customers'
     match '/new', action: 'new', as: 'create_new_customer', via: ['get', 'post']
     get '/show/:id', action: 'show', as: 'new_customer'
+    get '/paybill/:id', action: 'paybill', as: 'new_customer_paybill'
     get '/show/:id/items', action: 'items', as: 'new_customer_items'
     get '/show/:id/messages', action: 'messages', as: 'new_customer_messages'
     get '/show/:id/files', action: 'files', as: 'new_customer_files'
     match '/edit/:id', action: 'edit', as: 'edit_new_customer', via: ['get', 'patch']
     match '/files/:id/upload', action: 'upload_file', as: 'new_customer_upload_file', via: ['get', 'post']
     delete '/files/delete/:id', action: 'delete_file', as: 'new_customer_delete_file'
+    post '/confirm/:id/:step', action: 'confirm_step', as: 'new_customer_confirm_step'
     # get '/payments/:id', action: 'payments', as: 'new_customer_payments'
     # get '/accounts/:id', action: 'accounts', as: 'new_customer_accounts'
     # match '/accounts/:id/new', action: 'new_account', as: 'new_customer_new_account', via: ['get', 'post']

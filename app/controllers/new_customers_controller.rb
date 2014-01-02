@@ -34,6 +34,25 @@ class NewCustomersController < ApplicationController
     end
   end
 
+  def paybill
+    with_application do
+      @app = @application
+      respond_to do |format|
+        format.pdf {
+          amount = @app.amount / 2.0
+          @data = { date: Date.today,
+            payer: @app.rs_name, payer_account: @app.bank_account, payer_bank: @app.bank_name, payer_bank_code: @app.bank_code,
+            receiver: 'სს თელასი', receiver_account: 'GE53TB1147136030100001  ', receiver_bank: 'სს თიბისი ბანკი',
+            receiver_bank_code: 'TBCBGE22',
+            reason: "სს თელასის განამაწილებელ ქსელში ჩართვის ღირებულების 50%-ის დაფარვა. განცხადება №#{@app.effective_number}; TAXID: #{@app.rs_tin}.",
+            amount: amount
+          }
+          render template: 'network/new_customer/paybill'
+        }
+      end
+    end
+  end
+
   def files
     with_application do
       @title, @pill = I18n.t('applications.new_customer.files'), 'files'
@@ -83,6 +102,14 @@ class NewCustomersController < ApplicationController
     application = file.mountable
     file.destroy
     redirect_to new_customer_files_url(id: application.id), notice: I18n.t('models.network_new_customer_application.actions.delete_complete')
+  end
+
+  def confirm_step
+    with_application do
+      @application.send("#{params[:step]}=", true)
+      @application.save
+      redirect_to new_customer_files_url(id: @application.id, notice: 'დადასტურება მიღებულია')
+    end
   end
 
   def nav

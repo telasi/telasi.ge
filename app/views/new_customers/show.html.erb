@@ -1,2 +1,23 @@
 <%= render partial: 'new_customers/top' %>
+
+<% if @application.not_sent? %>
+  <hr />
+
+  <div class="alert alert-danger">
+    <p>თქვენი განცხადება შექმნილია, თუმცა ის <strong>ჯერ არაა გაგზავნილი</strong> თელასში.</p>
+  </div>
+
+  <% if @application.can_send? %>
+    SEND!!
+  <% else %>
+    <div class="alert alert-info">
+      განცხადების გასაგზავნად საჭიროა მასში <strong>აუცილებელი დოკუმენტის დამატება</strong>.
+      აუცილებელი დოკუმენტების სია
+      <strong><%= link_to 'იხილეთ აქ', new_customer_files_url(id: @application.id) %></strong>.
+    </div>
+  <% end %>
+
+  <hr />
+<% end %>
+
 <%= render partial: 'new_customers/application', locals: { app: @application } %>
