@@ -141,6 +141,9 @@ class Network::NewCustomerApplication
   def can_send_to_item?; self.status == STATUS_COMPLETE end #and self.items.any? end
   def formatted_mobile; KA::format_mobile(self.mobile) if self.mobile.present? end
 
+  def not_sent?; self.status == STATUS_DEFAULT end
+  def can_send?; self.status == STATUS_DEFAULT and self.files.size > 0 end
+
   # შესაძლო სტატუსების ჩამონათვალი მიმდინარე სტატუსიდან.
   def transitions
     case self.status

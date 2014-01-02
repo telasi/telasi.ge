@@ -1,7 +1,12 @@
-<div >
-<h2 class="page-header">
-  განცხადება <code>#<%= @application.effective_number %></code>
-</h2>
+<div class="page-header">
+  <div class="pull-right">
+    <a href="<%= new_customer_url(id: @application.id, format: 'pdf') %>" class="btn btn-default">
+      <i class="fa fa-print"></i>
+      <%= t('models.general.actions.print') %>
+    </a>
+  </div>
+  <h2>განცხადება <code>#<%= @application.effective_number %></code></h2>
+</div>
 <%
   my_links = {
     general: link_to(t('applications.new_customer.general'), new_customer_url(id: @application.id)),
@@ -17,3 +22,19 @@
     </li>
   <% end %>
 </ul>
+
+<% if @application.not_sent? %>
+  <div class="alert alert-danger">
+    <p>თქვენი განცხადება შექმნილია, თუმცა ის <strong>ჯერ არაა გაგზავნილი</strong> თელასში.</p>
+  </div>
+    <p>
+      თელასში განცხადების გასაგზავნად თქვენ უნდა შეასრულოთ შემდეგი მოთხოვნები:
+    </p>
+    <p>
+      TODO: detailed instructions (project + 1/2 payment)
+    </p>
+  
+  <% if @application.can_send? %>
+    SEND!!
+  <% end %>
+<% end %>
