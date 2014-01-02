@@ -2,12 +2,15 @@
 <div class="text-muted" style="margin-bottom: 16px;">
   აქ შეგიძლიათ ატვირთოთ თქვენი განცხადების თანდართული დოკუმენტაცია.
 </div>
-<div class="btn-toolbar" style="margin-bottom: 16px;"> 
-  <a href="<%= new_customer_upload_file_url(id: @application.id) %>" class="btn btn-success">
-    <i class="fa fa-plus-circle"></i>
-    <%= t 'models.network_new_customer_application.actions.upload' %>
-  </a>
-</div>
+
+<% if @application.editable_online? %>
+  <div class="btn-toolbar" style="margin-bottom: 16px;"> 
+    <a href="<%= new_customer_upload_file_url(id: @application.id) %>" class="btn btn-success">
+      <i class="fa fa-plus-circle"></i>
+      <%= t 'models.network_new_customer_application.actions.upload' %>
+    </a>
+  </div>
+<% end %>
 
 <% if @application.files.any? %>
 <table class="table table-hover table-bordered">
@@ -36,9 +39,11 @@
           <code><%= (file.file.size / 1000.0).round %></code> kB
         </td>
         <td class="text-center">
-          <a href="<%= new_customer_delete_file_url(id: file.id) %>" data-method="delete" class="btn btn-sm btn-default" data-confirm="<%= t 'models.network_new_customer_application.actions.delete_confirm' %>">
-            <i class="fa fa-trash-o"></i>
-          </a>
+          <% if @application.editable_online? %>
+            <a href="<%= new_customer_delete_file_url(id: file.id) %>" data-method="delete" class="btn btn-sm btn-default" data-confirm="<%= t 'models.network_new_customer_application.actions.delete_confirm' %>">
+              <i class="fa fa-trash-o"></i>
+            </a>
+          <% end %>
         </td>
       </tr>
     <% end %>

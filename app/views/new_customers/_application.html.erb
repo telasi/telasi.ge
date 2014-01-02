@@ -1,12 +1,14 @@
 <div class="row">
   <div class="col-sm-6">
     <div class="page-header">
-      <div class="pull-right">
-        <a href="<%= edit_new_customer_url(id: app.id) %>" class="btn btn-default">
-          <i class="fa fa-pencil"></i>
-          <%= t('models.general.actions.edit') %>
-        </a>
-      </div>
+      <% if app.editable_online? %>
+        <div class="pull-right">
+          <a href="<%= edit_new_customer_url(id: app.id) %>" class="btn btn-default">
+            <i class="fa fa-pencil"></i>
+            <%= t('models.general.actions.edit') %>
+          </a>
+        </div>
+      <% end %>
       <h3>ძირითადი მონაცემები</h3>
     </div>
     <%= render partial: 'new_customers/item', locals: { app: app } %>
