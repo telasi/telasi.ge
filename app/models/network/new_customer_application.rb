@@ -381,8 +381,13 @@ class Network::NewCustomerApplication
     end
   end
 
+  def number_required?
+    if self.online then not [STATUS_DEFAULT, STATUS_SENT].include?(self.status)
+    else not [STATUS_DEFAULT].include?(self.status) end
+  end
+
   def validate_number
-    if self.status != STATUS_DEFAULT and self.number.blank?
+    if self.number_required? and self.number.blank?
       self.errors.add(:number, I18n.t('models.network_new_customer_application.errors.number_required'))
     elsif self.number.present?
       self.errors.add(:number, 'არასწორი ფორმატი!') unless Network::NewCustomerApplication.correct_number?(self.number)
