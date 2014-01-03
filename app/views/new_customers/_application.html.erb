@@ -85,10 +85,10 @@
       </li>
       <% ['send_date', 'start_date', 'end_date', 'plan_end_date'].each do |dt| %>
         <li class="list-group-item">
-          <%= date = app.send dt %>
+          <% date = app.send dt %>
           <div class="pull-right">
             <% if date %>
-              <%= date.strftime('%d/%M/%Y') %>
+              <%= date.strftime('%d/%m/%Y') %>
             <% else %>
             --
             <% end %>
