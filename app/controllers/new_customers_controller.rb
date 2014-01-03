@@ -113,6 +113,20 @@ class NewCustomersController < ApplicationController
     end
   end
 
+  def send_to_telasi
+    with_application do
+      @application.status = Network::NewCustomerApplication::STATUS_SENT
+      if @application.save
+        msg = 'თქვენი განცხადება გაგზავნილია თელასში'
+        message = Sys::SmsMessage.new(message: msg.to_lat, messageable: @application, mobile: @application.mobile)
+        message.send_sms! if message.save
+        redirect_to new_customer_url(id: @application.id), notice: msg
+      else
+        redirect_to new_customer_url(id: @application.id), alert: 'თქვენი განცხადება ვერ გაიგზავნა!'
+      end
+    end
+  end
+
   def nav
     @nav = { I18n.t('models.network_new_customer_application.actions.index_page.title') => new_customers_url }
     if @application

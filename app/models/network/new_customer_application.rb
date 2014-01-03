@@ -359,6 +359,11 @@ class Network::NewCustomerApplication
     self.save
   end
 
+  def number_required?
+    if self.online then not [STATUS_DEFAULT, STATUS_SENT].include?(self.status)
+    else not [STATUS_DEFAULT].include?(self.status) end
+  end
+
   private
 
   def calculate_total_cost
@@ -379,11 +384,6 @@ class Network::NewCustomerApplication
         self.days = nil
       end
     end
-  end
-
-  def number_required?
-    if self.online then not [STATUS_DEFAULT, STATUS_SENT].include?(self.status)
-    else not [STATUS_DEFAULT].include?(self.status) end
   end
 
   def validate_number

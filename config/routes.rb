@@ -49,7 +49,7 @@ TelasiGe::Application.routes.draw do
     match '/files/:id/upload', action: 'upload_file', as: 'new_customer_upload_file', via: ['get', 'post']
     delete '/files/delete/:id', action: 'delete_file', as: 'new_customer_delete_file'
     post '/confirm/:id/:step', action: 'confirm_step', as: 'new_customer_confirm_step'
-    post '/send/:id', action: 'send', as: 'new_customer_send'
+    post '/send/:id', action: 'send_to_telasi', as: 'new_customer_send'
   end
 
   namespace 'admin' do
