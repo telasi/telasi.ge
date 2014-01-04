@@ -176,6 +176,7 @@ TelasiGe::Application.routes.draw do
       get   '/services',     action: :services
       get   '',              action: :index
       get   '/user_index',   action: :user_index
+      get   '/delete',       action: :delete_all
     end  
   end
 

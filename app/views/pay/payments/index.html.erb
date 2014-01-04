@@ -23,5 +23,6 @@
    t.text_field 'amount', label: t('payment.amount')
    t.text_field 'date', label: t('payment.date')
    t.boolean_field 'testmode', label: t('payment.testmode')
+   t.title_action pay_delete_url, label: 'Delete all', icon: '/icons/wand.png'
    t.paginate records: t('models.general.records')
  end %>
