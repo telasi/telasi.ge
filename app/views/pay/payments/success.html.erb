@@ -1,6 +1,8 @@
 <div class='container'>
 	<div class="page-header">
-	  <h2><%= t('form_titles.success_form') %></h2>
+	  <h2><%= t('form_titles.success_form') %>
+	  	<%= link_to t('buttons.history'), pay_user_index_url, :class => 'btn-lg' %>
+	  </h2>
 	</div>
    <div>
      <%= link_to t('buttons.back'), pay_services_url, :class => 'btn' %>

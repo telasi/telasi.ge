@@ -175,6 +175,7 @@ TelasiGe::Application.routes.draw do
       get   '/callback',     action: :callback
       get   '/services',     action: :services
       get   '',              action: :index
+      get   '/user_index',   action: :user_index
     end  
   end
 

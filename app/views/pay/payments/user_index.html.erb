@@ -1,0 +1,21 @@
+ <%= search_form @search do |f|
+   f.tab do |f|
+     f.col1 do |f|
+      f.combo_field 'serviceid', label: t('payment.serviceid'), 
+          collection: merchant_collection
+      f.text_field 'ordercode', label: t('payment.ordercode')
+      f.text_field 'transactioncode', label: t('payment.transactioncode')
+      f.combo_field 'gstatus', label: t('payment.gstatus'), 
+           collection: { 'დასრულებული' => Pay::Payment::GSTATUS_OK, 'მუშავდება' => Pay::Payment::GSTATUS_SENT, 'შეცდომით' => Pay::Payment::GSTATUS_ERROR }
+      f.date_field 'date', label: t('payment.date')
+     end
+   end
+ end %>
+ <%= table_for @payments, title: t('payments'), icon: '/icons/documents.png', collapsible: true do |t|
+   t.text_field 'ordercode', label: t('payment.ordercode')
+   t.text_field 'transactioncode', label: t('payment.transactioncode')
+   t.text_field 'gstatus', label: t('payment.gstatus')
+   t.text_field 'amount', label: t('payment.amount')
+   t.text_field 'date', label: t('payment.date')
+   t.paginate records: t('models.general.records')
+ end %>

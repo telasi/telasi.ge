@@ -1,8 +1,8 @@
 # -*- encoding : utf-8 -*-
 class Pay::PaymentsController < ApplicationController
 
-  MODES = [LiveMode = 0, TestMode = 1]
-  LANGUAGES = [LngENG = 'EN', LngGEO = 'KA']
+	MODES = [LiveMode = 0, TestMode = 1]
+	LANGUAGES = [LngENG = 'EN', LngGEO = 'KA']
 
   RESULTCODE_OK = 0
   RESULTCODE_DOUBLE = 1
@@ -10,7 +10,7 @@ class Pay::PaymentsController < ApplicationController
   RESULTCODE_NOT_FOUND = -2
   RESULTCODE_PARAMETER = -3
 
-  @mode = MODES[TestMode]
+ 	@mode = MODES[TestMode]
 
   def services
   end
@@ -30,11 +30,25 @@ class Pay::PaymentsController < ApplicationController
     @payments = rel.paginate(page: params[:page], per_page: 20)
   end
 
-  def show_form
-   @payment = Pay::Payment.new(amount: 100, serviceid: params[:serviceid], merchant: get_current_merchant(params[:serviceid]) )
+  def user_index
+    @search = params[:search] == 'clear' ? {} : params[:search]
+    rel = Pay::Payment
+    rel = rel.where(user: "current user")
+    if @search
+      rel = rel.where(serviceid: @search[:serviceid].mongonize) if @search[:serviceid].present?
+      rel = rel.where(ordercode: @search[:ordercode]) if @search[:ordercode].present?
+      rel = rel.where(instatus: @search[:instatus]) if @search[:instatus].present?
+      rel = rel.where(date: @search[:date]) if @search[:date].present?
+    end
+
+    @payments = rel.paginate(page: params[:page], per_page: 20)
   end
 
-  def confirm_form
+	def show_form
+    @payment = Pay::Payment.new(amount: 100, serviceid: params[:serviceid], merchant: get_current_merchant(params[:serviceid]) )
+	end
+
+	def confirm_form
     @payment = Pay::Payment.new(
         #user: current_user, 
         user: "current_user", 
@@ -42,15 +56,15 @@ class Pay::PaymentsController < ApplicationController
         merchant: params[:pay_payment][:merchant],
         testmode: Payge::TESTMODE, 
         ordercode: self.gen_order_code, currency: 'GEL', amount: params[:pay_payment][:amount],
-        description: 'test payment', lng: 'ka', ispreauth: 0, postpage: 0)
+        description: 'test payment', lng: 'ka', ispreauth: 0, postpage: 0, gstatus: Pay::Payment::GSTATUS_SENT)
 
     #if not request.post?
       @payment.prepare_for_step(Payge::STEP_SEND)
       @payment.user = 'current_user'
-      @payment.successurl = 'http://my.telasi.ge/pay/payment/success?'
-      @payment.cancelurl = 'http://my.telasi.ge/pay/payment/cancel?'
-      @payment.errorurl = 'http://my.telasi.ge/pay/payment/error?'
-      @payment.callbackurl = 'http://my.telasi.ge/pay/payment/callback?'
+      @payment.successurl = 'http://localhost:3000/pay/payment/success?'
+      @payment.cancelurl = 'http://localhost:3000/pay/payment/cancel?'
+      @payment.errorurl = 'http://localhost:3000/pay/payment/error?'
+      @payment.callbackurl = 'http://localhost:3000/pay/payment/callback?'
       if not @payment.save
         render action: 'show_form'
       end
@@ -86,13 +100,15 @@ class Pay::PaymentsController < ApplicationController
       @payment.status = params[:status]
       @payment.check_callback = params[:check]
 
-      if @payment.status = Pay::Payment::STATUS_COMPLETED && @payment.instatus = Pay::Payment::INSTATUS_OK
+      if @payment.status == Pay::Payment::STATUS_COMPLETED && @payment.instatus == Pay::Payment::INSTATUS_OK
         @payment.resultcode = RESULTCODE_OK
+        @payment.gstatus = Pay::Payment::GSTATUS_OK
 
         check_callback = prepare_for_step(STEP_CALLBACK)
         if check_callback != @payment.check_callback
           @payment.resultcode = RESULTCODE_PROBLEM 
           @payment.instatus = Pay::Payment::INSTATUS_CAL_CHECK_ERROR
+          @payment.gstatus = Pay::Payment::GSTATUS_ERROR
         end
 
       else
@@ -120,6 +136,7 @@ class Pay::PaymentsController < ApplicationController
          check_string = prepare_for_step(STEP_RETURNED)
          if check_string != @payment.check_returned
            @payment.instatus = Pay::Payment::INSTATUS_RET_CHECK_ERROR
+           @payment.gstatus = Pay::Payment::GSTATUS_ERROR
            redirect_to pay_error_url
          else
           @payment.instatus = Pay::Payment::INSTATUS_OK

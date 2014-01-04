@@ -9,11 +9,12 @@ class Pay::Payment
   field :merchant, 	       type: String					         # მერჩანტის უნიკალური კოდი
   field :ordercode,        type: Integer					       # მერჩანტის ტრანზაქციის უნიკალური კოდი
   field :amount, 	         type: Float  					       # თანხა
-  field :amount_tech,      type: Integer                 # თანხა თეტრებში
+ # field :amount_tech,      type: Integer                 # თანხა თეტრებში
   field :currency,         type: String, default: 'GEL'  # ვალუტა GEL
   field :date,             type: DateTime                # თარიღი
   field :status,           type: String                  # სტატუსი
   field :instatus,         type: String                  # სტატუსი
+  field :gstatus,          type: String                  # სტატუსი
   field :transactioncode,  type: String                  # ტრანზაქციის კოდი
   field :paymethod,        type: String                  # გადახდის არხის სახელი
   field :description,      type: String					         # ოპერაციის აღწერა
@@ -54,20 +55,9 @@ class Pay::Payment
   INSTATUS_RET_CHECK_ERROR = 'RET_CHECK_ERROR'
   INSTATUS_CAL_CHECK_ERROR = 'RET_CALLB_ERROR'
 
-# $str = $secretkey
-#            . $merchant
-#            . $ordercode
-#            . $amount
-#            . $currency
-#            . $description
-#            . $clientname
-#            . $customdata
-#            . $lng
-#            . $testmode;
-#     foreach ($items as $itemvalue) {
-#       $str .= $itemvalue;
-#     }
-#     $check = strtoupper(hash('sha256', $str));
+  GSTATUS_OK = 'OK'
+  GSTATUS_SENT = 'SENT'
+  GSTATUS_ERROR = 'ERROR'
 
   def amount_tech; (self.amount * 100).round end
 

@@ -8,7 +8,7 @@
       f.combo_field 'status', label: t('payment.status'), 
            collection: { 'დასრულებული' => Pay::Payment::STATUS_COMPLETED, 'გაუქმებული' => Pay::Payment::STATUS_CANCELED, 'შეცდომით' => Pay::Payment::STATUS_ERROR }
        f.combo_field 'instatus', label: t('payment.instatus'), 
-           collection: { 'CRC OK' => Pay::Payment::INSTATUS_OK, 'Bad CRC return' => Pay::Payment::INSTATUS_RET_CHECK_ERROR, 'Bad CRC callback' => Pay::Payment::INSTATUS_CAL_CHECK_ERROR }
+           collection: { 'დასრულებული' => Pay::Payment::INSTATUS_OK, 'Bad CRC return' => Pay::Payment::INSTATUS_RET_CHECK_ERROR, 'Bad CRC callback' => Pay::Payment::INSTATUS_CAL_CHECK_ERROR }
        f.date_field 'date', label: t('payment.date')
      end
    end
@@ -18,6 +18,8 @@
    t.text_field 'ordercode', label: t('payment.ordercode')
    t.text_field 'transactioncode', label: t('payment.transactioncode')
    t.text_field 'status', label: t('payment.status')
+   t.text_field 'instatus', label: t('payment.instatus')
+   t.text_field 'gstatus', label: t('payment.gstatus')
    t.text_field 'amount', label: t('payment.amount')
    t.text_field 'date', label: t('payment.date')
    t.boolean_field 'testmode', label: t('payment.testmode')
