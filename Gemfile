@@ -31,7 +31,7 @@ gem 'jbuilder', '~> 1.0.1'
 
 # forms
 # gem 'forma', path: '../forma'
-gem 'forma', github: 'dimakura/forma'
+gem 'forma', '~> 0.1'
 gem 'bootstrap-will_paginate'
 gem 'will_paginate_mongoid'
 gem 'carrierwave'
