@@ -5,6 +5,6 @@
     c.text_field :rs_name
   end
   f.date_field 'plan_end_date'
-  f.submit 'შეცვლა'
+  f.submit t('models.general.actions.edit')
   f.cancel_button network_new_customer_url(id: @application.id)
 end %>

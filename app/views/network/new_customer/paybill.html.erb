@@ -1,5 +1,5 @@
-<%= forma_for @data, title: 'საგადახდო დავალების თანხა', icon: '/icons/clipboard-task.png', collapsible: true, method: 'get', url: network_new_customer_paybill_url(id: @application.id, format: 'pdf') do |f|
-  f.number_field 'amount', autofocus: true, label: 'ჩაწერეთ თანხა:'
-  f.submit 'ბეჭდვა'
+<%= forma_for @data, title: t('models.network_new_customer_application.invoice_amount'), icon: '/icons/clipboard-task.png', collapsible: true, method: 'get', url: network_new_customer_paybill_url(id: @application.id, format: 'pdf') do |f|
+  f.number_field 'amount', autofocus: true, label: t('models.network_new_customer_application.enter_amount')
+  f.submit t('models.general.actions.print')
   f.cancel_button network_new_customer_url(id: @application.id)
 end %>

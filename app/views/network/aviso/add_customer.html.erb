@@ -1,23 +1,23 @@
 <!-- Account information -->
 <% if @account %>
   <div class="page-header">
-    <h3>აბონენტი</h3>
+    <h3><%= t('models.network.aviso.abonent') %></h3>
   </div>
-  <%= view_for @account, title: 'ანგარიშის თვისებები', icon: '/icons/user.png', collapsible: true do |f|
-    f.text_field 'customer.accnumb', tag: 'code', label: 'აბ. ნომერი', required: true
-    f.text_field 'customer.custname', label: 'დასახელება', required: true
-    f.text_field 'mtnumb', label: 'მრიხცველის #', required: true
-    f.date_field 'createdate', label: 'შეიქმნა', required: true
+  <%= view_for @account, title: t('models.network.aviso.account_param'), icon: '/icons/user.png', collapsible: true do |f|
+    f.text_field 'customer.accnumb', tag: 'code', label: t('models.network.aviso.number'), required: true
+    f.text_field 'customer.custname', label: t('models.network.aviso.name'), required: true
+    f.text_field 'mtnumb', label: t('models.network.aviso.count_no'), required: true
+    f.date_field 'createdate', label: t('models.network.aviso.created'), required: true
   end %>
   <div class="btn-toolbar">
-    <%= link_to 'აბონენტის მიბმა !!!', network_add_aviso_customer_url(custkey: @account.custkey), class: ['btn', 'btn-danger'], method: 'post', confirm: 'ნამდვილად გინდათ ამ აბონენტის მოცემულ ავიზოზე მიბმა?' %>
+    <%= link_to t('models.network.aviso.abonent_bound'), network_add_aviso_customer_url(custkey: @account.custkey), class: ['btn', 'btn-danger'], method: 'post', confirm: t('models.network.aviso.abonent_bound_confirm') %>
   </div>
 <% else %>
   <div class="page-header">
-    <h3>მოძებნეთ აბონენტი</h3>
+    <h3><%= t('models.network.aviso.abonent_search') %></h3>
   </div>
   <div class="muted" style="padding: 0 0 15px 0;">
-    აქ შეგიძლიათ იპოვოთ აბონენტი მრიხცველის ნომრის მიხედვით.
+    <%= t('models.network.aviso.abonent_search_hint') %> 
   </div>
   <div>
     <form method="get">
@@ -28,16 +28,16 @@
 <% end %>
 <!-- Aviso information -->
 <div class="page-header">
-  <h3>დასაკავშირებელი ავიზო</h3>
+  <h3><%= t('models.network.aviso.bound_aviso') %></h3>
 </div>
-<%= view_for @aviso, title: 'ავიზოს თვისებები', icon: '/icons/money-coin.png', collapsible: true do |f|
-  f.date_field 'avdate', label: 'თარიღი', required: true
-  f.complex_field label: 'ბანკი', required: true do |c|
+<%= view_for @aviso, title: t('models.network.aviso.aviso_param'), icon: '/icons/money-coin.png', collapsible: true do |f|
+  f.date_field 'avdate', label: t('models.network.aviso.date'), required: true
+  f.complex_field label: t('models.network.aviso.bank'), required: true do |c|
     c.text_field 'paypoint'
     c.text_field 'basepointkey', class: 'muted', before: '&mdash;'.html_safe
   end
-  f.number_field 'amount', label: 'თანხა', after: 'GEL', required: true
-  f.text_field 'accnumb', label: 'აბ.#'
-  f.text_field 'invoice', label: 'ინვოისის #'
-  f.text_field 'note', label: 'შენიშვნა'
+  f.number_field 'amount', label: t('models.network.aviso.amount'), after: 'GEL', required: true
+  f.text_field 'accnumb', label: t('models.network.aviso.abonent_no')
+  f.text_field 'invoice', label: t('models.network.aviso.invoice_no')
+  f.text_field 'note', label: t('models.network.aviso.note')
 end %>

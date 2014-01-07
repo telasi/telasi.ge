@@ -2,7 +2,7 @@
 class Network::ChangePowerController < Network::NetworkController
   def index
     @title = 'სიმძლავრის შეცვლა'
-    @title = 'ქსელზე მიერთება'
+    @title = I18n.t('models.network_new_customer_application.actions.index_page.title')
     @search = params[:search] == 'clear' ? nil : params[:search]
     rel = Network::ChangePowerApplication
     if @search
@@ -22,7 +22,7 @@ class Network::ChangePowerController < Network::NetworkController
   end
 
   def new
-    @title = 'ახალი განცხადება'
+    @title = I18n.t('models.network_new_customer_application.actions.new')
     if request.post?
       @application = Network::ChangePowerApplication.new(change_power_params)
       @application.user = current_user
@@ -37,15 +37,15 @@ class Network::ChangePowerController < Network::NetworkController
 
   def show
     @application = Network::ChangePowerApplication.find(params[:id])
-    @title = 'განცხადების შეცვლა'
+    @title = I18n.t('models.network_new_customer_application.actions.edit.title')
   end
 
   def edit
-    @title = 'განცხადების შეცვლა'
+    @title = I18n.t('models.network_new_customer_application.actions.edit.title')
     @application = Network::ChangePowerApplication.find(params[:id])
     if request.post?
       if @application.update_attributes(change_power_params)
-        redirect_to network_change_power_url(id: @application.id), notice: 'განცხადება შეცვლილია.'
+        redirect_to network_change_power_url(id: @application.id), notice: I18n.t('models.network_new_customer_application.actions.edit.changed')
       end
     end
   end
@@ -53,11 +53,11 @@ class Network::ChangePowerController < Network::NetworkController
   def delete
     application = Network::ChangePowerApplication.find(params[:id])
     application.destroy
-    redirect_to network_change_power_applications_url, notice: 'განცხადება წაშლილია.'
+    redirect_to network_change_power_applications_url, notice: I18n.t('models.network_new_customer_application.actions.edit.changed')
   end
 
   def change_status
-    @title = 'სტატუსის ცვლილება'
+    @title = I18n.t('models.network_new_customer_application.actions.status.title')
     @application = Network::ChangePowerApplication.find(params[:id])
     if request.post?
       @message = Sys::SmsMessage.new(params.require(:sys_sms_message).permit(:message))
@@ -67,7 +67,7 @@ class Network::ChangePowerController < Network::NetworkController
         @message.send_sms!
         @application.status = params[:status].to_i
         if @application.save
-          redirect_to network_change_power_url(id: @application.id), notice: 'სტატუსი შეცვლილია'
+          redirect_to network_change_power_url(id: @application.id), notice: I18n.t('models.network_new_customer_application.actions.status.changed')
         else
           @error = @application.errors.full_messages
         end
@@ -78,13 +78,13 @@ class Network::ChangePowerController < Network::NetworkController
   end
 
   def upload_file
-    @title = 'ფაილის ატვირთვა'
+    @title = I18n.t('models.network_new_customer_application.actions.file.title')
     @application = Network::ChangePowerApplication.find(params[:id])
     if request.post? and params[:sys_file]
       @file = Sys::File.new(params.require(:sys_file).permit(:file))
       if @file.save
         @application.files << @file
-        redirect_to network_change_power_url(id: @application.id, tab: 'files'), notice: 'ფაილი დამატებულია'
+        redirect_to network_change_power_url(id: @application.id, tab: 'files'), notice: I18n.t('models.network_new_customer_application.actions.file.loaded')
       end
     else
       @file = Sys::File.new
@@ -95,11 +95,11 @@ class Network::ChangePowerController < Network::NetworkController
     application = Network::ChangePowerApplication.find(params[:id])
     file = application.files.where(_id: params[:file_id]).first
     file.destroy
-    redirect_to network_change_power_url(id: application.id, tab: 'files'), notice: 'ფაილი წაშლილია'
+    redirect_to network_change_power_url(id: application.id, tab: 'files'), notice: I18n.t('models.network_new_customer_application.actions.file.deleted')
   end
 
   def send_sms
-    @title = 'შეტყობინების გაგზავნა'
+    @title = I18n.t('models.network_new_customer_application.actions.message.title')
     @application = Network::ChangePowerApplication.find(params[:id])
     if request.post?
       @message = Sys::SmsMessage.new(params.require(:sys_sms_message).permit(:message))
@@ -107,7 +107,7 @@ class Network::ChangePowerController < Network::NetworkController
       @message.mobile = @application.mobile
       if @message.save
         @message.send_sms!
-        redirect_to network_change_power_url(id: @application.id, tab: 'sms'), notice: 'შეტყობინება გაგზავნილია'
+        redirect_to network_change_power_url(id: @application.id, tab: 'sms'), notice: I18n.t('models.network_new_customer_application.actions.message.sent')
       end
     else
       @message = Sys::SmsMessage.new
@@ -115,14 +115,14 @@ class Network::ChangePowerController < Network::NetworkController
   end
 
   def new_control_item
-    @title = 'ახალი საკონტროლო ჩანაწერი'
+    @title = I18n.t('models.network_new_customer_application.actions.control.title')
     @application = Network::ChangePowerApplication.find(params[:id])
     if request.post?
       @item = Network::RequestItem.new(params.require(:network_request_item).permit(:type, :date, :description, :stage_id))
       @item.source = @application
       if @item.save
         @application.update_last_request
-        redirect_to network_change_power_url(id: @application.id, tab: 'watch'), notice: 'საკონტროლო ჩანაწერი დამატებულია'
+        redirect_to network_change_power_url(id: @application.id, tab: 'watch'), notice: I18n.t('models.network_new_customer_application.actions.control.added')
       end
     else
       @item = Network::RequestItem.new(source: @application, date: Date.today)
@@ -130,12 +130,12 @@ class Network::ChangePowerController < Network::NetworkController
   end
 
   def edit_control_item
-    @title = 'საკონტროლო ჩანაწერის შეცვლა'
+    @title = I18n.t('models.network_new_customer_application.actions.control.change')
     @item = Network::RequestItem.find(params[:id])
     if request.post?
       if @item.update_attributes(params.require(:network_request_item).permit(:type, :date, :description, :stage_id))
         @item.source.update_last_request
-        redirect_to network_change_power_url(id: @item.source.id, tab: 'watch'), notice: 'საკონტროლო ჩანაწერი შეცვლილია'
+        redirect_to network_change_power_url(id: @item.source.id, tab: 'watch'), notice: I18n.t('models.network_new_customer_application.actions.control.changed')
       end
     end
   end
@@ -145,15 +145,15 @@ class Network::ChangePowerController < Network::NetworkController
     app = item.source
     item.destroy
     app.update_last_request
-    redirect_to network_change_power_url(id: app.id, tab: 'watch'), notice: 'საკონტროლო ჩანაწერი წაშლილია'
+    redirect_to network_change_power_url(id: app.id, tab: 'watch'), notice: I18n.t('models.network_new_customer_application.actions.control.deleted')
   end
 
   def edit_amount
-    @title = 'თანხის შეცვლა'
+    @title = I18n.t('models.network_new_customer_application.actions.amount.title')
     @application = Network::ChangePowerApplication.find(params[:id])
     if request.post?
       if @application.update_attributes(params.require(:network_change_power_application).permit(:amount))
-        redirect_to network_change_power_url(id: @application.id), notice: 'თანხა შეცვლილია'
+        redirect_to network_change_power_url(id: @application.id), notice: I18n.t('models.network_new_customer_application.actions.amount.changed')
       end
     end
   end

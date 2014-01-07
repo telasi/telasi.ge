@@ -1,14 +1,14 @@
 <%= render partial: 'new_customers/top' %>
 <div class="text-muted" style="margin-bottom: 16px;">
-  ოპერაციები გამოჩნდება მათი ბილინგის სისტემაში დამატების პარალელურად.
+  <%= t('models.network_new_customer_item.billing_operations') %>
 </div>
 <% if @application.billing_items.any? %>
 <table class="table table-hover table-bordered">
   <thead>
     <tr>
-      <th>თარიღი</th>
-      <th>ოპერაცია</th>
-      <th>თანხა</th>
+      <th><%= t('models.network_request_item.date') %></th>
+      <th><%= t('models.billing_customer.operation') %></th>
+      <th><%= t('models.billing_customer.gel') %></th>
     </tr>
   </thead>
   <tbody>
@@ -28,7 +28,7 @@
   </tbody>
 </table>
 <% else %>
-<div class="well">
-  ჯერ არც ერთი ოპერაცია არ არის გატარებული!
+<div class="well">  
+  <%= t('models.network_new_customer_item.no_operations') %>
 </div>
 <% end %>

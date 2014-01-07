@@ -1,45 +1,45 @@
 <%= view_for @aviso, title: @title, icon: '/icons/money-coin.png', collapsible: true, selected_tab: (params[:tab] == 'related' ? 1 : 0) do |f|
-  f.tab title: 'ავიზო', icon: '/icons/money-coin.png' do |f|
-    f.date_field 'avdate', label: 'თარიღი', required: true
-    f.complex_field label: 'ბანკი', required: true do |c|
+  f.tab title: t('models.network.aviso.aviso'), icon: '/icons/money-coin.png' do |f|
+    f.date_field 'avdate', label: t('models.network.aviso.date'), required: true
+    f.complex_field label: t('models.network.aviso.bank'), required: true do |c|
       c.text_field 'paypoint'
       c.text_field 'basepointkey', class: 'muted', before: '&mdash;'.html_safe
     end
-    f.number_field 'amount', label: 'თანხა', after: 'GEL', required: true
-    f.text_field 'accnumb', label: 'აბ.#', tag: 'code' do |f|
-      f.action network_add_aviso_customer_url(id: @aviso.avdetkey), label: 'აბონენტის განსაზღვრა', icon: '/icons/user--plus.png' if (not @aviso.status)
+    f.number_field 'amount', label: t('models.network.aviso.amount'), after: 'GEL', required: true
+    f.text_field 'accnumb', label: t('models.network.aviso.abonent_no'), tag: 'code' do |f|
+      f.action network_add_aviso_customer_url(id: @aviso.avdetkey), label: t('models.network.aviso.abonent_def'), icon: '/icons/user--plus.png' if (not @aviso.status)
     end
     f.text_field 'cns', label: 'CNS #'
-    f.text_field 'note', label: 'შენიშვნა'
+    f.text_field 'note', label: t('models.network.aviso.note')
     f.col2 do |f|
-      f.boolean_field 'status', label: 'დამუშავებულია?', hint: 'დამუშავებულია თუ არა ეს ავიზო?', required: true
-      f.boolean_field 'is_created', label: 'აბონ. შექმნილია?', hint: 'შექმნილია თუ არა ახალი აბონენტი ამ განცხადების საფუძველზე?'
-      f.boolean_field 'in_item', label: 'ოპერ. ბილინგშია?', hint: 'გატარებულია თუ არა ეს ოპერაცია ბილინგში?'
+      f.boolean_field 'status', label: t('models.network.aviso.complete'), hint: t('models.network.aviso.complete_hint'), required: true
+      f.boolean_field 'is_created', label: t('models.network.aviso.abonent_created'), hint: t('models.network.aviso.abonent_created_hint')
+      f.boolean_field 'in_item', label: t('models.network.aviso.oper_billing'), hint: t('models.network.aviso.oper_billing_hint')
     end
   end
-  f.tab title: 'დაკავშირებული განცხადება', icon: '/icons/chain.png' do |f|
-    f.text_field 'related_application.effective_number', label: 'ნომერი', url: ->(x) { network_new_customer_url(id: x.related_application.id) } do |f|
-      f.action network_delink_aviso_url(id: @aviso.avdetkey), icon: '/icons/bin.png', label: 'კავშირის წაშლა', method: 'delete', confirm: 'ნამდვილად გინდათ კავშირის წაშლა?' if (@aviso.related_application.present? and not @aviso.in_item)
+  f.tab title: t('models.network.aviso.linked_oper'), icon: '/icons/chain.png' do |f|
+    f.text_field 'related_application.effective_number', label: t('models.network_change_power_application.number'), url: ->(x) { network_new_customer_url(id: x.related_application.id) } do |f|
+      f.action network_delink_aviso_url(id: @aviso.avdetkey), icon: '/icons/bin.png', label: t('models.network.aviso.delete_link'), method: 'delete', confirm: t('models.network.aviso.delete_link_confirm') if (@aviso.related_application.present? and not @aviso.in_item)
     end
-    f.date_field 'related_application.send_date', label: 'თარიღი'
+    f.date_field 'related_application.send_date', label: t('models.network.aviso.date')
   end
 end %>
 
 <% if @application %>
   <div class="alert alert-block alert-success">
     <p>
-      მოიძებნა განცხადება, რომელიც შესაძლოა იყოს დაკავშირებული ამ ავიზოსთან (იხ. ქვემოთ).
+      <%= t('models.network.aviso.application_found') %> 
     </p>
     <p>
-      თუ განცხადება სწორადაა ნაპოვნი, გთხოვთ დაადასტუროთ ეს მწვანე ღილაკზე დაჭერით.
+      <%= t('models.network.aviso.application_confirm_question') %> 
     </p>
     <p style="text-align: center;">
-      <%= link_to 'განცხადების დაკავშირება', network_link_aviso_url(id: @aviso.avdetkey), class: ['btn', 'btn-success'], method: 'post', data: { confirm: 'ნამდვილად გინდათ ავიზოს დაკავშირება ამ განცხადებასთან?' } %>
+      <%= link_to t('models.network.aviso.application_link'), network_link_aviso_url(id: @aviso.avdetkey), class: ['btn', 'btn-success'], method: 'post', data: { confirm: t('models.network.aviso.application_link_confirm') } %>
     </p>
   </div>
-  <%= new_customer_view @application, title: 'დაკავშირებული განცხადება', without_actions: true %>
+  <%= new_customer_view @application, title: t('models.network.aviso.linked_oper'), without_actions: true %>
 <% elsif not @aviso.status %>
   <div class="alert alert-block alert-error">
-    ვერ მოიძებნა დაკავშირებული განცხადება!
+    <%= t('models.network.aviso.application_not_found') %>
   </div>
 <% end %>

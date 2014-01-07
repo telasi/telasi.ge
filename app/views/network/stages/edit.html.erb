@@ -1,6 +1,6 @@
 <%= forma_for @stage, title: @title, icon: '/icons/wrench--pencil.png', collapsible: true do |f|
   f.text_field :name, required: true, autofocus: true
   f.number_field :numb
-  f.submit 'შენახვა'
+  f.submit t('models.general.actions.save')
   f.cancel_button network_stages_url
 end %>

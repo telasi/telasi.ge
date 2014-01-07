@@ -1,15 +1,14 @@
 <%= render partial: 'new_customers/top' %>
 <div class="text-muted" style="margin-bottom: 16px;">
-  შეტყობინებები მოგივათ SMS საშუალებით თქვენს მობილურ ტელეფონზე.
-  აქ თავმოყრილია ამ განცხადებასთან დაკავშირებული ყველა შეტყობინება.
+  <%= t('models.network_new_customer_item.messages.title') %>
 </div>
 <% if @application.messages.any? %>
 <table class="table table-hover table-bordered">
   <thead>
     <tr>
-      <th>თარიღი, დრო</th>
-      <th>შეტყობინების ტექსტი</th>
-      <th>მობილურის #</th>
+      <th><%= t('models.network_new_customer_item.messages.datetime') %></th>
+      <th><%= t('models.network_new_customer_item.messages.messagetext') %></th>
+      <th><%= t('models.network_new_customer_item.messages.mobile') %></th>
     </tr>
   </thead>
   <tbody>
@@ -24,6 +23,6 @@
 </table>
 <% else %>
 <div class="well">
-  ჯერ არც ერთი შეტყობინება არ არის!
+  <%= t('models.network_new_customer_item.messages.no_message') %>
 </div>
 <% end %>

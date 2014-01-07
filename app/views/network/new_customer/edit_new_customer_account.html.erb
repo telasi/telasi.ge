@@ -1,1 +1,1 @@
-<%= new_customer_account_form @account, title: @title, icon: '/icons/user--pencil.png', submit: 'ანგარიშის შეცვლა', cancel_url: network_new_customer_url(id: @account.application.id, tab: 'accounts') %>
+<%= new_customer_account_form @account, title: @title, icon: '/icons/user--pencil.png', submit: t('models.network_new_customer_application.actions.change_account'), cancel_url: network_new_customer_url(id: @account.application.id, tab: 'accounts') %>

@@ -1,5 +1,5 @@
-<%= forma_for @application, title: 'ბილინგის აბონენტის მიბმა', icon: '/icons/user--plus.png', collapsible: true do |f|
-  f.select_field :customer, select_customer_url, label: 'ბილინგის აბონენტი', required: true, search_width: 900
-  f.submit 'დაკავშიება'
-  f.bottom_action network_new_customer_url(id: @application.id, tab: 'accounts'), label: 'გაუქმება', icon: '/icons/cross.png'
+<%= forma_for @application, title: t('models.network_new_customer_application.actions.bound_billing'), icon: '/icons/user--plus.png', collapsible: true do |f|
+  f.select_field :customer, select_customer_url, label: t('models.network_new_customer_application.customer'), required: true, search_width: 900
+  f.submit t('models.general.actions.link')
+  f.bottom_action network_new_customer_url(id: @application.id, tab: 'accounts'), label: t('models.general.actions.cancel'), icon: '/icons/cross.png'
 end %>

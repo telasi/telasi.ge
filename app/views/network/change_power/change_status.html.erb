@@ -1,13 +1,13 @@
 <div style="padding-bottom: 16px;">
   <div>
-    მიმდინარე სტატუსი &mdash;
+    <%= t('models.network.change.current_status') %> &mdash;
     <strong>
       <img src="<%= Network::ChangePowerApplication.status_icon @application.status %>"></img>
       <%= Network::ChangePowerApplication.status_name @application.status.to_i %>
     </strong>
   </div>
   <div>
-    ახალი სტატუსი &mdash;
+    <%= t('models.network.change.new_status') %> &mdash;
     <strong>
       <img src="<%= Network::ChangePowerApplication.status_icon params[:status].to_i %>"></img>
       <%= Network::ChangePowerApplication.status_name params[:status].to_i %>
@@ -17,7 +17,7 @@
 <% if @error %>
 <div class="block block-error"><%= @error %></div>
 <% end %>
-<%= sms_message_form @message, title: 'SMS შეტყობინება',
-  icon: '/icons/mail.png', submit: 'სტატუსის შეცვლა',
+<%= sms_message_form @message, title: t('models.network.change.sms'),
+  icon: '/icons/mail.png', submit: t('models.network.change.status_change'),
   cancel_url: network_change_power_url(id: @application.id)
 %>

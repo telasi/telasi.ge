@@ -8,7 +8,7 @@
 <% if @error %>
 <div class="block block-error"><%= @error %></div>
 <% end %>
-<%= sms_message_form @message, title: 'SMS შეტყობინება',
-  icon: '/icons/mail.png', submit: 'სტატუსის შეცვლა',
+<%= sms_message_form @message, title: t('models.network.change.sms'),
+  icon: '/icons/mail.png', submit: t('models.network.change.status_change'),
   cancel_url: network_new_customer_url(id: @application.id)
 %>

@@ -1,10 +1,10 @@
-<%= table_for @tariffs, title: 'ტარიფები', icon: '/icons/network.png', collapsible: true do |t|
-  t.title_action network_generate_network_tariffs_url, label: 'გენერაცია', icon: '/icons/wand.png', confirm: 'ნამდვილად?' if @tariffs.empty?
+<%= table_for @tariffs, title: t('models.network.tariffs.tariff'), icon: '/icons/network.png', collapsible: true do |t|
+  t.title_action network_generate_network_tariffs_url, label: t('models.network.tariffs.generation'), icon: '/icons/wand.png', confirm: t('models.network.tariffs.sure') if @tariffs.empty?
   t.text_field :voltage
   t.complex_field i18n: 'power' do |c|
     c.text_field :power_from, tag: 'code', after: '-'
     c.text_field :power_to, tag: 'code', after: 'kW'
   end
-  t.text_field :days_to_complete, tag: 'code', after: 'დღე'
+  t.text_field :days_to_complete, tag: 'code', after: t('models.network_new_customer_item.unit_days')
   t.number_field :price_gel, after: 'GEL'
 end %>

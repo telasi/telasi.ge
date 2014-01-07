@@ -12,6 +12,7 @@ ru:
     new_customer: Новый Абонент
     calculator: Калькулятор
   applications:
+    pay_order: Платежное поручение
     customers_title: Задолженность
     customers_description: Задолженность и история абонента.
     admin:
@@ -53,6 +54,8 @@ ru:
       account: Выберите счетчик
       tariff: Тариф
     general:
+      yes: Да
+      no: Нет
       records: записей
       history: История
       system: Система
@@ -62,12 +65,16 @@ ru:
       search_clear: Очистить форму
       more: Еще
       undefined: Неопределенно
+      detailed: Детально
+      chose_file: Выберите файл
       actions:
         save: Сохранить
         cancel: Отменить
         search: Поиск
         show: Просмотр
         edit: Изменить
+        send: Отправить
+        link: Связь
     sys_user:
       title:
         single: Пользователь
@@ -194,7 +201,69 @@ ru:
         deny_alt: რეგისტრაციის უარყოფა
         remove_confirm: Вы действительно хотите убрать абонента?
         remove_complete: Абонент стерт
+    network:
+      network: Сеть
+      action:
+        manage: Управление авизо
+      aviso:
+        aviso: Авизо
+        avisos: Авизо
+        abonent: Абонент
+        account_param: Свойства счета
+        number: Номер аб.
+        name: Название
+        count_no: "# счетчика"
+        created: Создано
+        abonent_bound: 'Определение абонента !!!'
+        abonent_bound_confirm: 'Абонент действительно соответствует данному авизо?'
+        abonent_search: Найти абонента
+        abonent_search_hint: Здесь можете найти абонента по номеру счетчика.
+        bound_aviso: Приклепленное авизо
+        avido_param: Свойства авизо
+        date: Дата
+        bank: Банк
+        amount: Сумма
+        abonent_no: "# аб."
+        invoice_no: "# инвойса"
+        note: Примечание
+        complete: Обработано?
+        cmpl: Обр?
+        complete_hint: Обработано?
+        abonent_def: Определение абонента
+        abonent_created: Абонент создан?
+        abonent_created_hint: Создан новый абонет на основе этой заявки?
+        oper_billing: Опер. в биллинге?
+        oper_billing_hint: Проведена ли эта операция в биллинге?
+        linked_oper: Связанная операция
+        delete_link: Удаление связи
+        delete_link_confirm: Действительно желаете удалить связь?
+        application_found: "Найдены заявки, которые возможно связаны с этим авизо."
+        application_confirm_question: "Если найденная заявка верна, просьба подтвердить нажатием зеленной кнопки."
+        application_link: Связь заявки
+        application_link_confirm: Действительно хотите связать с этой заявкой?
+        application_not_found: Заявки не найдены!
+      change:
+        currenct_status: Текущий статус
+        new_status: Новый статус
+        sms: SMS сообщение
+        status_change: изменение статуса
+        send_new_file: Загрузка нового файла
+      stages:
+        stages: Этапы
+        new_stage: Новый этап
+        added: Этап добавлен
+        del_confirm: Действительно желаете удалить?
+        change: Изменение этапа
+        changed: Этап изменен
+        deleted: Этап удален
+      tariffs:
+        tariff: Тарифы
+        generation: Генерация
+        generated: Тарифы сгенерированы
+        sure: Уверены?
     network_change_power_application:
+      actions:
+        change: Изменение
       number: Номер
       rs_name: Апликант
       rs_tin: Личный номер или идентиикационный код
@@ -232,9 +301,19 @@ ru:
       unit_kwt: КВт
       unit_days: дни
     network_new_customer_application:
+      application: Заявка
+      contact_info: Контактная информация
+      tech_detail: Технические детали
+      bank_info: Банковские реквизиты
+      chose_bank: -- Выберите банк --
+      chose: -- Выберите --
+      general_data: Основные данные
+      progress: Прогресс
       number: Номер
       rs_name: Аппликант
+      rs_id: Инд. код аппликанта
       rs_tin: Личный номер или идентификационный код
+      rs_foreigner: Не резидент?
       rs_tin_hint: "Для физических лиц - 11-символьный личный номер, для юридических лиц -  &mdash; 9-символьный идентификационный код"
       rs_vat_payer: Является плательщиком НДС?
       rs_vat_payer_hint: Является ли организация плательщиком НДС?
@@ -273,7 +352,8 @@ ru:
       send_date_hint: Дата отправки заявления в Теласи
       start_date: Дата начала
       start_date_hint: Дата начала заявки
-      plan_end_date: Плановый окон.
+      real_date: Реальная дата
+      plan_end_date: Дата плановый окон.
       plan_end_date_hint: Дата планового окончания работ
       end_date: Реальное окон.
       end_date_hint: Дата реального окончания работ
@@ -291,6 +371,11 @@ ru:
       show_tin_on_print: Показать иден. кол
       show_tin_on_print_hint: Показать или нет идентификационный код в печатной форме?
       technical_parameters: Технические параметры
+      notes: Примечания
+      customer: Абонент биллинга
+      unit_days: дни
+      invoice_amount: Сумма платежного поручения
+      enter_amount: Введите сумму:
       errors:
         tin_required: Указание иден. кода обязательно
         tin_illegal: Неправильный иден. код
@@ -304,6 +389,10 @@ ru:
       actions:
         new: Навая заявка
         new2: Добавление заявки
+        added: Заявка добавлена
+        add_account: Добавление счета
+        change_account: Изменение счета
+        bound_billing: Связь с абонентом биллинга
         new_description: "Просим тщательно ввести заявку по подключению к сети. В роли заявителя может выступать как физическое лицо, так и юридическое или организация. Кроме Ваших личных данных необходимо указать банковский счет, на которые произойдет возврат денег в случае отклонения заявки."
         nav:
           main: Главная
@@ -323,6 +412,27 @@ ru:
         upload_complete: Файл загружен
         edit:
           title: Изменение заявки
+          changed: Заявка изменена
+          deleted: Заявка удалена
+        status: 
+          title: Изменение статуса
+          changed: Статус изменен
+        file: 
+          title: Загрузка файла
+          loaded: Файл загружен
+          deleted: Файл удален
+        message:
+          title: Отправка сообщения
+          sent: Сообщение отправлено
+        control:
+          title: Новая конрольная запись
+          added: Контрольная запись добавлена
+          change: Изменение конрольной записи
+          changed: Контрольная запись изменена
+          deleted: Контрольная запись удалена
+        amount:
+          title: Изменение суммы
+          changed: Сумма изменена
         back_to_application: Назад к заявке
         accounts_page:
           title: Абоненты
@@ -331,6 +441,7 @@ ru:
           calculations_description: "Стоимость пакета рассчитается в соответствии с количеством абонентов, уровнем напряжения и затребованной мощностью."
         delete_confirm: Уверены в удалении файла?
         delete_complete: Файл удален
+        unregistered: У вас не зарегистривано ни одной заявки. Для начала регистрации подключения к сети нажмите кнопку "Новая заявка".
     network_new_customer_item:
       type_individual: Индивидуальный
       type_summary: Суммарный
@@ -374,6 +485,14 @@ ru:
         tin_illegal: Неверный идентиикационный код
         illegal_count: Суммарное количество должно быть числом и > 0
         illegal_power: Мощность должно быть числом и > 0
+      billing_operations: Операции отразятся параллельно с добавлением их в систему биллинга.
+      no_operations: Не проведена ни одна операция!
+      messages: 
+        title: Сообщения придут в помощью SMS на ваш мобильный телефон. Здесь размещены все относящиеся к заявке сообщения.
+        datetime: "Дата, время"
+        messagetext: Текст сообщения
+        mobile: "# мобильного телефона"
+        no_message: Нет ни одного сообщения!
     network_new_customer_tariff:
       voltage: Напряжение
       power: Мощность

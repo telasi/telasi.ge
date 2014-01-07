@@ -4,47 +4,47 @@
       <code><%= app.address_code %></code>
       <%= app.work_address || app.address %>
     </div>
-    მისამართი
+    <%= t('models.network_new_customer_item.address') %>
   </li>
   <li class="list-group-item">
     <div class="pull-right">
       <code><%= app.rs_tin %></code>
       <%= app.rs_name %>
     </div>
-    განმცხადებელი
+    <%= t('models.network_new_customer_application.rs_name') %>
   </li>
   <li class="list-group-item">
     <div class="pull-right">
       <img src="<%= app.status_icon %>"></img>
       <%= app.status_name %>
     </div>
-    სტატუსი
+    <%= t('models.network_new_customer_application.status') %>
   </li>
   <li class="list-group-item">
     <div class="pull-right">
       <code><%= app.power.to_i %></code> kWh /
       <code><%= app.voltage %></code> <%= app.unit %>
     </div>
-    სიმძლავრე
+    <%= t('models.network_new_customer_application.power') %>
   </li>
   <li class="list-group-item">
     <div class="pull-right">
       <code><%= number_with_precision app.amount, delimiter: ',', separator: '.', precision: 2 %></code> GEL
     </div>
-    ღირებულება
+   <%= t('models.network_new_customer_application.amount') %>
   </li>
   <li class="list-group-item">
     <div class="pull-right">
       <code><%= number_with_precision app.paid, delimiter: ',', separator: '.', precision: 2 %></code> GEL
     </div>
-    გადახდილია
+    <%= t('models.network_new_customer_application.paid') %>
   </li>
   <% if app.plan_end_date %>
     <li class="list-group-item">
       <div class="pull-right">
         <%= app.plan_end_date.strftime('%d/%m/%Y') %>
       </div>
-      გეგმიური დასრულების თარიღი
+      <%= t('models.network_new_customer_application.plan_end_date') %>
     </li>
   <% end %>
 </ul>

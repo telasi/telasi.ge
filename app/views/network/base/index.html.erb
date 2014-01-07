@@ -6,12 +6,12 @@
     <% end %>
   </div>
   <a class="btn btn-default" href="<%= network_new_customers_url %>">
-    <img src="/icons/user--plus.png"></img> ახალი აბონენტი
+    <img src="/icons/user--plus.png"></img> <%= t('models.network_new_customer_item.actions.new_account') %>
   </a>
   <a class="btn btn-default" href="<%= network_change_power_applications_url %>">
-    <img src="/icons/user--pencil.png"></img> ქსელში ცვლილება
+    <img src="/icons/user--pencil.png"></img> <%= t('models.network_change_power_application.actions.change') %>
   </a>
-  <a class="btn btn-warning" href="<%= network_avisos_url %>"><img src="/icons/money-coin.png"></img> ავიზოების მართვა</a>
+  <a class="btn btn-warning" href="<%= network_avisos_url %>"><img src="/icons/money-coin.png"></img> <%= t('models.network.avisos.manage') %></a>
 </div>
 <%= new_customer_table @new_customers %>
 <%= change_power_table @change_powers %>

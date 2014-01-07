@@ -6,10 +6,10 @@
     </a>
     <a href="<%= new_customer_paybill_url(id: @application.id, format: 'pdf') %>" class="btn btn-default">
       <i class="fa fa-print"></i>
-      საგადახდო დავალება
+      <%= t('applications.pay_order') %>
     </a>
   </div>
-  <h2>განცხადება <code>#<%= @application.effective_number %></code></h2>
+  <h2><%= t('models.network_new_customer_application.application') %> <code>#<%= @application.effective_number %></code></h2>
 </div>
 <%
   my_links = {

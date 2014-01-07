@@ -3,7 +3,7 @@ require 'rs'
 
 class Network::NewCustomerController < Network::NetworkController
   def index
-    @title = 'ახალი აბონენტი'
+    @title = I18n.t('models.network_new_customer_item.actions.new_account')
     @search = params[:search] == 'clear' ? nil : params[:search]
     rel = Network::NewCustomerApplication
     if @search
@@ -30,13 +30,13 @@ class Network::NewCustomerController < Network::NetworkController
   end
 
   def add_new_customer
-    @title = 'ახალი განცხადება'
+    @title = I18n.t('models.network_new_customer_application.actions.new')
     if request.post?
       @application = Network::NewCustomerApplication.new(new_customer_params)
       @application.user = current_user
       # @application.status = Network::NewCustomerApplication::STATUS_SENT
       if @application.save
-        redirect_to network_new_customer_url(id: @application._id, tab: 'general'), notice: 'განცხადება დამატებულია'
+        redirect_to network_new_customer_url(id: @application._id, tab: 'general'), notice: I18n.t('models.network_new_customer_application.actions.added')
       end
     else
       @application = Network::NewCustomerApplication.new
@@ -44,11 +44,11 @@ class Network::NewCustomerController < Network::NetworkController
   end
 
   def edit_new_customer
-    @title = 'ახალი აბონენტის განცხადების შეცვლა'
+    @title = I18n.t('models.network_new_customer_application.actions.edit.title')
     @application = Network::NewCustomerApplication.find(params[:id])
     if request.post?
       if @application.update_attributes(new_customer_params)
-        redirect_to network_new_customer_url(id: @application._id, tab: 'general'), notice: 'განცხადება შეცვლილია'
+        redirect_to network_new_customer_url(id: @application._id, tab: 'general'), notice: I18n.t('models.network_new_customer_application.actions.edit.changed')
       end
     end
   end
@@ -56,7 +56,7 @@ class Network::NewCustomerController < Network::NetworkController
   def delete_new_customer
     application = Network::NewCustomerApplication.find(params[:id])
     application.destroy
-    redirect_to network_home_url, notice: 'განცხადება წაშლილია!'
+    redirect_to network_home_url, notice: I18n.t('models.network_new_customer_application.actions.edit.deleted')
   end
 
   def link_bs_customer
@@ -82,7 +82,7 @@ class Network::NewCustomerController < Network::NetworkController
   end
 
   def change_status
-    @title = 'სტატუსის ცვლილება'
+    @title = I18n.t('models.network_new_customer_application.actions.status.title')
     @application = Network::NewCustomerApplication.find(params[:id])
     if request.post?
       @message = Sys::SmsMessage.new(params.require(:sys_sms_message).permit(:message))
@@ -92,7 +92,7 @@ class Network::NewCustomerController < Network::NetworkController
         @message.send_sms!
         @application.status = params[:status].to_i
         if @application.save
-          redirect_to network_new_customer_url(id: @application.id), notice: 'სტატუსი შეცვლილია'
+          redirect_to network_new_customer_url(id: @application.id), notice: I18n.t('models.network_new_customer_application.actions.status.changed')
         else
           @error = @application.errors.full_messages
         end
@@ -103,7 +103,7 @@ class Network::NewCustomerController < Network::NetworkController
   end
 
   def send_sms
-    @title = 'შეტყობინების გაგზავნა'
+    @title = I18n.t('models.network_new_customer_application.actions.message.title')
     @application = Network::NewCustomerApplication.find(params[:id])
     if request.post?
       @message = Sys::SmsMessage.new(params.require(:sys_sms_message).permit(:message))
@@ -111,7 +111,7 @@ class Network::NewCustomerController < Network::NetworkController
       @message.mobile = @application.mobile
       if @message.save
         @message.send_sms!
-        redirect_to network_new_customer_url(id: @application.id, tab: 'sms'), notice: 'შეტყობინება გაგზავნილია'
+        redirect_to network_new_customer_url(id: @application.id, tab: 'sms'), notice: I18n.t('models.network_new_customer_application.actions.message.sent')
       end
     else
       @message = Sys::SmsMessage.new
@@ -119,13 +119,13 @@ class Network::NewCustomerController < Network::NetworkController
   end
 
   def upload_file
-    @title = 'ფაილის ატვირთვა'
+    @title = I18n.t('models.network_new_customer_application.actions.file.title')
     @application = Network::NewCustomerApplication.find(params[:id])
     if request.post? and params[:sys_file]
       @file = Sys::File.new(params.require(:sys_file).permit(:file))
       if @file.save
         @application.files << @file
-        redirect_to network_new_customer_url(id: @application.id, tab: 'files'), notice: 'ფაილი დამატებულია'
+        redirect_to network_new_customer_url(id: @application.id, tab: 'files'), notice: I18n.t('models.network_new_customer_application.actions.file.loaded')
       end
     else
       @file = Sys::File.new
@@ -136,7 +136,7 @@ class Network::NewCustomerController < Network::NetworkController
     application = Network::NewCustomerApplication.find(params[:id])
     file = application.files.where(_id: params[:file_id]).first
     file.destroy
-    redirect_to network_new_customer_url(id: application.id, tab: 'files'), notice: 'ფაილი წაშლილია'
+    redirect_to network_new_customer_url(id: application.id, tab: 'files'), notice: I18n.t('models.network_new_customer_application.actions.file.deleted')
   end
 
   def change_plan_date
@@ -171,7 +171,7 @@ class Network::NewCustomerController < Network::NetworkController
     @application = @app = Network::NewCustomerApplication.find(params[:id])
     respond_to do |format|
       format.html do
-        @title = 'საგადახდო დავალება'
+        @title = I18n.t('applications.pay_order')
         @data = { amount: @app.amount / 2.0 }
       end
       format.pdf do
@@ -210,14 +210,14 @@ class Network::NewCustomerController < Network::NetworkController
   end
 
   def new_control_item
-    @title = 'ახალი საკონტროლო ჩანაწერი'
+    @title = I18n.t('models.network_new_customer_application.actions.control.title')
     @application = Network::NewCustomerApplication.find(params[:id])
     if request.post?
       @item = Network::RequestItem.new(params.require(:network_request_item).permit(:type, :date, :description, :stage_id))
       @item.source = @application
       if @item.save
         @application.update_last_request
-        redirect_to network_new_customer_url(id: @application.id, tab: 'watch'), notice: 'საკონტროლო ჩანაწერი დამატებულია'
+        redirect_to network_new_customer_url(id: @application.id, tab: 'watch'), notice: I18n.t('models.network_new_customer_application.actions.control.added')
       end
     else
       @item = Network::RequestItem.new(source: @application, date: Date.today)
@@ -225,12 +225,12 @@ class Network::NewCustomerController < Network::NetworkController
   end
 
   def edit_control_item
-    @title = 'საკონტროლო ჩანაწერის შეცვლა'
+    @title = I18n.t('models.network_new_customer_application.actions.control.change')
     @item = Network::RequestItem.find(params[:id])
     if request.post?
       if @item.update_attributes(params.require(:network_request_item).permit(:type, :date, :description, :stage_id))
         @item.source.update_last_request
-        redirect_to network_new_customer_url(id: @item.source.id, tab: 'watch'), notice: 'საკონტროლო ჩანაწერი შეცვლილია'
+        redirect_to network_new_customer_url(id: @item.source.id, tab: 'watch'), notice: I18n.t('models.network_new_customer_application.actions.control.changed')
       end
     end
   end
@@ -240,7 +240,7 @@ class Network::NewCustomerController < Network::NetworkController
     app = item.source
     item.destroy
     app.update_last_request
-    redirect_to network_new_customer_url(id: app.id, tab: 'watch'), notice: 'საკონტროლო ჩანაწერი წაშლილია'
+    redirect_to network_new_customer_url(id: app.id, tab: 'watch'), notice: I18n.t('models.network_new_customer_application.actions.control.deleted')
   end
 
   def nav

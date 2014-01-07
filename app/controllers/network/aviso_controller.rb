@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 class Network::AvisoController < Network::NetworkController
   def index
-    @title = 'ავიზოები'
+    @title = I18n.t('models.network.avisos')
     @search = params[:search] == 'clear' ? nil : params[:search]
     rel = Billing::Aviso.where(avtpkey: Billing::Aviso::NEW_CUSTOMER_APP)
     if @search
@@ -13,7 +13,7 @@ class Network::AvisoController < Network::NetworkController
   end
 
   def show
-    @title = 'ავიზოს თვისებები'
+    @title = I18n.t('models.network.aviso_param')
     @aviso = Billing::Aviso.find(params[:id])
     @application = @aviso.guessed_application unless @aviso.status
   end
@@ -44,7 +44,7 @@ class Network::AvisoController < Network::NetworkController
 
   def add_customer
     @aviso = Billing::Aviso.find(params[:id])
-    @title = 'აბონენტის განსაზღვრა'
+    @title = I18n.t('models.network.aviso.abonent_def')
     if params[:meter]
       @account = Billing::Account.where(mtnumb: params[:meter]).first
     elsif params[:custkey]

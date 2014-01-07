@@ -12,6 +12,7 @@ ka:
     new_customer: ახალი აბონენტი
     calculator: კალკულატორი
   applications:
+    pay_order: საგადახდო დავალება
     customers_title: აბონენტები
     customers_description: აბონენტის ისტორია და ვალები.
     admin:
@@ -62,6 +63,8 @@ ka:
       account: აარჩიეთ მრიცხველი
       tariff: ტარიფი
     general:
+      yes: კი
+      no: არა
       records: ჩანაწერი
       history: ისტორია
       system: სისტემური
@@ -71,6 +74,8 @@ ka:
       search_clear: ფორმის გასუფთავება
       more: მეტი
       undefined: გაურკვეველი
+      detailed: დეტალურად
+      chose_file: აარჩიეთ ფაილი
       actions:
         save: შენახვა
         cancel: გაუქმება
@@ -78,6 +83,8 @@ ka:
         show: ნახვა
         edit: შეცვლა
         print: ბეჭდვა
+        send: გაგზავნა
+        link: დაკავშირება
     sys_user:
       title:
         single: მომხმარებელი
@@ -210,7 +217,69 @@ ka:
         deny_alt: რეგისტრაციის უარყოფა
         remove_confirm: ნამდვილად გინდათ აბონენტის წაშლა?
         remove_complete: აბონენტი წაშლილია
+    network:
+      network: ქსელი
+      action:
+        manage: ავიზოების მართვა
+      aviso:
+        aviso: ავიზო
+        avisos: ავიზოები
+        abonent: აბონენტი
+        account_param: ანგარიშის თვისებები
+        number: აბ. ნომერი
+        name: დასახელება
+        count_no: "მრიხცველის #"
+        created: შეიქმნა
+        abonent_bound: 'აბონენტის მიბმა !!!'
+        abonent_bound_confirm: 'ნამდვილად გინდათ ამ აბონენტის მოცემულ ავიზოზე მიბმა?'
+        abonent_search: მოძებნეთ აბონენტი
+        abonent_search_hint: აქ შეგიძლიათ იპოვოთ აბონენტი მრიხცველის ნომრის მიხედვით.
+        bound_aviso: დასაკავშირებელი ავიზო
+        avido_param: ავიზოს თვისებები
+        date: თარიღი
+        bank: ბანკი
+        amount: თანხა
+        abonent_no: "აბ.#"
+        invoice_no: "ინვოისის #"
+        note: შენიშვნა
+        complete: დამუშავებული?
+        cmpl: დმშ?
+        complete_hint: დამუშავებულია თუ არა ეს ავიზო?
+        abonent_def: აბონენტის განსაზღვრა
+        abonent_created: აბონ. შექმნილია?
+        abonent_created_hint: შექმნილია თუ არა ახალი აბონენტი ამ განცხადების საფუძველზე?
+        oper_billing: ოპერ. ბილინგშია?
+        oper_billing_hint: გატარებულია თუ არა ეს ოპერაცია ბილინგში?
+        linked_oper: დაკავშირებული განცხადება
+        delete_link: კავშირის წაშლა
+        delete_link_confirm: ნამდვილად გინდათ კავშირის წაშლა?
+        application_found: "მოიძებნა განცხადება, რომელიც შესაძლოა იყოს დაკავშირებული ამ ავიზოსთან (იხ. ქვემოთ)."
+        application_confirm_question: "თუ განცხადება სწორადაა ნაპოვნი, გთხოვთ დაადასტუროთ ეს მწვანე ღილაკზე დაჭერით."
+        application_link: განცხადების დაკავშირება
+        application_link_confirm: ნამდვილად გინდათ ავიზოს დაკავშირება ამ განცხადებასთან?
+        application_not_found: ვერ მოიძებნა დაკავშირებული განცხადება!
+      change:
+        currenct_status: მიმდინარე სტატუსი
+        new_status: ახალი სტატუსი
+        sms: SMS შეტყობინება
+        status_change: სტატუსის შეცვლა
+        send_new_file: ახალი ფაილის ატვირთვა
+      stages:
+        stages: ეტაპები
+        new_stage: ახალი ეტაპი
+        added: ეტაპი დამატებულია
+        del_confirm: ნამდვილად გინდათ წაშლა?
+        change: ეტაპის შეცვლა
+        changed: ეტაპი შეცვლილია
+        deleted: ეტაპი წაშლილია
+      tariffs:
+        tariff: ტარიფები
+        generation: გენერაცია
+        generated: ტარიფები გენერირებულია
+        sure: ნამდვილად?
     network_change_power_application:
+      actions:
+        change: ქსელში ცვლილება
       type: სახეობა
       number: ნომერი
       rs_name: განმცხადებელი
@@ -264,11 +333,20 @@ ka:
       factura_id: საიდ. კოდი
       factura_number: ნომერი
     network_new_customer_application:
+      application: განცხადება
+      contact_info: საკონტაქტო ინფორმაცია
+      tech_detail: ტექნიკური დეტალები
+      bank_info: განმცხადებლის საბანკო რეკვიზიტები
+      chose_bank: -- აარჩიეთ ბანკი --
+      chose: -- აარჩიეთ --
+      general_data: ძირითადი მონაცემები
+      progress: მიმდინარეობა
       number: ნომერი
       online: ონლაინ?
       online_hint: არის თუ არა ეს განცხადება შევსებული ონალაინ?
       vat_name: დღგ-ს გადამხდელი?
       rs_name: განმცხადებელი
+      rs_id: განმცხადებელის საიდ. კოდი
       rs_tin: პირადი ნომერი ან საიდენტიფიკაციო კოდი
       rs_foreigner: უცხოელია?
       rs_tin_hint: "ფიზიკური პირებისთვის ჩაწერეთ 11 ნიშნა პირადი ნომერი, ხოლო ორგანიზაციებისთვის &mdash; 9-ნიშნა საიდენტიფიკაციო ნომერი"
@@ -316,7 +394,8 @@ ka:
       send_date_hint: განცხადების თელასში გამოგზავნის თარიღი
       start_date: დაწყების თარიღი
       start_date_hint: განცხადების დაწყების თარიღი
-      plan_end_date: გეგმიური დასრულება
+      real_date: რეალური თარიღი
+      plan_end_date: გეგმიური დასრულების თარიღი
       plan_end_date_hint: სამუშაოების დასრულების გეგმიური თარიღი
       end_date: რეალური დასრულება
       end_date_hint: სამუშაოების დასრულების რეალური თარიღი
@@ -337,6 +416,8 @@ ka:
       notes: შენიშვნები
       customer: ბილინგის აბონენტი
       unit_days: დღე
+      invoice_amount: საგადახდო დავალების თანხა
+      enter_amount: ჩაწერეთ თანხა:
       errors:
         tin_required: საიდ.კოდის მითითება აუცილებელია
         tin_illegal: არასწორი საიდენტიფიკაციო კოდი
@@ -351,6 +432,10 @@ ka:
       actions:
         new: ახალი განცხადება
         new2: განცხადების დამატება
+        added: განცხადება დამატებულია
+        add_account: ანგარიშის დამატება
+        change_account: ანგარიშის შეცვლა
+        bound_billing: ბილინგის აბონენტის მიბმა
         new_description: "გთხოვთ გულდასმით შეავსოთ ქსელზე მიერთების განცხადება. განმცხადებლის როლში შეიძლება გამოდიოდეს როგორც ფიზიკური პირი, ასევე იურიდიული პირი ან ორგანიზაცია. თქვენი პირადი მონაცემების გარდა, აუცილებელია თქვენი საბანკო ანგარიშის მითითება, რომელზეც მოხდება ფულის დაბრუნება, განცხადების გაუქმების შემთხვევაში."
         index_page:
           title: ქსელზე მიერთება
@@ -366,6 +451,27 @@ ka:
         upload_complete: დოკუმენტი დამატებულია
         edit:
           title: განცხადების შეცვლა
+          changed: განცხადება შეცვლილია.
+          deleted: განცხადება წაშლილია!
+        status: 
+          title: სტატუსის ცვლილება
+          changed: სტატუსი შეცვლილია
+        file: 
+          title: ფაილის ატვირთვა
+          loaded: ფაილი დამატებულია
+          deleted: ფაილი წაშლილია
+        message:
+          title: შეტყობინების გაგზავნა
+          sent: შეტყობინება გაგზავნილია
+        control:
+          title: ახალი საკონტროლო ჩანაწერი
+          added: საკონტროლო ჩანაწერი დამატებულია
+          change: საკონტროლო ჩანაწერის შეცვლა
+          changed: საკონტროლო ჩანაწერი შეცვლილია
+          deleted: საკონტროლო ჩანაწერი წაშლილია
+        amount:
+          title: თანხის შეცვლა
+          changed: თანხა შეცვლილია
         back_to_application: უკან განცხადებაში
         accounts_page:
           title: აბონენტები
@@ -374,6 +480,7 @@ ka:
           calculations_description: "პაკეტის ღირებულება დაითვლება აბონენტების რაოდენობის, ძაბვის საფეხურის და მოთხოვნილი სიმძლავრის მიხედვით."
         delete_confirm: ნამდვილად გინდათ ამ ფაილის წაშლა?
         delete_complete: ფაილი წაშლილია
+        unregistered: თქვენ არც ერთი განცხადება არ გაქვთ რეგისტრირებული. ქსელზე მიერთების რეგისტრაციის დასაწყებად მიაჭირეთ ღილაკს "ახალი განცხადება".
     network_new_customer_item:
       type_individual: ინდივიდუალური
       type_summary: ჯამური
@@ -417,6 +524,14 @@ ka:
         tin_illegal: არასწორი საიდენტიფიკაციო კოდი
         illegal_count: ჯამური რაოდენობა უნდა იყოს რიცხვი და > 0
         illegal_power: სიმძლავრე უნდა იყოს რიცხვი და > 0
+      billing_operations: ოპერაციები გამოჩნდება მათი ბილინგის სისტემაში დამატების პარალელურად.
+      no_operations: ჯერ არც ერთი ოპერაცია არ არის გატარებული!
+      messages:
+        title: შეტყობინებები მოგივათ SMS საშუალებით თქვენს მობილურ ტელეფონზე. აქ თავმოყრილია ამ განცხადებასთან დაკავშირებული ყველა შეტყობინება.
+        datetime: "თარიღი, დრო"
+        messagetext: შეტყობინების ტექსტი
+        mobile: "მობილურის #"
+        no_message: ჯერ არც ერთი შეტყობინება არ არის!
     network_new_customer_tariff:
       voltage: ძაბვა
       power: სიმძლავრე

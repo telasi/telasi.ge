@@ -1,0 +1,42 @@
+<%= render partial: 'new_customers/top' %>
+
+<% if @application.not_sent? %>
+  <hr />
+
+  <% if not @application.docs_are_ok? %>
+    <div class="alert alert-danger">
+      В заявке пока нет <strong>необходимых документов</strong>!
+      для добаления
+      <strong><%= link_to 'перейдите на страницу', new_customer_files_url(id: @application.id) %></strong>.
+    </div>
+  <% elsif not @application.can_send? %>
+    <p>
+      Ваше заявка почти готова к отправке!
+      Просьба еще раз проверьте корректность.
+      <strong>Если введенные вами данные будут неточными, Теласи оставляет на собой право
+      отказать приему заявки</strong>.
+      Если же данные верны, нажмите подтверждающую кнопку.
+    </p>
+    <p class="text-center">
+      <a href="<%= new_customer_confirm_step_url(id: @application.id, step: 'confirm_correctness', tab: 'general') %>" data-method="post" data-confirm="Подтвердите корректность данных!" class="btn btn-success">
+        <i class="fa fa-check"></i>
+        Подтверждаю корректность данных
+      </a>
+    </p>
+  <% else %>
+    <p>
+      Ваша заявка готова к отправке!
+      <strong>Еще раз проверьте параметры заявки и документы: после отправки вы уже не сможете их поменять</strong>.
+    </p>
+    <p class="text-center">
+      <a href="<%= new_customer_send_url(id: @application.id) %>" data-method="post" data-confirm="Действительно хотите отправить заявку?" class="btn btn-success">
+        <i class="fa fa-share"></i>
+        Отправка заявки
+      </a>
+    </p>
+  <% end %>
+
+  <hr />
+<% end %>
+
+<%= render partial: 'new_customers/application', locals: { app: @application } %>

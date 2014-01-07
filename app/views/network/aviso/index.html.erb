@@ -1,20 +1,20 @@
 <%= search_form @search do |f|
-  f.combo_field 'paypoint', label: 'ბანკი', collection: Billing::Paypoint.network_paypoints, empty: '-- აარჩიეთ ბანკი --'
-  f.date_field 'date', label: 'თარიღი', default: Date.today
-  f.combo_field 'complete', label: 'დამუშავებული?', collection: { 'კი' => 'yes', 'არა' => 'no' }, empty: '--'
+  f.combo_field 'paypoint', label: t('models.network.aviso.bank'), collection: Billing::Paypoint.network_paypoints, empty: t('models.network_new_customer_application.chose_bank')
+  f.date_field 'date', label: t('models.network.aviso.date'), default: Date.today
+  f.combo_field 'complete', label: t('models.network.aviso.complete'), collection: { t('models.general.yes') => 'yes', t('models.general.yes') => 'no' }, empty: '--'
 end %>
-<%= table_for @avisos, title: 'ავიზოები', icon: '/icons/money-coin.png', collapsible: true do |t|
-  t.date_field 'avdate', label: 'თარიღი', url: ->(x) { network_aviso_url(id: x.avdetkey) }
-  t.complex_field label: 'ბანკი' do |c|
+<%= table_for @avisos, title: t('models.network.aviso.avisos'), icon: '/icons/money-coin.png', collapsible: true do |t|
+  t.date_field 'avdate', label: t('models.network.aviso.date'), url: ->(x) { network_aviso_url(id: x.avdetkey) }
+  t.complex_field label: t('models.network.aviso.bank') do |c|
     c.text_field 'paypoint'
     c.text_field 'basepointkey', class: 'muted'
   end
-  t.boolean_field 'status', label: 'დმშ?', hint: 'დამუშავებულია თუ არა ეს ავიზო?'
-  t.text_field 'accnumb', label: 'აბ.#', tag: 'code'
+  t.boolean_field 'status', label: t('models.network.aviso.cmpl'), hint: t('models.network.aviso.complete_hint')
+  t.text_field 'accnumb', label: t('models.network.aviso.abonent_no'), tag: 'code'
   t.text_field 'cns', label: 'CNS #'
-  t.number_field 'amount', label: 'თანხა', after: 'GEL'
+  t.number_field 'amount', label: t('models.network.aviso.amount'), after: 'GEL'
   # t.text_field 'note'
-  t.paginate records: 'ჩანაწერი'
+  t.paginate records: t('models.general.records')
 end %>
 <div class="alert alert-error">
   <p>

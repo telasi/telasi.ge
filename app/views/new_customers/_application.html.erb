@@ -9,7 +9,7 @@
           </a>
         </div>
       <% end %>
-      <h3>ძირითადი მონაცემები</h3>
+      <h3><%= t('models.network_new_customer_application.general_data') %></h3>
     </div>
     <%= render partial: 'new_customers/item', locals: { app: app } %>
     <!-- mobile /email -->
@@ -56,7 +56,7 @@
   </div>
   <div class="col-sm-6">
     <div class="page-header">
-      <h3>მიმდინარეობა</h3>
+      <h3><%= t('models.network_new_customer_application.progress') %></h3>
     </div>
     <ul class="list-group">
       <li class="list-group-item">

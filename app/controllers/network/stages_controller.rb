@@ -1,17 +1,17 @@
 # -*- encoding : utf-8 -*-
 class Network::StagesController < Network::NetworkController
   def index
-    @title = 'ეტაპები'
+    @title = I18n.t('models.network.stages.stages')
     @stages = Network::Stage.asc(:numb)
   end
 
   def new
-    @title = 'ახალი ეტაპი'
+    @title = I18n.t('models.network.stages.new_stage')
     if request.post?
       @stage = Network::Stage.new(params.require(:network_stage).permit(:name))
       if @stage.save
         Network::Stage.auto_numerate
-        redirect_to network_stages_url, notice: 'ეტაპი დამატებულია'
+        redirect_to network_stages_url, notice: I18n.t('models.network.stages.added')
       end
     else
       @stage = Network::Stage.new
@@ -19,12 +19,12 @@ class Network::StagesController < Network::NetworkController
   end
 
   def edit
-    @title = 'ეტაპის შეცვლა'
+    @title = I18n.t('models.network.stages.change')
     @stage = Network::Stage.find(params[:id])
     if request.post?
       if @stage.update_attributes(params.require(:network_stage).permit(:name, :numb))
         Network::Stage.auto_numerate
-        redirect_to network_stages_url, notice: 'ეტაპი შეცვლილია'
+        redirect_to network_stages_url, notice: I18n.t('models.network.stages.changed')
       end
     end
   end
@@ -33,7 +33,7 @@ class Network::StagesController < Network::NetworkController
     stage = Network::Stage.find(params[:id])
     stage.destroy
     Network::Stage.auto_numerate
-    redirect_to network_stages_url, notice: 'ეტაპი წაშლილია'
+    redirect_to network_stages_url, notice: I18n.t('models.network.stages.deleted')
   end
 
   def nav

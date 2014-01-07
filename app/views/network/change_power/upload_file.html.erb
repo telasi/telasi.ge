@@ -1,5 +1,5 @@
-<%= forma_for @file, title: 'ახალი ფაილის ატვირთვა', icon: '/icons/upload-cloud.png', collapsible: true, multipart: true do |f|
-  f.file_field 'file', label: 'აარჩიეთ ფაილი', required: true
-  f.submit 'შენახვა'
+<%= forma_for @file, title: t('models.network.change.send_new_file'), icon: '/icons/upload-cloud.png', collapsible: true, multipart: true do |f|
+  f.file_field 'file', label: t('models.general.chose_file'), required: true
+  f.submit t('models.general.actions.save')
   f.cancel_button network_change_power_url(id: @application.id, tab: 'files')
 end %>

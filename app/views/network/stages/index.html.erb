@@ -1,7 +1,7 @@
-<%= table_for @stages, title: 'ეტაპები', icon: '/icons/wrench.png', collapsible: true do |t|
-  t.title_action network_new_stage_url, label: 'ახალი ეტაპი', icon: '/icons/wrench--plus.png'
+<%= table_for @stages, title: t('models.network.stages.stages'), icon: '/icons/wrench.png', collapsible: true do |t|
+  t.title_action network_new_stage_url, label: t('models.network.stages.new_stage'), icon: '/icons/wrench--plus.png'
   t.item_action ->(x) { network_edit_stage_url(id: x.id) }, icon: '/icons/pencil.png'
-  t.item_action ->(x) { network_delete_stage_url(id: x.id) }, icon: '/icons/bin.png', method: 'delete', confirm: 'ნამდვილად გინდათ წაშლა?'
+  t.item_action ->(x) { network_delete_stage_url(id: x.id) }, icon: '/icons/bin.png', method: 'delete', confirm: t('models.network.stages.new_stage')
   t.text_field :numb, tag: 'code'
   t.text_field :name
 end %>

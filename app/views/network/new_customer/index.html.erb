@@ -1,24 +1,24 @@
 <%= search_form @search do |f|
   f.tab do |f|
-    f.number_field 'number', label: 'ნომერი'
-    f.combo_field 'status', label: 'სტატუსი', collection: Hash[ * (Network::NewCustomerApplication::STATUSES.map { |x| [Network::NewCustomerApplication.status_name(x), x] }).flatten ], empty: '-- აარჩიეთ --'
-    f.text_field 'rs_name', label: 'განმცხადებელი'
-    f.text_field 'rs_tin', label: 'განმცხადებელის საიდ. კოდი'
-    f.combo_field 'stage', label: 'ეტაპი', collection: Hash[*(Network::Stage.asc(:numb).map{|x| [x.name, x.id]}.flatten)], empty: '-- აარჩიეთ --'
+    f.number_field 'number', label: t('models.network_new_customer_application.number')
+    f.combo_field 'status', label: t('models.network_new_customer_application.status'), collection: Hash[ * (Network::NewCustomerApplication::STATUSES.map { |x| [Network::NewCustomerApplication.status_name(x), x] }).flatten ], empty: t('models.network_new_customer_application.chose')
+    f.text_field 'rs_name', label: t('models.network_new_customer_application.rs_name')
+    f.text_field 'rs_tin', label: t('models.network_new_customer_application.rs_id')
+    f.combo_field 'stage', label: t('models.network_request_item.stage'), collection: Hash[*(Network::Stage.asc(:numb).map{|x| [x.name, x.id]}.flatten)], empty: t('models.network_new_customer_application.chose')
     f.col2 do |f|
-      f.complex_field label: 'გამოგზავნის თარიღი' do |c|
+      f.complex_field label: t('models.network_new_customer_application.send_date') do |c|
         c.date_field 'send_d1'
         c.date_field 'send_d2'
       end
-      f.complex_field label: 'დაწყების თარიღი' do |c|
+      f.complex_field label: t('models.network_new_customer_application.start_date') do |c|
         c.date_field 'start_d1'
         c.date_field 'start_d2'
       end
-      f.complex_field label: 'რეალური თარიღი' do |c|
+      f.complex_field label: t('models.network_new_customer_application.real_date') do |c|
         c.date_field 'real_d1'
         c.date_field 'real_d2'
       end
-      f.complex_field label: 'გეგმიური თარიღი' do |c|
+      f.complex_field label: t('models.network_new_customer_application.plan_end_date') do |c|
         c.date_field 'plan_d1'
         c.date_field 'plan_d2'
       end

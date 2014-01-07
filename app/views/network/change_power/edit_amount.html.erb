@@ -1,5 +1,5 @@
 <%= forma_for @application, title: @title, collapsible: true, icon: '/icons/user--pencil.png' do |f|
   f.number_field :amount, autofocus: true
-  f.submit 'შენახვა'
+  f.submit t('models.general.actions.save')
   f.cancel_button network_change_power_url(id: @application.id)
 end %>
