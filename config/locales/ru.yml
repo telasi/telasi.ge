@@ -375,7 +375,7 @@ ru:
       customer: Абонент биллинга
       unit_days: дни
       invoice_amount: Сумма платежного поручения
-      enter_amount: Введите сумму:
+      enter_amount: Введите сумму
       errors:
         tin_required: Указание иден. кода обязательно
         tin_illegal: Неправильный иден. код

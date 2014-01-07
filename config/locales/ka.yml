@@ -417,7 +417,7 @@ ka:
       customer: ბილინგის აბონენტი
       unit_days: დღე
       invoice_amount: საგადახდო დავალების თანხა
-      enter_amount: ჩაწერეთ თანხა:
+      enter_amount: ჩაწერეთ თანხა
       errors:
         tin_required: საიდ.კოდის მითითება აუცილებელია
         tin_illegal: არასწორი საიდენტიფიკაციო კოდი
