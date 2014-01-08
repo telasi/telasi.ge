@@ -48,7 +48,7 @@ module Network::ChangePowerHelper
         t.email_field :email
         t.text_field  :address, required: true, width: 500
         t.text_field  :work_address, width: 500
-        t.text_field  :address_code, required: true
+        t.text_field  :address_code #, required: true
         t.combo_field :bank_code, collection: banks, empty: '-- აარჩიეთ ანგარიში --'
         t.text_field  :bank_account, width: 300
         f.select_field :customer, select_customer_url, label: 'ბილინგის აბონენტი', search_width: 900
@@ -105,7 +105,7 @@ module Network::ChangePowerHelper
         t.text_field :mobile, required: true
         t.text_field :address, required: true, hint: 'განმცხადებლის მისამართი'
         t.complex_field i18n: 'work_address', required: true do |c|
-          c.text_field 'address_code', tag: 'code'
+          c.text_field 'address_code', tag: 'code', empty: false
           c.text_field 'work_address', empty: false
         end
         t.complex_field label: 'საბანკო ანგარიში', required: true do |c|
