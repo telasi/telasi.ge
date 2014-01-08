@@ -73,6 +73,8 @@ class Network::NewCustomerApplication
   field :aviso_id, type: Integer
 
   # confirmation flags
+  field :doc_id,        type: Mongoid::Boolean, default: false
+  field :doc_ownership, type: Mongoid::Boolean, default: false
   field :doc_project,   type: Mongoid::Boolean, default: false
   field :doc_payment,   type: Mongoid::Boolean, default: false
   field :confirm_correctness,  type: Mongoid::Boolean, default: false
@@ -148,7 +150,7 @@ class Network::NewCustomerApplication
 
   def editable_online?; self.status == STATUS_DEFAULT end
   def not_sent?; self.status == STATUS_DEFAULT end
-  def docs_are_ok?; self.doc_project and self.doc_payment end
+  def docs_are_ok?; self.doc_payment and self.doc_ownership and self.doc_id end
   def can_send?; self.status == STATUS_DEFAULT and self.docs_are_ok? and self.confirm_correctness end
 
   # შესაძლო სტატუსების ჩამონათვალი მიმდინარე სტატუსიდან.
