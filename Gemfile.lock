@@ -1,12 +1,4 @@
 GIT
-  remote: git://github.com/dimakura/forma.git
-  revision: f664bf1f0557611ad3db9a76231bbd1fe8ce607c
-  specs:
-    forma (0.1.2)
-      activesupport
-      railties (>= 3.1)
-
-GIT
   remote: git://github.com/mongoid/mongoid.git
   revision: 3d1b8aa48340b79b8481ab96b56e0681433b0bcb
   ref: 3d1b8aa48340b79b8481ab96b56e0681433b0bcb
@@ -82,7 +74,10 @@ GEM
       activerecord (>= 4.0.0)
     erubis (2.7.0)
     execjs (2.0.2)
-    gyoku (1.1.0)
+    forma (0.1.2)
+      activesupport
+      railties (>= 3.1)
+    gyoku (1.1.1)
       builder (>= 2.1.2)
     hashery (2.1.1)
     hike (1.2.3)
@@ -134,7 +129,7 @@ GEM
       ruby-rc4
       ttfunk
     polyglot (0.3.3)
-    prawn (0.13.1)
+    prawn (0.13.2)
       pdf-reader (~> 1.2)
       ruby-rc4
       ttfunk (~> 1.0.3)
@@ -163,12 +158,12 @@ GEM
       mime-types (>= 1.16)
     ruby-oci8 (2.1.5)
     ruby-oci8 (2.1.5-x86-mingw32)
-    ruby-prof (0.13.1)
+    ruby-prof (0.14.2)
     ruby-rc4 (0.1.5)
     rubyntlm (0.3.4)
     safe_attributes (1.0.10)
       activerecord (>= 3.0.0)
-    savon (2.3.2)
+    savon (2.3.3)
       akami (~> 1.2.0)
       builder (>= 2.1.2)
       gyoku (~> 1.1.0)
@@ -225,7 +220,7 @@ DEPENDENCIES
   carrierwave-mongoid
   coffee-rails (~> 4.0.0)
   composite_primary_keys
-  forma!
+  forma (~> 0.1)
   jbuilder (~> 1.0.1)
   jquery-rails (~> 3)
   jquery-ui-rails
