@@ -88,7 +88,7 @@ class Network::NewCustomerApplication
   validates :mobile, presence: { message: I18n.t('models.network_new_customer_application.errors.mobile_required') }
   # validates :email, presence: { message: I18n.t('models.network_new_customer_application.errors.email_required') }
   validates :address, presence: { message: I18n.t('models.network_new_customer_application.errors.address_required') }
-  validates :address_code, presence: { message: I18n.t('models.network_new_customer_application.errors.address_code_required') }
+  # validates :address_code, presence: { message: I18n.t('models.network_new_customer_application.errors.address_code_required') }
   # validates :bank_code, presence: { message: I18n.t('models.network_new_customer_application.errors.bank_code_required') }
   # validates :bank_account, presence: { message: I18n.t('models.network_new_customer_application.errors.bank_account_required') }
   validates :voltage, presence: { message: I18n.t('models.network_new_customer_application.errors.volt_required') }
