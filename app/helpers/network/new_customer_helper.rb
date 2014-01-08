@@ -47,7 +47,7 @@ module Network::NewCustomerHelper
         t.email_field :email
         t.text_field  :address, required: true, width: 500
         t.text_field  :work_address, width: 500
-        t.text_field  :address_code, required: true
+        t.text_field  :address_code #, required: true
         t.combo_field :bank_code, collection: banks, empty: '-- აარჩიეთ ბანკი --' #empty: true, required: true
         t.text_field  :bank_account, width: 300 #, required: true
         t.combo_field :voltage, collection: voltage_collection, empty: false, required: true
@@ -126,7 +126,7 @@ module Network::NewCustomerHelper
         t.text_field :formatted_mobile, required: true
         t.text_field :address, required: true, hint: 'განმცხადებლის მისამართი'
         t.complex_field i18n: 'work_address', required: true do |c|
-          c.text_field 'address_code', tag: 'code'
+          c.text_field 'address_code', tag: 'code', empty: false
           c.text_field 'work_address', empty: false
         end
         t.complex_field label: 'საბანკო ანგარიში', required: true do |c|
