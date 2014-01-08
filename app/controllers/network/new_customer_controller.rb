@@ -12,6 +12,7 @@ class Network::NewCustomerController < Network::NetworkController
       rel = rel.where(rs_tin: @search[:rs_tin].mongonize) if @search[:rs_tin].present?
       rel = rel.where(status: @search[:status].to_i) if @search[:status].present?
       rel = rel.where(stage: Network::Stage.find(@search[:stage])) if @search[:stage].present?
+      rel = rel.where(online: @search[:online] == 'yes') if @search[:online].present?
       rel = rel.where(:send_date.gte => @search[:send_d1]) if @search[:send_d1].present?
       rel = rel.where(:send_date.lte => @search[:send_d2]) if @search[:send_d2].present?
       rel = rel.where(:start_date.gte => @search[:start_d1]) if @search[:start_d1].present?

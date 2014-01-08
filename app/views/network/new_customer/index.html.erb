@@ -5,6 +5,7 @@
     f.text_field 'rs_name', label: t('models.network_new_customer_application.rs_name')
     f.text_field 'rs_tin', label: t('models.network_new_customer_application.rs_id')
     f.combo_field 'stage', label: t('models.network_request_item.stage'), collection: Hash[*(Network::Stage.asc(:numb).map{|x| [x.name, x.id]}.flatten)], empty: t('models.network_new_customer_application.chose')
+    f.combo_field 'online', label: 'ონლაინი?', collection: { 'კი' => 'yes', 'არა' => 'no' }, empty: '--'
     f.col2 do |f|
       f.complex_field label: t('models.network_new_customer_application.send_date') do |c|
         c.date_field 'send_d1'
