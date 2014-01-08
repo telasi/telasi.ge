@@ -63,66 +63,45 @@
     <%= yes_no false %>
     ყველა აუცილებელი დოკუმენტი ჯერ არაა მითითებული განცხადებაში.
   </div>
-<% end %>
-
-<!-- project documentation -->
-<% if @application.doc_project %>
-  <h3 class="text-success page-header">
-    ნაბიჯი #1: ატვირთეთ პროექტი <%= yes_no true %>
-  </h3>
-<% else %>
-  <h3 class="text-danger page-header">
-    ნაბიჯი #1: ატვირთეთ პროექტი <%= yes_no false %>
-  </h3>
-  <ol>
-    <li>თქვენ უნდა ფლობდეთ ქალაქის არქიტექტურული სამსახურის მიერ დამტკიცებულ პროექტს;</li>
-    <li>დაასკანრეთ თქვენი პროექტი და მასთან დაკავშირებული ყველა დოკუმენტაცია და მოათავსეთ ერთ ფაილში თქვენს კომპიუტერზე;</li>
-    <li>დააჭირეთ მწვანე ღილაკს წარწერით "დოკუმენტის დამატება" და ატვირთეთ პროექტის ფაილი თქვენი კომპიუტერიდან;</li>
-    <li>
-      როდესაც დაასრულებთ პროექტის ატვირთვას, დააჭირეთ შესრულების ღილაკს:
-    </li>
-  </ol>
-  <div class="text-center">
-    <a href="<%= new_customer_confirm_step_url(id: @application.id, step: 'doc_project') %>" data-method="post" data-confirm="დაადასტურეთ, რომ ნამდვილად ატვირთეთ პროექტის დოკუმენტი!" class="btn btn-success">
-      <i class="fa fa-check"></i>
-      ნაბიჯი #1 შესრულდა
-    </a>
+  <div class="alert alert-info">
+    <p>
+      <i class="fa fa-info-circle"></i>
+      ქვემოთ მოცემულია ყველა აუცილებელი დოკუმენტი, რომელიც თან უნდა ახლდეს თქვენ განცხადებას.
+      დოკუმენტების განცხადებასთან დასაკვშირებლად გამოიყენეთ ღილაკი წარწერით "დოკუმენტის დამატება"
+      (იხილეთ მწვანე ღილაკი ზემოთ). ყოველი დოკუმენტის დაკავშირების შემდეგ უნდა დააჭიროთ
+      შესაბამის შესრულების ღილაკს, რითიც დაადასტურებთ, რომ საბუთების ატვირთვა დასრულდა და მათში მოცემული
+      ინფორმაცია სწორია.
+    </p>
   </div>
 <% end %>
 
-<!-- payment documentation -->
-<% if @application.doc_payment %>
-  <h3 class="text-success page-header">
-    ნაბიჯი #2: გადაიხადეთ ღირებულების 50% <%= yes_no true %>
-  </h3>
-<% else %>
-  <h3 class="text-danger page-header">
-    ნაბიჯი #2: გადაიხადეთ ღირებულების 50% <%= yes_no false %>
-  </h3>
-  <ol>
-    <li>
-      ქსელზე მიერთების ღირებულება თქვენს შემთხვევაში შეადგენს <code><%= @application.amount %></code> GEL.
-      თქვენ უნდა გადაიხადოთ მინიმუმ ამ თანხის <code>50</code>%;
-    </li>
-    <li>
-      <%= link_to 'ამობეჭდეთ საგადახდო დავალება', new_customer_paybill_url(id: @application.id, format: 'pdf') %>
-      და გადაიხადეთ მითითებული თანხა ბანკში;
-    </li>
-    <li>
-      გადაიღეთ (დაასკანერეთ) ბანკის მიერ გაცემული გადახდის დამადასტურებელი საბუთი და
-      შეინახეთ თქვენს კომპიუტერზე;
-    </li>
-    <li>
-      დაამატეთ გადახდის დამადასტურებელი დოკუმენტი თქვენს განცხადებაში. ამისთვის გამოიყენეთ დიდი მწვანე ღილაკი წარწერით "დოკუმნეტის დამატება";
-    </li>
-    <li>
-      როდესაც დაასრულებთ ყველა ზემოთ აღწერილ ნაბიჯს, დააჭირეთ შესრულების ღილაკს:
-    </li>
-  </ol>
-  <div class="text-center">
-    <a href="<%= new_customer_confirm_step_url(id: @application.id, step: 'doc_payment') %>" data-method="post" data-confirm="დაადასტურეთ, რომ ნამდვილად ატვირთეთ გადახდის დოკუმენტი!" class="btn btn-success">
-      <i class="fa fa-check"></i>
-      ნაბიჯი #2 შესრულდა
-    </a>
-  </div>
+<% [:doc_id, :doc_ownership, :doc_project, :doc_payment].each_with_index do |doc, index| %>
+  <% has_doc = @application.send doc %>
+  <% title = t("models.network_new_customer_application.page_flow.#{doc}") %>
+  <% if has_doc %>
+    <h3 class="text-success page-header">
+      #<%= index + 1 %>: <%= title %> <%= yes_no true %>
+    </h3>
+  <% else %>
+    <h3 class="text-danger page-header">
+      #<%= index + 1 %>: <%= title %> <%= yes_no false %>
+    </h3>
+    <p>
+      <%= t("models.network_new_customer_application.page_flow.#{doc}_descr").html_safe %>
+    </p>
+    <% if doc.to_s == 'doc_payment' %>
+      <p class="alert alert-warning">
+        თქვენი მინიმალური წინასწარი გადასახადია: <code><%= @application.amount / 2 %></code> GEL
+      </p>
+    <% end %>
+    <p class="text-center">
+      <% url = new_customer_confirm_step_url(id: @application.id, step: doc) %>
+      <% confirm = t("models.network_new_customer_application.page_flow.#{doc}_confirm") %>
+      <a href="<%= url %>" data-method="post" data-confirm="<%= confirm %>" class="btn btn-success">
+        <i class="fa fa-check"></i>
+        <%= t('models.network_new_customer_application.page_flow.doc_complete', step: (index + 1)) %>
+      </a>
+    </p>
+  <% end %>
+
 <% end %>
