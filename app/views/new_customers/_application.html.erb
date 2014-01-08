@@ -83,7 +83,7 @@
         </div>
         <%= t('models.network_new_customer_application.days') %>
       </li>
-      <% ['send_date', 'start_date', 'end_date', 'plan_end_date'].each do |dt| %>
+      <% ['send_date', 'plan_end_date', 'start_date', 'end_date'].each do |dt| %>
         <li class="list-group-item">
           <% date = app.send dt %>
           <div class="pull-right">
