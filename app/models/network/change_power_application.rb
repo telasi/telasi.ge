@@ -64,7 +64,7 @@ class Network::ChangePowerApplication
   validates :rs_tin, presence: { message: I18n.t('models.network_change_power_application.errors.tin_required') }
   validates :mobile, presence: { message: I18n.t('models.network_change_power_application.errors.mobile_required') }
   validates :address, presence: { message: I18n.t('models.network_change_power_application.errors.address_required') }
-  validates :address_code, presence: { message: I18n.t('models.network_change_power_application.errors.address_code_required') }
+  # validates :address_code, presence: { message: I18n.t('models.network_change_power_application.errors.address_code_required') }
   # validates :bank_code, presence: { message: I18n.t('models.network_change_power_application.errors.bank_code_required') }
   # validates :bank_account, presence: { message: I18n.t('models.network_change_power_application.errors.bank_account_required') }
   # validates :old_voltage, presence: { message: 'required!' }
