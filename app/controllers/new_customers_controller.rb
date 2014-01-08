@@ -133,7 +133,7 @@ class NewCustomersController < ApplicationController
       if @application.new_record?
         @nav[I18n.t('models.network_new_customer_application.actions.new')] = create_new_customer_url
       else
-        @nav[I18n.t('models.network_new_customer_application')+"##{@application.effective_number}"] = new_customer_url(id: @application.id)
+        @nav["#{I18n.t('models.network_new_customer_application.application')} ##{@application.effective_number}"] = new_customer_url(id: @application.id)
         @nav[@title] = nil unless action_name == 'show'
       end
     end
