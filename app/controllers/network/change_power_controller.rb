@@ -28,7 +28,7 @@ class Network::ChangePowerController < Network::NetworkController
       @application.user = current_user
       @application.status = Network::NewCustomerApplication::STATUS_SENT
       if @application.save
-        redirect_to network_change_power_url(id: @application.id), notice: 'განცხადება შექმნილია.'
+        redirect_to network_change_power_url(id: @application.id), notice: I18n.t('models.network_new_customer_application.actions.created')
       end
     else
       @application = Network::ChangePowerApplication.new

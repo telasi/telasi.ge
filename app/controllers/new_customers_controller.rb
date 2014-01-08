@@ -18,7 +18,7 @@ class NewCustomersController < ApplicationController
       @application.user = user
       @application.online = true
       if @application.save
-        redirect_to new_customer_url(id: @application.id), notice: 'განცხადება შექმნილია'
+        redirect_to new_customer_url(id: @application.id), notice: I18n.t('models.network_new_customer_application.actions.created')
       end
     else
       @application = Network::NewCustomerApplication.new(mobile: user.mobile, email: user.email)
@@ -133,7 +133,7 @@ class NewCustomersController < ApplicationController
       if @application.new_record?
         @nav[I18n.t('models.network_new_customer_application.actions.new')] = create_new_customer_url
       else
-        @nav["განცხადება ##{@application.effective_number}"] = new_customer_url(id: @application.id)
+        @nav[I18n.t('models.network_new_customer_application')+"##{@application.effective_number}"] = new_customer_url(id: @application.id)
         @nav[@title] = nil unless action_name == 'show'
       end
     end

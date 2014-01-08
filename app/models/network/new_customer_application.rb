@@ -83,7 +83,7 @@ class Network::NewCustomerApplication
   has_many :requests, class_name: 'Network::RequestItem', as: 'source'
   belongs_to :stage, class_name: 'Network::Stage'
 
-  validates :user, presence: { message: 'მომხმარებელი არაა მითითებული' }
+  validates :user, presence: { message: I18n.t('models.network_new_customer_application.errors.user_required') }
   validates :rs_tin, presence: { message: I18n.t('models.network_new_customer_application.errors.tin_required') }
   validates :mobile, presence: { message: I18n.t('models.network_new_customer_application.errors.mobile_required') }
   # validates :email, presence: { message: I18n.t('models.network_new_customer_application.errors.email_required') }
@@ -91,7 +91,7 @@ class Network::NewCustomerApplication
   validates :address_code, presence: { message: I18n.t('models.network_new_customer_application.errors.address_code_required') }
   # validates :bank_code, presence: { message: I18n.t('models.network_new_customer_application.errors.bank_code_required') }
   # validates :bank_account, presence: { message: I18n.t('models.network_new_customer_application.errors.bank_account_required') }
-  validates :voltage, presence: { message: 'აარჩიეთ ძაბვის საფეხური' }
+  validates :voltage, presence: { message: I18n.t('models.network_new_customer_application.errors.volt_required') }
   validates :power, numericality: { message: I18n.t('models.network_new_customer_item.errors.illegal_power') }
   validate :validate_rs_name, :validate_number, :validate_mobile
   before_save :status_manager, :calculate_total_cost, :upcase_number, :prepare_mobile

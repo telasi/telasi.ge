@@ -20,8 +20,17 @@ ru:
       users: Пользователи
       customers: Абоненты
       network: Управление сетями
+      subscriptions: "Получение новостей"
     new_customer_title: Новый Абонент
-    new_customer_description: Создание заявки нового абонента.
+    new_customer_description: Создание заявки нового абонента
+    new_customer:
+      general: Основное
+      items: Операции
+      files: Документы
+      messages: SMS сообщения
+      operations: Операции
+    calculator_title: Калькулятор
+    calculator_description: Определите сколо тратите
   info:
     telasi: АО Теласи
     department: Департамент информационных технологий
@@ -75,6 +84,7 @@ ru:
         edit: Изменить
         send: Отправить
         link: Связь
+        print: Печать
     sys_user:
       title:
         single: Пользователь
@@ -310,6 +320,9 @@ ru:
       general_data: Основные данные
       progress: Прогресс
       number: Номер
+      online: Онлайн?
+      online_hint: Эта заявка заполнена онлайн?
+      vat_name: Плательщик НДС?
       rs_name: Аппликант
       rs_id: Инд. код аппликанта
       rs_tin: Личный номер или идентификационный код
@@ -346,6 +359,12 @@ ru:
       payments: Платежи
       paid: Оплачено
       remaining: Осталось
+      penalty_first_stage: Штраф (I этап)
+      penalty_second_stage: Штраф (II этап)
+      penalty_third_stage: Компенсация (III этап)
+      effective_amount: Сумма фактуры
+      effective_amount_hint: Полная сумма по фактуре
+      factura_sent?: Отправлено?      
       need_resolution: Спец.разрешение?
       need_resolution_hint: Требуется ли специальное разрешение?
       send_date: Дата отправки
@@ -377,6 +396,7 @@ ru:
       invoice_amount: Сумма платежного поручения
       enter_amount: Введите сумму
       errors:
+        user_required: Указание пользователя обязательно
         tin_required: Указание иден. кода обязательно
         tin_illegal: Неправильный иден. код
         mobile_required: Указание номер мобильного телефона обязательно
@@ -386,9 +406,11 @@ ru:
         bank_code_required: Указание банковского кода обязательно
         bank_account_required: Указание банковского счета обязательно
         number_required: Введите номер
+        volt_required: Выберите ступень напряжения
       actions:
         new: Новая заявка
         new2: Добавление заявки
+        created: Заявка создана
         added: Заявка добавлена
         add_account: Добавление счета
         change_account: Изменение счета
@@ -409,6 +431,7 @@ ru:
           all_applications: Все заявки
           goto_accounts: Управление абонентами
         upload: Загрузка файла
+        upload_hint: Для документа выберите соответствующий файл на вашем компьютере
         upload_complete: Файл загружен
         edit:
           title: Изменение заявки
@@ -476,7 +499,7 @@ ru:
         edit_account: Изменение абонента
         edit_account_complete: Абонент изменен
         delete_confirm: Уверены в удалении абонента?
-        delete_complete: Абонент удален.
+        delete_complete: Абонент удален
       errors:
         address_required: Введите адрес
         address_code_required: Введите кадастровый код
@@ -488,7 +511,7 @@ ru:
       billing_operations: Операции отразятся параллельно с добавлением их в систему биллинга.
       no_operations: Не проведена ни одна операция!
       messages: 
-        title: Сообщения придут в помощью SMS на ваш мобильный телефон. Здесь размещены все относящиеся к заявке сообщения.
+        title: Сообщения придут в помощью SMS на ваш мобильный телефон. Здесь размещены все относящиеся к заявке сообщения
         datetime: "Дата, время"
         messagetext: Текст сообщения
         mobile: "# мобильного телефона"
@@ -508,6 +531,14 @@ ru:
       no_items_description: "В заявке не определен ни один абонент, стоимость пакета отразится когда введете одного или несколько абонентов."
       errors:
         not_compatible_volatage_and_power: Мощность не соответствует стоимости напряжения!
+    network_request_item:
+      date: Дата
+      type: Тип
+      description: Краткое описание
+      stage: Этап
+    network_stage:
+      name: Название
+      numb: "#"
     sys_sms_message:
       message: Сообщение
       mobile: Мобильный телефон
