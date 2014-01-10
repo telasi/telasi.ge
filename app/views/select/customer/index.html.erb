@@ -7,6 +7,7 @@ end %>
   t.complex_field label: 'აბონენტი' do |c|
     c.text_field :accnumb, tag: 'code'
     c.text_field :custname
+    c.text_field :commercial, empty: false, before: '&mdash;'.html_safe
   end
   t.paginate records: 'ჩანაწერი'
 end %>

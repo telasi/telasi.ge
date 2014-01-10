@@ -145,6 +145,7 @@ module Network::NewCustomerHelper
           c.complex_field label: 'ბილინგის აბონენტი' do |c|
             c.text_field 'customer.accnumb', tag: 'code', empty: false
             c.text_field 'customer.custname'
+            c.text_field 'customer.commercial', empty: false, before: '&mdash;'.html_safe
           end
           c.number_field :amount, after: 'GEL'
           c.number_field :days, max_digits: 0, after: 'დღე'
@@ -170,7 +171,8 @@ module Network::NewCustomerHelper
         end
         t.complex_field label: 'ბილინგის აბონენტი' do |c|
           c.text_field 'customer.accnumb', tag: 'code', empty: false
-          c.text_field 'customer.custname' do |cust|
+          c.text_field 'customer.custname' 
+          c.text_field 'customer.commercial', empty: false, before: '&mdash;'.html_safe do |cust|
             cust.action network_link_bs_customer_url(id: application.id), icon: '/icons/user--pencil.png' if (show_actions and app_change_customer?(application))
             if application.customer_id.present?
               cust.action network_remove_bs_customer_url(id: application.id), icon: '/icons/user--minus.png', method: 'delete', confirm: 'ნამდვილად გინდათ აბონენტის წაშლა?' if (show_actions and app_change_customer?(application))
