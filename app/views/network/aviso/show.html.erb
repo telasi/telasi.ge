@@ -7,9 +7,11 @@
     end
     f.number_field 'amount', label: t('models.network.aviso.amount'), after: 'GEL', required: true
     f.text_field 'accnumb', label: t('models.network.aviso.abonent_no'), tag: 'code' do |f|
-      f.action network_add_aviso_customer_url(id: @aviso.avdetkey), label: t('models.network.aviso.abonent_def'), icon: '/icons/user--plus.png' if (not @aviso.status)
+      #f.action network_add_aviso_customer_url(id: @aviso.avdetkey), label: t('models.network.aviso.abonent_def'), icon: '/icons/user--plus.png' if (not @aviso.status)
     end
-    f.text_field 'cns', label: 'CNS #'
+    f.text_field 'cns', label: 'CNS #' do |f|
+      f.action network_edit_aviso_url(id: @aviso.id), label: 'შეცვლა', icon: '/icons/pencil.png' unless @aviso.status
+    end
     f.text_field 'note', label: t('models.network.aviso.note')
     f.col2 do |f|
       f.boolean_field 'status', label: t('models.network.aviso.complete'), hint: t('models.network.aviso.complete_hint'), required: true
@@ -40,6 +42,6 @@ end %>
   <%= new_customer_view @application, title: t('models.network.aviso.linked_oper'), without_actions: true %>
 <% elsif not @aviso.status %>
   <div class="alert alert-block alert-error">
-    <%= t('models.network.aviso.application_not_found') %>
+    დაკავშირებული განცხადება ვერ მოიძებნა!
   </div>
 <% end %>

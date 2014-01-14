@@ -88,6 +88,7 @@ TelasiGe::Application.routes.draw do
       get '/', action: 'index', as: 'avisos'
       get '/show/:id', action: 'show', as: 'aviso'
       post '/link/:id', action: 'link', as: 'link_aviso'
+      match '/edit/:id', action: 'edit', as: 'edit_aviso', via: ['get', 'post']
       delete '/delink/:id', action: 'delink', as: 'delink_aviso'
       match '/add_customer/:id', action: 'add_customer', as: 'add_aviso_customer', via: ['get', 'post']
       post '/sync', action: 'sync', as: 'sync_avisos'

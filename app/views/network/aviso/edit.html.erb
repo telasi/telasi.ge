@@ -1,0 +1,13 @@
+<%= forma_for @aviso, title: 'ავიზოს შეცვლა' do |f|
+  f.date_field 'avdate', label: t('models.network.aviso.date'), required: true, readonly: true
+  f.complex_field label: t('models.network.aviso.bank'), required: true, readonly: true do |c|
+    c.text_field 'paypoint'
+    c.text_field 'basepointkey', class: 'muted', before: '&mdash;'.html_safe
+  end
+  f.number_field 'amount', label: t('models.network.aviso.amount'), after: 'GEL', required: true, readonly: true
+  f.text_field 'accnumb', label: t('models.network.aviso.abonent_no'), tag: 'code', readonly: true
+  ###
+  f.text_field 'cns', autofocus: true, label: 'CNS #'
+  f.submit 'შენახვა'
+  f.cancel_button network_aviso_url(id: @aviso.id)
+end %>

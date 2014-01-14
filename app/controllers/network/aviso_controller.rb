@@ -13,9 +13,24 @@ class Network::AvisoController < Network::NetworkController
   end
 
   def show
-    @title = I18n.t('models.network.aviso_param')
+    @title = 'ავიზოს პარამეტრები'
     @aviso = Billing::Aviso.find(params[:id])
     @application = @aviso.guessed_application unless @aviso.status
+  end
+
+  def edit
+    @title = 'ავიზოს შეცვლა'
+    @aviso = Billing::Aviso.find(params[:id])
+    if request.post?
+      num = params[:payments_avizo_detail][:cns]
+      @aviso.cns = num
+      app = Network::NewCustomerApplication.where(number: num).first
+      app = Network::NewCustomerApplication.where(payment_id: num).first if app.blank?
+      if app.present?
+        @aviso.save
+        redirect_to network_aviso_url(id: @aviso.id), notice: 'ავიზო შეცვლილია'
+      end
+    end
   end
 
   def link
@@ -73,7 +88,7 @@ class Network::AvisoController < Network::NetworkController
   def nav
     @nav = { 'ქსელი' => network_home_url, 'ავიზოები' => network_avisos_url }
     @nav['ავიზოს თვისებები'] = network_aviso_url(id: @aviso.avdetkey) if @aviso
-    @nav['აბონენტის განსაზღვრა'] = nil if action_name == 'add_customer'
+    @nav[@title] = nil if ['add_customer', 'edit'].include?(action_name )
     @nav
   end
 end
