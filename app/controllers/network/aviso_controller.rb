@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 class Network::AvisoController < Network::NetworkController
   def index
-    @title = I18n.t('models.network.avisos')
+    @title = 'ავიზოების მართვა'
     @search = params[:search] == 'clear' ? nil : params[:search]
     rel = Billing::Aviso.where(avtpkey: Billing::Aviso::NEW_CUSTOMER_APP)
     if @search
