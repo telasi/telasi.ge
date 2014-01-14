@@ -13,6 +13,8 @@
       f.action network_edit_aviso_url(id: @aviso.id), label: 'შეცვლა', icon: '/icons/pencil.png' unless @aviso.status
     end
     f.text_field 'note', label: t('models.network.aviso.note')
+    f.text_field 'custname', label: 'აბონენტის სახელი'
+    f.text_field 'payid', label: 'გადახდის #'
     f.col2 do |f|
       f.boolean_field 'status', label: t('models.network.aviso.complete'), hint: t('models.network.aviso.complete_hint'), required: true
       f.boolean_field 'is_created', label: t('models.network.aviso.abonent_created'), hint: t('models.network.aviso.abonent_created_hint')
