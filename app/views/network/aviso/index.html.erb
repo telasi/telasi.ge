@@ -10,10 +10,13 @@ end %>
     c.text_field 'basepointkey', class: 'muted'
   end
   t.boolean_field 'status', label: t('models.network.aviso.cmpl'), hint: t('models.network.aviso.complete_hint')
-  t.text_field 'accnumb', label: t('models.network.aviso.abonent_no'), tag: 'code'
   t.text_field 'cns', label: 'CNS #'
+  t.complex_field label: t('models.network.aviso.abonent_no') do |f|
+    f.text_field 'accnumb', tag: 'code'
+    f.text_field 'custname', empty: false
+  end
+  t.text_field 'payid', label: 'გადახდა#'
   t.number_field 'amount', label: t('models.network.aviso.amount'), after: 'GEL'
-  # t.text_field 'note'
   t.paginate records: t('models.general.records')
 end %>
 <div class="alert alert-error">
