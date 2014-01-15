@@ -16,9 +16,9 @@
   <thead>
     <tr>
       <th>#</th>
-      <th>თარიღი, დრო</th>
-      <th>ფაილის დასახელება</th>
-      <th>ფაილის ზომა</th>
+      <th><%= t("models.network_new_customer_application.files.date") %></th>
+      <th><%= t("models.network_new_customer_application.files.filename") %></th>
+      <th><%= t("models.network_new_customer_application.files.filesize") %></th>
       <th class="text-center"><i class="fa fa-cog"></i></th>
     </tr>
   </thead>
@@ -52,25 +52,21 @@
 
 <!-- required documents -->
 
-<h3 class="page-header">აუცილებელი დოკუმენტების სია</h3>
+<h3 class="page-header"><%= t("models.network_new_customer_application.docs_list") %></h3>
 <% if @application.docs_are_ok? %>
   <div class="alert alert-success">
     <%= yes_no true %>
-    ყველა აუცილებელი დოკუმენტი მითითებულია.
+    <%= t("models.network_new_customer_application.docs_complete") %>
   </div>
 <% else %>
   <div class="alert alert-danger">
     <%= yes_no false %>
-    ყველა აუცილებელი დოკუმენტი ჯერ არაა მითითებული განცხადებაში.
+    <%= t("models.network_new_customer_application.docs_incomplete") %>
   </div>
   <div class="alert alert-info">
     <p>
       <i class="fa fa-info-circle"></i>
-      ქვემოთ მოცემულია ყველა აუცილებელი დოკუმენტი, რომელიც თან უნდა ახლდეს თქვენ განცხადებას.
-      დოკუმენტების განცხადებასთან დასაკვშირებლად გამოიყენეთ ღილაკი წარწერით "დოკუმენტის დამატება"
-      (იხილეთ მწვანე ღილაკი ზემოთ). ყოველი დოკუმენტის დაკავშირების შემდეგ უნდა დააჭიროთ
-      შესაბამის შესრულების ღილაკს, რითიც დაადასტურებთ, რომ საბუთების ატვირთვა დასრულდა და მათში მოცემული
-      ინფორმაცია სწორია.
+      <%= t("models.network_new_customer_application.docs") %>
     </p>
   </div>
 <% end %>
@@ -91,7 +87,7 @@
     </p>
     <% if doc.to_s == 'doc_payment' %>
       <p class="alert alert-warning">
-        თქვენი მინიმალური წინასწარი გადასახადია: <code><%= @application.amount / 2 %></code> GEL
+       <%= t("models.network_new_customer_application.mintopay") %> <code><%= @application.amount / 2 %></code> GEL
       </p>
     <% end %>
     <p class="text-center">
