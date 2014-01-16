@@ -16,6 +16,7 @@
       <div>
         <%= f.submit t('models.sys_subscription.actions.subscribe_short'), class: ['btn', 'btn-primary'] %>
       </div>
+      <%= hidden_field_tag :item, params[:item] %>
     <% end %>
   </div>
 </div>
