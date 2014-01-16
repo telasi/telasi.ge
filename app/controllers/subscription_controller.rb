@@ -25,6 +25,23 @@ class SubscriptionController < ApplicationController
     end
   end
 
+  def subscribe_item
+    @title = I18n.t("models.sys_subscription.actions.#{params[:item]}")
+    if request.get?
+      redirect_to subscribe_url if !params[:item] || !Sys::Subscription.method_defined?(params[:item])
+      @subscription = Sys::Subscription.new(company_news: false, procurement_news: false, outage_news: false)
+    else
+      subs_params = params[:sys_subscription]
+      @subscription = Sys::Subscription.where(email: subs_params[:email]).first || Sys::Subscription.new(email: subs_params[:email], company_news: false, procurement_news: false, outage_news: false)
+      @subscription.company_news = true if subs_params.key?(:company_news)
+      @subscription.procurement_news = true if subs_params.key?(:procurement_news)
+      @subscription.locale = I18n.locale
+      if @subscription.save
+        redirect_to subscribe_complete_url
+      end
+    end
+  end  
+
   def unsubscribe
     @title = I18n.t('models.sys_subscription.actions.unsubscribe')
     if params[:email].present?

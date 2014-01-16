@@ -574,6 +574,8 @@ ru:
       actions:
         subscribe: Подписка на новости
         unsubscribe: Отказ от подписки
+        company_news: Подписка на новости компании
+        procurement_news: Подписка на новости о закупках
         subscribe_short: Подписаться
         subscribe_complete: Подписка завершена!
         subscribe_complete_full: Вы подписались на новости Теласи!
