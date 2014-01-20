@@ -1,12 +1,18 @@
-<div class="row">
+<!-- <div class="row">
   <div class="col-sm-8">
-     <div class="panel panel-default">
+  	<div class="panel panel-default">
 
-     <div class="panel-heading">
-        <h4 style="margin: 0;"><%= t('form.confirm') %></h4>
-      </div>
+	  <div class="panel-heading">
+	    <h4 style="margin: 0;"><%= t('form.confirm') %></h4>
+	  </div>
 
-      <div class="panel-body">
+      <div class="panel-body"> -->
+ <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel"><%= t('form.confirm') %></h4>
+      </div> 
+ <div class="modal-body"> 
         <%= form_tag 'https://www.pay.ge/pay', method: :post do  %>
           <% if @error.present? %><div class="alert alert-danger"><%= @error %></div><% end %>
           <%= hidden_field_tag :merchant, @payment.merchant, class: 'form-control' %>
@@ -40,7 +46,7 @@
         <div>
            <%= submit_tag t('buttons.comfirm'), class: ['btn', 'btn-primary'] %>
         </div>
-        
+
        <% end %>
      </div>
 

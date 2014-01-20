@@ -1,4 +1,4 @@
-<div class="row">
+<!-- <div class="row">
   <div class="col-sm-8">
   	<div class="panel panel-default">
 
@@ -6,9 +6,14 @@
 	    <h4 style="margin: 0;"><%= servicetext(params[:serviceid]) %></h4>
 	  </div>
 
-	      <div class="panel-body">
-	        <%= form_for @payment, url: pay_confirm_form_url, role: 'form', method: 'get' do |f| %>
-	          <% if @error.present? %><div class="alert alert-danger"><%= @error %></div><% end %>
+	      <div class="panel-body"> -->
+ <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel"><%= servicetext(params[:serviceid]) %></h4>
+      </div> 
+ <div class="modal-body"> 	      	
+	        <%= form_for @payment, url: pay_show_form_url, role: 'form', method: 'post' do |f| %>
 	           <%= f.hidden_field :merchant %>
 	           <%= f.hidden_field :serviceid %>
 	           <%= f.hidden_field :ordercode %>

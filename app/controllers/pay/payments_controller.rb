@@ -44,21 +44,17 @@ class Pay::PaymentsController < ApplicationController
     @payments = rel.paginate(page: params[:page], per_page: 20)
   end
 
-	def show_form
-    @payment = Pay::Payment.new(amount: 100, serviceid: params[:serviceid], merchant: get_current_merchant(params[:serviceid]) )
-	end
+  def show_form
+    if request.post?
+      @payment = Pay::Payment.new(
+          #user: current_user, 
+          user: "current_user", 
+          serviceid: params[:pay_payment][:serviceid],
+          merchant: params[:pay_payment][:merchant],
+          testmode: Payge::TESTMODE, 
+          ordercode: self.gen_order_code, currency: 'GEL', amount: params[:pay_payment][:amount],
+          description: 'test payment', lng: 'ka', ispreauth: 0, postpage: 0, gstatus: Pay::Payment::GSTATUS_SENT)
 
-	def confirm_form
-    @payment = Pay::Payment.new(
-        #user: current_user, 
-        user: "current_user", 
-        serviceid: params[:pay_payment][:serviceid],
-        merchant: params[:pay_payment][:merchant],
-        testmode: Payge::TESTMODE, 
-        ordercode: self.gen_order_code, currency: 'GEL', amount: params[:pay_payment][:amount],
-        description: 'test payment', lng: 'ka', ispreauth: 0, postpage: 0, gstatus: Pay::Payment::GSTATUS_SENT)
-
-    #if not request.post?
       @payment.prepare_for_step(Payge::STEP_SEND)
       @payment.user = 'current_user'
       @payment.successurl = 'http://my.telasi.ge/pay/payment/success?'
@@ -66,17 +62,40 @@ class Pay::PaymentsController < ApplicationController
       @payment.errorurl = 'http://my.telasi.ge/pay/payment/error?'
       @payment.callbackurl = 'http://my.telasi.ge/pay/payment/callback?'
 
-      if not @payment.save
-        render action: 'show_form'
+      if @payment.save
+        redirect_to pay_confirm_form_url(ordercode: @payment.ordercode)
       end
-    #end
+
+      params[:serviceid] = params[:pay_payment][:serviceid]
+
+    else 
+      @payment = Pay::Payment.new(amount: 100, serviceid: params[:serviceid], merchant: get_current_merchant(params[:serviceid]) )
+    end
+  end
+
+  def confirm_form
+    @payment = Pay::Payment.where("ordercode" => params[:ordercode]).first
   end
 
   def gen_order_code
-    @payment = Pay::Payment.where("merchant" => params[:pay_payment][:merchant]).sort([['ordercode', -1]]).first
+    @seq = Pay::Sequence.find_and_modify( { "$inc" => { sequence: 1 } },
+                                          { new: true }
+                                          ) 
+    if !@seq 
+      @seq = Pay::Sequence.new
 
-    return @payment.ordercode + 1 if @payment;
-    return 1 unless @payment;
+      @payment = Pay::Payment.where("merchant" => params[:pay_payment][:merchant]).sort([['ordercode', -1]]).first
+
+      @seq.sequence = @payment.ordercode + 1 if @payment
+      @seq.sequence = 1 unless @payment
+      @seq.save
+    end
+
+    @seq["sequence"]
+  end
+
+  def gen_description_text
+    'test payment'
   end
 
   def success
