@@ -14,7 +14,7 @@
    end
  end %>
  <%= table_for @payments, title: t('payments'), icon: '/icons/documents.png', collapsible: true do |t|
-   t.text_field 'clientname', label: t('payment.clientname')
+   t.text_field 'user', label: t('payment.user')
    t.text_field 'ordercode', label: t('payment.ordercode')
    t.text_field 'transactioncode', label: t('payment.transactioncode')
    t.text_field 'status', label: t('payment.status')

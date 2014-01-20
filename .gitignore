@@ -23,4 +23,4 @@ sqlnet.log
 
 public/uploads/*
 
-#config/initializers/payge.rb
+config/initializers/payge.rb

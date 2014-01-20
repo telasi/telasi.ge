@@ -3,8 +3,8 @@ class Pay::Payment
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  #belongs_to :user, class_name: 'Sys::User'              # მომხმარებელი
-  field :user,             type: String
+  belongs_to :user, class_name: 'Sys::User'              # მომხმარებელი
+  #field :user,             type: String
   field :serviceid,        type: String                  # მერჩანტის უნიკალური კოდი
   field :merchant, 	       type: String					         # მერჩანტის უნიკალური კოდი
   field :ordercode,        type: Integer					       # მერჩანტის ტრანზაქციის უნიკალური კოდი

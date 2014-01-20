@@ -4,6 +4,4 @@ class Pay::Sequence
 
   field :sequence,        type: Integer
 
-  validates :sequence
-
 end

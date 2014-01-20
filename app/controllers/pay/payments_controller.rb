@@ -33,7 +33,7 @@ class Pay::PaymentsController < ApplicationController
   def user_index
     @search = params[:search] == 'clear' ? {} : params[:search]
     rel = Pay::Payment
-    rel = rel.where(user: "current_user")
+    rel = rel.where(user: current_user)
     if @search
       rel = rel.where(serviceid: @search[:serviceid].mongonize) if @search[:serviceid].present?
       rel = rel.where(ordercode: @search[:ordercode]) if @search[:ordercode].present?
@@ -47,8 +47,8 @@ class Pay::PaymentsController < ApplicationController
   def show_form
     if request.post?
       @payment = Pay::Payment.new(
-          #user: current_user, 
-          user: "current_user", 
+          user: current_user, 
+          #user: "current_user", 
           serviceid: params[:pay_payment][:serviceid],
           merchant: params[:pay_payment][:merchant],
           testmode: Payge::TESTMODE, 
@@ -56,11 +56,11 @@ class Pay::PaymentsController < ApplicationController
           description: 'test payment', lng: 'ka', ispreauth: 0, postpage: 0, gstatus: Pay::Payment::GSTATUS_SENT)
 
       @payment.prepare_for_step(Payge::STEP_SEND)
-      @payment.user = 'current_user'
-      @payment.successurl = 'http://my.telasi.ge/pay/payment/success?'
-      @payment.cancelurl = 'http://my.telasi.ge/pay/payment/cancel?'
-      @payment.errorurl = 'http://my.telasi.ge/pay/payment/error?'
-      @payment.callbackurl = 'http://my.telasi.ge/pay/payment/callback?'
+      @payment.user = current_user
+      @payment.successurl = ''
+      @payment.cancelurl = ''
+      @payment.errorurl = ''
+      @payment.callbackurl = ''
 
       if @payment.save
         redirect_to pay_confirm_form_url(ordercode: @payment.ordercode)
