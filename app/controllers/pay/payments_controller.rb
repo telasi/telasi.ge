@@ -155,7 +155,7 @@ class Pay::PaymentsController < ApplicationController
       case @payment.status 
 
        when Pay::Payment::STATUS_COMPLETED
-         check_string = @payment.prepare_for_step(Pay::STEP_RETURNED)
+         check_string = @payment.prepare_for_step(Payge::STEP_RETURNED)
          if check_string != @payment.check_returned
            @payment.instatus = Pay::Payment::INSTATUS_RET_CHECK_ERROR
            @payment.gstatus = Pay::Payment::GSTATUS_ERROR
