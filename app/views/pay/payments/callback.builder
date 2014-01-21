@@ -1,6 +1,6 @@
 xml.result do
-	xml.resultcode(@result.resultcode)
-	xml.resultdesc(@result.resultdesc)
-	xml.check(@result.check)
-	xml.data(@result.data)
+	xml.resultcode(@payment.resultcode)
+	xml.resultdesc(@payment.resultdesc)
+	xml.check(@payment.check_response)
+	xml.data(@payment.data)
 end

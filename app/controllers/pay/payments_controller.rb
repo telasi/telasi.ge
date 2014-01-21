@@ -125,7 +125,7 @@ class Pay::PaymentsController < ApplicationController
         @payment.resultcode = RESULTCODE_OK
         @payment.gstatus = Pay::Payment::GSTATUS_OK
 
-        check_callback = @payment.prepare_for_step(Pay::Payment::STEP_CALLBACK)
+        check_callback = @payment.prepare_for_step(Payge::STEP_CALLBACK)
         if check_callback != @payment.check_callback
           @payment.resultcode = RESULTCODE_PROBLEM 
           @payment.instatus = Pay::Payment::INSTATUS_CAL_CHECK_ERROR
@@ -138,7 +138,7 @@ class Pay::PaymentsController < ApplicationController
       end
       @payment.save
     end
-    @payment.check_response = @payment.prepare_for_step(Pay::Payment::STEP_RESPONSE)
+    @payment.check_response = @payment.prepare_for_step(Payge::STEP_RESPONSE)
   end
 
   def update_payment
@@ -155,7 +155,7 @@ class Pay::PaymentsController < ApplicationController
       case @payment.status 
 
        when Pay::Payment::STATUS_COMPLETED
-         check_string = @payment.prepare_for_step(Pay::Payment::STEP_RETURNED)
+         check_string = @payment.prepare_for_step(Pay::STEP_RETURNED)
          if check_string != @payment.check_returned
            @payment.instatus = Pay::Payment::INSTATUS_RET_CHECK_ERROR
            @payment.gstatus = Pay::Payment::GSTATUS_ERROR
