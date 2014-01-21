@@ -6,7 +6,7 @@ module Payge
                      :Password => 'hn*8SksyoPPheXJ81VDn',
                      :icon => 'fa-bolt'},
   	               { :ServiceID => 'TRASH',
-  	                 :ServiceName => 'გასუფთავება', 
+  	                 :ServiceName => 'დასუფთავება', 
   	                 :Merchant => '',
                      :Password => '',
                      :icon => 'fa-trash-o'}, 
@@ -16,6 +16,13 @@ module Payge
                      :Password => '',
                      :icon => 'fa-sign-in'}
   	             ]
+
+  URLS = { :success  => 'http://my.telasi.ge/pay/payment/success?',
+           :cancel   => 'http://my.telasi.ge/pay/payment/cancel?',
+           :error    => 'http://my.telasi.ge/pay/payment/error?',
+           :callback => 'http://my.telasi.ge/pay/payment/callback?'
+
+         }
 
   merchant = 'TEST'
   password = 'hn*8SksyoPPheXJ81VDn'

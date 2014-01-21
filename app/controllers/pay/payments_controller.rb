@@ -1,5 +1,6 @@
 # -*- encoding : utf-8 -*-
 class Pay::PaymentsController < ApplicationController
+  before_action :validate_login
 
 	MODES = [LiveMode = 0, TestMode = 1]
 	LANGUAGES = [LngENG = 'EN', LngGEO = 'KA']
@@ -57,10 +58,10 @@ class Pay::PaymentsController < ApplicationController
 
       @payment.prepare_for_step(Payge::STEP_SEND)
       @payment.user = current_user
-      @payment.successurl = ''
-      @payment.cancelurl = ''
-      @payment.errorurl = ''
-      @payment.callbackurl = ''
+      @payment.successurl = Payge::URLS[:success]
+      @payment.cancelurl = Payge::URLS[:cancel]
+      @payment.errorurl = Payge::URLS[:error]
+      @payment.callbackurl = Payge::URLS[:callback]
 
       if @payment.save
         redirect_to pay_confirm_form_url(ordercode: @payment.ordercode)
