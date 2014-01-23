@@ -50,8 +50,6 @@ class Pay::Payment
   validates :testmode, presence: { message: 'testmode not defined' }
   validates :check, presence: { message: 'check not defined' }
 
-  before_save :generate_description
-
   STATUS_COMPLETED = 'COMPLETED'
   STATUS_CANCELED  = 'CANCELED'
   STATUS_ERROR     = 'ERROR'

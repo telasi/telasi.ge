@@ -58,6 +58,7 @@ class Pay::PaymentsController < ApplicationController
           ordercode: self.gen_order_code, currency: 'GEL', 
           lng: 'ka', ispreauth: 0, postpage: 0, gstatus: Pay::Payment::GSTATUS_SENT)
 
+      @payment.generate_description
       @payment.prepare_for_step(Payge::STEP_SEND)
       @payment.user = current_user
       @payment.successurl = Payge::URLS[:success]
