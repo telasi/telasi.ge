@@ -3,13 +3,15 @@ class Pay::Payment
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  belongs_to :user, class_name: 'Sys::User'              # მომხმარებელი
+  belongs_to :user,    class_name: 'Sys::User'           # მომხმარებელი
   #field :user,             type: String
+  field :accnumb,          type: String
+  field :rs_tin,           type: String
   field :serviceid,        type: String                  # მერჩანტის უნიკალური კოდი
   field :merchant, 	       type: String					         # მერჩანტის უნიკალური კოდი
   field :ordercode,        type: Integer					       # მერჩანტის ტრანზაქციის უნიკალური კოდი
   field :amount, 	         type: Float  					       # თანხა
- # field :amount_tech,      type: Integer                 # თანხა თეტრებში
+ # field :amount_tech,      type: Integer                # თანხა თეტრებში
   field :currency,         type: String, default: 'GEL'  # ვალუტა GEL
   field :date,             type: DateTime                # თარიღი
   field :status,           type: String                  # სტატუსი
@@ -41,6 +43,7 @@ class Pay::Payment
   validates :merchant, presence: { message: 'ჩაწერეთ მერჩანტი' }
   validates :ordercode, presence: { message: 'ჩაწერეთ შეკვეთის კოდი' }
   validates :amount, numericality: { greater_than: 0, message: 'მნიშვნელობა უნდა იყოს 0-ზე მეტი' }
+  validate  :accnumb_validation
 
   validates :currency, presence: { message: 'currency not defined' }
   validates :lng, presence: { message: 'lng not defined' }
@@ -58,11 +61,26 @@ class Pay::Payment
   GSTATUS_OK = 'OK'
   GSTATUS_SENT = 'SENT'
   GSTATUS_ERROR = 'ERROR'
+  GSTATUS_ERROR_BILLING = 'ERROR_BILLING'
+
+  def accnumb_validation
+    case get_user_field
+      when 'accnumb'
+        errors.add(:accnumb, I18n.t('models.sys_user.errors.illegal_accnumb')) if Billing::Customer.where(accnumb: self.accnumb).first.blank?
+      when 'rs_tin'        
+        rs_name = RS.get_name_from_tin(RS::TELASI_SU.merge(tin: self.rs_tin))
+        errors.add(:rs_tin, I18n.t('models.billing_customer_registration.errors.tin_illegal')) if rs_name.blank?
+      end
+  end
 
   def amount_tech; (self.amount * 100).round end
 
-  def get_current_password(merchant)
-   Payge::PAY_SERVICES.find{ |h| h[:Merchant] == merchant }[:Password]
+  def get_current_password
+   Payge::PAY_SERVICES.find{ |h| h[:Merchant] == self.merchant }[:Password]
+  end
+
+  def get_user_field
+    Payge::PAY_SERVICES.find{ |h| h[:ServiceID] == self.serviceid }[:field]
   end
 
   def check_text(step)
@@ -73,7 +91,7 @@ class Pay::Payment
         [
           #PAYGE_PASSWORD,
           #TELASI_MERCHANT,
-          get_current_password(self.merchant),
+          get_current_password,
           self.merchant,
           self.ordercode,
           self.amount_tech,
@@ -97,7 +115,7 @@ class Pay::Payment
           self.paymethod,
           self.customdata,
           self.testmode,
-          get_current_password(self.merchant),
+          get_current_password,
          ].join
      when Payge::STEP_CALLBACK # PAY სისტემიდან შეტყობინების გამოგზავნა
         [
@@ -109,14 +127,14 @@ class Pay::Payment
           self.paymethod,
           self.customdata,
           self.testmode,
-          get_current_password(self.merchant),
+          get_current_password,
          ].join
      when Payge::STEP_RESPONSE # PAY სისტემის შეტყობინებაზე პასუხი
         [
           self.resultcode,
           self.resultdesc,
           self.transactioncode,
-          get_current_password(self.merchant),
+          get_current_password,
          ].join
     end
   end

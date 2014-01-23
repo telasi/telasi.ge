@@ -49,11 +49,13 @@ class Pay::PaymentsController < ApplicationController
     if request.post?
       @payment = Pay::Payment.new(
           user: current_user, 
-          #user: "current_user", 
+          accnumb:   params[:pay_payment][:accnumb],
+          rs_tin:    params[:pay_payment][:rs_tin],
           serviceid: params[:pay_payment][:serviceid],
-          merchant: params[:pay_payment][:merchant],
+          merchant:  params[:pay_payment][:merchant],
+          amount:    params[:pay_payment][:amount],
           testmode: Payge::TESTMODE, 
-          ordercode: self.gen_order_code, currency: 'GEL', amount: params[:pay_payment][:amount],
+          ordercode: self.gen_order_code, currency: 'GEL', 
           description: 'test payment', lng: 'ka', ispreauth: 0, postpage: 0, gstatus: Pay::Payment::GSTATUS_SENT)
 
       @payment.prepare_for_step(Payge::STEP_SEND)
@@ -68,9 +70,8 @@ class Pay::PaymentsController < ApplicationController
       end
 
       params[:serviceid] = params[:pay_payment][:serviceid]
-
     else 
-      @payment = Pay::Payment.new(amount: 100, serviceid: params[:serviceid], merchant: get_current_merchant(params[:serviceid]) )
+      @payment = Pay::Payment.new(accnumb: current_user.accnumb, rs_tin: current_user.rs_tin, amount: 0, serviceid: params[:serviceid], merchant: get_current_merchant(params[:serviceid]) )
     end
   end
 
@@ -130,6 +131,10 @@ class Pay::PaymentsController < ApplicationController
           @payment.resultcode = RESULTCODE_PROBLEM 
           @payment.instatus = Pay::Payment::INSTATUS_CAL_CHECK_ERROR
           @payment.gstatus = Pay::Payment::GSTATUS_ERROR
+        else
+          if not write_to_bs(@payment)
+            @payment.gstatus = Pay::Payment::GSTATUS_ERROR_BILLING
+          end
         end
 
       else
@@ -176,6 +181,25 @@ class Pay::PaymentsController < ApplicationController
 
       @payment.save
     end
+  end
+
+  def write_to_bs(payment)
+    customer = Billing::Customer.where(accnumb: @payment.accnumb).first
+    @billing_payment = Billing::Payment.new
+    @billing_payment.custkey = customer.custkey
+    @billing_payment.billoperkey = Payge::BILLING_CONSTANTS[:billoperkey]
+    @billing_payment.paytpkey = Payge::BILLING_CONSTANTS[:paytpkey]
+    @billing_payment.ppointkey = Payge::BILLING_CONSTANTS[:ppointkey]
+    @billing_payment.perskey = Payge::BILLING_CONSTANTS[:perskey]
+    @billing_payment.regionkey = Billing::Addesss.where(premisekey: customer.premisekey).first.regionkey
+    @billing_payment.paydate = @payment.date || Time.now
+    @billing_payment.amount = @payment.amount
+    @billing_payment.billnumber = @payment.transactioncode
+    @billing_payment.status = Payge::BILLING_CONSTANTS[:status]
+    @billing_payment.accnumb = @payment.accnumb
+    @billing_payment.enterdate = @payment.date
+
+    @billing_payment.save
   end
 
   def get_current_merchant(serviceid)

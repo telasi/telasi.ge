@@ -4,16 +4,19 @@ module Payge
                      :ServiceName => 'ელ. ენერგია',
   	                 :Merchant => 'TEST',
                      :Password => 'hn*8SksyoPPheXJ81VDn',
+                     :field => 'accnumb',
                      :icon => 'fa-bolt'},
   	               { :ServiceID => 'TRASH',
   	                 :ServiceName => 'დასუფთავება', 
   	                 :Merchant => '',
                      :Password => '',
+                     :field => 'accnumb',
                      :icon => 'fa-trash-o'}, 
   	               { :ServiceID => 'NETWORK',
   	                 :ServiceName => 'ქსელში ჩართვა', 
   	                 :Merchant => '',
                      :Password => '',
+                     :field => 'rs_tin',
                      :icon => 'fa-sign-in'}
   	             ]
 
@@ -23,6 +26,14 @@ module Payge
            :callback => 'http://my.telasi.ge/pay/payment/callback?'
 
          }
+
+  BILLING_CONSTANTS = {
+                        :billoperkey => 35,
+                        :paytpkey    => 1,
+                        :ppointkey   => 265,
+                        :perskey     => 1,
+                        :status      => 1
+                      }
 
   merchant = 'TEST'
   password = 'hn*8SksyoPPheXJ81VDn'
