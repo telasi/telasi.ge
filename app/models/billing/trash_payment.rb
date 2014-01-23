@@ -2,5 +2,6 @@
 class Billing::TrashPayment < ActiveRecord::Base
   self.table_name  = 'payments.trashpayment'
   self.primary_key = :paykey
+  self.sequence_name = 'payments.trashpayments_seq'
   belongs_to :customer, class_name: 'Billing::Customer', foreign_key: :custkey
 end

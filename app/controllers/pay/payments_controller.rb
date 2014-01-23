@@ -56,7 +56,7 @@ class Pay::PaymentsController < ApplicationController
           amount:    params[:pay_payment][:amount],
           testmode: Payge::TESTMODE, 
           ordercode: self.gen_order_code, currency: 'GEL', 
-          description: 'test payment', lng: 'ka', ispreauth: 0, postpage: 0, gstatus: Pay::Payment::GSTATUS_SENT)
+          lng: 'ka', ispreauth: 0, postpage: 0, gstatus: Pay::Payment::GSTATUS_SENT)
 
       @payment.prepare_for_step(Payge::STEP_SEND)
       @payment.user = current_user
@@ -94,10 +94,6 @@ class Pay::PaymentsController < ApplicationController
     end
 
     @seq["sequence"]
-  end
-
-  def gen_description_text
-    'test payment'
   end
 
   def success
@@ -184,6 +180,17 @@ class Pay::PaymentsController < ApplicationController
   end
 
   def write_to_bs(payment)
+    case payment.serviceid
+      when 'ENERGY'
+        write_to_payment(payment)
+      when 'TRASH'
+        write_to_trash(payment)
+      else
+        true
+    end
+  end
+
+  def write_to_payment(payment)
     customer = Billing::Customer.where(accnumb: @payment.accnumb).first
     @billing_payment = Billing::Payment.new
     @billing_payment.custkey = customer.custkey
@@ -191,7 +198,7 @@ class Pay::PaymentsController < ApplicationController
     @billing_payment.paytpkey = Payge::BILLING_CONSTANTS[:paytpkey]
     @billing_payment.ppointkey = Payge::BILLING_CONSTANTS[:ppointkey]
     @billing_payment.perskey = Payge::BILLING_CONSTANTS[:perskey]
-    @billing_payment.regionkey = Billing::Addesss.where(premisekey: customer.premisekey).first.regionkey
+    @billing_payment.regionkey = Billing::Address.where(premisekey: customer.premisekey).first.regionkey
     @billing_payment.paydate = @payment.date || Time.now
     @billing_payment.amount = @payment.amount
     @billing_payment.billnumber = @payment.transactioncode
@@ -200,6 +207,25 @@ class Pay::PaymentsController < ApplicationController
     @billing_payment.enterdate = @payment.date
 
     @billing_payment.save
+  end
+
+  def write_to_trash(payment)
+    customer = Billing::Customer.where(accnumb: @payment.accnumb).first
+    @trash_payment = Billing::TrashPayment.new
+    @trash_payment.custkey = customer.custkey
+    @trash_payment.billoperkey = Payge::BILLING_CONSTANTS[:billoperkey]
+    @trash_payment.paytpkey = Payge::BILLING_CONSTANTS[:paytpkey]
+    @trash_payment.ppointkey = Payge::BILLING_CONSTANTS[:ppointkey]
+    @trash_payment.perskey = Payge::BILLING_CONSTANTS[:perskey]
+    @trash_payment.trashofficeid = Billing::Address.where(premisekey: customer.premisekey).first.regionkey
+    @trash_payment.paydate = @payment.date || Time.now
+    @trash_payment.amount = @payment.amount
+    @trash_payment.billnumber = @payment.transactioncode
+    @trash_payment.status = Payge::BILLING_CONSTANTS[:status]
+    @trash_payment.accnumb = @payment.accnumb
+    @trash_payment.enterdate = @payment.date
+
+    @trash_payment.save
   end
 
   def get_current_merchant(serviceid)

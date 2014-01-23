@@ -50,6 +50,8 @@ class Pay::Payment
   validates :testmode, presence: { message: 'testmode not defined' }
   validates :check, presence: { message: 'check not defined' }
 
+  before_save :generate_description
+
   STATUS_COMPLETED = 'COMPLETED'
   STATUS_CANCELED  = 'CANCELED'
   STATUS_ERROR     = 'ERROR'
@@ -84,13 +86,9 @@ class Pay::Payment
   end
 
   def check_text(step)
-    merchant = 'TEST'
-    password = 'hn*8SksyoPPheXJ81VDn'
     case step
      when Payge::STEP_SEND # გადახდების გვერდზე გადასვლა
         [
-          #PAYGE_PASSWORD,
-          #TELASI_MERCHANT,
           get_current_password,
           self.merchant,
           self.ordercode,
@@ -142,5 +140,11 @@ class Pay::Payment
   def prepare_for_step(step)
       text = check_text(step)
       self.check = Digest::SHA256.hexdigest(text).upcase
+  end
+
+  def generate_description
+    self.description = I18n.t("services.#{self.serviceid.downcase}") + ' | ' +
+                       I18n.t("models.sys_user.#{self.get_user_field()}") + ": " +
+                       self.send(self.get_user_field())
   end
 end
