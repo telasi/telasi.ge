@@ -35,6 +35,7 @@ class SubscriptionController < ApplicationController
       @subscription = Sys::Subscription.where(email: subs_params[:email]).first || Sys::Subscription.new(email: subs_params[:email], company_news: false, procurement_news: false, outage_news: false)
       @subscription.company_news = true if subs_params.key?(:company_news)
       @subscription.procurement_news = true if subs_params.key?(:procurement_news)
+      @subscription.outage_news = true if subs_params.key?(:outage_news)
       @subscription.locale = I18n.locale
       if @subscription.save
         redirect_to subscribe_complete_url
