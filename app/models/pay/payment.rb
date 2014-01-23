@@ -146,5 +146,7 @@ class Pay::Payment
     self.description = I18n.t("services.#{self.serviceid.downcase}") + ' | ' +
                        I18n.t("models.sys_user.#{self.get_user_field()}") + ": " +
                        self.send(self.get_user_field())
+
+    self.transactioncode = "test #{self.transactioncode}" 
   end
 end
