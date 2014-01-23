@@ -75,7 +75,7 @@ class Pay::Payment
       end
   end
 
-  def amount_tech; (self.amount * 100).round end
+  def amount_tech; (self.amount || 0 * 100).round end
 
   def get_current_password
    Payge::PAY_SERVICES.find{ |h| h[:Merchant] == self.merchant }[:Password]
@@ -146,7 +146,5 @@ class Pay::Payment
     self.description = I18n.t("services.#{self.serviceid.downcase}") + ' | ' +
                        I18n.t("models.sys_user.#{self.get_user_field()}") + ": " +
                        self.send(self.get_user_field())
-
-    self.transactioncode = "test #{self.transactioncode}" 
   end
 end
