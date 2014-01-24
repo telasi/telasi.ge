@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
 class Pay::PaymentsController < ApplicationController
-  before_action :validate_login
+  before_action :validate_login, :except => [:callback] 
 
 	MODES = [LiveMode = 0, TestMode = 1]
 	LANGUAGES = [LngENG = 'EN', LngGEO = 'KA']
