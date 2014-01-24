@@ -195,7 +195,7 @@ class Pay::PaymentsController < ApplicationController
     customer = Billing::Customer.where(accnumb: @payment.accnumb).first
     @billing_payment = Billing::Payment.new
     @billing_payment.custkey = customer.custkey
-    @billing_payment.billoperkey = Payge::BILLING_CONSTANTS[:billoperkey]
+    @billing_payment.operationid = Payge::BILLING_CONSTANTS[:billoperkey]
     @billing_payment.paytpkey = Payge::BILLING_CONSTANTS[:paytpkey]
     @billing_payment.ppointkey = Payge::BILLING_CONSTANTS[:ppointkey]
     @billing_payment.perskey = Payge::BILLING_CONSTANTS[:perskey]
