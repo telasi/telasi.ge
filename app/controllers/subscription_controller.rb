@@ -16,6 +16,7 @@ class SubscriptionController < ApplicationController
       @subscription.outage_news = subs_params[:outage_news]
       @subscription.locale = I18n.locale
       if @subscription.save
+         send_notification(@subscription)
         if current_user
           redirect_to profile_url, notice: I18n.t('models.sys_subscription.actions.subscribe_complete')
         else
@@ -38,6 +39,7 @@ class SubscriptionController < ApplicationController
       @subscription.outage_news = true if subs_params.key?(:outage_news)
       @subscription.locale = I18n.locale
       if @subscription.save
+        send_notification(@subscription)
         redirect_to subscribe_complete_url
       end
     end
@@ -54,4 +56,67 @@ class SubscriptionController < ApplicationController
 
   def subscribe_complete; @title = I18n.t('models.sys_subscription.actions.subscribe_complete') end
   def unsubscribe_complete; @title = I18n.t('models.sys_subscription.actions.unsubscribe_complete') end
+
+  def send_notification(subscription)
+    strings = []
+
+    strings << { en: "company news",
+                 ge: "კომპანიის სიახლეები",
+                 ru: "новости компании"
+               } if subscription.company_news
+    strings << { en: "procurement news",
+                 ge: "სიახლეები თენდერებზე",
+                 ru: "новости о закупках"
+               } if subscription.procurement_news
+    strings << { en: "outage news",
+                 ge: "ენერგომომარაგების შეზღუდვის შეტყობინებები",
+                 ru: "сообщения об ограничении электроэнергии"
+               } if subscription.outage_news
+
+    strings.drop(1).each { |a|
+      if a.equal? strings.last
+        a[:en] = " and " + a[:en]
+        a[:ru] = " и "   + a[:ru]
+        a[:ge] = " და "  + a[:ge]
+      else
+        a[:en] = ", " + a[:en]
+        a[:ru] = ", " + a[:ru]
+        a[:ge] = ", " + a[:ge]
+      end
+    }
+
+    s = { en: '', ru: '', ge: ''}
+
+    strings.each{ |a|
+      s[:en] << a[:en]
+      s[:ru] << a[:ru]
+      s[:ge] << a[:ge]
+    }
+
+     RestClient.post "https://api:#{Telasi::MAILGUN_KEY}"\
+        "@api.mailgun.net/v2/telasi.ge/messages",
+        from: "Telasi <hello@telasi.ge>",
+        to: subscription.email,
+        subject: "www.telasi.ge Subscription",
+        html: %Q{
+          <html>
+          <body>
+            <font face="Tahoma">
+            თქვენ გამოწერეთ #{s[:ge]}
+            <br><br>
+            Вы подписались на #{s[:ru]}
+            <br><br>
+            You have subscribed to #{s[:en]}
+            <br>
+            <hr>
+             </font>
+             <font face="Tahoma" size="2">
+            <span>
+              <a href="http://www.telasi.ge" font-type>Telasi</a>&nbsp;2014 
+              </span>
+             </font>
+          </body>
+          </html>
+        } unless strings.empty?
+  end
 end

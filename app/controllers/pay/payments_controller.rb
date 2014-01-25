@@ -112,18 +112,25 @@ class Pay::PaymentsController < ApplicationController
   def callback
     @payment = Pay::Payment.where("ordercode" => params[:ordercode]).first
 
-    if !@payment
+    if !@payment # if payment not found 
       @payment = Pay::Payment.new
       @payment.resultcode = RESULTCODE_NOT_FOUND
     else
+      # exit if payment has OK status - save from if someone enters CALLBACK with parameters in browser
+      if @payment.gstatus = Pay::Payment::GSTATUS_OK 
+        break
+      end
+
       @payment.status = params[:status]
       @payment.check_callback = params[:check]
 
+      # if payment successfully was sent and we recieved COMPLETED status
       if @payment.status == Pay::Payment::STATUS_COMPLETED && @payment.instatus == Pay::Payment::INSTATUS_OK
         @payment.resultcode = RESULTCODE_OK
         @payment.gstatus = Pay::Payment::GSTATUS_OK
 
         check_callback = @payment.prepare_for_step(Payge::STEP_CALLBACK)
+        # check on callback CRC
         if check_callback != @payment.check_callback
           @payment.resultcode = RESULTCODE_PROBLEM 
           @payment.instatus = Pay::Payment::INSTATUS_CAL_CHECK_ERROR
@@ -134,7 +141,7 @@ class Pay::PaymentsController < ApplicationController
           end
         end
 
-      else
+      else # payment was sent but something went wrong
         @payment.gstatus = Pay::Payment::GSTATUS_ERROR
         @payment.resultcode = RESULTCODE_PROBLEM         
       end
