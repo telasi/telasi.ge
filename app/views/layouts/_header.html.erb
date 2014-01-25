@@ -21,7 +21,7 @@
           <%= link_to t('menu.calculator'), calculator_url %>
         </li>
         <% if can_pay? %>
-          <li class="<%= active?('services#*') ? 'active' : 'common' %>"
+          <li class="<%= active?('services#*') ? 'active' : 'common' %>">
             <%= link_to t('menu.payments'), pay_services_url %>
           </li>
         <% end %>
