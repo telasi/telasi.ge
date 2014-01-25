@@ -22,7 +22,7 @@
 	           <%= f.hidden_field :lng %>
 	           <%= f.hidden_field :testmode %>
              
-               <%= f.b_text_field @payment.get_user_field(), label: t("model.sys_user.#{@payment.get_user_field()}"), autofocus: true %>
+               <%= f.b_text_field @payment.get_user_field(), label: t("models.sys_user.#{@payment.get_user_field()}"), autofocus: true %>
                <%= f.b_text_field :amount, label: t('form.action.amount')%>
 
 	           <%= f.hidden_field :currency %>

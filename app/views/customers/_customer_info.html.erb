@@ -10,6 +10,9 @@
         &nbsp;
         <%= link_to t('models.general.history'), customer_history_url(custkey: customer.custkey), class: ['btn', 'btn-xs', 'btn-info'] %>
       <% end %>
+      <% if can_pay? %>
+        <%= link_to t('pay'), pay_show_form_url(serviceid: 'ENERGY', amount: number_with_precision(customer.balance, precision: 2)), class: ['btn', 'btn-primary', 'btn-xs', 'active'] %>
+      <% end %>
     </div>
     <%= t('models.billing_customer.balance') %>
   </li>
@@ -20,6 +23,9 @@
       <% if with_actions %>
         &nbsp;
         <%= link_to t('models.general.history'), customer_trash_history_url(custkey: customer.custkey), class: ['btn', 'btn-xs', 'btn-primary'] %>
+      <% end %>
+      <% if can_pay? %>
+        <%= link_to t('pay'), pay_show_form_url(serviceid: 'TRASH', amount: number_with_precision(customer.trash_balance, precision: 2)), class: ['btn', 'btn-primary', 'btn-xs', 'active'] %>
       <% end %>
     </div>
     <%= t('models.billing_customer.trash_balance') %>

@@ -7,6 +7,7 @@ ka:
     logout: "გასვლა"
     logout_confirm: ნამდვილად გინდათ გასვლა?
     customers: დავალიანება
+    payments: გადახდები
     applications: ყველა
     applications_alt: პროგრამები
     new_customer: ახალი აბონენტი

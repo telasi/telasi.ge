@@ -1,4 +1,5 @@
 en:
+    pay:            'Pay'
     services:
       title:        'Choose wage to pay'
       energy:       'Electricity bill'
@@ -34,6 +35,7 @@ en:
       history:      'My payments'
     payments:       'Payments'
 ka:
+    pay:            'გადახდა'
     form_titles:
       cancel_form:  'გადახდა გაუქმებულია'
       confirm_form: 'გადახდა დადასტურება'
@@ -68,6 +70,7 @@ ka:
       history:      'ჩემი გადახდები'
     payments:       'გადახდები'
 ru:
+    pay:            'Оплата'
     form_titles:
       cancel_form:  'Платеж отменен'
       confirm_form: 'Платеж подтвержден'

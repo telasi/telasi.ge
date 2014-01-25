@@ -20,6 +20,11 @@
         <li class="<%= active?('calculator#*') ? 'active' : 'common' %>" data-no-turbolink>
           <%= link_to t('menu.calculator'), calculator_url %>
         </li>
+        <% if can_pay? %>
+          <li class="<%= active?('services#*') ? 'active' : 'common' %>"
+            <%= link_to t('menu.payments'), pay_services_url %>
+          </li>
+        <% end %>
         <%= render partial: 'layouts/apps' %>
       </ul>
       <ul class="nav navbar-nav navbar-right">

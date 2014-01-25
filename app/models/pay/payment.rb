@@ -73,7 +73,7 @@ class Pay::Payment
       end
   end
 
-  def amount_tech; (self.amount || 0 * 100).round end
+  def amount_tech; ((self.amount || 0) * 100).round end
 
   def get_current_password
    Payge::PAY_SERVICES.find{ |h| h[:Merchant] == self.merchant }[:Password]

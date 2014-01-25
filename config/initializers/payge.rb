@@ -44,4 +44,6 @@ module Payge
   STEP_RETURNED = 2
   STEP_CALLBACK = 3
   STEP_RESPONSE = 4
+
+  USERS = [ "temo.chutlashvili@gmail.com" ]
 end

@@ -1,6 +1,7 @@
 # -*- encoding : utf-8 -*-
 class Pay::PaymentsController < ApplicationController
   before_action :validate_login, :except => [:callback] 
+  before_action :validate_users, :except => [:callback] 
 
 	MODES = [LiveMode = 0, TestMode = 1]
 	LANGUAGES = [LngENG = 'EN', LngGEO = 'KA']
@@ -72,7 +73,7 @@ class Pay::PaymentsController < ApplicationController
 
       params[:serviceid] = params[:pay_payment][:serviceid]
     else 
-      @payment = Pay::Payment.new(accnumb: current_user.accnumb, rs_tin: current_user.rs_tin, amount: 0, serviceid: params[:serviceid], merchant: get_current_merchant(params[:serviceid]) )
+      @payment = Pay::Payment.new(accnumb: current_user.accnumb, rs_tin: current_user.rs_tin, amount: ( params[:amount] || 0 ), serviceid: params[:serviceid], merchant: get_current_merchant(params[:serviceid]) )
     end
   end
 
@@ -118,7 +119,7 @@ class Pay::PaymentsController < ApplicationController
     else
       # exit if payment has OK status - save from if someone enters CALLBACK with parameters in browser
       if @payment.gstatus = Pay::Payment::GSTATUS_OK 
-        break
+        abort('error')
       end
 
       @payment.status = params[:status]
@@ -243,6 +244,12 @@ class Pay::PaymentsController < ApplicationController
   def delete_all
     Pay::Payment.delete_all
     redirect_to pay_url
+  end
+
+  def validate_users
+    if not Payge::USERS.include?(current_user.email)
+      redirect_to root_path
+    end
   end
 
 end
