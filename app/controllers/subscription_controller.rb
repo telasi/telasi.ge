@@ -102,7 +102,7 @@ class SubscriptionController < ApplicationController
           <html>
           <body>
             <font face="Tahoma">
-            თქვენ გამოწერეთ #{s[:ge]}
+            თქვენ გამოიწერეთ #{s[:ge]}
             <br><br>
             Вы подписались на #{s[:ru]}
             <br><br>
