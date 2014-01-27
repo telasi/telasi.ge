@@ -74,6 +74,8 @@ class Pay::Payment
   end
 
   def amount_tech; ((self.amount || 0) * 100).round end
+  def serviceidtext; I18n.t("services.#{self.serviceid.downcase}") end
+  def gstatustext; I18n.t("services.#{self.gstatus.downcase}") end
 
   def get_current_password
    Payge::PAY_SERVICES.find{ |h| h[:Merchant] == self.merchant }[:Password]

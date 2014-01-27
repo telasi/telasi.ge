@@ -14,6 +14,7 @@ en:
     payment:
        serviceid:   'Service'
        merchant:    'Merchant'
+       description: 'Description'
        ordercode:   'Order code'
        transactioncode:   'Transaction code'
        amount:      'Amount'
@@ -32,8 +33,13 @@ en:
       pay:          'Proceed to transaction'
       comfirm:      'Confirm transaction'
       back:         'Back'
-      history:      'My payments'
+      history:      'Transaction history'
     payments:       'Payments'
+    status:
+      ok:           'Completed'
+      sent:         'Processing'
+      error:        'Error'
+      billing_error: 'Error'
 ka:
     pay:            'გადახდა'
     form_titles:
@@ -50,6 +56,7 @@ ka:
        serviceid:   'სერვისი'
        merchant:    'მერჩანტი'
        ordercode:   'კოდი'
+       description: 'დანიშნულება'
        transactioncode:   'ტრანზაქციის კოდი'
        amount:      'თანხა'
        currency:    'ვალუტა'
@@ -67,8 +74,13 @@ ka:
       pay:          'ტრანზაქციის შესრულება'
       comfirm:      'ტრანზაქციის დასტური'
       back:         'დაბრუნება'
-      history:      'ჩემი გადახდები'
+      history:      'ტრანზაქციების ისტორია'
     payments:       'გადახდები'
+    status:
+      ok:           'დასრულებული'
+      sent:         'მუშავდება'
+      error:        'შეცდომით'
+      billing_error: 'შეცდომით'
 ru:
     pay:            'Оплата'
     form_titles:
@@ -85,6 +97,7 @@ ru:
        serviceid:   'Сервис'
        merchant:    'Мерчант'
        ordercode:   'Код'
+       description: 'Описание'
        transactioncode:   'Код транзакции'
        amount:      'Сумма'
        currency:    'Валюта'
@@ -102,5 +115,10 @@ ru:
       pay:          'Провести транзакцию'
       comfirm:      'Подтвердить транзакцию'
       back:         'Назад'
-      history:      'Мои транзакции'
+      history:      'История транзакций'
     payments:       'Платежи'
+    status:
+      ok:           'Завершено'
+      sent:         'В обработке'
+      error:        'Ошибочно'
+      billing_error: 'Ошибочно'

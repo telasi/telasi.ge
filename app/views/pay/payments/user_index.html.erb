@@ -6,15 +6,18 @@
       f.text_field 'ordercode', label: t('payment.ordercode')
       f.text_field 'transactioncode', label: t('payment.transactioncode')
       f.combo_field 'gstatus', label: t('payment.gstatus'), 
-           collection: { 'დასრულებული' => Pay::Payment::GSTATUS_OK, 'მუშავდება' => Pay::Payment::GSTATUS_SENT, 'შეცდომით' => Pay::Payment::GSTATUS_ERROR }
+           collection: { t('status.ok') => Pay::Payment::GSTATUS_OK, 
+                         t('status.sent') => Pay::Payment::GSTATUS_SENT, 
+                         t('status.error') => Pay::Payment::GSTATUS_ERROR }
       f.date_field 'date', label: t('payment.date')
      end
    end
  end %>
  <%= table_for @payments, title: t('payments'), icon: '/icons/documents.png', collapsible: true do |t|
+   t.text_field 'serviceidtext', label: t('payment.serviceid')
    t.text_field 'ordercode', label: t('payment.ordercode')
    t.text_field 'transactioncode', label: t('payment.transactioncode')
-   t.text_field 'gstatus', label: t('payment.gstatus')
+   t.text_field 'gstatustext', label: t('payment.gstatus')
    t.text_field 'amount', label: t('payment.amount')
    t.text_field 'date', label: t('payment.date')
    t.paginate records: t('models.general.records')

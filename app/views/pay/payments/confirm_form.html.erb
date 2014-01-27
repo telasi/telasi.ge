@@ -19,6 +19,11 @@
           <%= hidden_field_tag :serviceid, @payment.serviceid, class: 'form-control' %>
 
           <div class="form-group">
+           <%= label_tag t('payment.description') %>
+           <%= text_field_tag :description_show, @payment.description, disabled: true, class: 'form-control' %>
+           <%= hidden_field_tag :description, @payment.description %>
+          </div>
+          <div class="form-group">
            <%= label_tag t('payment.ordercode') %>
            <%= text_field_tag :ordercode_show, @payment.ordercode, disabled: true, class: 'form-control' %>
            <%= hidden_field_tag :ordercode, @payment.ordercode %>
@@ -33,7 +38,6 @@
             <%= text_field_tag :currency_show, @payment.currency, disabled: true, class: 'form-control' %>
             <%= hidden_field_tag :currency, @payment.currency %>
           </div>
-          <%= hidden_field_tag :description, @payment.description, class: 'form-control' %>
           <%= hidden_field_tag :lng, @payment.lng, class: 'form-control' %>
           <%= hidden_field_tag :check, @payment.check, class: 'form-control' %>
           <%= hidden_field_tag :testmode, @payment.testmode, class: 'form-control' %>

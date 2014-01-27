@@ -79,6 +79,9 @@ class Pay::PaymentsController < ApplicationController
 
   def confirm_form
     @payment = Pay::Payment.where("ordercode" => params[:ordercode]).first
+    if @payment.status  # if there is ordercode with populated status, this payment is completed or processing
+      redirect_to pay_error_url
+    end
   end
 
   def gen_order_code

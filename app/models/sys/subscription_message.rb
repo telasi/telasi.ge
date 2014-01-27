@@ -41,7 +41,7 @@ class Sys::SubscriptionMessage
         html: %Q{
           <html>
           <body>
-            <h1 class="page-header"><a href="http://telasi.ge/#{I18n.site_locale}/node/#{m.nid}?ref=email">#{m.subject}</a></h1>
+            <h1 class="page-header"><a href="http://telasi.ge/#{m.locale}/node/#{m.nid}?ref=email">#{m.subject}</a></h1>
             #{m.body}
           </body>
           </html>
