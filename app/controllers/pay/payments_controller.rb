@@ -118,7 +118,7 @@ class Pay::PaymentsController < ApplicationController
       @payment.resultcode = RESULTCODE_NOT_FOUND
     else
       # exit if payment has OK status - save from if someone enters CALLBACK with parameters in browser
-      if @payment.gstatus = Pay::Payment::GSTATUS_OK 
+      if @payment.gstatus == Pay::Payment::GSTATUS_OK 
         abort('error')
       end
 
