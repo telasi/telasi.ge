@@ -7,8 +7,13 @@
       f.text_field 'clientname', label: t('payment.clientname')
       f.combo_field 'status', label: t('payment.status'), 
            collection: { 'დასრულებული' => Pay::Payment::STATUS_COMPLETED, 'გაუქმებული' => Pay::Payment::STATUS_CANCELED, 'შეცდომით' => Pay::Payment::STATUS_ERROR }
-       f.combo_field 'instatus', label: t('payment.instatus'), 
+      f.combo_field 'instatus', label: t('payment.instatus'), 
            collection: { 'დასრულებული' => Pay::Payment::INSTATUS_OK, 'Bad CRC return' => Pay::Payment::INSTATUS_RET_CHECK_ERROR, 'Bad CRC callback' => Pay::Payment::INSTATUS_CAL_CHECK_ERROR }
+      f.combo_field 'gstatus', label: t('payment.gstatus'), 
+           collection: { t('status.ok') => Pay::Payment::GSTATUS_OK, 
+                         t('status.sent') => Pay::Payment::GSTATUS_SENT, 
+                         t('status.error') => Pay::Payment::GSTATUS_ERROR,
+                         t('status.cancel') => Pay::Payment::GSTATUS_CANCEL }
        f.date_field 'date', label: t('payment.date')
      end
    end

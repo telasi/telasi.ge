@@ -62,6 +62,7 @@ class Pay::PaymentsController < ApplicationController
       @payment.generate_description
       @payment.prepare_for_step(Payge::STEP_SEND)
       @payment.user = current_user
+      @payment.createdate = Time.now
       @payment.successurl = Payge::URLS[:success]
       @payment.cancelurl = Payge::URLS[:cancel]
       @payment.errorurl = Payge::URLS[:error]
@@ -178,7 +179,7 @@ class Pay::PaymentsController < ApplicationController
          end
 
        when Pay::Payment::STATUS_CANCELED
-         @payment.gstatus = Pay::Payment::GSTATUS_ERROR
+         @payment.gstatus = Pay::Payment::GSTATUS_CANCEL
          redirect_to pay_cancel_url
 
        when Pay::Payment::STATUS_ERROR

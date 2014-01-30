@@ -13,6 +13,7 @@ class Pay::Payment
   field :amount, 	         type: Float  					       # თანხა
  # field :amount_tech,      type: Integer                # თანხა თეტრებში
   field :currency,         type: String, default: 'GEL'  # ვალუტა GEL
+  field :createdate,       type: DateTime                # შექმნის თარიღი
   field :date,             type: DateTime                # თარიღი
   field :status,           type: String                  # სტატუსი
   field :instatus,         type: String                  # სტატუსი
@@ -61,6 +62,7 @@ class Pay::Payment
   GSTATUS_OK = 'OK'
   GSTATUS_SENT = 'SENT'
   GSTATUS_ERROR = 'ERROR'
+  GSTATUS_CANCEL = 'CANCEL'
   GSTATUS_ERROR_BILLING = 'ERROR_BILLING'
 
   def accnumb_validation

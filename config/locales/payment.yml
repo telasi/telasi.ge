@@ -39,6 +39,7 @@ en:
       ok:           'Completed'
       sent:         'Processing'
       error:        'Error'
+      cancel:        'Cancelled'
       billing_error: 'Error'
 ka:
     pay:            'გადახდა'
@@ -80,6 +81,7 @@ ka:
       ok:           'დასრულებული'
       sent:         'მუშავდება'
       error:        'შეცდომით'
+      cancel:        'გაუქმებული'
       billing_error: 'შეცდომით'
 ru:
     pay:            'Оплата'
@@ -121,4 +123,5 @@ ru:
       ok:           'Завершено'
       sent:         'В обработке'
       error:        'Ошибочно'
+      cancel:        'Отменено'
       billing_error: 'Ошибочно'
