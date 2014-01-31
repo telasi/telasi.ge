@@ -210,7 +210,7 @@ class Pay::PaymentsController < ApplicationController
     @billing_payment.billoperkey = Payge::BILLING_CONSTANTS[:billoperkey]
     @billing_payment.paytpkey = Payge::BILLING_CONSTANTS[:paytpkey]
     @billing_payment.ppointkey = Payge::BILLING_CONSTANTS[:ppointkey]
-    @billing_payment.perskey = get_perskey(customer.serviceid)
+    @billing_payment.perskey = get_perskey(@payment.serviceid)
     @billing_payment.regionkey = Billing::Address.where(premisekey: customer.premisekey).first.regionkey
     @billing_payment.paydate = @payment.date || Time.now
     @billing_payment.amount = @payment.amount
@@ -229,7 +229,7 @@ class Pay::PaymentsController < ApplicationController
     @trash_payment.operationid = Payge::BILLING_CONSTANTS[:billoperkey]
     @trash_payment.paytpkey = Payge::BILLING_CONSTANTS[:paytpkey]
     @trash_payment.ppointkey = Payge::BILLING_CONSTANTS[:ppointkey]
-    @trash_payment.perskey = get_perskey(customer.serviceid)
+    @trash_payment.perskey = get_perskey(@payment.serviceid)
     @trash_payment.trashofficeid = Billing::Address.where(premisekey: customer.premisekey).first.regionkey
     @trash_payment.paydate = @payment.date || Time.now
     @trash_payment.amount = @payment.amount
