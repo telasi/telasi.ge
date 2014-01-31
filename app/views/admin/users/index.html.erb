@@ -9,6 +9,7 @@
     f.col2 do |f|
       f.combo_field 'admin', label: 'ადმინისტრატორი?', collection: { 'კი' => 'yes', 'არა' => 'no' }, empty: '--'
       f.combo_field 'network_admin', label: 'ქსელის ადმინი?', collection: { 'კი' => 'yes', 'არა' => 'no' }, empty: '--'
+      f.combo_field 'news_admin', label: 'სიახლეების ადმინი?', collection: { 'კი' => 'yes', 'არა' => 'no' }, empty: '--'
     end
   end
 end %>

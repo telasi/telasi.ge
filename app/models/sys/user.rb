@@ -24,6 +24,7 @@ module Sys
     field :dob,                   type: Date
     # roles
     field :network_admin, type: Mongoid::Boolean, default: false
+    field :news_admin,    type: Mongoid::Boolean, default: false
 
     # customer registrations
     has_many :registrations, class_name: 'Billing::CustomerRegistration'
@@ -51,6 +52,7 @@ module Sys
 
     def admin?; self.admin end
     def network_admin?; self.admin? or self.network_admin end
+    def news_admin?; self.admin? or self.news_admin end
 
     attr_accessor :password_confirmation
     attr_reader :password
