@@ -11,6 +11,7 @@ class Admin::UsersController < Admin::AdminController
       rel = rel.where(email_confirmed: @search[:confirmed] == 'yes') if @search[:confirmed].present?
       rel = rel.where(admin: @search[:admin] == 'yes') if @search[:admin].present?
       rel = rel.where(network_admin: @search[:network_admin] == 'yes') if @search[:network_admin].present?
+      rel = rel.where(news_admin: @search[:news_admin] == 'yes') if @search[:news_admin].present?
     end
     @users = rel.desc(:_id).paginate(page: params[:page], per_page: 20)
   end
@@ -62,5 +63,5 @@ class Admin::UsersController < Admin::AdminController
 
   private
 
-  def user_params; params.require(:sys_user).permit(:email, :password, :first_name, :last_name, :mobile, :admin, :email_confirmed, :network_admin) end
+  def user_params; params.require(:sys_user).permit(:email, :password, :first_name, :last_name, :mobile, :admin, :email_confirmed, :network_admin, :news_admin) end
 end
