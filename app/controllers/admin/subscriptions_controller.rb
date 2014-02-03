@@ -23,7 +23,12 @@ class Admin::SubscriptionsController < Admin::AdminController
   end
 
   def send_messages
-    Sys::SubscriptionMessage.send_subscription_messages
-    redirect_to admin_subscriptions_url, notice: 'წერილები დაგზავნილია.'
+    last_sent = Sys::SubscriptionMessage.where(sent: true).last
+    if last_sent.updated_at + 10.minutes > Time.now
+      redirect_to admin_subscriptions_url, alert: '10 წუთის ინტერვალში დაუშვებელია წერილების განმეორებითი დაგზავნა.'
+    else
+      Sys::SubscriptionMessage.send_subscription_messages
+      redirect_to admin_subscriptions_url, notice: 'წერილები დაგზავნილია.'
+    end
   end
 end

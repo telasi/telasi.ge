@@ -21,7 +21,7 @@ ru:
       users: Пользователи
       customers: Абоненты
       network: Управление сетями
-      subscriptions: "Получение новостей"
+      subscriptions: Рассылка новостей
     new_customer_title: Новый Абонент
     new_customer_description: Создание заявки нового абонента
     new_customer:
