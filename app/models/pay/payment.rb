@@ -114,7 +114,7 @@ class Pay::Payment
           self.ordercode,
           self.paymethod,
           self.customdata,
-          self.testmode if self.testmode == 1,
+          ( self.testmode if self.testmode == 1 ),
           get_current_password,
          ].join
      when Payge::STEP_CALLBACK # PAY სისტემიდან შეტყობინების გამოგზავნა
@@ -126,7 +126,7 @@ class Pay::Payment
           self.ordercode,
           self.paymethod,
           self.customdata,
-          self.testmode if self.testmode == 1,
+          ( self.testmode if self.testmode == 1 ),
           get_current_password,
          ].join
      when Payge::STEP_RESPONSE # PAY სისტემის შეტყობინებაზე პასუხი
