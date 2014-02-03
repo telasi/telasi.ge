@@ -29,6 +29,8 @@ class Pay::PaymentsController < ApplicationController
       rel = rel.where(date: @search[:date]) if @search[:date].present?
     end
 
+    set_status_from_billing(rel)
+
     @payments = rel.paginate(page: params[:page], per_page: 20)
   end
 
@@ -42,6 +44,8 @@ class Pay::PaymentsController < ApplicationController
       rel = rel.where(gstatus: @search[:gstatus]) if @search[:gstatus].present?
       rel = rel.where(date: @search[:date]) if @search[:date].present?
     end
+
+    set_status_from_billing(rel)
 
     @payments = rel.paginate(page: params[:page], per_page: 20)
   end
@@ -122,7 +126,7 @@ class Pay::PaymentsController < ApplicationController
       @payment.resultcode = RESULTCODE_NOT_FOUND
     else
       # exit if payment has OK status - save from if someone enters CALLBACK with parameters in browser
-      if @payment.gstatus == Pay::Payment::GSTATUS_OK 
+      if @payment.gstatus == ( Pay::Payment::GSTATUS_PROCESS or Pay::Payment::GSTATUS_OK )
         abort('error')
       end
 
@@ -132,7 +136,7 @@ class Pay::PaymentsController < ApplicationController
       # if payment successfully was sent and we recieved COMPLETED status
       if @payment.status == Pay::Payment::STATUS_COMPLETED && @payment.instatus == Pay::Payment::INSTATUS_OK
         @payment.resultcode = RESULTCODE_OK
-        @payment.gstatus = Pay::Payment::GSTATUS_OK
+        @payment.gstatus = Pay::Payment::GSTATUS_PROCESS
 
         check_callback = @payment.prepare_for_step(Payge::STEP_CALLBACK)
         # check on callback CRC
@@ -257,6 +261,15 @@ class Pay::PaymentsController < ApplicationController
   def validate_users
     if not Payge::USERS.include?(current_user.email)
       redirect_to root_path
+    end
+  end
+
+  def set_status_from_billing(rel)
+    rel.select{ |r| r.transactioncode and r.gstatus == Pay::Payment::GSTATUS_PROCESS }.each do |rl|
+    pay = Billing::Payment.where(billnumber: rl.transactioncode).first
+    if pay and pay.status == 2
+      rl.gstatus = Pay::Payment::GSTATUS_OK
+      rl.save
     end
   end
 

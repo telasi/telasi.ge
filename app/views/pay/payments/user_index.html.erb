@@ -7,6 +7,7 @@
       f.text_field 'transactioncode', label: t('payment.transactioncode')
       f.combo_field 'gstatus', label: t('payment.gstatus'), 
            collection: { t('status.ok') => Pay::Payment::GSTATUS_OK, 
+                         t('status.process') => Pay::Payment::GSTATUS_PROCESS, 
                          t('status.sent') => Pay::Payment::GSTATUS_SENT, 
                          t('status.error') => Pay::Payment::GSTATUS_ERROR,
                          t('status.cancel') => Pay::Payment::GSTATUS_CANCEL }

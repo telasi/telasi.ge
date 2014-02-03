@@ -37,7 +37,8 @@ en:
     payments:       'Payments'
     status:
       ok:           'Completed'
-      sent:         'Processing'
+      sent:         'Sent to bank'
+      process:      'Processing'
       error:        'Error'
       cancel:        'Cancelled'
       billing_error: 'Error'
@@ -79,7 +80,8 @@ ka:
     payments:       'გადახდები'
     status:
       ok:           'დასრულებული'
-      sent:         'მუშავდება'
+      process:      'მუშავდება'
+      sent:         'გაგზავნილია'
       error:        'შეცდომით'
       cancel:        'გაუქმებული'
       billing_error: 'შეცდომით'
@@ -121,7 +123,8 @@ ru:
     payments:       'Платежи'
     status:
       ok:           'Завершено'
-      sent:         'В обработке'
+      process:      'В обработке'
+      sent:         'Отправлено'
       error:        'Ошибочно'
       cancel:        'Отменено'
       billing_error: 'Ошибочно'
