@@ -2,7 +2,7 @@
 class Bank
   BANKS = {
     'BNLNGE22' => I18n.t('banks.BNLNGE22'),
-    # 'TRESGE22' => I18n.t('banks.TRESGE22'),
+    'TRESGE22' => I18n.t('banks.TRESGE22'),
     'CBASGE22' => I18n.t('banks.CBASGE22'),
     'CNSBGE22' => I18n.t('banks.CNSBGE22'),
     'CRTUGE22' => I18n.t('banks.CRTUGE22'),
