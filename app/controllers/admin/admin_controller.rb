@@ -6,7 +6,9 @@ class Admin::AdminController < ApplicationController
   private
 
   def validate_admin
-    unless current_user.admin?
+    if controller_name == 'subscriptions' and not current_user.news_admin?
+      redirect_to login_url, alert: I18n.t('models.sys_user.errors.admin_required')
+    elsif not current_user.admin?
       redirect_to login_url, alert: I18n.t('models.sys_user.errors.admin_required')
     end
   end
