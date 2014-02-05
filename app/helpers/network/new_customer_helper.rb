@@ -271,7 +271,7 @@ module Network::NewCustomerHelper
 
   def sms_message_form(message, opts = {})
     forma_for message, title: opts[:title], icon: opts[:icon], collapsible: true do |f|
-      f.text_field 'message', required: true, autofocus: true, width: 400
+      f.text_field 'message', required: true, autofocus: true, width: 800
       f.submit opts[:submit]
       f.bottom_action opts[:cancel_url], label: 'გაუქმება', icon: '/icons/cross.png'
     end
