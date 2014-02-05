@@ -1,8 +1,0 @@
-<%= render partial: 'new_customer/side_back', locals: { url: new_customer_files_url } %>
-<div class="module">
-  <h1><%= @title %></h1>
-  <%= form_for @file, url: request.url do |f| %>
-    <%= f.file_field :file %>
-    <div style="padding-top: 32px;"><%= f.submit @title, class: 'btn btn-primary'  %></div>
-  <% end %>
-</div>
