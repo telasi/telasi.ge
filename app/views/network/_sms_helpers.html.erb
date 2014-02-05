@@ -1,0 +1,16 @@
+<h3>აარჩიეთ სტანდარტული ტექსტი</h3>
+<hr>
+<ul>
+  <% Network::MessageStrings.formatted_texts(application).each do |msg| %>
+    <li><a class="message" href="#"><%= msg %></a></li>
+  <% end %>
+</ul>
+<script type="text/javascript">
+$(function() {
+  $('.message').click(function(evnt) {
+    var txt = $(evnt.target).text();
+    $('#sys_sms_message_message').val(txt);
+    return false;
+  });
+});
+</script>
