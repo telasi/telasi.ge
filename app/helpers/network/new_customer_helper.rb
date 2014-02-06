@@ -93,6 +93,16 @@ module Network::NewCustomerHelper
     ].include?(app.status)
   end
 
+  def app_change_dates?(app)
+    [
+      Network::NewCustomerApplication::STATUS_DEFAULT,
+      Network::NewCustomerApplication::STATUS_SENT,
+      Network::NewCustomerApplication::STATUS_CANCELED,
+      Network::NewCustomerApplication::STATUS_CONFIRMED,
+      Network::NewCustomerApplication::STATUS_COMPLETE,
+    ].include?(app.status)
+  end
+
   public
 
   def new_customer_view(application, opts = {})
@@ -157,10 +167,10 @@ module Network::NewCustomerHelper
           c.date_field :send_date
           c.date_field :start_date
           c.date_field :end_date do |real|
-            real.action network_change_real_date_url(id: application.id), icon: '/icons/pencil.png' if (application.end_date.present? and show_actions and app_editable?(application))
+            real.action network_change_real_date_url(id: application.id), icon: '/icons/pencil.png' if (application.end_date.present? and show_actions and app_change_dates?(application))
           end
           c.date_field :plan_end_date do |plan|
-            plan.action network_change_plan_date_url(id: application.id), icon: '/icons/pencil.png' if (application.plan_end_date.present? and show_actions and app_editable?(application))
+            plan.action network_change_plan_date_url(id: application.id), icon: '/icons/pencil.png' if (application.plan_end_date.present? and show_actions and app_change_dates?(application))
           end
         end
       end
