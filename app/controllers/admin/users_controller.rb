@@ -53,6 +53,11 @@ class Admin::UsersController < Admin::AdminController
     end
   end
 
+  def roles
+    @title = 'როლები'
+    @roles = Sys::Role.asc(:name)
+  end
+
   def nav
     @nav = { 'მომხმარებლები' => admin_users_url }
     if @user
