@@ -1,0 +1,7 @@
+<%= table_for @permissions, title: 'უფლებები', icon: '/icons/application-task.png', collapsible: true do |t|
+  t.title_action admin_syns_permissions_url, label: 'სინქრონიზაცია', icon: '/icons/arrow-circle.png', method: 'post', confirm: 'ნამდვილად გინდათ სინქრონიზაცია?'
+  t.text_field 'controller', label: 'კონტროლერი'
+  t.text_field 'action', label: 'მოქმედება'
+  t.text_field 'path', label: 'მისამართი'
+  t.boolean_field 'public_page', label: 'ღია?'
+end %>
