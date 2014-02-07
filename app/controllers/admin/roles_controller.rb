@@ -17,6 +17,16 @@ class Admin::RolesController < Admin::AdminController
     end
   end
 
+  def edit
+    @title = 'როლის შეცვლა'
+    @role = Sys::Role.find(params[:id])
+    if request.post?
+      if @role.update_attributes(params.require(:sys_role).permit(:name))
+        redirect_to admin_roles_url, notice: 'შეცვლა'
+      end
+    end
+  end
+
   def delete
     role = Sys::Role.find(params[:id])
     role.destroy
@@ -26,8 +36,7 @@ class Admin::RolesController < Admin::AdminController
   def nav
     @nav = { 'მომხმარებლები' => admin_users_url, 'როლები' => admin_roles_url }
     if @role
-      @nav[@role.name] = admin_role_url(id: @role.id) unless @role.new_record?
-      @nav[@title] = nil unless action_name == 'show'
+      @nav[@title] = nil
     end
   end
 end
