@@ -1,4 +1,5 @@
 <%= table_for @roles, title: @title, icon: '/icons/mask.png', collapsible: true do |t|
   t.title_action admin_new_role_url, label: 'ახალი როლი', icon: '/icons/plus.png'
+  t.item_action ->(x) { admin_delete_role_url(id: x.id) }, icon: '/icons/bin.png', method: 'delete', confirm: 'ნამდვილად გინდათ წაშლა?'
   t.text_field 'name'
 end %>

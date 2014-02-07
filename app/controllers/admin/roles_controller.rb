@@ -17,6 +17,12 @@ class Admin::RolesController < Admin::AdminController
     end
   end
 
+  def delete
+    role = Sys::Role.find(params[:id])
+    role.destroy
+    redirect_to admin_roles_url, notice: 'როლი წაშლილია.'
+  end
+
   def nav
     @nav = { 'მომხმარებლები' => admin_users_url, 'როლები' => admin_roles_url }
     if @role

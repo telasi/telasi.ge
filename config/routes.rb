@@ -65,6 +65,7 @@ TelasiGe::Application.routes.draw do
       get '/', action: 'index', as: 'roles'
       get '/show/:id', action: 'show', as: 'role'
       match '/new', action: 'new', as: 'new_role', via: ['get', 'post']
+      delete '/delete/:id', action: 'delete', as: 'delete_role'
     end
     scope '/permission', controller: 'permission' do      
       get '/', action: 'index', as: 'permission'
