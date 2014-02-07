@@ -4,4 +4,5 @@ class Sys::Role
   include Mongoid::Timestamps
 
   field :name, type: String
+  validates :name, presence: { message: 'ჩაწერეთ დასახელება' }
 end
