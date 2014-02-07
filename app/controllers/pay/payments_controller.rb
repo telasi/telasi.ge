@@ -218,7 +218,7 @@ class Pay::PaymentsController < ApplicationController
     @billing_payment.regionkey = Billing::Address.where(premisekey: customer.premisekey).first.regionkey
     @billing_payment.paydate = @payment.date || Time.now
     @billing_payment.amount = @payment.amount
-    @billing_payment.billnumber = @payment.transactioncode
+    @billing_payment.billnumber = "#{@payment.transactioncode} Web"
     @billing_payment.status = Payge::BILLING_CONSTANTS[:status]
     @billing_payment.accnumb = @payment.accnumb
     @billing_payment.enterdate = @payment.date
@@ -237,7 +237,7 @@ class Pay::PaymentsController < ApplicationController
     @trash_payment.trashofficeid = Billing::Address.where(premisekey: customer.premisekey).first.regionkey
     @trash_payment.paydate = @payment.date || Time.now
     @trash_payment.amount = @payment.amount
-    @trash_payment.billnumber = @payment.transactioncode
+    @trash_payment.billnumber = "#{@payment.transactioncode} Web"
     @trash_payment.status = Payge::BILLING_CONSTANTS[:status]
     @trash_payment.accnumb = @payment.accnumb
     @trash_payment.enterdate = @payment.date
