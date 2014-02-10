@@ -75,7 +75,9 @@ TelasiGe::Application.routes.draw do
       get '/show/:id', action: 'show', as: 'permission'
       post '/toggle_public', action: 'toggle_public', as: 'toggle_public_permission'
       post '/toggle_admin', action: 'toggle_admin', as: 'toggle_admin_permission'
-      match '/edit/:id', action: 'edit', as: 'edit_permission', via: ['get', 'post']
+      # match '/edit/:id', action: 'edit', as: 'edit_permission', via: ['get', 'post']
+      match '/add_role/:permission_id', action: 'add_role', as: 'add_permission_role', via: ['get', 'post']
+      delete '/remove_role/:permission_id/:role_id', action: 'remove_role', as: 'remove_permission_role'
     end
     scope '/customers', controller: 'customers' do
       get '/', action: 'index', as: 'customers'

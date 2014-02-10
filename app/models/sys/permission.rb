@@ -8,7 +8,7 @@ class Sys::Permission
   field :path, type: String
   field :public_page, type: Mongoid::Boolean, default: false
   field :admin_page, type: Mongoid::Boolean, default: false
-  has_many :roles, class_name: 'Sys::Role'
+  has_and_belongs_to_many :roles, class_name: 'Sys::Role'
 
   index({controller: 1, action: 1}, { unique: true })
 

@@ -1,12 +1,34 @@
-<%= view_for @permission, title: @title, icon: '/icons/application-task.png', collapsible: true do |f|
-  f.text_field 'controller', required: true
-  f.text_field 'action', required: true
-  f.text_field 'path', required: true
-  f.boolean_field 'public_page', required: true do |fld|
-    fld.action admin_toggle_public_permission_url(id: @permission.id), icon: '/icons/arrow-repeat.png', label: 'შეცვლა', method: 'post', confirm: 'ნამდვილად გინდათ შეცვლა?'
+<%
+  case params[:tab]
+  when 'roles' then index = 1
+  when 'sys' then index = 2
+  else index = 0
   end
-  f.boolean_field 'admin_page', required: true do |fld|
-    fld.action admin_toggle_admin_permission_url(id: @permission.id), icon: '/icons/arrow-repeat.png', label: 'შეცვლა', method: 'post', confirm: 'ნამდვილად გინდათ შეცვლა?'
+%>
+<%= view_for @permission, title: @title, icon: '/icons/application-task.png', collapsible: true, selected_tab: index do |f|
+  f.tab title: 'ძირითადი', icon: '/icons/application-task.png' do |v|
+    f.text_field 'controller', required: true
+    f.text_field 'action', required: true
+    f.text_field 'path', required: true
+    f.boolean_field 'public_page', required: true do |fld|
+      fld.action admin_toggle_public_permission_url(id: @permission.id), icon: '/icons/arrow-repeat.png', label: 'შეცვლა', method: 'post', confirm: 'ნამდვილად გინდათ შეცვლა?'
+    end
+    f.boolean_field 'admin_page', required: true do |fld|
+      fld.action admin_toggle_admin_permission_url(id: @permission.id), icon: '/icons/arrow-repeat.png', label: 'შეცვლა', method: 'post', confirm: 'ნამდვილად გინდათ შეცვლა?'
+    end
   end
-  f.array_field 'roles'
+  f.tab title: "როლები &mdash; <strong>#{@permission.roles.size}</strong>".html_safe, icon: '/icons/mask.png' do |t|
+    t.table_field 'roles', table: { title: 'როლები', icon: '/icons/mask.png' } do |roles|
+      roles.table do |t|
+        t.title_action admin_add_permission_role_url(permission_id: @permission.id), icon: '/icons/plus.png', label: 'როლის დამატება'
+        t.item_action ->(x) { admin_remove_permission_role_url(permission_id: @permission.id, role_id: x.id)  }, icon: '/icons/bin.png', method: 'delete', confirm: 'ნამდივილად გინდათ როლის წაშლა?'
+        t.text_field 'name', label: 'დასახელება'
+        t.text_field 'description', class: 'text-muted', label: 'აღწერა'
+      end
+    end
+  end
+  f.tab title: 'სისტემური', icon: '/icons/traffic-cone.png' do |t|
+    t.date_field 'created_at', required: true, formatter: '%d-%b-%Y %H:%M:%S'
+    t.date_field 'updated_at', required: true, formatter: '%d-%b-%Y %H:%M:%S'
+  end
 end %>

@@ -29,6 +29,27 @@ class Admin::PermissionsController < ApplicationController
     redirect_to admin_permission_url(id: permission.id)
   end
 
+  def add_role
+    @title = 'როლის დამატება'
+    @permission = Sys::Permission.find(params[:permission_id])
+    if request.post?
+      @role = Sys::Role.find(params[:role_id])
+      unless @permission.roles.include?(@role)
+        @permission.roles << @role
+        @permission.save
+      end
+      redirect_to admin_permission_url(id: @permission.id, tab: 'roles'), notice: 'როლი დამატებულია'
+    end
+  end
+
+  def remove_role
+    permission = Sys::Permission.find(params[:permission_id])
+    role = Sys::Role.find(params[:role_id])
+    permission.roles.delete(role)
+    permission.save
+    redirect_to admin_permission_url(id: permission.id, tab: 'roles'), notice: 'როლი წაშლილია'
+  end
+
   def nav
     @nav = { 'მომხმარებლები' => admin_users_url, 'უფლებები' => admin_permissions_url }
     if @permission

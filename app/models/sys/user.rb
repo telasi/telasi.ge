@@ -24,6 +24,8 @@ module Sys
     field :dob,                   type: Date
     # roles
     has_and_belongs_to_many :roles, class_name: 'Sys::Role'
+    
+    ## XXX: remove this fields
     field :network_admin, type: Mongoid::Boolean, default: false
     field :news_admin,    type: Mongoid::Boolean, default: false
 
