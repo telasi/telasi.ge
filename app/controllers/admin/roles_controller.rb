@@ -8,7 +8,7 @@ class Admin::RolesController < ApplicationController
   def new
     @title = 'ახალი როლი'
     if request.post?
-      @role = Sys::Role.new(params.require(:sys_role).permit(:name))
+      @role = Sys::Role.new(params.require(:sys_role).permit(:name, :description))
       if @role.save
         redirect_to admin_roles_url, notice: 'როლი დამატებულია'
       end
@@ -21,7 +21,7 @@ class Admin::RolesController < ApplicationController
     @title = 'როლის შეცვლა'
     @role = Sys::Role.find(params[:id])
     if request.post?
-      if @role.update_attributes(params.require(:sys_role).permit(:name))
+      if @role.update_attributes(params.require(:sys_role).permit(:name, :description))
         redirect_to admin_roles_url, notice: 'შეცვლა'
       end
     end

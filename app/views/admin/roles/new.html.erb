@@ -1,5 +1,6 @@
 <%= forma_for @role, title: @title, icon: '/icons/mask.png' do |f|
   f.text_field 'name', label: 'დასახელება', required: true, autofocus: true
+  f.text_field 'description', label: 'აღწერილობა', width: 800
   f.submit 'როლის დამატება'
   f.cancel_button admin_roles_url
 end %>
