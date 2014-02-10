@@ -34,16 +34,13 @@ class Sys::Permission
         else
           if permission.roles.empty? then true # no role required for this action
           else
-            # TODO:
-            true
+            if (permissin.roles & user.roles).any? then true # user roles has intersection with permission roles
+            else false end # ... no intersection => no permission
           end
         end
       else
         false
       end
     end
-
-
-    # true
   end
 end
