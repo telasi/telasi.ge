@@ -22,6 +22,13 @@ class Admin::PermissionsController < ApplicationController
     redirect_to admin_permission_url(id: permission.id)
   end
 
+  def toggle_admin
+    permission = Sys::Permission.find(params[:id])
+    permission.admin_page = !permission.admin_page
+    permission.save
+    redirect_to admin_permission_url(id: permission.id)
+  end
+
   def nav
     @nav = { 'მომხმარებლები' => admin_users_url, 'უფლებები' => admin_permissions_url }
     if @permission

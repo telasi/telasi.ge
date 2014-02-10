@@ -6,7 +6,8 @@ class Sys::Permission
   field :controller, type: String
   field :action, type: String
   field :path, type: String
-  field :public_page, type: Mongoid::Boolean
+  field :public_page, type: Mongoid::Boolean, default: false
+  field :admin_page, type: Mongoid::Boolean, default: false
   has_many :roles, class_name: 'Sys::Role'
 
   index({controller: 1, action: 1}, { unique: true })
@@ -22,19 +23,24 @@ class Sys::Permission
   end
 
   def self.has_permission?(user, controller, action)
-    permission = Sys::Permission.where(controller: controller, action: action).first
-    if permission
-      if permission.public_page then true # everyone has access to public page
-      elsif user.blank? then false # authentication required for non-public pages
-      elsif user.admin? then true  # admin has all privileges
-      ##############################
-      else true # XXX
-      ##############################
-      end
+    if user and user.admin? then true # admin has all privileges
     else
-      false
+      permission = Sys::Permission.where(controller: controller, action: action).first
+      if permission
+        if permission.public_page then true # everyone has access to public page
+        elsif user.blank? then false # authentication required for non-public pages
+        elsif permission.admin_page then false # only admin has access to admin page
+        else
+          if permission.roles.empty? then true # no role required for this action
+          else
+            # TODO:
+            true
+          end
+        end
+      else
+        false
+      end
     end
-
 
 
     # true

@@ -5,4 +5,5 @@ ka:
       action: მოქმედება
       path: მისამართი
       public_page: public გვერდია?
+      admin_page: admin გვერდია?
       roles: როლები

@@ -5,5 +5,8 @@
   f.boolean_field 'public_page', required: true do |fld|
     fld.action admin_toggle_public_permission_url(id: @permission.id), icon: '/icons/arrow-repeat.png', label: 'შეცვლა', method: 'post', confirm: 'ნამდვილად გინდათ შეცვლა?'
   end
+  f.boolean_field 'admin_page', required: true do |fld|
+    fld.action admin_toggle_admin_permission_url(id: @permission.id), icon: '/icons/arrow-repeat.png', label: 'შეცვლა', method: 'post', confirm: 'ნამდვილად გინდათ შეცვლა?'
+  end
   f.array_field 'roles'
 end %>
