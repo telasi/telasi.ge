@@ -1,0 +1,7 @@
+<%= view_for @permission, title: @title, icon: '/icons/application-task.png', collapsible: true do |f|
+  f.text_field 'controller', required: true
+  f.text_field 'action', required: true
+  f.text_field 'path', required: true
+  f.boolean_field 'public_page', required: true
+  f.array_field 'roles'
+end %>

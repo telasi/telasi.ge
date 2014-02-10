@@ -10,6 +10,11 @@ class Admin::PermissionsController < Admin::AdminController
     redirect_to admin_permissions_url, notice: 'სინქრონიზაცია დასრულებულია.'
   end
 
+  def show
+    @title = 'უფლების თვისებები'
+    @permission = Sys::Permission.find(params[:id])
+  end
+
   def nav
     @nav = { 'მომხმარებლები' => admin_users_url, 'უფლებები' => admin_permissions_url }
     if @permission

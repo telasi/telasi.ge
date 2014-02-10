@@ -1,0 +1,8 @@
+ka:
+  models:
+    sys_permission:
+      controller: კონტროლერი
+      action: მოქმედება
+      path: მისამართი
+      public_page: public გვერდია?
+      roles: როლები

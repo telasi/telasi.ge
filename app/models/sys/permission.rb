@@ -7,6 +7,7 @@ class Sys::Permission
   field :action, type: String
   field :path, type: String
   field :public_page, type: Mongoid::Boolean
+  has_many :roles, class_name: 'Sys::Role'
 
   index({controller: 1, action: 1}, { unique: true })
 
