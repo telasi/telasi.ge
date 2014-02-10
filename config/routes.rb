@@ -61,7 +61,7 @@ TelasiGe::Application.routes.draw do
       match '/edit/:id', action: 'edit', as: 'edit_user', via: ['get', 'post']
       delete '/delete/:id', action: 'delete', as: 'delete_user'
       match '/add_role/:user_id', action: 'add_role', as: 'add_user_role', via: ['get', 'post']
-      delete '/remove_role/:id', action: 'remove_role', as: 'remove_user_role'
+      delete '/remove_role/:user_id/:role_id', action: 'remove_role', as: 'remove_user_role'
     end
     scope '/roles', controller: 'roles' do      
       get '/', action: 'index', as: 'roles'

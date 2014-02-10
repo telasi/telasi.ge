@@ -64,11 +64,19 @@ class Admin::UsersController < ApplicationController
     if request.post?
       @role = Sys::Role.find(params[:role_id])
       unless @user.roles.include?(@role)
-        @user.roles.push @role
+        @user.roles << @role
         @user.save
       end
       redirect_to admin_user_url(id: @user.id, tab: 'roles'), notice: 'როლი დამატებულია'
     end
+  end
+
+  def remove_role
+    user = Sys::User.find(params[:user_id])
+    role = Sys::Role.find(params[:role_id])
+    user.roles.delete(role)
+    user.save
+    redirect_to admin_user_url(id: user.id, tab: 'roles'), notice: 'როლი წაშლილია'
   end
 
   def nav
