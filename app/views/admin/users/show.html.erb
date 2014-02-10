@@ -16,11 +16,9 @@
       c.text_field 'formatted_mobile', required: true, i18n: 'mobile'
       c.boolean_field 'email_confirmed'
       c.boolean_field 'admin'
-      c.boolean_field 'network_admin'
-      c.boolean_field 'news_admin'
+      c.text_field 'subscription.locale', label: 'ენა', tag: 'code'
     end
     t.col2 do |c|
-      c.text_field 'subscription.locale', label: 'ენა', tag: 'code'
       c.boolean_field 'subscription.company_news', label: 'კომპანიის სიახლეები'
       c.boolean_field 'subscription.procurement_news', label: 'ტენდერების სიახლეები'
       c.boolean_field 'subscription.outage_news', label: 'გათიშვების სიახლეები'
@@ -41,7 +39,7 @@
   v.tab title: "როლები &mdash; <strong>#{@user.roles.size}</strong>".html_safe, icon: '/icons/mask.png' do |t|
     t.table_field 'roles', table: { title: 'როლები', icon: '/icons/mask.png' } do |roles|
       roles.table do |t|
-        t.title_action '/', icon: '/icons/plus.png', label: 'როლის დამატება'
+        t.title_action admin_add_user_role_url(user_id: @user.id), icon: '/icons/plus.png', label: 'როლის დამატება'
         t.text_field 'name'
         t.text_field 'description'
       end

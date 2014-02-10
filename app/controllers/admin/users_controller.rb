@@ -58,6 +58,19 @@ class Admin::UsersController < ApplicationController
     @roles = Sys::Role.asc(:name)
   end
 
+  def add_role
+    @title = 'როლის დამატება'
+    @user = Sys::User.find(params[:user_id])
+    if request.post?
+      @role = Sys::Role.find(params[:role_id])
+      unless @user.roles.include?(@role)
+        @user.roles.push @role
+        @user.save
+      end
+      redirect_to admin_user_url(id: @user.id, tab: 'roles'), notice: 'როლი დამატებულია'
+    end
+  end
+
   def nav
     @nav = { 'მომხმარებლები' => admin_users_url }
     if @user

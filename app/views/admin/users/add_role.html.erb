@@ -1,0 +1,8 @@
+<h3 class="page-header">აარჩიეთ როლი</h3>
+<%= form_tag url: admin_add_user_role_url(user_id: @user.id) do |f| %>
+<%= select_tag "role_id", options_from_collection_for_select(Sys::Role.asc(:name), 'id', 'name') %>
+<div style="margin: 16px 0 0 0;">
+  <%= submit_tag 'დამატება', class: ['btn', 'btn-primary'] %>
+  <%= link_to 'გაუქმება', admin_user_url(id: @user.id, tab: 'roles'), class: ['btn', 'btn-default'] %>
+</div>
+<% end %>
