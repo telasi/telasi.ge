@@ -1,7 +1,5 @@
 # -*- encoding : utf-8 -*-
 class ProfileController < ApplicationController
-  before_action :validate_login, :nav
-
   def index
     @title = I18n.t('models.sys_user.actions.profile')
     @user = current_user

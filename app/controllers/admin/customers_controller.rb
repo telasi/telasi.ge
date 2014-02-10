@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-class Admin::CustomersController < Admin::AdminController
+class Admin::CustomersController < ApplicationController
   def index
     @title = t('models.billing_customer_registration.title.pluaral')
     @search = params[:search] == 'clear' ? {} : params[:search]

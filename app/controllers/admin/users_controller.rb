@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-class Admin::UsersController < Admin::AdminController
+class Admin::UsersController < ApplicationController
   def index
     @title = I18n.t('applications.admin.users')
     @search = params[:search] == 'clear' ? {} : params[:search]

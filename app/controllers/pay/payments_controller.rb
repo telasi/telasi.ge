@@ -1,6 +1,5 @@
 # -*- encoding : utf-8 -*-
 class Pay::PaymentsController < ApplicationController
-  before_action :validate_login, :except => [:callback] 
   before_action :validate_users, :except => [:callback] 
 
 	MODES = [LiveMode = 0, TestMode = 1]

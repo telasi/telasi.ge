@@ -71,6 +71,7 @@ TelasiGe::Application.routes.draw do
       get '/', action: 'index', as: 'permissions'
       post '/sync', action: 'sync', as: 'syns_permissions'
       get '/show/:id', action: 'show', as: 'permission'
+      post '/toggle_public', action: 'toggle_public', as: 'toggle_public_permission'
       match '/edit/:id', action: 'edit', as: 'edit_permission', via: ['get', 'post']
     end
     scope '/customers', controller: 'customers' do

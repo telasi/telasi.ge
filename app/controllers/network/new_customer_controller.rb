@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 require 'rs'
 
-class Network::NewCustomerController < Network::NetworkController
+class Network::NewCustomerController < ApplicationController
   def index
     @title = I18n.t('models.network_new_customer_item.actions.new_account')
     @search = params[:search] == 'clear' ? nil : params[:search]

@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-class Network::TariffsController < Network::NetworkController
+class Network::TariffsController < ApplicationController
   def index
     @title = I18n.t('models.network.tariffs.tariff')
     @tariffs = Network::NewCustomerTariff.asc(:_id)

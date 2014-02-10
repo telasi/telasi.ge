@@ -1,7 +1,5 @@
 # -*- encoding : utf-8 -*-
 class CustomersController < ApplicationController
-  before_action :validate_login
-
   def index
     @title = I18n.t('menu.customers')
     @registrations = Billing::CustomerRegistration.where(user: current_user, denied: false).desc(:_id)

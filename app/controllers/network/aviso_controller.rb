@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-class Network::AvisoController < Network::NetworkController
+class Network::AvisoController < ApplicationController
   def index
     @title = 'ავიზოების მართვა'
     @search = params[:search] == 'clear' ? nil : params[:search]

@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-class Network::ChangePowerController < Network::NetworkController
+class Network::ChangePowerController < ApplicationController
   def index
     @title = 'სიმძლავრის შეცვლა'
     @title = I18n.t('models.network_new_customer_application.actions.index_page.title')

@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-class Network::StagesController < Network::NetworkController
+class Network::StagesController < ApplicationController
   def index
     @title = I18n.t('models.network.stages.stages')
     @stages = Network::Stage.asc(:numb)

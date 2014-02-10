@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-class Admin::RolesController < Admin::AdminController
+class Admin::RolesController < ApplicationController
   def index
     @title = 'როლები'
     @roles = Sys::Role.asc(:name)

@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-class Network::BaseController < Network::NetworkController
+class Network::BaseController < ApplicationController
   def index
     @title = I18n.t('models.network.network')
     @new_customers = Network::NewCustomerApplication.desc(:_id).paginate(page: params[:page_new], per_page: 10)

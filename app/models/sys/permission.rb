@@ -20,4 +20,23 @@ class Sys::Permission
       permission.save
     end
   end
+
+  def self.has_permission?(user, controller, action)
+    permission = Sys::Permission.where(controller: controller, action: action).first
+    if permission
+      if permission.public_page then true # everyone has access to public page
+      elsif user.blank? then false # authentication required for non-public pages
+      elsif user.admin? then true  # admin has all privileges
+      ##############################
+      else true # XXX
+      ##############################
+      end
+    else
+      false
+    end
+
+
+
+    # true
+  end
 end
