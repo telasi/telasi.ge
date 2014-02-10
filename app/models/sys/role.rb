@@ -5,6 +5,5 @@ class Sys::Role
 
   field :name, type: String
   field :description, type: String
-  belongs_to :actor, polymorphic: true
   validates :name, presence: { message: 'ჩაწერეთ დასახელება' }
 end

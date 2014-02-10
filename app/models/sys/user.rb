@@ -23,7 +23,7 @@ module Sys
     field :rs_tin,                type: String
     field :dob,                   type: Date
     # roles
-    has_many :roles, class_name: 'Sys::Role', as: 'actor'
+    has_and_belongs_to_many :roles, class_name: 'Sys::Role'
     field :network_admin, type: Mongoid::Boolean, default: false
     field :news_admin,    type: Mongoid::Boolean, default: false
 
