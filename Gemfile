@@ -14,6 +14,9 @@ gem 'coffee-rails', '~> 4.0.0'
 gem 'jquery-rails', '~> 3'
 gem 'jquery-ui-rails'
 
+# soap
+gem 'savon', '2.3.2'
+
 # db
 gem 'sqlite3'
 gem 'mongoid', github: 'mongoid/mongoid', ref: '3d1b8aa48340b79b8481ab96b56e0681433b0bcb'
