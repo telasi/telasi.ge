@@ -24,6 +24,7 @@ class Sys::Permission
 
   def self.has_permission?(user, controller, action)
     if user and user.admin? then true # admin has all privileges
+    elsif Sys::Permission.count == 0 then true # no permissions defined yet
     else
       permission = Sys::Permission.where(controller: controller, action: action).first
       if permission

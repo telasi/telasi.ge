@@ -1,4 +1,12 @@
-<%= view_for @user, title: @title, icon: '/icons/user.png', collapsible: true do |v|
+<%
+  case params[:tab]
+  when 'customers' then index = 1
+  when 'roles' then index = 2
+  when 'sys' then index = 3
+  else index = 0
+  end
+%>
+<%= view_for @user, title: @title, icon: '/icons/user.png', collapsible: true, selected_tab: index do |v|
   v.title_action admin_edit_user_url(id: @user.id), label: t('models.sys_user.actions.edit'), icon: '/icons/user--pencil.png'
   v.title_action admin_delete_user_url(id: @user.id), label: 'წაშლა', icon: '/icons/bin.png', method: 'delete', confirm: 'ნამდვილად გინდათ მომხმარებლის წაშლა?'
   v.tab title: 'ძირითადი', icon: '/icons/user.png'  do |t|
@@ -27,6 +35,15 @@
         end
         t.boolean_field 'confirmed'
         t.boolean_field 'denied'
+      end
+    end
+  end
+  v.tab title: "როლები &mdash; <strong>#{@user.roles.size}</strong>".html_safe, icon: '/icons/mask.png' do |t|
+    t.table_field 'roles', table: { title: 'როლები', icon: '/icons/mask.png' } do |roles|
+      roles.table do |t|
+        t.title_action '/', icon: '/icons/plus.png', label: 'როლის დამატება'
+        t.text_field 'name'
+        t.text_field 'description'
       end
     end
   end
