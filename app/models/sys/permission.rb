@@ -23,9 +23,6 @@ class Sys::Permission
   end
 
   def self.has_permission?(user, controller, action)
-
-# debugger
-
     if user and user.admin? then true # admin has all privileges
     elsif Sys::Permission.count == 0 then true # no permissions defined yet
     else
