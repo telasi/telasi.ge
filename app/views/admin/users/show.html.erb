@@ -41,7 +41,7 @@
       roles.table do |t|
         t.title_action admin_add_user_role_url(user_id: @user.id), icon: '/icons/plus.png', label: 'როლის დამატება'
         t.item_action ->(x) { admin_remove_user_role_url(user_id: @user.id, role_id: x.id)  }, icon: '/icons/bin.png', method: 'delete', confirm: 'ნამდივილად გინდათ როლის წაშლა?'
-        t.text_field 'name', label: 'დასახელება'
+        t.text_field 'name', label: 'დასახელება', url: ->(x) { admin_role_url(id: x.id) }
         t.text_field 'description', class: 'text-muted', label: 'აღწერა'
       end
     end

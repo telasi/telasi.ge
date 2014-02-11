@@ -5,6 +5,12 @@ class Admin::RolesController < ApplicationController
     @roles = Sys::Role.asc(:name)
   end
 
+  def show
+    @title = 'როლის თვისებები'
+    @role = Sys::Role.find(params[:id])
+    @users = @role.users
+  end
+
   def new
     @title = 'ახალი როლი'
     if request.post?

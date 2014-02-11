@@ -1,0 +1,5 @@
+ka:
+  models:
+    sys_role:
+      name: სახელი
+      description: აღწერა

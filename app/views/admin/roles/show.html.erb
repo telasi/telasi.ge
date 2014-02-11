@@ -1,0 +1,10 @@
+<%= view_for @role, title: @title, icon: '/icons/mask.png', collapsible: true do |v|
+  v.text_field 'name', required: true
+  v.text_field 'description', required: true
+end %>
+<%= table_for @users, title: 'მომხმარებლები', icon: '/icons/users.png', collapsible: true do |t|
+  t.email_field 'email'
+  t.text_field 'full_name', url: ->(x) { admin_user_url(id: x.id) }
+  t.text_field 'formatted_mobile', i18n: 'mobile'
+  t.boolean_field 'email_confirmed'
+end %>
