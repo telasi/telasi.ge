@@ -146,12 +146,13 @@ class Pay::PaymentsController < ApplicationController
         else
           if not write_to_bs(@payment)
             @payment.gstatus = Pay::Payment::GSTATUS_ERROR_BILLING
+            @payment.resultcode = RESULTCODE_PROBLEM
           end
         end
 
       else # payment was sent but something went wrong
         @payment.gstatus = Pay::Payment::GSTATUS_ERROR
-        @payment.resultcode = RESULTCODE_PROBLEM         
+        @payment.resultcode = RESULTCODE_PROBLEM
       end
       @payment.save
     end
