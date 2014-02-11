@@ -1,3 +1,11 @@
+<%= search_form @search do |f|
+  f.tab do |f|
+    f.text_field 'controller', label: 'კონტროლერი'
+    f.text_field 'action', label: 'მოქმედება'
+    f.combo_field 'admin', label: 'ადმინი?', collection: { 'კი' => 'yes', 'არა' => 'no' }, empty: '--'
+    f.combo_field 'public', label: 'ღია?', collection: { 'კი' => 'yes', 'არა' => 'no' }, empty: '--'
+  end
+end %>
 <%= table_for @permissions, title: 'უფლებები', icon: '/icons/application-task.png', collapsible: true do |t|
   t.title_action admin_syns_permissions_url, label: 'სინქრონიზაცია', icon: '/icons/arrow-circle.png', method: 'post', confirm: 'ნამდვილად გინდათ სინქრონიზაცია?'
   t.item_action ->(x) { admin_permission_url(id: x.id) }, icon: '/icons/eye.png'
@@ -5,6 +13,7 @@
     t.text_field 'controller', label: 'კონტროლერი', after: '&rarr;'.html_safe, tag: 'code'
     t.text_field 'action', label: 'მოქმედება', tag: 'code'
   end
+  t.text_field 'roles2', i18n: 'roles'
   t.boolean_field 'public_page', label: 'ღია?'
   t.boolean_field 'admin_page', label: 'ადმინი?'
 end %>

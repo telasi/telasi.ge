@@ -2,7 +2,15 @@
 class Admin::PermissionsController < ApplicationController
   def index
     @title = 'როლები'
-    @permissions = Sys::Permission.asc(:controller, :action)
+    @search = params[:search] == 'clear' ? {} : params[:search]
+    rel = Sys::Permission
+    if @search
+      rel = rel.where(controller: @search[:controller].mongonize) if @search[:controller].present?
+      rel = rel.where(action: @search[:action].mongonize) if @search[:action].present?
+      rel = rel.where(admin_page: @search[:admin] == 'yes') if @search[:admin].present?
+      rel = rel.where(public_page: @search[:public] == 'yes') if @search[:public].present?
+    end
+    @permissions = rel.asc(:controller, :action)
   end
 
   def sync

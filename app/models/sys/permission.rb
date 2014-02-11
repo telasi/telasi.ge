@@ -43,4 +43,8 @@ class Sys::Permission
       end
     end
   end
+
+  def roles2
+    self.roles.map { |x| x.name }.join(', ')
+  end
 end
