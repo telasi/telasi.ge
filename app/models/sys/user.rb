@@ -24,10 +24,6 @@ module Sys
     field :dob,                   type: Date
     # roles
     has_and_belongs_to_many :roles, class_name: 'Sys::Role'
-    
-    ## XXX: remove this fields
-    field :network_admin, type: Mongoid::Boolean, default: false
-    field :news_admin,    type: Mongoid::Boolean, default: false
 
     # customer registrations
     has_many :registrations, class_name: 'Billing::CustomerRegistration'
@@ -53,9 +49,11 @@ module Sys
     def to_s; full_name end
     def formatted_mobile; KA::format_mobile(self.mobile) end
 
+    def includes_role?(role); self.role_ids.include?(Moped::BSON::ObjectId(role)) end
     def admin?; self.admin end
-    def network_admin?; self.admin? or self.network_admin end
-    def news_admin?; self.admin? or self.news_admin end
+    def network_admin?; self.admin? or self.includes_role?(Telasi::PERMISSIONS[:network_admin_id]) end
+    def network_cancelaria?; self.admin? or self.includes_role?(Telasi::PERMISSIONS[:network_cancelaria_id]) end
+    def news_admin?; self.admin? or self.includes_role?(Telasi::PERMISSIONS[:subscriptions_admin_id]) end
 
     attr_accessor :password_confirmation
     attr_reader :password

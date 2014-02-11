@@ -13,11 +13,7 @@
       f.text_field 'first_name', label: 'სახელი'
       f.text_field 'last_name', label: 'გვარი'
       f.combo_field 'confirmed', label: 'დადასტურებული?', collection: { 'კი' => 'yes', 'არა' => 'no' }, empty: '--'
-    end
-    f.col2 do |f|
-      f.combo_field 'admin', label: 'ადმინისტრატორი?', collection: { 'კი' => 'yes', 'არა' => 'no' }, empty: '--'
-      f.combo_field 'network_admin', label: 'ქსელის ადმინი?', collection: { 'კი' => 'yes', 'არა' => 'no' }, empty: '--'
-      f.combo_field 'news_admin', label: 'სიახლეების ადმინი?', collection: { 'კი' => 'yes', 'არა' => 'no' }, empty: '--'
+      f.combo_field 'admin', label: 'ადმინი?', collection: { 'კი' => 'yes', 'არა' => 'no' }, empty: '--'
     end
   end
 end %>
