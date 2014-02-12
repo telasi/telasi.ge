@@ -1,1 +1,2 @@
 <%= new_customer_form(@application, title: @title, submit: t('models.general.actions.edit'), cancel_url: network_new_customer_url(id: @application.id, tab: 'general'), icon: '/icons/pencil.png') %>
+<%= render partial: 'network/new_customer/edit_js' %>
