@@ -6,7 +6,7 @@ module Network::NewCustomerHelper
       t.text_field 'effective_number', i18n: 'number', tag: 'code'
       t.complex_field i18n: 'status_name', required: true do |c|
         c.image_field :status_icon
-        c.text_field :status_name
+        c.text_field :status_name, url: ->(x) { network_new_customer_url(id: x.id) }
       end
       t.complex_field i18n: 'rs_name' do |c|
         c.text_field :rs_tin, tag: 'code'
@@ -36,6 +36,13 @@ module Network::NewCustomerHelper
       h[x] = x
     end
     h
+  end
+
+  def app_base_collection
+    {
+      I18n.t('models.application_base.project')  => Network::ApplicationBase::BASE_PROJECT ,
+      I18n.t('models.application_base.document') => Network::ApplicationBase::BASE_DOCUMENT,
+    }
   end
 
   def new_customer_form(application, opts = {})
