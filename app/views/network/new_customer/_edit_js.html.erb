@@ -2,6 +2,7 @@
   $(function() {
     resetForeignerField();
     $('#network_new_customer_application_rs_foreigner').click(resetForeignerField);
+    $('#network_new_customer_application_base_type').change(resetBaseApplicationType);
   });
 
   var resetForeignerField = function() {

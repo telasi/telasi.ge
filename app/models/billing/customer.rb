@@ -54,9 +54,10 @@ class Billing::Customer < ActiveRecord::Base
 
   def to_s
     if self.commercial.present?
-      "#{self.custname.to_ka} (#{self.commercial})"
+      a = "#{self.custname.to_ka} (#{self.commercial.to_ka})"
     else
-      self.custname.to_ka
+      a = self.custname.to_ka
     end
+    "#{self.accnumb.to_ka} -- #{a}"
   end
 end
