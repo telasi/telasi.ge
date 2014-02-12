@@ -260,7 +260,7 @@ class Network::NewCustomerController < ApplicationController
   private
 
   def new_customer_params
-    params.require(:network_new_customer_application).permit(:number, :rs_tin, :rs_foreigner, :rs_name, :personal_use, :mobile, :email, :address, :work_address, :address_code, :bank_code, :bank_account, :need_resolution, :voltage, :power, :vat_options, :need_factura, :show_tin_on_print, :notes)
+    params.require(:network_new_customer_application).permit(:number, :rs_tin, :rs_foreigner, :rs_name, :personal_use, :mobile, :email, :region, :address, :work_address, :address_code, :bank_code, :bank_account, :need_resolution, :voltage, :power, :vat_options, :need_factura, :show_tin_on_print, :notes)
   end
 
   def account_params; params.require(:network_new_customer_item).permit(:address, :address_code, :rs_tin, :customer_id) end

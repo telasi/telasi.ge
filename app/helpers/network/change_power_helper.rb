@@ -6,7 +6,7 @@ module Network::ChangePowerHelper
       t.text_field 'number', i18n: 'number', tag: 'code'
       t.complex_field i18n: 'status_name', required: true do |c|
         c.image_field :status_icon
-        c.text_field :status_name
+        c.text_field :status_name, url: ->(x) { network_change_power_url(id: x.id) }
       end
       t.complex_field i18n: 'rs_name' do |c|
         c.text_field :rs_tin, tag: 'code'
@@ -46,6 +46,7 @@ module Network::ChangePowerHelper
         t.boolean_field :work_by_telasi, required: true
         t.text_field  :mobile, required: true
         t.email_field :email
+        t.combo_field :region, collection: regions_collection, empty: '--'
         t.text_field  :address, required: true, width: 500
         t.text_field  :work_address, width: 500
         t.text_field  :address_code #, required: true
@@ -103,6 +104,7 @@ module Network::ChangePowerHelper
         t.boolean_field 'work_by_telasi', required: true
         t.email_field :email
         t.text_field :mobile, required: true
+        t.text_field :region
         t.text_field :address, required: true, hint: 'განმცხადებლის მისამართი'
         t.complex_field i18n: 'work_address', required: true do |c|
           c.text_field 'address_code', tag: 'code', empty: false

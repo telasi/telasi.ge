@@ -30,6 +30,14 @@ module Network::NewCustomerHelper
     h
   end
 
+  def regions_collection
+    h = {}
+    Network::ApplicationBase.regions.each do |x|
+      h[x] = x
+    end
+    h
+  end
+
   def new_customer_form(application, opts = {})
     forma_for application, title: opts[:title], collapsible: true, icon: opts[:icon] do |f|
       f.tab do |t|
@@ -45,6 +53,7 @@ module Network::NewCustomerHelper
         t.boolean_field :personal_use, required: true
         t.text_field  :mobile, required: true
         t.email_field :email
+        t.combo_field :region, collection: regions_collection, empty: '--'
         t.text_field  :address, required: true, width: 500
         t.text_field  :work_address, width: 500
         t.text_field  :address_code #, required: true
@@ -134,6 +143,7 @@ module Network::NewCustomerHelper
         t.boolean_field :personal_use, required: true
         t.email_field :email
         t.text_field :formatted_mobile, required: true
+        t.text_field :region
         t.text_field :address, required: true, hint: 'განმცხადებლის მისამართი'
         t.complex_field i18n: 'work_address', required: true do |c|
           c.text_field 'address_code', tag: 'code', empty: false

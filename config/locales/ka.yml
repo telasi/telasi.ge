@@ -334,6 +334,7 @@ ka:
       "factura_sent?": "გაგზავნილია?"
       factura_id: საიდ. კოდი
       factura_number: ნომერი
+      region: რაიონი
     network_new_customer_application:
       application: განცხადება
       contact_info: საკონტაქტო ინფორმაცია
@@ -424,6 +425,7 @@ ka:
       docs_incomplete: "ყველა აუცილებელი დოკუმენტი ჯერ არაა მითითებული განცხადებაში."
       docs_complete: "ყველა აუცილებელი დოკუმენტი მითითებულია."
       docs_list: "აუცილებელი დოკუმენტების სია"
+      region: რაიონი
       files:
         date: "თარიღი, დრო"
         filename: ფაილის დასახელება
