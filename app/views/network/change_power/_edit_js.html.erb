@@ -1,0 +1,16 @@
+<script type="text/javascript">
+  $(function() {
+    resetForeignerField();
+    $('#network_change_power_application_rs_foreigner').click(resetForeignerField);
+  });
+
+  var resetForeignerField = function() {
+    if ($('#network_change_power_application_rs_foreigner').is(':checked')) {
+      $('#network_change_power_application_rs_name').show();
+      $('#network_change_power_application_rs_name').focus();
+    } else {
+      $('#network_change_power_application_rs_name').hide();
+      $('#network_change_power_application_rs_tin').focus();
+    }
+  };
+</script>
