@@ -64,7 +64,7 @@ class Network::ChangePowerController < ApplicationController
       @message.messageable = @application
       @message.mobile = @application.mobile
       if @message.save
-        @message.send_sms!
+        @message.send_sms!(lat: true)
         @application.status = params[:status].to_i
         if @application.save
           redirect_to network_change_power_url(id: @application.id), notice: I18n.t('models.network_new_customer_application.actions.status.changed')
@@ -106,7 +106,7 @@ class Network::ChangePowerController < ApplicationController
       @message.messageable = @application
       @message.mobile = @application.mobile
       if @message.save
-        @message.send_sms!
+        @message.send_sms!(lat: true)
         redirect_to network_change_power_url(id: @application.id, tab: 'sms'), notice: I18n.t('models.network_new_customer_application.actions.message.sent')
       end
     else

@@ -7,5 +7,11 @@ class Sys::SmsMessage
   field :message, type: String
   validates :message, presence: { message: 'ჩაწერეთ შინაარსი.' }
 
-  def send_sms!; Magti.send_sms(self.mobile, self.message) if Magti::SEND end
+  def send_sms!(opts = {})
+    if Magti::SEND
+      msg = self.message
+      msg = msg.to_lat if opts[:lat]
+      Magti.send_sms(self.mobile, msg)
+    end
+  end
 end
