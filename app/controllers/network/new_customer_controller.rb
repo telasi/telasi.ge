@@ -10,6 +10,8 @@ class Network::NewCustomerController < ApplicationController
       rel = rel.where(number: @search[:number].mongonize) if @search[:number].present?
       rel = rel.where(rs_name: @search[:rs_name].mongonize) if @search[:rs_name].present?
       rel = rel.where(rs_tin: @search[:rs_tin].mongonize) if @search[:rs_tin].present?
+      rel = rel.where(address: @search[:address].mongonize) if @search[:address].present?
+      rel = rel.where(work_address: @search[:work_address].mongonize) if @search[:work_address].present?
       rel = rel.where(status: @search[:status].to_i) if @search[:status].present?
       rel = rel.where(stage: Network::Stage.find(@search[:stage])) if @search[:stage].present?
       rel = rel.where(online: @search[:online] == 'yes') if @search[:online].present?

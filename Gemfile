@@ -4,14 +4,13 @@ source 'https://rubygems.org'
 gem 'rails', '4.0.0'
 # gem 'composite_primary_keys', github: 'drnic/composite_primary_keys', branch: 'ar_4.0.x'
 gem 'composite_primary_keys'
-gem 'turbolinks'
+gem 'turbolinks', '2.2.0'
 gem 'jquery-turbolinks'
 
 # resources
 gem 'therubyracer', platforms: :ruby
 gem 'less', '~> 2'
 gem 'uglifier', '>= 1.3.0'
-gem 'coffee-rails', '~> 4.0.0'
 gem 'jquery-rails', '~> 3'
 gem 'jquery-ui-rails'
 
