@@ -6,7 +6,7 @@
   <ul class="dropdown-menu">
     <!-- public applications -->
     <li><%= link_to t('menu.new_customer'), new_customers_url %></li>
-    <% if current_user and current_user.network_admin? %>
+    <% if current_user and (current_user.network_admin? or current_user.network_cancelaria?) %>
     <!-- network application -->
       <li class="divider"></li>
       <li><%= link_to t('applications.admin.network'), network_home_url %></li>
