@@ -86,9 +86,17 @@
       <%= t("models.network_new_customer_application.page_flow.#{doc}_descr").html_safe %>
     </p>
     <% if doc.to_s == 'doc_payment' %>
-      <p class="alert alert-warning">
-       <%= t("models.network_new_customer_application.mintopay") %> <code><%= @application.amount / 2 %></code> GEL
-      </p>
+      <% if @application.amount and @application.amount > 0 %>
+        <p class="alert alert-warning">
+         <%= t("models.network_new_customer_application.mintopay") %> <code><%= @application.amount / 2 %></code> GEL
+        </p>
+      <% else %>
+        <div class="alert alert-danger">
+          თქვენ გაქვთ სიმძლავრის/ძაბვის შეუსაბამობა, რის გამოც
+          ვერ ხერხდება თქვენი კუთვნილი თანხის დაანგარიშება.
+          გთხოვთ გაასწოროთ!
+        </div>
+      <% end %>
     <% end %>
     <p class="text-center">
       <% url = new_customer_confirm_step_url(id: @application.id, step: doc) %>

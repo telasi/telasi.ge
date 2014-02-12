@@ -4,10 +4,12 @@
       <i class="fa fa-print"></i>
       <%= t('models.general.actions.print') %>
     </a>
-    <a href="<%= new_customer_paybill_url(id: @application.id, format: 'pdf') %>" class="btn btn-default">
-      <i class="fa fa-print"></i>
-      <%= t('applications.pay_order') %>
-    </a>
+    <% if @application.amount and @application.amount > 0 %>
+      <a href="<%= new_customer_paybill_url(id: @application.id, format: 'pdf') %>" class="btn btn-default">
+        <i class="fa fa-print"></i>
+        <%= t('applications.pay_order') %>
+      </a>
+    <% end %>
   </div>
   <h2><%= t('models.network_new_customer_application.application') %> <code>#<%= @application.effective_number %></code></h2>
 </div>

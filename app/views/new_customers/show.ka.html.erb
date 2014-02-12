@@ -3,6 +3,13 @@
 <% if @application.not_sent? %>
   <hr />
 
+  <% unless @application.amount and @application.amount > 0 %>
+    <div class="alert alert-danger">
+      ტარიფის პრობლემა! გთხოვთ შეადაროთ <strong>სიმძლავრის და ძაბვის</strong>
+      შესაბამისობა.
+    </div>
+  <% end %>
+
   <% if not @application.docs_are_ok? %>
     <div class="alert alert-danger">
       განცხადების ჯერ აკლია <strong>აუცილებელი დოკუმენტები</strong>!
