@@ -13,7 +13,9 @@ class Network::ChangePowerApplication
   TYPE_CHANGE_SOURCE = 1
   TYPE_SPLIT         = 2
   TYPE_RESERVATION   = 3
-  TYPES = [ TYPE_CHANGE_POWER, TYPE_CHANGE_SOURCE, TYPE_SPLIT, TYPE_RESERVATION ]
+  TYPE_TEMP_BUILD    = 4
+  TYPE_ABONIREBA     = 5
+  TYPES = [ TYPE_CHANGE_POWER, TYPE_CHANGE_SOURCE, TYPE_SPLIT, TYPE_RESERVATION, TYPE_TEMP_BUILD, TYPE_ABONIREBA ]
 
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -84,7 +86,7 @@ class Network::ChangePowerApplication
       not not (/^(TCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number)
     elsif type == TYPE_SPLIT
       not not (/^(1TCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number)
-    elsif type == TYPE_RESERVATION
+    elsif [TYPE_RESERVATION, TYPE_TEMP_BUILD, TYPE_ABONIREBA].include?(type)
       not not (/^(TCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number)
     else
       false
