@@ -26,6 +26,7 @@ class Network::NewCustomerApplication
   include Network::RsName
   include Sys::VatPayer
   include Network::CalculationUtils
+  include Network::ApplicationBase
 
   belongs_to :user, class_name: 'Sys::User'
   field :online, type: Mongoid::Boolean, default: false # ონლაინ არის შევსებული?

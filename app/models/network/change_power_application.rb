@@ -19,6 +19,7 @@ class Network::ChangePowerApplication
   include Mongoid::Timestamps
   include Network::RsName
   include Sys::VatPayer
+  include Network::ApplicationBase
 
   belongs_to :user, class_name: 'Sys::User'
   field :number,    type: String
