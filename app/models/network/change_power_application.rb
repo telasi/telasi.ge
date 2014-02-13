@@ -22,6 +22,7 @@ class Network::ChangePowerApplication
   include Network::RsName
   include Sys::VatPayer
   include Network::ApplicationBase
+  include Network::BsBase
 
   belongs_to :user, class_name: 'Sys::User'
   field :number,    type: String

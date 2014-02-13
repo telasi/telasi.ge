@@ -7,16 +7,6 @@ class Network::NewCustomerApplication
   STATUS_COMPLETE   = 4
   STATUS_IN_BS      = 5
   STATUSES = [ STATUS_DEFAULT, STATUS_SENT, STATUS_CANCELED, STATUS_CONFIRMED, STATUS_COMPLETE, STATUS_IN_BS ]
-  NETWORK_OPERATIONS = [
-    116,   # prepayment
-    1000,  # charge: new_customer_application
-    1006,  # penalty I
-    1007,  # penalty II
-    120,   # penalty III
-    1008,  # charge correction
-    1009,  # penalty I correction
-    1010,  # penalty II correction
-  ]
   VOLTAGE_220 = '220'
   VOLTAGE_380 = '380'
   VOLTAGE_610 = '6/10'
@@ -27,6 +17,7 @@ class Network::NewCustomerApplication
   include Sys::VatPayer
   include Network::CalculationUtils
   include Network::ApplicationBase
+  include Network::BsBase
 
   belongs_to :user, class_name: 'Sys::User'
   field :online, type: Mongoid::Boolean, default: false # ონლაინ არის შევსებული?
@@ -104,15 +95,6 @@ class Network::NewCustomerApplication
   def self.correct_number?(number); not not (/^(CNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number) end
 
   def customer; Billing::Customer.find(self.customer_id) if self.customer_id.present? end
-  def billing_items
-    if @__billing_items
-      @__billing_items
-    elsif self.customer_id.present?
-      @__billing_items = Billing::Item.where(custkey: self.customer_id, billoperkey: NETWORK_OPERATIONS).order('itemkey DESC')
-    else
-      @__billing_items = []
-    end
-  end
   def payments; self.billing_items.select { |x| x.billoperkey == 116 } end
   def paid; self.payments.map{ |x| x.amount }.inject{ |sum, x| sum + x } || 0  end
   def remaining
