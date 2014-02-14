@@ -164,6 +164,8 @@ TelasiGe::Application.routes.draw do
       match '/edit_amount/:id', action: 'edit_amount', as: 'change_power_edit_amount', via: ['get', 'post']
       # send factura
       post '/send_factura/:id', action: 'send_factura', as: 'change_power_send_factura'
+      # --> billing system
+      post '/send_to_bs/:id', action: 'send_to_bs', as: 'change_power_send_to_bs'
     end
     scope '/stages', controller: 'stages' do
       get '/', action: 'index', as: 'stages'

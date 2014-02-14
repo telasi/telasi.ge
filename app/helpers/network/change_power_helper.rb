@@ -68,11 +68,12 @@ module Network::ChangePowerHelper
 
   def selected_change_power_tab
     case params[:tab]
-    when 'sms'     then 1
-    when 'files'   then 2
-    when 'watch'   then 3
-    when 'factura' then 4
-    when 'sys'     then 5
+    when 'operations' then 1
+    when 'sms'        then 2
+    when 'files'      then 3
+    when 'watch'      then 4
+    when 'factura'    then 5
+    when 'sys'        then 6
     else 0 end
   end
 
@@ -146,7 +147,26 @@ module Network::ChangePowerHelper
           # end
         end
       end
-      # 2. sms messages
+      # 2. billing operations
+      f.tab title: "ოპერაციები &mdash; <strong>#{application.billing_items.count}</strong>".html_safe, icon: '/icons/edit-list.png' do |t|
+        if application.can_send_to_bs?
+          t.action network_change_power_send_to_bs_url(id: application.id), label: 'ბილინგში გაგზავნა', icon: '/icons/wand.png', method: 'post', confirm: 'ნამდვილად გინდათ ბილინგში გაგზავნა?'
+        end
+        t.table_field :billing_items, table: { title: 'ბილინგის ოპერაციები', icon: '/icons/edit-list.png' } do |operations|
+          operations.table do |t|
+            t.text_field 'customer.accnumb', tag: 'code', label: 'აბონენტი'
+            t.date_field 'itemdate', label: 'თარიღი'
+            t.complex_field label: 'ოპერაცია' do |c|
+              c.text_field 'operation.billopername', after: '&mdash;'.html_safe
+              c.text_field 'operation.billoperkey', class: 'muted'
+            end
+            t.number_field 'kwt', after: 'kWh', label: 'დარიცხვა'
+            t.number_field 'amount', after: 'GEL', label: 'თანხა'
+            t.number_field 'balance', after: 'GEL', label: 'ბალანსი'
+          end
+        end
+      end
+      # 3. sms messages
       f.tab title: "SMS &mdash; <strong>#{application.messages.count}</strong>".html_safe, icon: '/icons/mobile-phone.png' do |t|
         t.table_field :messages, table: { title: 'SMS შეტყობინებები', icon: '/icons/mobile-phone.png' } do |sms|
           sms.table do |t|
@@ -157,7 +177,7 @@ module Network::ChangePowerHelper
           end
         end
       end
-      # 3. files
+      # 4. files
       f.tab title: "ფაილები &mdash; <strong>#{application.files.count rescue 0}</strong>".html_safe, icon: '/icons/book-open-text-image.png' do |t|
         t.table_field :files, table: { title: 'ფაილები', icon: '/icons/book-open-text-image.png' } do |files|
           files.table do |t|
@@ -167,7 +187,7 @@ module Network::ChangePowerHelper
           end
         end
       end
-      # 4. stages
+      # 5. stages
       f.tab title: "კონტროლი &mdash; <strong>#{application.requests.count}</strong>".html_safe, icon: '/icons/eye.png' do |t|
         t.table_field :requests, table: { title: 'კონტროლი', icon: '/icons/eye.png' } do |requests|
           requests.table do |t|
@@ -181,7 +201,7 @@ module Network::ChangePowerHelper
           end
         end
       end
-      # 5. factura
+      # 6. factura
       f.tab title: 'ფაქტურა', icon: '/icons/money.png' do |t|
         if application.can_send_factura?
           t.action network_change_power_send_factura_url(id: application.id), icon: '/icons/money--arrow.png', label: 'ფაქტურის გაგზავნა', method: 'post', confirm: 'ნამდვილად გინდათ ფაქტურის გაგზავნა?'
@@ -194,7 +214,7 @@ module Network::ChangePowerHelper
           c.text_field 'factura_number', empty: false
         end
       end
-      # 6. sys
+      # 7. sys
       f.tab title: 'სისტემური', icon: '/icons/traffic-cone.png' do |t|
         t.complex_field label: 'მომხმარებელი', hint: 'მომხმარებელი, რომელმაც შექმნა ეს განცხადება', required: true do |c|
           c.email_field 'user.email', after: '&mdash;'.html_safe
