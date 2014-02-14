@@ -77,6 +77,15 @@ module Network::ChangePowerHelper
     else 0 end
   end
 
+  def app_editable?(app)
+    [
+      Network::ChangePowerApplication::STATUS_DEFAULT,
+      Network::ChangePowerApplication::STATUS_SENT,
+      #Network::ChangePowerApplication::STATUS_CANCELED,
+      Network::ChangePowerApplication::STATUS_CONFIRMED,
+    ].include?(app.status)
+  end
+
   public
 
   def change_power_view(application, opts = {})
@@ -86,7 +95,7 @@ module Network::ChangePowerHelper
       f.tab title: 'ძირითადი', icon: '/icons/user.png' do |t|
         t.action network_change_power_url(id: application.id, format: 'pdf'), label: 'განცხადების ბეჭდვა', icon: '/icons/printer.png'
         # t.action network_new_customer_paybill_url(id: application.id, format: 'pdf'), label: 'საგ/დავ ბეჭდვა', icon: '/icons/printer.png'
-        t.action network_edit_change_power_url(id: application.id), label: 'შეცვლა', icon: '/icons/pencil.png'
+        t.action network_edit_change_power_url(id: application.id), label: 'შეცვლა', icon: '/icons/pencil.png' if app_editable?(application)
         application.transitions.each do |status|
           t.action network_change_change_power_status_url(id: application.id, status: status), label: Network::ChangePowerApplication.status_name(status), icon: Network::ChangePowerApplication.status_icon(status)
         end
