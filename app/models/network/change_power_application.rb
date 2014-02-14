@@ -5,7 +5,8 @@ class Network::ChangePowerApplication
   STATUS_CANCELED   = 2
   STATUS_CONFIRMED  = 3
   STATUS_COMPLETE   = 4
-  STATUSES = [ STATUS_DEFAULT, STATUS_SENT, STATUS_CANCELED, STATUS_CONFIRMED, STATUS_COMPLETE ]
+  STATUS_IN_BS      = 5
+  STATUSES = [ STATUS_DEFAULT, STATUS_SENT, STATUS_CANCELED, STATUS_CONFIRMED, STATUS_COMPLETE, STATUS_IN_BS ]
   VOLTAGE_220 = '220'
   VOLTAGE_380 = '380'
   VOLTAGE_610 = '6/10'
@@ -141,6 +142,37 @@ class Network::ChangePowerApplication
 
   def factura_sent?; not self.factura_seria.blank? end
   def can_send_factura?; self.need_factura and [STATUS_COMPLETE].include?(self.status) and not self.factura_sent? and self.amount > 0 end
+  def can_send_to_bs?; self.status == STATUS_COMPLETE and self.amount > 0 end
+
+  def send_to_bs!
+    # customer
+    customer = self.customer
+
+    # general parameters
+    item_date = self.end_date
+    main_amount = self.amount
+
+    # find zdeposit customer
+    deposit_customer = Billing::NetworkCustomer.where(customer: customer).first
+    raise "სადეპოზიტო აბონენტი ვერ მოიძებნა: #{customer.accnumb}!" if deposit_customer.blank?
+
+    if main_amount > 0
+      # sending to billing
+      Billing::Item.transaction do
+        bs_item = Billing::Item.new(billoperkey: 1001, acckey: customer.accounts.first.acckey,
+          custkey: customer.custkey, perskey: 1, signkey: 1, itemdate: item_date, reading: 0,
+          kwt: 0, amount: main_amount, enterdate: Time.now, itemcatkey: 0)
+        bs_item.save!
+        network_item = Billing::NetworkItem.new(zdepozit_cust_id: deposit_customer.zdepozit_cust_id,
+          amount: main_amount, operkey: 1001, enterdate: Time.now, operdate: item_date, perskey: 1)
+        network_item.save!
+      end
+
+      # update application status
+      self.status = STATUS_IN_BS
+      self.save
+    end
+  end
 
   private
 
