@@ -21,4 +21,9 @@ class Site::Node < ActiveRecord::Base
     t = self.thumbnail
     t.uri.gsub('public://', 'http://telasi.ge/sites/default/files/styles/single_page/public/') if t
   end
+
+  def tenderno
+    reg = /№(.*?)\s/.match(self.title)
+    if reg;reg[1];end
+  end
 end

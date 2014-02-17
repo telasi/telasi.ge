@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
 class Tender::TenderuserController < ApplicationController
-  before_action :validate_login, only: [:index, :delete]
+  #before_action :validate_login, only: [:index, :delete]
   before_action :validate_admin, only: [:index, :delete]
 
   def index
