@@ -53,11 +53,12 @@ class Pay::PaymentsController < ApplicationController
     if request.post?
       @payment = Pay::Payment.new(
           user: current_user, 
-          accnumb:   params[:pay_payment][:accnumb],
-          rs_tin:    params[:pay_payment][:rs_tin],
-          serviceid: params[:pay_payment][:serviceid],
-          merchant:  params[:pay_payment][:merchant],
-          amount:    params[:pay_payment][:amount],
+          accnumb:    params[:pay_payment][:accnumb],
+          rs_tin:     params[:pay_payment][:rs_tin],
+          serviceid:  params[:pay_payment][:serviceid],
+          merchant:   params[:pay_payment][:merchant],
+          amount:     params[:pay_payment][:amount],
+          clientname: params[:pay_payment][:clientname],
           testmode: Payge::TESTMODE, 
           ordercode: self.gen_order_code, currency: 'GEL', 
           lng: 'ka', ispreauth: 0, postpage: 0, gstatus: Pay::Payment::GSTATUS_SENT)
@@ -77,7 +78,7 @@ class Pay::PaymentsController < ApplicationController
 
       params[:serviceid] = params[:pay_payment][:serviceid]
     else 
-      @payment = Pay::Payment.new(accnumb: current_user.accnumb, rs_tin: current_user.rs_tin, amount: ( params[:amount] || 0 ), serviceid: params[:serviceid], merchant: get_current_merchant(params[:serviceid]) )
+      @payment = Pay::Payment.new(accnumb: current_user.accnumb, clientname: current_user.accnumb, rs_tin: current_user.rs_tin, amount: ( params[:amount] || 0 ), serviceid: params[:serviceid], merchant: get_current_merchant(params[:serviceid]) )
     end
   end
 

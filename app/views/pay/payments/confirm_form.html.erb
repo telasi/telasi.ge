@@ -33,6 +33,7 @@
             <%= text_field_tag :currency_show, @payment.currency, disabled: true, class: 'form-control' %>
             <%= hidden_field_tag :currency, @payment.currency %>
           </div>
+          <%= hidden_field_tag :clientname, @payment.clientname, class: 'form-control' %>
           <%= hidden_field_tag :ordercode, @payment.ordercode, class: 'form-control' %>
           <%= hidden_field_tag :lng, @payment.lng, class: 'form-control' %>
           <%= hidden_field_tag :check, @payment.check, class: 'form-control' %>
