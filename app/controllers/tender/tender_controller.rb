@@ -47,7 +47,9 @@ class Tender::TenderController < ApplicationController
   		}
   	}
 
-  	@down = downloads.map_reduce(map,reduce).out(inline: true)
+    if downloads
+  	 @down = downloads.map_reduce(map,reduce).out(inline: true)
+    end
 
     #@downloads = down.paginate(page: params[:page], per_page: 20)
   end

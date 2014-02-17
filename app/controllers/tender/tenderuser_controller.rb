@@ -42,7 +42,7 @@ class Tender::TenderuserController < ApplicationController
 
   def validate_admin
     unless current_user.admin?
-      redirect_to login_url, alert: 'საჭიროა იყოთ ქსელის ამინისტრატორი!'
+      #redirect_to login_url, alert: 'საჭიროა იყოთ ქსელის ამინისტრატორი!'
     end
   end
 
