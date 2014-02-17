@@ -86,6 +86,7 @@ ka:
         print: ბეჭდვა
         send: გაგზავნა
         link: დაკავშირება
+        delete: წაშლა
     sys_user:
       title:
         single: მომხმარებელი

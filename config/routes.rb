@@ -203,5 +203,21 @@ TelasiGe::Application.routes.draw do
     end  
   end
 
+  namespace 'tender' do
+    scope '/tenderuser', controller: :tenderuser do
+      match '/register', action: :register, via: [:get, :post]
+      get  '/',          action: :index, as: 'user_index'
+    end
+    scope '/tender', controller: :tender do    
+      match  '/item/:nid',        action: 'item', as: 'tender_item', via: [:get, :post]
+      get  '/report',             action: :report
+      get  '/index',              action: :index
+      get  '/show/:nid',          action: 'show', as: 'show'
+      get  '/list',               action: 'list', as: 'list'
+      get  '/delete_file/:nid',   action: 'delete_file', as: 'delete_file'
+      post  '/download_file/:nid',  action: 'download_file', as: 'download_file'
+    end
+  end  
+
   root 'dashboard#index'
 end

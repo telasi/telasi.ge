@@ -1,0 +1,72 @@
+<%= search_form @search do |f|
+  f.tab do |f|
+    f.col1 do |f|
+      f.text_field 'organization_name', label: t('tender.organization_name')
+      f.combo_field 'organization_type', label: t('tender.organization_type_label'), 
+           collection: organization_type_collection
+      f.text_field 'director_name', label: t('tender.director_name')
+      f.text_field 'rs_tin', label: t('models.sys_user.rs_tin')
+      f.text_field 'tenderno', label: t('tender.tender')
+    end
+    f.col2 do |f|
+    end
+  end
+end %>
+<div class="ff-table">
+  <div class="ff-table-body ff-collapsible-body">
+    <table class="ff-common-table">
+      <thead>
+        <tr>
+          <th class="ff-field"><%= t('tender.organization_name') %></th>
+          <th class="ff-field"><%= t('tender.organization_type_label') %></th>
+          <th class="ff-field"><%= t('tender.director_name') %></th>
+          <th class="ff-field"><%= t('tender.tenderno') %></th>
+          <th class="ff-field"><%= t('tender.download_count') %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% 
+        #raise @down.inspect
+        @down.each do |item| %>
+        <tr>
+          <td>
+            <div>
+              <span id="organization_name">
+                <%= item['_id']['tenderuser']['organization_name'] %>
+              </span>
+            </div>
+          </td>
+          <td>
+            <div>
+              <span id="organization_type">
+                <%= I18n.t("tender.organization_types.#{item['_id']['tenderuser']['organization_type']}") %>
+              </span>
+            </div>
+          </td>
+          <td>
+            <div>
+              <span id="director_name">
+                <%= item['_id']['tenderuser']['director_name'] %>
+              </span>
+            </div>
+          </td>
+          <td>
+            <div>
+              <span id="tender">
+                <%= number_with_precision(item['_id']['tenderno'], precision: 0) %>
+              </span>
+            </div>
+          </td>
+          <td>
+            <div>
+              <span id="download_count">
+                <%= number_with_precision(item['value']['count'], precision: 0) %>
+              </span>
+            </div>
+          </td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

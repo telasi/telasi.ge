@@ -1,0 +1,110 @@
+<script type="text/javascript">
+var org_type_change = function() {
+  if ( $('#tender_tenderuser_organization_type').val() == 'OT_LEGAL') {
+    $('label[for="tender_tenderuser_organization_name"]').text("<%= t('tender.organization_name') %>");
+    $('label[for="tender_tenderuser_rs_tin"]').text("<%= t('models.network_new_customer_item.rs_tin') %>");
+  } else {
+    $('label[for="tender_tenderuser_organization_name"]').text("<%= t('tender.phys_name') %>");
+    $('label[for="tender_tenderuser_rs_tin"]').text("<%= t('models.sys_user.rs_tin') %>");
+}
+};
+$(function() {
+  $('#tender_tenderuser_organization_type').click(function() {
+    org_type_change();
+  });
+  org_type_change();
+});
+</script>
+<div class="row">
+  <div class="col-sm-8">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 style="margin: 0;"><%= t('models.sys_user.actions.register') %></h4>
+      </div>
+      <div class="panel-body">
+        <%= form_for @tenderuser, url: tender_register_url, role: 'form' do |f| %>
+          <!-- user registration -->
+          <% if not @tenderuser.user.email_confirmed %>
+                <%= f.fields_for @tenderuser.user do |u| %>
+                      <%= u.b_text_field 'email', label: t('models.sys_user.email'), autofocus: true %>
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <%= u.b_password_field 'password', label: t('models.sys_user.password') %>
+                        </div>
+                        <div class="col-sm-6">
+                          <%= u.b_password_field 'password_confirmation', label: t('models.sys_user.password_confirmation') %>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <%= u.b_text_field 'first_name', label: t('models.sys_user.first_name') %>
+                        </div>
+                        <div class="col-sm-6">
+                          <%= u.b_text_field 'last_name', label: t('models.sys_user.last_name') %>
+                        </div>
+                      </div>
+                      <%= u.b_text_field 'mobile', label: t('models.sys_user.mobile') %>
+                <% end %>
+          <% end %>
+          <!-- tenderuser registration -->
+          <legend><%= t('tender.organization_data') %></legend>
+          <div class="row">
+            <div class="col-sm-3">
+              <div class="form-group">
+                <%= f.label 'organization_type_label', t('tender.organization_type_label') %>
+                <%= f.select 'organization_type', organization_type_collection, {}, { class: 'form-control' } do %>
+                <% end %>
+              </div>
+            </div>
+            <div class="col-sm-9">
+              <div class="form-group">
+              <%= f.b_text_field 'organization_name', label: t('tender.organization_name') %>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <%= f.b_text_field 'director_name', label: t('tender.director_name') %>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <%= f.b_text_field 'fact_address', label: t('tender.fact_address') %>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <%= f.b_text_field 'legal_address', label: t('tender.legal_address') %>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <%= f.b_text_field 'phones', label: t('tender.phones') %>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <%= f.b_text_field 'work_email', label: t('tender.work_mail') %>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <%= f.b_text_field 'rs_tin', label: t('models.sys_user.rs_tin') %>
+            </div>
+          </div>
+          <div>
+            <%= f.submit @title, class: ['btn', 'btn-primary'] %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+ <% if not @tenderuser.user.email_confirmed %>
+  <div class="col-sm-4">
+    <div class="module">
+      <p><%= t('models.sys_user.actions.already_registered') %></p>
+      <p><a href="<%= login_url %>"><%= t('models.sys_user.actions.login') %> &rarr;</a></p>
+    </div>
+  </div>
+<% end %>
+</div>

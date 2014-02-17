@@ -1,0 +1,18 @@
+<%= search_form @search do |f|
+  f.tab do |f|
+    f.col1 do |f|
+      f.text_field 'nid', label: 'Node'
+      f.text_field 'title', label: 'Title'
+      f.text_field 'created_dt', label: 'Date'
+    end
+    f.col2 do |f|
+    end
+  end
+end %>
+<%= table_for @tenders, title: @title, icon: '/icons/users.png', collapsible: true do |t|
+  t.text_field 'nid'
+  t.text_field 'title', label: 'Title', url: ->(x) { tender_tender_item_url(nid: x.nid) }
+  t.text_field 'created_dt', label: 'Created'
+  t.boolean_field 'file_uploaded?', label: 'File exist', defailt: false
+  t.paginate records: t('models.general.records')
+end %>

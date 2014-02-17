@@ -25,6 +25,9 @@
             <%= link_to t('menu.payments'), pay_services_url %>
           </li>
         <% end %>
+        <% if tender_user? %>
+         <%= render partial: 'layouts/tender' %>
+        <% end %>
         <%= render partial: 'layouts/apps' %>
       </ul>
       <ul class="nav navbar-nav navbar-right">

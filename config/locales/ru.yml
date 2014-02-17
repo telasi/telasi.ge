@@ -86,6 +86,7 @@ ru:
         send: Отправить
         link: Связь
         print: Печать
+        delete: Удаление
     sys_user:
       title:
         single: Пользователь

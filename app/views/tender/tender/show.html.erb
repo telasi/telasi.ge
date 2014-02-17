@@ -1,0 +1,14 @@
+<h1 class="page-header muted"><small><%= "#{t('tender.registered_as')}: #{@tenderuser.organization_name}" %></small></h1>
+
+<div class="panel panel-info">
+  <div class="panel-heading"> 
+  	<h3 class="panel-title"><%= "#{t('models.network_new_customer_application.application')} ##{@node.tenderno}" %></h3>
+  </div> 
+  <div class="panel-body">
+    <%= @node.title %>	
+  </div>
+</div>
+<div align='center'>
+<%= form_tag(tender_download_file_url(nid: @node.nid), method: 'post') do 
+  submit_tag t('tender.download_file'), class: ['btn', 'btn-primary' ]
+end %>

@@ -1,0 +1,81 @@
+ka:
+  tender:
+    tender: ტენდერი
+    organization_types:
+      OT_PHYSIC: 'ფიზიკური პირი'
+      OT_LEGAL: 'იურიდიული პირი'
+      OT_JSC: 'ს.ს.'
+      OT_LTD: 'შ.პ.ს.'
+      OT_IND: 'ინდ. მეწარმე'
+      OT_PHY: 'რეგ. ფიზ. პირი'
+    organization_data: ორგანიზაციის მონაცემები
+    organization_type_label: ორგანიზაციის ტიპი
+    organization_name: ორგანიზაციის დასახელება
+    phys_name: ფიზიკური პირის სახელი და გვარი
+    director_name: ხელმძღვანელის სახელი და გვარი
+    fact_address: ფაქტიური მისამართი
+    legal_address: იურიდიული მისამართი
+    phones: საკონტაქტო ტელეფონები
+    work_mail: სამსახურეობრივი ელ. ფოსტა
+    download_file: დოკუმენტაციის გადმოწერა
+    download_count: გადმოწერების რაოდენობა
+    registered_as: დარეგისტრირებული როგორ
+    menu: 
+      users: მომხმარებლები
+      report: ანგარიში
+      tenders: ტენდერების სია ადმინისტრირებისთვის
+      download: დოკუმენტაციის გადმოწერა
+ru:
+  tender:
+    tender: Тендер
+    organization_types:
+      OT_PHYSIC: 'Физическое лицо'
+      OT_LEGAL: 'Юридическое лицо'
+      OT_JSC: 'А.А.'
+      OT_LTD: 'ООО'
+      OT_IND: 'Инд.'
+      OT_PHY: 'Рег. физ. лицо'
+    organization_data: Данные огранизации
+    organization_type_label: Тип огранизации
+    organization_name: Название организации
+    phys_name: Имя и фамилия физического лица
+    director_name: Имя и фамилия руководителя
+    fact_address: Фактический адрес
+    legal_address: Юридический адрес
+    phones: Контактные телефоны
+    work_mail: Рабочая эл. почта
+    download_file: Скачать документ
+    download_count: Количество скачиваний
+    registered_as: Зарегистрированы как
+    menu: 
+      users: Пользователи
+      report: Отчет
+      tenders: Список тендеров для администрирования
+      download: Документация
+en:
+  tender:
+    tender: Procurement
+    organization_types:
+      OT_PHYSIC: 'Individual'
+      OT_LEGAL: 'Legal entity'
+      OT_JSC: 'JSC'
+      OT_LTD: 'Ltd'
+      OT_IND: 'Ind.'
+      OT_PHY: 'Reg. '
+    organization_data: Organization data
+    organization_type_label: Organization type
+    organization_name: Name of organization
+    phys_name: First and last names
+    director_name: Directors name
+    fact_address: Address
+    legal_address: Legal address
+    phones: Phones
+    work_mail: Email
+    download_file: Download document
+    download_count: Download count
+    registered_as: Registered as
+    menu: 
+      users: Users
+      report: Report
+      tenders: Tender list for upload
+      download: Documentation download

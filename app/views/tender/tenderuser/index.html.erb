@@ -1,0 +1,27 @@
+<%= search_form @search do |f|
+  f.tab do |f|
+    f.col1 do |f|
+      f.combo_field 'organization_type', label: t('tender.organization_type_label'), collection: organization_type_collection
+      f.text_field 'organization_name', label: t('tender.organization_name')
+      f.text_field 'director_name',     label: t('tender.director_name')
+      f.text_field 'fact_address',      label: t('tender.fact_address')
+    end
+    f.col2 do |f|
+      f.text_field 'legal_address',     label: t('tender.legal_address')
+      f.text_field 'phones',            label: t('tender.phones')
+      f.text_field 'work_email',        label: t('tender.work_mail')
+      f.text_field 'rs_tin',            label: t('models.network_change_power_application.rs_tin')
+    end
+  end
+end %>
+<%= table_for @tenderusers, title: @title, icon: '/icons/users.png', collapsible: true do |t|
+  t.text_field 'organization_type', label: t('tender.organization_type_label') 
+  t.text_field 'organization_name', label: t('tender.organization_name')
+  t.text_field 'director_name',     label: t('tender.director_name')
+  t.text_field 'fact_address',      label: t('tender.fact_address')
+  t.text_field 'legal_address',     label: t('tender.legal_address')
+  t.text_field 'phones',            label: t('tender.phones')
+  t.text_field 'work_email',        label: t('tender.work_mail')
+  t.text_field 'rs_tin',            label: t('models.network_change_power_application.rs_tin')
+  t.paginate records: t('models.general.records')
+end %>
