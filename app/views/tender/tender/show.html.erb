@@ -9,6 +9,10 @@
   </div>
 </div>
 <div align='center'>
-<%= form_tag(tender_download_file_url(nid: @node.nid), method: 'post') do 
-  submit_tag t('tender.download_file'), class: ['btn', 'btn-primary' ]
-end %>
+<%= 
+   if @node.file_uploaded?
+    form_tag(tender_download_file_url(nid: @node.nid), method: 'post') do 
+      submit_tag t('tender.download_file'), class: ['btn', 'btn-primary' ]
+    end
+   end 
+%>
