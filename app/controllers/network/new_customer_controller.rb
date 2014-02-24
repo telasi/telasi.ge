@@ -246,6 +246,13 @@ class Network::NewCustomerController < ApplicationController
     redirect_to network_new_customer_url(id: app.id, tab: 'watch'), notice: I18n.t('models.network_new_customer_application.actions.control.deleted')
   end
 
+  def toggle_need_factura
+    application = Network::NewCustomerApplication.find(params[:id])
+    application.need_factura = (not application.need_factura)
+    application.save
+    redirect_to network_new_customer_url(id: application.id), notice: 'სჭირდება ფაქტურა შეცვლილია'
+  end
+
   def nav
     @nav = { 'ქსელი' => network_home_url, 'ახალი აბონენტი' => network_new_customers_url }
     if @application

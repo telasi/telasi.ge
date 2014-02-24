@@ -184,6 +184,13 @@ class Network::ChangePowerController < ApplicationController
     redirect_to network_change_power_url(id: application.id, tab: 'operations'), notice: 'დარიცხვა გაგზავნილია ბილინგში'
   end
 
+  def toggle_need_factura
+    application = Network::ChangePowerApplication.find(params[:id])
+    application.need_factura = (not application.need_factura)
+    application.save
+    redirect_to network_change_power_url(id: application.id), notice: 'სჭირდება ფაქტურა შეცვლილია'
+  end
+
   def nav
     @nav = { 'ქსელი' => network_home_url, 'ქსელში ცვლილება' => network_change_power_applications_url }
     if @application

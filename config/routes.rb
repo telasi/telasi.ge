@@ -30,7 +30,7 @@ TelasiGe::Application.routes.draw do
     get '/', action: 'index', as: 'calculator'
   end
 
-  scope 'subscription', controller: 'subscription' do
+  scope '/subscription', controller: 'subscription' do
     match '/subscribe', action: 'subscribe', as: 'subscribe', via: ['get', 'post', 'patch']
     match '/subscribe_item', action: 'subscribe_item', as: 'subscribe_item', via: ['get', 'post', 'patch']
     get '/subscribe_complete', action: 'subscribe_complete', as: 'subscribe_complete'
@@ -143,6 +143,7 @@ TelasiGe::Application.routes.draw do
       match '/new_control_item/:id', action: 'new_control_item', as: 'new_customer_new_control_item', via: ['get','post']
       match '/edit_control_item/:id', action: 'edit_control_item', as: 'new_customer_edit_control_item', via: ['get','post']
       delete '/delete_control_item/:id', action: 'delete_control_item', as: 'new_customer_delete_control_item'
+      post '/toggle_need_factura/:id', action: 'toggle_need_factura', as: 'new_customer_toggle_need_factura'
     end
     scope '/change_power', controller: 'change_power' do
       get '/', action: 'index', as: 'change_power_applications'
@@ -166,6 +167,7 @@ TelasiGe::Application.routes.draw do
       post '/send_factura/:id', action: 'send_factura', as: 'change_power_send_factura'
       # --> billing system
       post '/send_to_bs/:id', action: 'send_to_bs', as: 'change_power_send_to_bs'
+      post '/toggle_need_factura/:id', action: 'toggle_need_factura', as: 'change_power_toggle_need_factura'
     end
     scope '/stages', controller: 'stages' do
       get '/', action: 'index', as: 'stages'

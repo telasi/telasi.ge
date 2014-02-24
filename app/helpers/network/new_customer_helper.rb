@@ -145,7 +145,9 @@ module Network::NewCustomerHelper
           c.text_field :rs_name, url: ->(x) { network_new_customer_url(id: x.id) }
         end
         t.text_field :vat_name, required: true
-        t.boolean_field :need_factura, required: true
+        t.boolean_field :need_factura, required: true do |f|
+          f.action network_new_customer_toggle_need_factura_url(id: application.id), label: 'შეცვლა', icon: '/icons/arrow-repeat.png', method: 'post', confirm: ' ნამდვილად გინდათ ფაქტურის საჭიროების შეცვლა?'
+        end
         t.boolean_field :show_tin_on_print, required: true
         t.boolean_field :personal_use, required: true
         t.email_field :email
