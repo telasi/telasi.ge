@@ -141,7 +141,7 @@ class Network::ChangePowerApplication
   def can_change_amount?; self.type != TYPE_CHANGE_POWER end
 
   def factura_sent?; not self.factura_seria.blank? end
-  def can_send_factura?; self.need_factura and [STATUS_COMPLETE].include?(self.status) and not self.factura_sent? and self.amount > 0 end
+  def can_send_factura?; self.need_factura and [STATUS_SENT, STATUS_CONFIRMED, STATUS_COMPLETE, STATUS_IN_BS].include?(self.status) and not self.factura_sent? and self.amount > 0 end
   def can_send_to_bs?; self.status == STATUS_COMPLETE and self.amount > 0 end
 
   def send_to_bs!
