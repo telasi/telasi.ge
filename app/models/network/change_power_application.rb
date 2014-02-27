@@ -154,6 +154,10 @@ class Network::ChangePowerApplication
 
     # find zdeposit customer
     deposit_customer = Billing::NetworkCustomer.where(customer: customer).first
+    if deposit_customer.blank?
+      Billing::NetworkCustomer.from_bs_customer(customer)
+      deposit_customer = Billing::NetworkCustomer.where(customer: customer).first
+    end
     raise "სადეპოზიტო აბონენტი ვერ მოიძებნა: #{customer.accnumb}!" if deposit_customer.blank?
 
     if main_amount > 0
