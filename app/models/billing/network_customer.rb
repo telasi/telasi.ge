@@ -2,6 +2,7 @@
 class Billing::NetworkCustomer < ActiveRecord::Base
   self.table_name  = 'bs.zdepozit_cust_qs'
   self.primary_key = 'zdepozit_cust_id'
+  self.sequence_name = 'BS.ZDEPOZIT_CUST_QS_ID_SEQ'
 
   belongs_to :customer, class_name: 'Billing::Customer', foreign_key: :custkey
 
