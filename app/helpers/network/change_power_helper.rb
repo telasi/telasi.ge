@@ -83,6 +83,7 @@ module Network::ChangePowerHelper
       Network::ChangePowerApplication::STATUS_SENT,
       #Network::ChangePowerApplication::STATUS_CANCELED,
       Network::ChangePowerApplication::STATUS_CONFIRMED,
+      Network::ChangePowerApplication::STATUS_COMPLETE,
     ].include?(app.status)
   end
 
