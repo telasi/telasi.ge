@@ -201,7 +201,7 @@ class Network::ChangePowerApplication
         if self.old_power == self.power
           self.amount = 0
         else
-          per_kwh = tariff * 1.0 / self.power
+          per_kwh = tariff * 1.0 / self.power_to
           self.amount = (per_kwh * (self.power - self.old_power)).round(2)
         end
       else
