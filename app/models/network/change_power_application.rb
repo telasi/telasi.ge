@@ -193,19 +193,19 @@ class Network::ChangePowerApplication
 
   def calculate_total_cost
     unless self.can_change_amount?
-      tariff_old = Network::NewCustomerTariff.tariff_for(self.old_voltage, self.old_power).price_gel
-      tariff = Network::NewCustomerTariff.tariff_for(self.voltage, self.power).price_gel
-      if tariff_old > tariff
+      tariff_old = Network::NewCustomerTariff.tariff_for(self.old_voltage, self.old_power)
+      tariff = Network::NewCustomerTariff.tariff_for(self.voltage, self.power)
+      if tariff_old.price_gel > tariff.price_gel
         self.amount = 0
       elsif tariff_old == tariff
         if self.old_power == self.power
           self.amount = 0
         else
-          per_kwh = tariff * 1.0 / tariff.power_to
+          per_kwh = tariff.price_gel * 1.0 / tariff.power_to
           self.amount = (per_kwh * (self.power - self.old_power)).round(2)
         end
       else
-        self.amount = tariff - tariff_old
+        self.amount = tariff.price_gel - tariff_old.price_gel
       end
     end
   end
