@@ -46,7 +46,6 @@ class DashboardController < ApplicationController
     if request.post?
       user = Sys::User.where(email: params[:email]).first
       if user
-        user.generate_restore_hash!
         UserMailer.restore_password(user).deliver
         redirect_to restore_url(ok: 'ok')
       else
