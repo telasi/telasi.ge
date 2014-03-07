@@ -1,35 +1,10 @@
-<h2 class="page-header">
-  <%= @title %>
-</h2>
-<form method="GET">
-  თარიღების ინტერვალი:
-  <input name="d1" class="datepicker" style="width:100px;" value="<%= @d1.strftime('%d-%b-%Y') %>" />-დან
-  <input name="d2" class="datepicker" style="width:100px;" value="<%= @d2.strftime('%d-%b-%Y') %>" />-მდე
-  <input type="submit" value="გენერაცია" />
-</form>
-<hr/>
-
-<div class="row">
-  <div class="col-sm-6">
-    <h3 class="page-header"><img src="/icons/user--plus.png"/> ახალი განცხადება</h3>
-    <%= render partial: 'network/reports/count_stat',
-               locals: { clazz: Network::NewCustomerApplication, apps: @newapps } %>
-  </div>
-  <div class="col-sm-6">
-    <h3 class="page-header"><img src="/icons/user--pencil.png"/> ქსელში ცვლილება</h3>
-    <%= render partial: 'network/reports/count_stat',
-               locals: { clazz: Network::ChangePowerApplication, apps: @chgapps } %>
-  </div>
-</div>
-
-<!-- ჯარიმები -->
 <%
   apps0 = @newapps.where(:penalty1    => 0, :penalty2 => 0, :penalty3 => 0)
   apps1 = @newapps.where(:penalty1.gt => 0, :penalty2 => 0, :penalty3 => 0)
   apps2 = @newapps.where(:penalty2.gt => 0, :penalty3 => 0)
   apps3 = @newapps.where(:penalty3.gt => 0)
 %>
-<h4 class="page-header">კომპენსაციების მიხედვით (ახალი განცხადება)</h4>
+<h2 class="page-header"><%= @title %></h2>
 <table class="table table-bordered">
   <thead>
     <tr>

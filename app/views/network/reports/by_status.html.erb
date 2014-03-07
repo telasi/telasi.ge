@@ -1,0 +1,23 @@
+<h2 class="page-header">
+  <%= @title %>
+</h2>
+<form method="GET">
+  თარიღების ინტერვალი:
+  <input name="d1" class="datepicker" style="width:100px;" value="<%= @d1.strftime('%d-%b-%Y') %>" />-დან
+  <input name="d2" class="datepicker" style="width:100px;" value="<%= @d2.strftime('%d-%b-%Y') %>" />-მდე
+  <input type="submit" value="გენერაცია" />
+</form>
+<hr/>
+
+<div class="row">
+  <div class="col-sm-6">
+    <h3 class="page-header"><img src="/icons/user--plus.png"/> ახალი განცხადება</h3>
+    <%= render partial: 'network/reports/by_status_apps',
+               locals: { clazz: Network::NewCustomerApplication, apps: @newapps } %>
+  </div>
+  <div class="col-sm-6">
+    <h3 class="page-header"><img src="/icons/user--pencil.png"/> ქსელში ცვლილება</h3>
+    <%= render partial: 'network/reports/by_status_apps',
+               locals: { clazz: Network::ChangePowerApplication, apps: @chgapps } %>
+  </div>
+</div>
