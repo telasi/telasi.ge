@@ -43,6 +43,9 @@ class Network::NewCustomerApplication
   field :amount,      type: Float, default: 0
   field :days,        type: Integer, default: 0
   field :customer_id, type: Integer
+  field :penalty1,    type: Float, default: 0
+  field :penalty2,    type: Float, default: 0
+  field :penalty3,    type: Float, default: 0
   ### დღეების ანგარიში ###
   # send_date, არის თარიღი, როდესაც მოხდა განცხადების თელასში გამოგზავნა
   field :send_date, type: Date
@@ -362,6 +365,9 @@ class Network::NewCustomerApplication
           self.plan_end_date = self.send_date + self.days
         end
         self.amount = (self.amount / 1.18 * 100).round / 100.0 unless self.pays_non_zero_vat?
+        self.penalty1 = self.penalty_first_stage
+        self.penalty2 = self.penalty_second_stage
+        self.penalty3 = self.penalty_third_stage
       end
     else
       if power > 0
