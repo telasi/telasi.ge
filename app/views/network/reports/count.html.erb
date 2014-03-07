@@ -11,43 +11,96 @@
 
 <div class="row">
   <div class="col-sm-6">
-    <h3 class="page-header">
-      <img src="/icons/user--plus.png"/> ახალი განცხადება &mdash;
-      <span class="label label-danger"><%= @newapps.count %></span>
-    </h3>
-    <h4 class="page-header">სტატუსების მიხედვით</h4>
-    <table class="table">
-      <% Network::NewCustomerApplication::STATUSES.each do |stat| %>
-        <tr>
-          <td>
-            <img src="<%= Network::NewCustomerApplication.status_icon(stat) %>" />
-            <%= Network::NewCustomerApplication.status_name(stat) %>
-          </td>
-          <td>
-            <code><%= @newapps.where(status: stat).count %></code>
-          </td>
-        </tr>
-      <% end %>
-    </table>
+    <h3 class="page-header"><img src="/icons/user--plus.png"/> ახალი განცხადება</h3>
+    <%= render partial: 'network/reports/count_stat',
+               locals: { clazz: Network::NewCustomerApplication, apps: @newapps } %>
   </div>
   <div class="col-sm-6">
-    <h3 class="page-header">
-      <img src="/icons/user--pencil.png"/> ქსელში ცვლილება &mdash;
-      <span class="label label-success"><%= @chgapps.count %></span>
-    </h3>
-    <h4 class="page-header">სტატუსების მიხედვით</h4>
-    <table class="table">
-      <% Network::ChangePowerApplication::STATUSES.each do |stat| %>
-        <tr>
-          <td>
-            <img src="<%= Network::ChangePowerApplication.status_icon(stat) %>" />
-            <%= Network::ChangePowerApplication.status_name(stat) %>
-          </td>
-          <td>
-            <code><%= @chgapps.where(status: stat).count %></code>
-          </td>
-        </tr>
-      <% end %>
-    </table>
+    <h3 class="page-header"><img src="/icons/user--pencil.png"/> ქსელში ცვლილება</h3>
+    <%= render partial: 'network/reports/count_stat',
+               locals: { clazz: Network::ChangePowerApplication, apps: @chgapps } %>
   </div>
 </div>
+
+<!-- ჯარიმები -->
+<%
+  apps0 = @newapps.where(:penalty1    => 0, :penalty2 => 0, :penalty3 => 0)
+  apps1 = @newapps.where(:penalty1.gt => 0, :penalty2 => 0, :penalty3 => 0)
+  apps2 = @newapps.where(:penalty2.gt => 0, :penalty3 => 0)
+  apps3 = @newapps.where(:penalty3.gt => 0)
+%>
+<h4 class="page-header">კომპენსაციების მიხედვით (ახალი განცხადება)</h4>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>ეტაპი</th>
+      <th width="150">რაოდ.</th>
+      <th width="150">თანხა</th>
+      <th width="150">კომპენს.</th>
+    </tr>
+  </thead>
+  <tr>
+    <td>დროზე დასრულებული</td>
+    <td style="text-align: right;"><code><%= apps0.count %></code></td>
+    <td style="text-align: right;">
+      <code><%= number_with_precision(apps0.sum(:amount) || 0, precision: 2) %></code> GEL
+    </td>
+    <td style="text-align: right;">
+      <code><%= number_with_precision(0, precision: 2) %></code> GEL
+    </td>
+  </tr>
+  <tr>
+    <td>I ეტაპი</td>
+    <td style="text-align: right;"><code><%= apps1.count %></code></td>
+    <td style="text-align: right;">
+      <code><%= number_with_precision(apps1.sum(:amount) || 0, precision: 2) %></code> GEL
+    </td>
+    <td style="text-align: right;">
+      <code><%= number_with_precision(apps1.sum(:penalty1) || 0, precision: 2) %></code>
+      GEL
+    </td>
+  </tr>
+  <tr>
+    <td>II ეტაპი</td>
+    <td style="text-align: right;"><code><%= apps2.count %></code></td>
+    <td style="text-align: right;">
+      <code><%= number_with_precision(apps2.sum(:amount) || 0, precision: 2) %></code> GEL
+    </td>
+    <td style="text-align: right;">
+      <code><%= number_with_precision((apps2.sum(:penalty1) || 0) + (apps2.sum(:penalty2) || 0), precision: 2) %></code>
+      GEL
+    </td>
+  </tr>
+  <tr>
+    <td>III ეტაპი</td>
+    <td style="text-align: right;"><code><%= apps3.count %></code></td>
+    <td style="text-align: right;">
+      <code><%= number_with_precision(apps3.sum(:amount) || 0, precision: 2) %></code> GEL
+    </td>
+    <td style="text-align: right;">
+      <code><%= number_with_precision(
+                  (apps3.sum(:penalty1) || 0) +
+                  (apps3.sum(:penalty2) || 0) +
+                  (apps3.sum(:penalty3) || 0),
+                  precision: 2) %>
+      </code>
+      GEL
+    </td>
+  </tr>
+  <tfoot>
+    <tr>
+      <th>ჯამი</th>
+      <th style="text-align: right;"><code><%= @newapps.count %></code></th>
+      <th style="text-align: right;">
+        <code><%= number_with_precision(@newapps.sum(:amount) || 0, precision: 2) %></code> GEL
+      </th>
+      <th style="text-align: right;">
+        <code><%= number_with_precision(
+                    (@newapps.sum(:penalty1) || 0) +
+                    (@newapps.sum(:penalty2) || 0) +
+                    (@newapps.sum(:penalty3) || 0),
+                    precision: 2) %></code> GEL
+      </th>
+    </tr>
+  </tfoot>
+</table>
