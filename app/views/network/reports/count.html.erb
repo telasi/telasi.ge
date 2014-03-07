@@ -43,20 +43,20 @@
     <td>დროზე დასრულებული</td>
     <td style="text-align: right;"><code><%= apps0.count %></code></td>
     <td style="text-align: right;">
-      <code><%= number_with_precision(apps0.sum(:amount) || 0, precision: 2) %></code> GEL
+      <code><%= number_with_precision(apps0.sum(:amount) || 0, precision: 2, locale: :fr) %></code> GEL
     </td>
     <td style="text-align: right;">
-      <code><%= number_with_precision(0, precision: 2) %></code> GEL
+      <code><%= number_with_precision(0, precision: 2, locale: :fr) %></code> GEL
     </td>
   </tr>
   <tr>
     <td>I ეტაპი</td>
     <td style="text-align: right;"><code><%= apps1.count %></code></td>
     <td style="text-align: right;">
-      <code><%= number_with_precision(apps1.sum(:amount) || 0, precision: 2) %></code> GEL
+      <code><%= number_with_precision(apps1.sum(:amount) || 0, precision: 2, locale: :fr) %></code> GEL
     </td>
     <td style="text-align: right;">
-      <code><%= number_with_precision(apps1.sum(:penalty1) || 0, precision: 2) %></code>
+      <code><%= number_with_precision(apps1.sum(:penalty1) || 0, precision: 2, locale: :fr) %></code>
       GEL
     </td>
   </tr>
@@ -64,10 +64,10 @@
     <td>II ეტაპი</td>
     <td style="text-align: right;"><code><%= apps2.count %></code></td>
     <td style="text-align: right;">
-      <code><%= number_with_precision(apps2.sum(:amount) || 0, precision: 2) %></code> GEL
+      <code><%= number_with_precision(apps2.sum(:amount) || 0, precision: 2, locale: :fr) %></code> GEL
     </td>
     <td style="text-align: right;">
-      <code><%= number_with_precision((apps2.sum(:penalty1) || 0) + (apps2.sum(:penalty2) || 0), precision: 2) %></code>
+      <code><%= number_with_precision((apps2.sum(:penalty1) || 0) + (apps2.sum(:penalty2) || 0), precision: 2, locale: :fr) %></code>
       GEL
     </td>
   </tr>
@@ -75,14 +75,14 @@
     <td>III ეტაპი</td>
     <td style="text-align: right;"><code><%= apps3.count %></code></td>
     <td style="text-align: right;">
-      <code><%= number_with_precision(apps3.sum(:amount) || 0, precision: 2) %></code> GEL
+      <code><%= number_with_precision(apps3.sum(:amount) || 0, precision: 2, locale: :fr) %></code> GEL
     </td>
     <td style="text-align: right;">
       <code><%= number_with_precision(
                   (apps3.sum(:penalty1) || 0) +
                   (apps3.sum(:penalty2) || 0) +
                   (apps3.sum(:penalty3) || 0),
-                  precision: 2) %>
+                  precision: 2, locale: :fr) %>
       </code>
       GEL
     </td>
@@ -92,14 +92,14 @@
       <th>ჯამი</th>
       <th style="text-align: right;"><code><%= @newapps.count %></code></th>
       <th style="text-align: right;">
-        <code><%= number_with_precision(@newapps.sum(:amount) || 0, precision: 2) %></code> GEL
+        <code><%= number_with_precision(@newapps.sum(:amount) || 0, precision: 2, locale: :fr) %></code> GEL
       </th>
       <th style="text-align: right;">
         <code><%= number_with_precision(
                     (@newapps.sum(:penalty1) || 0) +
                     (@newapps.sum(:penalty2) || 0) +
                     (@newapps.sum(:penalty3) || 0),
-                    precision: 2) %></code> GEL
+                    precision: 2, locale: :fr) %></code> GEL
       </th>
     </tr>
   </tfoot>
