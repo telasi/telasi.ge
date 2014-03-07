@@ -20,7 +20,7 @@
         <code>
           <%= number_with_precision(
                 apps.where(status: stat).sum(:amount) || 0,
-                precision: 2) %>
+                precision: 2, locale: :fr) %>
         </code> GEL
       </td>
     </tr>
@@ -30,7 +30,7 @@
       <th>ჯამი:</th>
       <th style="text-align: right;"><code><%= apps.count %></code></th>
       <th style="text-align: right;">
-        <code><%= number_with_precision(apps.sum(:amount) || 0, precision: 2) %></code> GEL
+        <code><%= number_with_precision(apps.sum(:amount) || 0, precision: 2, locale: :fr) %></code> GEL
       </th>
     </tr>
   </tfoot>
