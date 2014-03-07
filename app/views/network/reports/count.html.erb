@@ -1,0 +1,53 @@
+<h2 class="page-header">
+  <%= @title %>
+</h2>
+<form method="GET">
+  თარიღების ინტერვალი:
+  <input name="d1" class="datepicker" style="width:100px;" value="<%= @d1.strftime('%d-%b-%Y') %>" />-დან
+  <input name="d2" class="datepicker" style="width:100px;" value="<%= @d2.strftime('%d-%b-%Y') %>" />-მდე
+  <input type="submit" value="გენერაცია" />
+</form>
+<hr/>
+
+<div class="row">
+  <div class="col-sm-6">
+    <h3 class="page-header">
+      <img src="/icons/user--plus.png"/> ახალი განცხადება &mdash;
+      <span class="label label-danger"><%= @newapps.count %></span>
+    </h3>
+    <h4 class="page-header">სტატუსების მიხედვით</h4>
+    <table class="table">
+      <% Network::NewCustomerApplication::STATUSES.each do |stat| %>
+        <tr>
+          <td>
+            <img src="<%= Network::NewCustomerApplication.status_icon(stat) %>" />
+            <%= Network::NewCustomerApplication.status_name(stat) %>
+          </td>
+          <td>
+            <code><%= @newapps.where(status: stat).count %></code>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+  <div class="col-sm-6">
+    <h3 class="page-header">
+      <img src="/icons/user--pencil.png"/> ქსელში ცვლილება &mdash;
+      <span class="label label-success"><%= @chgapps.count %></span>
+    </h3>
+    <h4 class="page-header">სტატუსების მიხედვით</h4>
+    <table class="table">
+      <% Network::ChangePowerApplication::STATUSES.each do |stat| %>
+        <tr>
+          <td>
+            <img src="<%= Network::ChangePowerApplication.status_icon(stat) %>" />
+            <%= Network::ChangePowerApplication.status_name(stat) %>
+          </td>
+          <td>
+            <code><%= @chgapps.where(status: stat).count %></code>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+</div>

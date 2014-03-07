@@ -1,8 +1,12 @@
 <div style="padding: 0 0 20px 0;">
   <div class="pull-right">
     <% if current_user.admin %>
-      <a class="btn btn-default" href="<%= network_tariffs_url %>"><img src="/icons/wrench.png"></img> ტარიფები</a>
-      <a class="btn btn-default" href="<%= network_stages_url %>"><img src="/icons/wrench.png"></img> ეტაპები</a>
+      <a class="btn btn-default" href="<%= network_tariffs_url %>">
+        <img src="/icons/wrench.png"></img> ტარიფები
+      </a>
+      <a class="btn btn-default" href="<%= network_stages_url %>">
+        <img src="/icons/wrench.png"></img> ეტაპები
+      </a>
     <% end %>
   </div>
   <a class="btn btn-default" href="<%= network_new_customers_url %>">
@@ -11,7 +15,10 @@
   <a class="btn btn-default" href="<%= network_change_power_applications_url %>">
     <img src="/icons/user--pencil.png"></img> <%= t('models.network_change_power_application.actions.change') %>
   </a>
-  <a class="btn btn-warning" href="<%= network_avisos_url %>"><img src="/icons/money-coin.png"></img> ავიზოების მართვა</a>
+  <a class="btn btn-warning" href="<%= network_avisos_url %>">
+    <img src="/icons/money-coin.png"></img> ავიზოების მართვა
+  </a>
+  <a class="btn btn-success" href="<%= network_reports_url %>">რეპორტები</a>
 </div>
 <%= new_customer_table @new_customers %>
 <%= change_power_table @change_powers %>

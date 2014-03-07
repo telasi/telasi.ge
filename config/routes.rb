@@ -100,6 +100,10 @@ TelasiGe::Application.routes.draw do
     scope '/', controller: 'base' do
       get '/', action: 'index', as: 'home'
     end
+    scope '/reports', controller: 'reports' do
+      get '/', action: 'index', as: 'reports'
+      get '/count', action: 'count', as: 'count_report'
+    end
     scope '/tariffs', controller: 'tariffs' do
       get '/', action: 'index', as: 'tariffs'
       get '/generate_tariffs', action: 'generate_tariffs', as: 'generate_network_tariffs'
