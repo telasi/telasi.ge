@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class Network::ReportsController < ApplicationController
   def index
     @title = 'რეპორტები'

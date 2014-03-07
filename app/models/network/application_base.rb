@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module Network::ApplicationBase
   BASE_PROJECT  = 'project'
   BASE_DOCUMENT = 'document'
