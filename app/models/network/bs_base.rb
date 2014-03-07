@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module Network::BsBase
   NETWORK_OPERATIONS = [
     116,   # prepayment
