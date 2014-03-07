@@ -12,12 +12,12 @@
 <div class="row">
   <div class="col-sm-6">
     <h3 class="page-header"><img src="/icons/user--plus.png"/> ახალი განცხადება</h3>
-    <%= render partial: 'network/reports/count_stat',
+    <%= render partial: 'network/reports/by_status_apps',
                locals: { clazz: Network::NewCustomerApplication, apps: @newapps } %>
   </div>
   <div class="col-sm-6">
     <h3 class="page-header"><img src="/icons/user--pencil.png"/> ქსელში ცვლილება</h3>
-    <%= render partial: 'network/reports/count_stat',
+    <%= render partial: 'network/reports/by_status_apps',
                locals: { clazz: Network::ChangePowerApplication, apps: @chgapps } %>
   </div>
 </div>

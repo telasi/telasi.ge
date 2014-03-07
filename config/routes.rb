@@ -102,7 +102,8 @@ TelasiGe::Application.routes.draw do
     end
     scope '/reports', controller: 'reports' do
       get '/', action: 'index', as: 'reports'
-      get '/count', action: 'count', as: 'count_report'
+      get '/by_status', action: 'by_status', as: 'by_status_report'
+      get '/completed_apps', action: 'completed_apps', as: 'completed_apps_report'
     end
     scope '/tariffs', controller: 'tariffs' do
       get '/', action: 'index', as: 'tariffs'
