@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 class Tender::TenderController < ApplicationController
   before_action :validate_tender_login, only: [:show, :download_file] 
-  before_action :validate_tender_admin, only: [:report, :item, :delete_file]
+  #before_action :validate_tender_admin, only: [:report, :item, :delete_file]
 
   def show
   	@node = Site::Node.where(nid: params[:nid]).first
