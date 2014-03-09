@@ -26,3 +26,4 @@ class Tender::Tender
     end
    end
 
+end
