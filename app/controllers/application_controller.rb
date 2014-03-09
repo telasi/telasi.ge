@@ -26,9 +26,9 @@ class ApplicationController < ActionController::Base
   def validate_permission
     unless Sys::Permission.has_permission?(current_user, controller_path, action_name)
       if current_user 
-        #render text: I18n.t('models.sys_user.errors.no_permission')
+        render text: I18n.t('models.sys_user.errors.no_permission')
       else
-        #redirect_to login_url, alert: I18n.t('models.sys_user.errors.login_required')
+        redirect_to login_url, alert: I18n.t('models.sys_user.errors.login_required')
       end
     end
   end
