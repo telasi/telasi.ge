@@ -33,7 +33,15 @@ Billing::WaterPayment.establish_connection  :report_bs
 
 # Site (mysql)
 Site::Node.establish_connection :telasi_site
+Site::Tenderfile.establish_connection :telasi_site
+Site::Tenderfilerevision.establish_connection :telasi_site
+Site::Cachefield.establish_connection :telasi_site
 Site::ContentType.establish_connection :telasi_site
 Site::Content.establish_connection :telasi_site
 Site::ContentThumbnail.establish_connection :telasi_site
 Site::File.establish_connection :telasi_site
+
+# SAP
+Sap::Material.establish_connection :sap
+Sap::MaterialStock.establish_connection :sap
+Sap::MaterialText.establish_connection :sap

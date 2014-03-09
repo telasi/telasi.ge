@@ -1,0 +1,42 @@
+<div class="row">
+  <div class="col-sm-8">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 style="margin: 0;"><%= 'Cartridge data' %></h4>
+      </div>
+      <div class="panel-body">
+        <%= form_for @cartridge, url: cartridge_edit_url, role: 'form' do |f| %>
+          <div class="row">
+            <div class="col-sm-3">
+              <div class="form-group">
+                <%= f.b_text_field 'matnr', label: 'SAP ID', readonly: true %>
+              </div>
+            </div>
+            <div class="col-sm-9">
+              <div class="form-group">
+                <%= f.b_text_field 'maktx', label: 'SAP Name', readonly: true %>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <%= f.b_text_field 'manuf', label: 'Manufacturer' %>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <%= f.b_text_field 'name', label: 'Name' %>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <%= f.b_text_field 'prop', label: 'Prop' %>
+            </div>
+          </div>
+            <%= f.submit @title, class: ['btn', 'btn-primary'] %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

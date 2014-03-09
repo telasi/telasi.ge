@@ -1,0 +1,25 @@
+<div class="page-header">
+  <h2>კარტრიჯები</h2>
+</div>
+<%= form_tag("", method: 'put') do %>
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th width="50">SAP id</th>
+      <th width="50">დასახელება</th>
+      <th width="50" class="center">აქტიური?</th>
+    </tr>
+  </thead>
+  <tbody>
+      <% for item in @materials %> 
+      <tr>
+        <td><%= item.matnr %></td>
+        <td><%= item.mat_name %></td>
+        <td><%= check_box_tag "ids[]", item.matnr, true %></td>
+        <%= hidden_field_tag "ids_hidden[]", item.matnr %></td>
+      </tr>
+      <% end %>
+  </tbody>
+</table>
+  <%= submit_tag "განახლება", class: ['btn', 'btn-primary' ] %>
+<% end %>

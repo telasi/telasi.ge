@@ -1,0 +1,80 @@
+<div class="row">
+  <div class="col-sm-8">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 style="margin: 0;"><%= t('models.sys_user.title.single') %></h4>
+      </div>
+      <div class="panel-body">
+        <%= form_for @tenderuser, url: tender_print_url(id: @tenderuser.id, format: 'pdf'), role: 'form' do |f| %>
+                <%= f.fields_for @tenderuser.user do |u| %>
+                      <%= u.b_text_field 'email', label: t('models.sys_user.email'), readonly: true %>
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <%= u.b_text_field 'first_name', label: t('models.sys_user.first_name'), readonly: true %>
+                        </div>
+                        <div class="col-sm-6">
+                          <%= u.b_text_field 'last_name', label: t('models.sys_user.last_name'), readonly: true %>
+                        </div>
+                      </div>
+                      <%= u.b_text_field 'mobile', label: t('models.sys_user.mobile'), readonly: true %>
+                <% end %>
+          <!-- tenderuser registration -->
+          <legend><%= t('tender.organization_data') %></legend>
+          <div class="row">
+            <div class="col-sm-3">
+              <div class="form-group">
+                <%= f.b_text_field 'organization_type_name', label: t('tender.organization_type_label'), readonly: true %>                
+              </div>
+            </div>
+            <div class="col-sm-9">
+              <div class="form-group">
+              <%= if @tenderuser.organization_type == 'OT_PHYSIC'
+                  f.b_text_field 'organization_name', label: t('tender.phys_name'), readonly: true
+                 else
+                  f.b_text_field 'organization_name', label: t('tender.organization_name'), readonly: true
+                 end %>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <%= f.b_text_field 'director_name', label: t('tender.director_name'), readonly: true %>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <%= f.b_text_field 'fact_address', label: t('tender.fact_address'), readonly: true%>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <%= f.b_text_field 'legal_address', label: t('tender.legal_address'), readonly: true %>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <%= f.b_text_field 'phones', label: t('tender.phones'), readonly: true %>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <%= f.b_text_field 'work_email', label: t('tender.work_mail'), readonly: true %>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <%= if @tenderuser.organization_type == 'OT_PHYSIC'
+                 f.b_text_field 'rs_tin', label: t('models.sys_user.rs_tin'), readonly: true
+                 else
+                  f.b_text_field 'rs_tin', label: t('models.network_new_customer_item.rs_tin'), readonly: true
+                 end %>
+            </div>
+          </div>
+          <div>
+            <%= f.submit t('models.general.actions.print'), class: ['btn', 'btn-primary'] %>
+          </div>
+      <% end %>
+      </div>
+    </div>
+  </div>
+</div>

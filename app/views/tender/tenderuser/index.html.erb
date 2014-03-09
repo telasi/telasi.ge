@@ -23,5 +23,6 @@ end %>
   t.text_field 'phones',            label: t('tender.phones')
   t.text_field 'work_email',        label: t('tender.work_mail')
   t.text_field 'rs_tin',            label: t('models.network_change_power_application.rs_tin')
+  t.item_action ->(x) { tender_showuser_url(x.id) }, icon: '/icons/user--pencil.png'
   t.paginate records: t('models.general.records')
 end %>

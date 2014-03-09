@@ -6,6 +6,7 @@ class Site::Node < ActiveRecord::Base
 
   def created_at; Time.at(self.created) end
   def updated_at; Time.at(self.updated) end
+  def created_dt; Time.at(self.created).strftime('%d-%m-%Y') end
 
   def content_type; Site::ContentType.where(entity_type: 'node', bundle: self.type, entity_id: self.nid).first end
   def content_thumbnail; Site::ContentThumbnail; Site::ContentThumbnail.where(entity_type: 'node', bundle: self.type, entity_id: self.nid).first end

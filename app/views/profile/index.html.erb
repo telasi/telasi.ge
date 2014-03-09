@@ -73,3 +73,75 @@
     <% end %>
   </div>
 </div>
+
+<% if @tenderuser %>
+  <div class="row">
+    <div class="col-sm-6">
+      <h2 class="page-header"><%= t('tender.organization_data') %></h2>
+      <ul class="list-group">
+        <li class="list-group-item">
+          <div class="pull-right">
+            <%= @tenderuser.organization_type_name %>
+          </div>
+          <%= t('tender.organization_type_label') %>
+        </li>
+        <li class="list-group-item">
+          <div class="pull-right">
+             <%= @tenderuser.organization_name %>
+          </div>
+             <%= if @tenderuser.organization_type == 'OT_PHYSIC'
+                t('tender.phys_name')
+              else
+                t('tender.organization_name')
+              end %>
+        </li>
+        <li class="list-group-item">
+          <div class="pull-right">
+            <%= @tenderuser.director_name %>
+          </div>
+          <%= t('tender.director_name') %>
+        </li>
+        <li class="list-group-item">
+          <div class="pull-right">
+            <%= @tenderuser.fact_address %>
+          </div>
+          <%= t('tender.fact_address') %>
+        </li>
+        <li class="list-group-item">
+          <div class="pull-right">
+            <%= @tenderuser.legal_address %>
+          </div>
+          <%= t('tender.legal_address') %>
+        </li>
+        <li class="list-group-item">
+          <div class="pull-right">
+            <%= @tenderuser.phones %>
+          </div>
+          <%= t('tender.phones') %>
+        </li>
+        <li class="list-group-item">
+          <div class="pull-right">
+            <%= @tenderuser.work_email %>
+          </div>
+          <%= t('tender.work_mail') %>
+        </li>
+        <li class="list-group-item">
+          <div class="pull-right">
+            <%= @tenderuser.rs_tin %>
+          </div>
+             <%= if @tenderuser.organization_type == 'OT_PHYSIC'
+                t('models.sys_user.rs_tin')
+              else
+                t('models.network_new_customer_item.rs_tin')
+              end %>
+        </li>
+      </ul>
+      <div>
+        <a href="<%= tender_edit_url %>" class="btn btn-default">
+          <i class="fa fa-pencil"></i>
+          <%= t('models.general.actions.edit') %>
+        </a>
+      </div>
+    </div>
+  </div>
+<% end %>

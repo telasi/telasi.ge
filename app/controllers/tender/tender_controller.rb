@@ -11,47 +11,50 @@ class Tender::TenderController < ApplicationController
   def report
   	@search = params[:search] == 'clear' ? {} : params[:search]
     downloads = Tender::Download
+    tenderusers = Tender::Tenderuser
+    tenders = Tender::Tender
 
-    #raise downloads.inspect
-
-    search_string = ' true '
+    @result = []
 
   	if @search 
-  	    downloads = downloads.where(tenderno: @search[:tenderno].mongonize) if @search[:tenderno].present?
+        tenders = tenders.where(tenderno: @search[:tenderno].mongonize) if @search[:tenderno].present?
 
-  	    search_string = "#{search_string} && tenderuservar.organization_name.toLowerCase().indexOf('#{@search[:organization_name]}'.toLowerCase()) != -1 " if @search[:organization_name].present?
-  	    search_string = "#{search_string} && tenderuservar.organization_type.toLowerCase().indexOf('#{@search[:organization_type]}'.toLowerCase()) != -1 " if @search[:organization_type].present?
-  	    search_string = "#{search_string} && tenderuservar.director_name.toLowerCase().indexOf('#{@search[:director_name]}'.toLowerCase()) != -1 " if @search[:director_name].present?
-  	    search_string = "#{search_string} && tenderuservar.rs_tin == '#{@search[:rs_tin]}'" if @search[:rs_tin].present?
+        tenderusers = tenderusers.where(organization_name: @search[:organization_name].mongonize) if @search[:organization_name].present?
+        tenderusers = tenderusers.where(organization_type: @search[:organization_type].mongonize) if @search[:organization_type].present?
+        tenderusers = tenderusers.where(director_name: @search[:director_name].mongonize) if @search[:director_name].present?
+        tenderusers = tenderusers.where(rs_tin: @search[:rs_tin]) if @search[:rs_tin].present?
   	end
   	
-  	map = %Q{
+  	map_down = %Q{
   		function() {
-  			 tenderuservar = db.tender_tenderusers.findOne({_id: this.tenderuser_id});
-  			 if (#{search_string}) 
-  			 	{
-	  			 emit({ 
-	  			 	tenderuser: tenderuservar, 
-	  			 	nid: this.nid}, {count: 1})
+	  			 emit({tenderuser: this.tenderuser_id, nid: this.nid}, {count: 1})
 				}
-  		}
   	}
 
-  	reduce = %Q{
+  	reduce_down = %Q{
   		function(key, values) {
-  			var result = {count:0}
+        var result = {organization_name: 'd', count:0}
   			values.forEach(function(value) {
-  				result.count += value.count;
+            result.count += value.count;
   			});
 			return result;
   		}
   	}
 
-    if downloads
-  	 @down = downloads.map_reduce(map,reduce).out(inline: true)
-    end
+     @down = downloads.map_reduce(map_down,reduce_down).out(inline: true)
+     @down.each do |d|
+       @tender = tenders.where(nid: d['_id']['nid']).first
+       @user = tenderusers.where(_id: d['_id']['tenderuser']).first
+       if @user && @tender
+        @result << { organization_name: @user.organization_name,
+                     organization_type: @user.organization_type,
+                     director_name: @user.director_name,
+                     tenderno: @tender.tenderno,
+                     count: d['value']['count']
+                  }
+       end
+     end
 
-    #@downloads = down.paginate(page: params[:page], per_page: 20)
   end
 
   def index
@@ -109,10 +112,12 @@ class Tender::TenderController < ApplicationController
 
   def delete_file
    @tender = Tender::Tender.where(nid: params[:nid]).first
-   if @tender.file
+   if @tender 
+    if @tender.file
    	 @tender.file.destroy
+    end
+    @tender.destroy
    end
-   @tender.destroy
    redirect_to tender_tender_item_url(nid: params[:nid]) 
   end
 

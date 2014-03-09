@@ -1,0 +1,20 @@
+<%= search_form @search do |f|
+  f.tab do |f|
+    f.col1 do |f|
+      f.text_field 'name', label: 'Name'
+      f.text_field 'manuf', label: 'Manufacturer'
+      f.text_field 'matnr', label: 'SAP ID'
+      f.text_field 'maktx', label: 'SAP Name'
+    end
+    f.col2 do |f|
+    end
+  end
+end %>
+<%= table_for @cartridges, title: @title, icon: '/icons/users.png', collapsible: true do |t|
+  t.text_field 'matnr', label: 'SAP ID'
+  t.text_field 'name', label: 'Name'
+  t.text_field 'manuf', label: 'Manufacturer'
+  t.text_field 'maktx', label: 'SAP Name'
+  t.item_action ->(x) { cartridge_edit_url(x.matnr) }, icon: '/icons/pencil.png'
+  t.paginate records: t('models.general.records')
+end %>

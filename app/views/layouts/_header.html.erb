@@ -25,7 +25,7 @@
             <%= link_to t('menu.payments'), pay_services_url %>
           </li>
         <% end %>
-        <% if tender_user? %>
+        <% if current_user and current_user.tender_admin? %>
          <%= render partial: 'layouts/tender' %>
         <% end %>
         <%= render partial: 'layouts/apps' %>

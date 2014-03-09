@@ -212,8 +212,11 @@ TelasiGe::Application.routes.draw do
 
   namespace 'tender' do
     scope '/tenderuser', controller: :tenderuser do
-      match '/register', action: :register, via: [:get, :post]
-      get  '/',          action: :index, as: 'user_index'
+      match '/register',     action: :register, via: [:get, :post]
+      get  '/',              action: :index, as: 'user_index'
+      get '/showuser/:id',   action: 'showuser', as: 'showuser'
+      match '/print/:id',    action: 'print', as: 'print', via: [:get, :post, :patch]
+      match '/edit',         action: 'edit', as: 'edit', via: [:get, :post, :patch]
     end
     scope '/tender', controller: :tender do    
       match  '/item/:nid',        action: 'item', as: 'tender_item', via: [:get, :post]
@@ -224,7 +227,17 @@ TelasiGe::Application.routes.draw do
       get  '/delete_file/:nid',   action: 'delete_file', as: 'delete_file'
       post  '/download_file/:nid',  action: 'download_file', as: 'download_file'
     end
-  end  
+  end
+
+  namespace 'cartridge' do
+    scope '/cartridge', controller: :cartridge do
+        get  '/',                  action: :index
+        match  '/update',          action: :update, via: [:get, :put]
+        get  '/list',              action: :list
+        get  '/report/:lgort',     action: 'report', as: 'report'
+        match  '/edit/:matnr',     action: 'edit', as: 'edit', via: [:get, :post, :patch]
+    end
+  end
 
   root 'dashboard#index'
 end

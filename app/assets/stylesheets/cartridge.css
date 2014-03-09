@@ -1,0 +1,298 @@
+#contentcart{
+	margin-top: 50px;
+}
+
+.navbarcart *{
+	background-image: none !important;
+}
+
+/* Navbar */
+
+.navbarcart *{
+	text-shadow:none !important;
+}
+
+.navbarcart .container{
+   max-width:100%;
+}
+
+.navbarcart{
+	background: #000;
+}
+
+.navbarcart .navbarcart-brand{
+	color: #fff !important;
+}
+
+
+.navbarcart .nav > li > a{
+	font-size: 13px !important;
+	color: #fff !important;
+}
+
+.navbarcart i{
+	margin-right: 3px;
+}
+
+.navbarcart .caret{
+	border-top-color:#fff !important;
+	border-bottom-color:#fff !important;
+}
+
+.navbarcart .nav-user-pic{
+	width: 20px;
+	margin-right: 10px;
+	display:inline-block;
+}
+
+.navbarcart .badge{
+	margin-left: 5px;
+}
+
+.navbarcart-inverse{
+	background-color:#222;border-color:#080808
+}
+
+
+/* Sidebar */
+
+.sidebar{
+	width: 230px;
+	float: left;
+	display: block;
+	background:#111;
+	color: #eee;
+	position: relative;
+}
+
+.sidebar hr{
+	border-bottom: 1px solid #333 !important;
+}
+
+.sidebar ul{
+	padding: 0px;
+	margin: 0px;
+	list-style-type: none;	
+}
+
+.sidebar ul li{
+	list-style-type: none;
+}
+
+.sidebar .sidebar-inner{
+  display: block; 
+  width:100%; 
+  margin: 0 auto; 
+  position: absolute;
+  z-index: 60;	
+  background: #111;
+}
+
+.sidebar .navi li i{
+	margin-right: 5px;
+}
+
+.sidebar .navi li span i{
+	margin: 0px;
+}
+
+.sidebar .navi > li > a{ 
+  display: block; 
+  padding: 12px 20px;
+  font-size: 15px;
+  line-height: 25px;
+  color: #fff;
+  text-decoration: none;
+  border-bottom: 1px solid #222;
+  background-color: #111;
+}
+
+.sidebar .navi > li > a:hover, .sidebar .navi > li.open > a { 
+  border-bottom: 1px solid #222;
+  background-color: #222;
+  color: #fff;
+}
+
+.sidebar .navi li ul { 
+	display: none; 
+	background: #181818; 
+}
+
+.sidebar .navi li.open ul{
+	display: block;
+}
+
+.sidebar .navi li ul li a { 
+  display: block; 
+  background: none;
+  padding: 10px 0px;
+  padding-left: 30px;
+  text-decoration: none;
+  color: #999;
+  border-bottom: 1px solid #222;
+}
+
+.sidebar .navi li ul li.active a { 
+  background: #131313;
+  border-bottom: 1px solid #222;
+}
+
+.sidebar .navi li ul li a:hover {
+  background: #131313;
+  border-bottom: 1px solid #222;
+}
+
+/* Sidebar colors */
+
+.sidebar .navi > li.nlightblue > a:hover, 
+.sidebar .navi > li.open.nlightblue > a, 
+.sidebar .navi > li.current.nlightblue > a { 
+  background:#52b9e9 !important;
+  -webkit-transition:background 0.5s ease;
+  -moz-transition:background 0.5s ease;
+  -o-transition:background 0.5s ease;
+  transition:background 0.5s ease;
+}
+
+.sidebar .navi > li.nblue > a:hover, 
+.sidebar .navi > li.open.nblue > a,
+.sidebar .navi > li.current.nblue > a { 
+  background:#1171a3 !important;
+  -webkit-transition:background 0.5s ease;
+  -moz-transition:background 0.5s ease;
+  -o-transition:background 0.5s ease;
+  transition:background 0.5s ease;
+}
+
+.sidebar .navi > li.ngreen > a:hover, 
+.sidebar .navi > li.open.ngreen > a,
+.sidebar .navi > li.current.ngreen > a { 
+  background:#43c83c !important;
+  -webkit-transition:background 0.5s ease;
+  -moz-transition:background 0.5s ease;
+  -o-transition:background 0.5s ease;
+  transition:background 0.5s ease;
+}
+
+.sidebar .navi > li.norange > a:hover, 
+.sidebar .navi > li.open.norange > a,
+.sidebar .navi > li.current.norange > a { 
+  background:#f88529 !important;
+  -webkit-transition:background 0.5s ease;
+  -moz-transition:background 0.5s ease;
+  -o-transition:background 0.5s ease;
+  transition:background 0.5s ease;
+}
+
+.sidebar .navi > li.nred > a:hover, 
+.sidebar .navi > li.open.nred > a,
+.sidebar .navi > li.current.nred > a { 
+  background:#fa3031 !important;
+  -webkit-transition:background 0.5s ease;
+  -moz-transition:background 0.5s ease;
+  -o-transition:background 0.5s ease;
+  transition:background 0.5s ease;
+}
+
+.sidebar .navi > li.nviolet > a:hover, 
+.sidebar .navi > li.open.nviolet > a,
+.sidebar .navi > li.current.nviolet > a { 
+  background:#932ab6 !important;
+  -webkit-transition:background 0.5s ease;
+  -moz-transition:background 0.5s ease;
+  -o-transition:background 0.5s ease;
+  transition:background 0.5s ease;
+}
+
+/* Sidebar dropdown */
+
+.sidebar .sidebar-dropdown*{
+	text-decoration: none;
+}
+
+.sidebar .sidebar-dropdown{
+	display: none;
+}
+
+.sidebar .sidebar-dropdown a{
+	color: #ddd;  
+	background-color: #343434;	
+	padding:10px;
+	text-transform: uppercase;
+	text-align: center;
+	font-size: 13px;
+	line-height:19px;
+	display: block;
+	border-top: 1px solid #666;
+	border-bottom: 1px solid #333;  
+}
+
+.sidebar .sidebar-dropdown a:hover{
+	text-decoration: none;
+}
+
+/* Sidebar widget */
+
+.sidebar .sidebar-widget{
+	padding: 10px 5px;
+}
+
+.sidebar .ui-datepicker{
+	width: 95%;
+	margin: 0 auto;
+	background: #111;
+	color: #888;
+	border: 0px;
+	padding: 0px;
+}
+
+.sidebar .ui-datepicker-header{
+	background: #222;
+	border: 1px solid #212121;
+}
+
+.sidebar .ui-datepicker-prev:hover{
+	background: transparent;
+	border: 0px;
+	top: 2px !important;
+	left: 2px !important;
+}
+
+.sidebar .ui-datepicker-next:hover{
+	background: transparent;
+	border: 0px;
+	top: 2px !important;
+	right: 2px !important;
+}
+
+.sidebar .ui-state-default{
+	background: #222;
+	border: 0px;
+	text-align: center;
+	color: #ccc;
+}
+
+.sidebar .ui-state-default:hover{
+	background: #282828;
+	color: #999;
+}
+
+.sidebar .ui-state-hightlight, .sidebar .ui-state-active{
+	background: #444;
+}
+
+/* Main */
+
+.mainbar{
+	position: relative;
+	margin-left: 250px;
+	margin-right: 20px;
+	width: auto;
+	background:#fff;
+	min-height: 900px;
+}
+
+.mainbar .containerx{
+   padding-top: 10px;
+   max-width:100% !important;
+}

@@ -4,6 +4,7 @@ class ProfileController < ApplicationController
     @title = I18n.t('models.sys_user.actions.profile')
     @user = current_user
     @subscription = @user.subscription
+    @tenderuser = Tender::Tenderuser.where(user: current_user).first
   end
 
   def edit

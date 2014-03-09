@@ -7,5 +7,6 @@ module Telasi
     network_admin_id:       '52f4c9493bd0417158000004',
     network_cancelaria_id:  '52f4c91a3bd04103d4000003',
     subscriptions_admin_id: '52f890373bd041079e000002',
+    tender_admin_id: '53181c991d41c8d0d90000c3'
   }
 end

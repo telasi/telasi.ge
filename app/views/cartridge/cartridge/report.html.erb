@@ -1,0 +1,31 @@
+<div class="page-header">
+  <h3>კარტრიჯები</h3>
+</div>
+<%= form_tag("", method: 'put') do %>
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th width="50">SAP id</th>
+      <th width="50">დასახელება</th>
+      <th width="50" class="center">აქტიური?</th>
+    </tr>
+  </thead>
+  <tbody>
+      <% current_item = @cartridges.first
+         for item in @cartridges 
+         if current_item != item 
+         %>
+      <tr>
+        <td colspan='3'><%= item.manuf %></td>
+      </tr>
+      <% end %>
+      <tr>
+        <td></td>
+        <td><%= item.name %></td>
+        <td><%= item.prop %></td>
+      </tr>
+      <% end %>
+  </tbody>
+</table>
+  <%= submit_tag "განახლება", class: ['btn', 'btn-primary' ] %>
+<% end %>

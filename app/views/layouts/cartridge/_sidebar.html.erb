@@ -1,0 +1,22 @@
+    <div class="sidebar">
+        <div class="sidebar-widget">
+            <div id="todaydate"></div>
+        </div>
+
+        <div class="sidebar-inner">
+          <ul class="navi">
+            <% Cartridge::SKLAD.each do |sklad| %>
+              <li class="<%= params[:lgort] == sklad[:lgort] ? 'nred current' : 'has_submenu nblue' %>">
+              <%= link_to sklad[:name], cartridge_report_url(lgort: sklad[:lgort]) %>
+            <% end %>
+          </ul>
+
+          <!-- Date -->
+
+          <div class="sidebar-widget">
+            <div id="todaydate"></div>
+          </div>
+
+        </div>
+
+    </div>

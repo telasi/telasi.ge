@@ -20,47 +20,47 @@ end %>
           <th class="ff-field"><%= t('tender.organization_name') %></th>
           <th class="ff-field"><%= t('tender.organization_type_label') %></th>
           <th class="ff-field"><%= t('tender.director_name') %></th>
-          <th class="ff-field"><%= t('tender.tenderno') %></th>
+          <th class="ff-field">N</th>
           <th class="ff-field"><%= t('tender.download_count') %></th>
         </tr>
       </thead>
       <tbody>
         <% 
         #raise @down.inspect
-        @down.each do |item| %>
+        @result.each do |item| %>
         <tr>
           <td>
             <div>
               <span id="organization_name">
-                <%= item['_id']['tenderuser']['organization_name'] %>
+                <%= item[:organization_name] %>
               </span>
             </div>
           </td>
           <td>
             <div>
               <span id="organization_type">
-                <%= I18n.t("tender.organization_types.#{item['_id']['tenderuser']['organization_type']}") %>
+                <%= I18n.t("tender.organization_types.#{item[:organization_type]}") %>
               </span>
             </div>
           </td>
           <td>
             <div>
               <span id="director_name">
-                <%= item['_id']['tenderuser']['director_name'] %>
+                <%= item[:director_name] %>
               </span>
             </div>
           </td>
           <td>
             <div>
               <span id="tender">
-                <%= number_with_precision(item['_id']['tenderno'], precision: 0) %>
+                <%= item[:tenderno] %>
               </span>
             </div>
           </td>
           <td>
             <div>
               <span id="download_count">
-                <%= number_with_precision(item['value']['count'], precision: 0) %>
+                <%= number_with_precision(item[:count], precision: 0) %>
               </span>
             </div>
           </td>

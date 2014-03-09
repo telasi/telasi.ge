@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta name="Author" content="Dimitri Kurashvili (dimakura@gmail.com)">
+<meta name="Keywords" content="Telasi, Electricity">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><% if @title.present? %><%= @title %> &mdash; <% end %>telasi.ge</title>
+<%= stylesheet_link_tag 'application' %>
+<%= javascript_include_tag 'application' %>
+<%= favicon_link_tag('/favicon.ico') %>
+<%= csrf_meta_tags %>
+</head>
+<body class="telasi">
+<%= render partial: 'layouts/cartridge/header' %>
+<div id="contentcart">
+  <%= render partial: 'layouts/cartridge/sidebar' %>
+  <div class="mainbar">
+  	<div class="containerx">
+      <%= yield %>
+    </div>
+  </div>
+</div>
+</body>
+</html>

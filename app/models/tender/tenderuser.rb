@@ -19,4 +19,8 @@ class Tender::Tenderuser
    field :rs_tin,             type: String
    field :rs_foreigner,       type: Mongoid::Boolean, default: false
 
+   def organization_type_name
+      I18n.t("tender.organization_types.#{self.organization_type}")
+   end
+
 end

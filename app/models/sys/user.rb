@@ -54,6 +54,7 @@ module Sys
     def network_admin?; self.admin? or self.includes_role?(Telasi::PERMISSIONS[:network_admin_id]) end
     def network_cancelaria?; self.admin? or self.includes_role?(Telasi::PERMISSIONS[:network_cancelaria_id]) end
     def news_admin?; self.admin? or self.includes_role?(Telasi::PERMISSIONS[:subscriptions_admin_id]) end
+    def tender_admin?; self.admin? or self.includes_role?(Telasi::PERMISSIONS[:tender_admin_id]) end
 
     attr_accessor :password_confirmation
     attr_reader :password
