@@ -130,6 +130,7 @@ module Network::NewCustomerHelper
         t.action network_new_customer_print_url(id: application.id, format: 'pdf'), label: 'განაცხადი', icon: '/icons/printer.png' if show_actions
         t.action network_new_customer_paybill_url(id: application.id), label: 'საგ. დავალება', icon: '/icons/clipboard-task.png' if show_actions
         t.action network_edit_new_customer_url(id: application.id), label: 'შეცვლა', icon: '/icons/pencil.png' if (show_actions and app_editable?(application))
+        t.action network_change_dates_url(id: application.id), label: 'თარიღების შეცვლა', icon: '/icons/alarm-clock--pencil.png'
         application.transitions.each do |status|
           t.action network_change_new_customer_status_url(id: application.id, status: status), label: Network::NewCustomerApplication.status_name(status), icon: Network::NewCustomerApplication.status_icon(status) if show_actions
         end
@@ -185,12 +186,8 @@ module Network::NewCustomerHelper
           c.number_field :penalty_third_stage, after: 'GEL'
           c.date_field :send_date
           c.date_field :start_date
-          c.date_field :end_date do |real|
-            real.action network_change_real_date_url(id: application.id), icon: '/icons/pencil.png' if (application.end_date.present? and show_actions and app_change_dates?(application))
-          end
-          c.date_field :plan_end_date do |plan|
-            plan.action network_change_plan_date_url(id: application.id), icon: '/icons/pencil.png' if (application.plan_end_date.present? and show_actions and app_change_dates?(application))
-          end
+          c.date_field :end_date
+          c.date_field :plan_end_date
         end
       end
       # 2. customers

@@ -137,9 +137,8 @@ TelasiGe::Application.routes.draw do
       # link customer
       match '/link_bs_customer/:id', action: 'link_bs_customer', as: 'link_bs_customer', via: ['get','post']
       delete '/remove_bs_customer/:id', action: 'remove_bs_customer', as: 'remove_bs_customer'
-      # 
-      match '/change_plan_date/:id', action: 'change_plan_date', as: 'change_plan_date', via: ['get','post']
-      match '/change_real_date/:id', action: 'change_real_date', as: 'change_real_date', via: ['get','post']
+      # change dates
+      match '/change_dates/:id', action: 'change_dates', as: 'change_dates', via: ['get', 'post']
       # print
       get '/paybill/:id', action: 'paybill', as: 'new_customer_paybill'
       get '/print/:id', action: 'print', as: 'new_customer_print'

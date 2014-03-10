@@ -4,6 +4,8 @@
     c.text_field :rs_tin, tag: 'code'
     c.text_field :rs_name
   end
+  f.date_field 'send_date'
+  f.date_field 'start_date'
   f.date_field 'end_date'
   f.submit t('models.general.actions.edit')
   f.cancel_button network_new_customer_url(id: @application.id)
