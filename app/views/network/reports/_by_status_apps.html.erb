@@ -1,17 +1,24 @@
-<h4 class="page-header">სტატუსების მიხედვით</h4>
 <table class="table table-bordered">
   <thead>
     <tr>
-      <th>სტატუსი</th>
+      <th width="200">სტატუსი</th>
       <th>რაოდ.</th>
       <th>თანხა</th>
     </tr>
   </thead>
-  <% clazz::STATUSES.each do |stat| %>
+  <% clazz::STATUSES_REPORT_BY_STATUS.each do |stat| %>
     <tr>
-      <td width="200">
+      <td>
         <img src="<%= clazz.status_icon(stat) %>" />
-        <%= clazz.status_name(stat) %>
+        <%
+          search = { status: stat, send_d1: @d1.strftime('%Y-%m-%d'), send_d2: @d2.strftime('%Y-%m-%d') }
+          if clazz == Network::NewCustomerApplication
+            url = network_new_customers_url(search: search)
+          else
+            url = network_change_power_applications_url(search: search)
+          end
+        %>
+        <%= link_to clazz.status_name(stat), url %>
       </td>
       <td style="text-align: right;">
         <code><%= apps.where(status: stat).count %></code>
@@ -27,7 +34,15 @@
   <% end %>
   <tfoot>
     <tr>
-      <th>ჯამი:</th>
+      <%
+        search = { send_d1: @d1.strftime('%Y-%m-%d'), send_d2: @d2.strftime('%Y-%m-%d') }
+        if clazz == Network::NewCustomerApplication
+          url = network_new_customers_url(search: search)
+        else
+          url = network_change_power_applications_url(search: search)
+        end
+      %>
+      <th><%= link_to 'ჯამი:', url %></th>
       <th style="text-align: right;"><code><%= apps.count %></code></th>
       <th style="text-align: right;">
         <code><%= number_with_precision(apps.sum(:amount) || 0, precision: 2, delimiter: ',') %></code> GEL

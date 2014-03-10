@@ -142,24 +142,12 @@ class Network::NewCustomerController < ApplicationController
     redirect_to network_new_customer_url(id: application.id, tab: 'files'), notice: I18n.t('models.network_new_customer_application.actions.file.deleted')
   end
 
-  def change_plan_date
-    @title = 'გეგმიური დასრულების თარიღის შეცვლა'
+  def change_dates
+    @title = 'თარიღების შეცვლა'
     @application = Network::NewCustomerApplication.find(params[:id])
     if request.post?
-      update_params = params.require(:network_new_customer_application).permit(:plan_end_date).merge(plan_end_date_changed_manually: true)
-      if @application.update_attributes(update_params)
-        @application.save
-        redirect_to network_new_customer_url(id: @application.id), notice: 'გეგმიური დასრულების თარიღი შეცვლილია'
-      end
-    end
-  end
-
-  def change_real_date
-    @title = 'დასრულების თარიღის შეცვლა'
-    @application = Network::NewCustomerApplication.find(params[:id])
-    if request.post?
-      if @application.update_attributes(params.require(:network_new_customer_application).permit(:end_date))
-        redirect_to network_new_customer_url(id: @application.id), notice: 'დასრულების თარიღი შეცვლილია'
+      if @application.update_attributes(params.require(:network_new_customer_application).permit(:send_date, :end_date, :start_date))
+        redirect_to network_new_customer_url(id: @application.id), notice: 'თარიღები შეცვლილია'
       end
     end
   end

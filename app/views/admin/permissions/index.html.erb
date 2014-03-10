@@ -9,6 +9,7 @@ end %>
 <%= table_for @permissions, title: 'უფლებები', icon: '/icons/application-task.png', collapsible: true do |t|
   t.title_action admin_syns_permissions_url, label: 'სინქრონიზაცია', icon: '/icons/arrow-circle.png', method: 'post', confirm: 'ნამდვილად გინდათ სინქრონიზაცია?'
   t.item_action ->(x) { admin_permission_url(id: x.id) }, icon: '/icons/eye.png'
+  t.item_action ->(x) { admin_delete_permission_url(id: x.id) }, icon: '/icons/bin.png', method: 'delete', confirm: 'ნამდვილად გინდათ წაშლა?'
   t.complex_field label: 'მოქმედება' do |t|
     t.text_field 'controller', label: 'კონტროლერი', after: '&rarr;'.html_safe, tag: 'code'
     t.text_field 'action', label: 'მოქმედება', tag: 'code'
