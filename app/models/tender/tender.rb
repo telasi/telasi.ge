@@ -8,7 +8,7 @@ class Tender::Tender
 
    field    :nid,      type: Integer
    field    :tenderno, type: String 
-   has_many :file,  	  class_name: 'Sys::File', as: 'mountable'
+   has_many :files,  	 class_name: 'Sys::File', as: 'mountable'
 
   private
 

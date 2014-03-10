@@ -91,10 +91,10 @@ class Tender::TenderController < ApplicationController
     if request.post? and params[:sys_file]
       @file = Sys::File.new(params.require(:sys_file).permit(:file))
       if @tender.save and @file.save
-      	 @tender.file << @file
+      	 @tender.files << @file
       end
     else
-  	 @file = @tender.file.last || Sys::File.new
+  	 @file = @tender.files.last || Sys::File.new
     end
   end
 
@@ -103,8 +103,8 @@ class Tender::TenderController < ApplicationController
   	if @tenderuser
   		@download = Tender::Download.new(tenderuser: @tenderuser, nid: params[:nid], datetime: Time.now)
   		@tender = Tender::Tender.where(nid: params[:nid]).first
-  		if @tender and @tender.file
-	  	    send_file "#{Dir.getwd}/public/#{@tender.file.last.file_url}"
+  		if @tender and @tender.files
+	  	    send_file "#{Dir.getwd}/public/#{@tender.files.last.file_url}"
 	  	    @download.save
 	  	end
     end
@@ -113,8 +113,8 @@ class Tender::TenderController < ApplicationController
   def delete_file
    @tender = Tender::Tender.where(nid: params[:nid]).first
    if @tender 
-    if @tender.file
-   	 @tender.file.destroy
+    if @tender.files
+   	 @tender.files.destroy
     end
     @tender.destroy
    end
