@@ -13,18 +13,18 @@ test:
   pool: 5
   timeout: 5000
 
-# bs:
-#   adapter: oracle_enhanced
-#   database: 192.168.1.247:1521/orcl
-#   username: bs
-#   password: bs
-
 bs:
   adapter: oracle_enhanced
-  database: 192.168.1.10:1521/orcl
-  username: dimitri
-  password: erty2sami
-  pool:     4
+  database: 192.168.1.247:1521/orcl
+  username: bs
+  password: bs
+
+# bs:
+#   adapter: oracle_enhanced
+#   database: 192.168.1.10:1521/orcl
+#   username: dimitri
+#   password: erty2sami
+#   pool:     4
 
 report_bs:
   adapter:  oracle_enhanced
