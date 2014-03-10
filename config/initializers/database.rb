@@ -27,6 +27,7 @@ Billing::Paypoint.establish_connection         :bs
 Billing::Aviso.establish_connection            :bs
 Billing::Tariff.establish_connection           :bs
 Billing::TariffStep.establish_connection       :bs
+Billing::DebitorSms.establish_connection       :bs
 
 # REPORT server
 Billing::WaterPayment.establish_connection  :report_bs
