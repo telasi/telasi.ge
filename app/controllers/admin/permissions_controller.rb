@@ -23,6 +23,12 @@ class Admin::PermissionsController < ApplicationController
     @permission = Sys::Permission.find(params[:id])
   end
 
+  def delete
+    permission = Sys::Permission.find(params[:id])
+    permission.destroy
+    redirect_to admin_permissions_url, notice: 'უფლება წაშლილია'
+  end
+
   def toggle_public
     permission = Sys::Permission.find(params[:id])
     permission.public_page = !permission.public_page
