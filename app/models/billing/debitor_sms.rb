@@ -10,6 +10,8 @@ class Billing::DebitorSms < ActiveRecord::Base
     if Magti::SEND
       Billing::DebitorSms.where(sent: 0).each do |sms|
         Magti.send_sms(sms.mobile.strip, sms.smstext)
+        sms.sent = 1
+        sms.save
       end
     end
   end
