@@ -14,5 +14,5 @@ class TelasiUploader < CarrierWave::Uploader::Base
     file and file.exists?
   end
 
-  def filename; self.url.split('/').last end
+  def filename; self.url.split('/').last rescue nil end
 end
