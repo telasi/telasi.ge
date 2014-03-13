@@ -63,19 +63,19 @@
   </td>
   <td style="text-align: right;">
     <% amnt = apps1.sum(:penalty1) || 0 %>
-    <code><%= number_with_precision 0, precision: 2, delimiter: ',' %></code> GEL
+    <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL
   </td>
   <td style="text-align: right;">
     <% amnt = (apps2.sum(:penalty1) || 0) + (apps2.sum(:penalty2) || 0) %>
-    <code><%= number_with_precision 0, precision: 2, delimiter: ',' %></code> GEL
+    <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL
   </td>
   <td style="text-align: right;">
     <% amnt = (apps3.sum(:penalty1) || 0) + (apps3.sum(:penalty2) || 0) + (apps3.sum(:penalty3) || 0) %>
-    <code><%= number_with_precision 0, precision: 2, delimiter: ',' %></code> GEL
+    <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL
   </td>
   <td style="text-align: right;">
     <%
       amnt = (apps.sum(:penalty1) || 0) + (apps.sum(:penalty2) || 0) + (apps.sum(:penalty3) || 0) %>
-    <code><%= number_with_precision 0, precision: 2, delimiter: ',' %></code> GEL
+    <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL
   </td>
 </tr>
