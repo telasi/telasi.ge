@@ -21,6 +21,7 @@ class Network::NewCustomerApplication
   include Network::BsBase
 
   belongs_to :user, class_name: 'Sys::User'
+  belongs_to :tariff, class_name: 'Network::NewCustomerTariff'
   field :online, type: Mongoid::Boolean, default: false # ონლაინ არის შევსებული?
   field :number,    type: String
   field :payment_id, type: Integer
@@ -359,6 +360,7 @@ class Network::NewCustomerApplication
     tariff = Network::NewCustomerTariff.tariff_for(self.voltage, self.power)
     if tariff
       if power > 0
+        self.tariff = tariff
         tariff_days = self.need_resolution ? tariff.days_to_complete : tariff.days_to_complete_without_resolution
         self.amount = tariff.price_gel
         self.days = tariff_days
@@ -374,6 +376,7 @@ class Network::NewCustomerApplication
       if power > 0
         self.amount = nil
         self.days = nil
+        self.tariff = nil
       end
     end
   end
