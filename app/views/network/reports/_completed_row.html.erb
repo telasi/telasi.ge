@@ -1,0 +1,81 @@
+<%
+  detail_record = !defined?(power_from)
+  summary_record = !defined?(voltage)
+  clazz = detail_record ? (summary_record ? 'danger' : 'success') : 'default'
+%>
+<tr class="<%= clazz %>">
+  <% if summary_record %>
+    <td rowspan="2" style="vertical-align: middle;">ჯამი</td>
+  <% elsif detail_record %>
+    <td rowspan="2" style="vertical-align: middle;">
+      <code><%= voltage rescue nil %></code>
+    </td>
+  <% else %>
+    <td rowspan="2" style="vertical-align: middle;">
+      <code><%= voltage %></code> <br>
+      <code><%= power_from %></code>/<code><%= power_to %></code>kWh
+    </td>
+  <% end %>
+  <!-- apps0 -->
+  <td rowspan="2" style="text-align: right; vertical-align: middle;">
+    <code><%= apps0.count %></code>
+  </td>
+  <td style="text-align: right;">
+    <% amnt = apps0.sum(:amount) || 0 %>
+    <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL
+  </td>
+  <!-- apps1 -->
+  <td style="text-align: right; vertical-align: middle;" rowspan="2">
+    <code><%= apps1.count %></code>
+  </td>
+  <td style="text-align: right;">
+    <% amnt = apps1.sum(:amount) || 0 %>
+    <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL
+  </td>
+  <!-- apps2 -->
+  <td style="text-align: right; vertical-align: middle;" rowspan="2">
+    <code><%= apps2.count %></code>
+  </td>
+  <td style="text-align: right;">
+    <% amnt = apps2.sum(:amount) || 0 %>
+    <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL
+  </td>
+  <!-- apps3 -->
+  <td style="text-align: right; vertical-align: middle;" rowspan="2">
+    <code><%= apps3.count %></code>
+  </td>
+  <td style="text-align: right;">
+    <% amnt = apps3.sum(:amount) || 0 %>
+    <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL
+  </td>
+  <!-- all apps -->
+  <td style="text-align: right; vertical-align: middle;" rowspan="2">
+    <code><%= apps.count %></code>
+  </td>
+  <td style="text-align: right;">
+    <% amnt = apps.sum(:amount) || 0 %>
+    <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL
+  </td>
+</tr>
+<tr class="<%= clazz %>">
+  <td style="text-align: right;">
+    <code><%= number_with_precision 0, precision: 2, delimiter: ',' %></code> GEL
+  </td>
+  <td style="text-align: right;">
+    <% amnt = apps1.sum(:penalty1) || 0 %>
+    <code><%= number_with_precision 0, precision: 2, delimiter: ',' %></code> GEL
+  </td>
+  <td style="text-align: right;">
+    <% amnt = (apps2.sum(:penalty1) || 0) + (apps2.sum(:penalty2) || 0) %>
+    <code><%= number_with_precision 0, precision: 2, delimiter: ',' %></code> GEL
+  </td>
+  <td style="text-align: right;">
+    <% amnt = (apps3.sum(:penalty1) || 0) + (apps3.sum(:penalty2) || 0) + (apps3.sum(:penalty3) || 0) %>
+    <code><%= number_with_precision 0, precision: 2, delimiter: ',' %></code> GEL
+  </td>
+  <td style="text-align: right;">
+    <%
+      amnt = (apps.sum(:penalty1) || 0) + (apps.sum(:penalty2) || 0) + (apps.sum(:penalty3) || 0) %>
+    <code><%= number_with_precision 0, precision: 2, delimiter: ',' %></code> GEL
+  </td>
+</tr>
