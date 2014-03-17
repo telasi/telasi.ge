@@ -27,6 +27,7 @@ class Network::NewCustomerController < ApplicationController
       rel = rel.where(:power.gte => @search[:power1]) if @search[:power1] and @search[:power1].to_i > 0
       rel = rel.where(:power.lte => @search[:power2]) if @search[:power2] and @search[:power1].to_i > 0
       if @search[:penalty].present?
+        rel = rel.where(:status.in => [Network::NewCustomerApplication::STATUS_COMPLETE, Network::NewCustomerApplication::STATUS_IN_BS])
         case @search[:penalty]
         when '0' then rel = rel.where(:penalty1    => 0, :penalty2 => 0, :penalty3 => 0)
         when '1' then rel = rel.where(:penalty1.gt => 0, :penalty2 => 0, :penalty3 => 0)
