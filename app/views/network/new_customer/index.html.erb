@@ -38,6 +38,10 @@
 end %>
 <%
   idx = request.url.index('?')
-  xlsx_url = "#{request.url[0..idx-1]}.xlsx?#{request.url[idx+1..-1]}"
+  if idx
+    xlsx_url = "#{request.url[0..idx-1]}.xlsx?#{request.url[idx+1..-1]}"
+  else
+    xlsx_url = "#{request.url}.xlsx"
+  end
 %>
 <%= new_customer_table @applications, xlsx: xlsx_url %>
