@@ -24,8 +24,16 @@ class Network::NewCustomerController < ApplicationController
       rel = rel.where(:end_date.gte => @search[:real_d1]) if @search[:real_d1].present?
       rel = rel.where(:end_date.lte => @search[:real_d2]) if @search[:real_d2].present?
       rel = rel.where(voltage: @search[:voltage]) if @search[:voltage].present?
-      rel = rel.where(:power.gte => @search[:power1]) if @search[:power1]
-      rel = rel.where(:power.lte => @search[:power2]) if @search[:power2]
+      rel = rel.where(:power.gte => @search[:power1]) if @search[:power1] and @search[:power1].to_i > 0
+      rel = rel.where(:power.lte => @search[:power2]) if @search[:power2] and @search[:power1].to_i > 0
+      if @search[:penalty].present?
+        case @search[:penalty]
+        when '0' then rel = rel #.where(:penalty1    => 0, :penalty2 => 0, :penalty3 => 0)
+        when '1' then rel = rel.where(:penalty1.gt => 0, :penalty2 => 0, :penalty3 => 0)
+        when '2' then rel = rel.where(:penalty2.gt => 0, :penalty3 => 0)
+        when '3' then rel = rel.where(:penalty3.gt => 0)
+        end
+      end
     end
     @applications = rel.desc(:_id).paginate(page: params[:page_new], per_page: 10)
   end

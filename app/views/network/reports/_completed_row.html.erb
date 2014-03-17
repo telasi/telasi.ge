@@ -8,11 +8,13 @@
     <td rowspan="2" style="vertical-align: middle;">ჯამი</td>
   <% elsif detail_record %>
     <td rowspan="2" style="vertical-align: middle;">
-      <code><%= voltage rescue nil %></code>
+      <% srch_params = { voltage: voltage, send_d1: @d1, send_d2: @d2 } %>
+      <code><%= link_to voltage, network_new_customers_url(search: srch_params) %></code>
     </td>
   <% else %>
     <td rowspan="2" style="vertical-align: middle;">
-      <code><%= voltage %></code> <br>
+      <% srch_params = { voltage: voltage, power1: power_from, power2: power_to, send_d1: @d1, send_d2: @d2 } %>
+      <code><%= link_to voltage, network_new_customers_url(search: srch_params) %></code> <br>
       <code><%= power_from %></code>/<code><%= power_to %></code>kWh
     </td>
   <% end %>

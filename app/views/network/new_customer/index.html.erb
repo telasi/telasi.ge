@@ -30,6 +30,9 @@
         c.date_field 'plan_d1'
         c.date_field 'plan_d2'
       end
+      f.combo_field 'penalty', label: 'ჯარიმა', collection: {
+        'დროულად' => '0', 'ეტაპი I' => '1', 'ეტაპი II' => '2', 'ეტაპი III' => '3'
+        }, empty: '--'
     end
   end
 end %>
