@@ -3,7 +3,15 @@ module NewCustomerHelper
   def voltage_collection
     { I18n.t('models.network_new_customer_item.voltage_220') => '220',
       I18n.t('models.network_new_customer_item.voltage_380') => '380',
-      I18n.t('models.network_new_customer_item.voltage_610') => '6/10'
+      I18n.t('models.network_new_customer_item.voltage_610') => '6/10',
+    }
+  end
+
+  def voltage_collection_change_power
+    { I18n.t('models.network_new_customer_item.voltage_220') => '220',
+      I18n.t('models.network_new_customer_item.voltage_380') => '380',
+      I18n.t('models.network_new_customer_item.voltage_610') => '6/10',
+      I18n.t('models.network_new_customer_item.voltage_35110') => '35/110',
     }
   end
 

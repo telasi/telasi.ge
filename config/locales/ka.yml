@@ -523,6 +523,7 @@ ka:
       voltage_220: 220 ვ
       voltage_380: 380 ვ
       voltage_610: 6/10 კვ
+      voltage_35110: 35/110 კვ
       unit_volt: ვ
       unit_kvolt: კვ
       unit_kwt: კვტ

@@ -11,6 +11,7 @@ class Network::ChangePowerApplication
   VOLTAGE_220 = '220'
   VOLTAGE_380 = '380'
   VOLTAGE_610 = '6/10'
+  VOLTAGE_35110 = '35/110'
   TYPE_CHANGE_POWER  = 0
   TYPE_CHANGE_SOURCE = 1
   TYPE_SPLIT         = 2
@@ -97,11 +98,11 @@ class Network::ChangePowerApplication
   end
 
   def unit
-    if self.voltage == '6/10' then I18n.t('models.network_change_power_application.unit_kvolt')
+    if [VOLTAGE_610, VOLTAGE_35110].include?(self.voltage) then I18n.t('models.network_change_power_application.unit_kvolt')
     else I18n.t('models.network_change_power_application.unit_volt') end
   end
   def old_unit
-    if self.old_voltage == '6/10' then I18n.t('models.network_change_power_application.unit_kvolt')
+    if [VOLTAGE_610, VOLTAGE_35110].include?(self.voltage) then I18n.t('models.network_change_power_application.unit_kvolt')
     else I18n.t('models.network_change_power_application.unit_volt') end
   end
   def bank_name; Bank.bank_name(self.bank_code) end
