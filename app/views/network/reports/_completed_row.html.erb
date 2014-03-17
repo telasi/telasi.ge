@@ -4,23 +4,30 @@
   clazz = detail_record ? (summary_record ? 'danger' : 'success') : 'default'
 %>
 <tr class="<%= clazz %>">
+  <%
+    if summary_record
+      srch_params = { send_d1: @d1, send_d2: @d2 }
+    elsif detail_record
+      srch_params = { voltage: voltage, send_d1: @d1, send_d2: @d2 }
+    else
+      srch_params = { voltage: voltage, power1: power_from, power2: power_to, send_d1: @d1, send_d2: @d2 }
+    end
+  %>
   <% if summary_record %>
     <td rowspan="2" style="vertical-align: middle;">ჯამი</td>
   <% elsif detail_record %>
     <td rowspan="2" style="vertical-align: middle;">
-      <% srch_params = { voltage: voltage, send_d1: @d1, send_d2: @d2 } %>
-      <code><%= link_to voltage, network_new_customers_url(search: srch_params) %></code>
+      <code><%= voltage%></code>
     </td>
   <% else %>
     <td rowspan="2" style="vertical-align: middle;">
-      <% srch_params = { voltage: voltage, power1: power_from, power2: power_to, send_d1: @d1, send_d2: @d2 } %>
-      <code><%= link_to voltage, network_new_customers_url(search: srch_params) %></code> <br>
+      <code><%= voltage %></code> <br>
       <code><%= power_from %></code>/<code><%= power_to %></code>kWh
     </td>
   <% end %>
   <!-- apps0 -->
   <td rowspan="2" style="text-align: right; vertical-align: middle;">
-    <code><%= apps0.count %></code>
+    <code><%= link_to apps0.count, network_new_customers_url(search: srch_params.merge(penalty: 0)) %></code>
   </td>
   <td style="text-align: right;">
     <% amnt = apps0.sum(:amount) || 0 %>
@@ -28,7 +35,7 @@
   </td>
   <!-- apps1 -->
   <td style="text-align: right; vertical-align: middle;" rowspan="2">
-    <code><%= apps1.count %></code>
+    <code><%= link_to apps1.count, network_new_customers_url(search: srch_params.merge(penalty: 1)) %></code>
   </td>
   <td style="text-align: right;">
     <% amnt = apps1.sum(:amount) || 0 %>
@@ -36,7 +43,7 @@
   </td>
   <!-- apps2 -->
   <td style="text-align: right; vertical-align: middle;" rowspan="2">
-    <code><%= apps2.count %></code>
+    <code><%= link_to apps2.count, network_new_customers_url(search: srch_params.merge(penalty: 2)) %></code>
   </td>
   <td style="text-align: right;">
     <% amnt = apps2.sum(:amount) || 0 %>
@@ -44,7 +51,7 @@
   </td>
   <!-- apps3 -->
   <td style="text-align: right; vertical-align: middle;" rowspan="2">
-    <code><%= apps3.count %></code>
+    <code><%= link_to apps3.count, network_new_customers_url(search: srch_params.merge(penalty: 3)) %></code>
   </td>
   <td style="text-align: right;">
     <% amnt = apps3.sum(:amount) || 0 %>
@@ -52,7 +59,7 @@
   </td>
   <!-- all apps -->
   <td style="text-align: right; vertical-align: middle;" rowspan="2">
-    <code><%= apps.count %></code>
+    <code><%= link_to apps.count, network_new_customers_url(search: srch_params) %></code>
   </td>
   <td style="text-align: right;">
     <% amnt = apps.sum(:amount) || 0 %>
