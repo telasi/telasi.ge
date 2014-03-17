@@ -36,4 +36,8 @@
     end
   end
 end %>
-<%= new_customer_table @applications %>
+<%
+  idx = request.url.index('?')
+  xlsx_url = "#{request.url[0..idx-1]}.xlsx?#{request.url[idx+1..-1]}"
+%>
+<%= new_customer_table @applications, xlsx: xlsx_url %>

@@ -48,6 +48,8 @@ gem 'magti'
 # pdf
 gem 'prawn'
 gem 'prawn_rails'
+# excel
+gem 'axlsx_rails'
 
 group :test do
   gem 'ruby-prof'

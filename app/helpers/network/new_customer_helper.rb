@@ -3,6 +3,7 @@ module Network::NewCustomerHelper
   def new_customer_table(applications, opts = {})
     table_for applications, title: 'ახალი აბონენტის განცხადებები', icon: '/icons/user--plus.png', collapsible: true do |t|
       t.title_action network_add_new_customer_url, label: 'ახალი განცხადება', icon: '/icons/plus.png'
+      t.title_action opts[:xlsx], label: 'ექსელში გადმოწერა', icon: '/icons/document-excel.png' if opts[:xlsx].present?
       t.text_field 'effective_number', i18n: 'number', tag: 'code'
       t.complex_field i18n: 'status_name', required: true do |c|
         c.image_field :status_icon

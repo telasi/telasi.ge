@@ -35,7 +35,10 @@ class Network::NewCustomerController < ApplicationController
         end
       end
     end
-    @applications = rel.desc(:_id).paginate(page: params[:page_new], per_page: 10)
+    respond_to do |format|
+      format.html { @applications = rel.desc(:_id).paginate(page: params[:page_new], per_page: 10) }
+      format.xlsx { @applications = rel.desc(:_id).paginate(page: 1, per_page: 1000) }
+    end
   end
 
   def new_customer
