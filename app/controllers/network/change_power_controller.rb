@@ -17,6 +17,9 @@ class Network::ChangePowerController < ApplicationController
       rel = rel.where(:start_date.lte => @search[:start_d2]) if @search[:start_d2].present?
       rel = rel.where(:end_date.gte => @search[:end_d1]) if @search[:end_d1].present?
       rel = rel.where(:end_date.lte => @search[:end_d2]) if @search[:end_d2].present?
+      rel = rel.where(voltage: @search[:voltage]) if @search[:voltage].present?
+      rel = rel.where(:power.gte => @search[:power1]) if @search[:power1].present?
+      rel = rel.where(:power.lte => @search[:power2]) if @search[:power2].present?
     end
     @applications = rel.desc(:_id).paginate(page: params[:page_change], per_page: 10)
   end

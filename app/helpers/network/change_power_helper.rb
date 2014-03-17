@@ -53,9 +53,9 @@ module Network::ChangePowerHelper
         t.combo_field :bank_code, collection: banks, empty: '-- აარჩიეთ ანგარიში --'
         t.text_field  :bank_account, width: 300
         f.select_field :customer, select_customer_url, label: 'ბილინგის აბონენტი', search_width: 900
-        t.combo_field :old_voltage, collection: voltage_collection, empty: false
+        t.combo_field :old_voltage, collection: voltage_collection_change_power, empty: false
         t.number_field :old_power, after: 'kWh', width: 100
-        t.combo_field :voltage, collection: voltage_collection, empty: false, required: true
+        t.combo_field :voltage, collection: voltage_collection_change_power, empty: false, required: true
         t.number_field :power, after: 'kWh', width: 100, required: true
         t.text_field :note, width: 400
       end

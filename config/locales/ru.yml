@@ -498,14 +498,14 @@ ru:
       address_code: Кадастровый код
       address_code_hint: "Укажите кадастровый код объекта, для которого устанавливается счетчик"
       voltage: Уровень напряжения
-      voltage_220: 220 в
-      voltage_380: 380 в
-      voltage_610: 6/10 Кв
+      voltage_220: 220 В
+      voltage_380: 380 В
+      voltage_610: 6/10 кВ
       unit_volt: в
-      unit_kvolt: Кв
-      unit_kwt: КВт
+      unit_kvolt: кВ
+      unit_kwt: кВт
       unit_days: дни
-      power: "Мощность, КВт"
+      power: "Мощность, кВт"
       voltage_and_power: Напряжение и мощность
       use: Тип счетчика
       use_personal: Для собственных нужд

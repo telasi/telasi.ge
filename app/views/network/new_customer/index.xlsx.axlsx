@@ -1,0 +1,23 @@
+wb = xlsx_package.workbook
+style_header = wb.styles.add_style b: true, alignment: { horizontal: :center }
+wb.add_worksheet(name: "report") do |sheet|
+  sheet.add_row [
+    'ნომერი', 'სტატუსი', 'საიდ.კოდი', 'დასახელება', 'დღგ-ს გადამხდელი',
+    "საყოფაც?", "ფაქტურა?",
+    "გამოგზ.თარიღი", "დაწყ. თარიღი", "რეალრ. დასრ.", "გეგმიურ. დასრულ.",
+    'ელ.ფოსტა', 'მობილური', 'რეგიონი', 'იურ.მისამართი', 'საკ.კოდი', 'ფაქტ.მისამართი',
+    'ბანკი', 'ანგარიშის #',
+    "აბ.#", "აბონენტი",
+    "თანხა", "ვადა (დღე)", "დარჩენილია", "ჯარიმა I", "ჯარიმა II", "ჯარიმა III",
+  ]
+  @applications.each do |app|
+    sheet.add_row [app.number, app.status_name, app.rs_tin, app.rs_name, app.vat_name,
+      app.personal_use ? 'კი' : 'არა', app.need_factura ? 'კი' : 'არა',
+      app.send_date, app.start_date, app.end_date, app.plan_end_date,
+      app.email, app.mobile, app.region, app.address, app.address_code, app.work_address,
+      "#{app.bank_name} (#{app.bank_code})", app.bank_account,
+      app.customer ? app.customer.accnumb.to_ka : "", app.customer ? app.customer.custname.to_ka : "",
+      app.amount, app.days, app.remaining, app.penalty1, app.penalty2, app.penalty3,
+    ]
+  end
+end

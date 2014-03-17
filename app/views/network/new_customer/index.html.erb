@@ -8,6 +8,11 @@
     f.text_field 'work_address', label: t('models.network_new_customer_application.work_address')
     f.combo_field 'stage', label: t('models.network_request_item.stage'), collection: Hash[*(Network::Stage.asc(:numb).map{|x| [x.name, x.id]}.flatten)], empty: t('models.network_new_customer_application.chose')
     f.combo_field 'online', label: 'ონლაინი?', collection: { 'კი' => 'yes', 'არა' => 'no' }, empty: '--'
+    f.combo_field 'voltage', label: 'ძაბვა', collection: voltage_collection, empty: '--'
+    f.complex_field label: 'სიმძლავრე' do |c|
+      c.number_field 'power1', width: 100
+      c.number_field 'power2', width: 100
+    end
     f.col2 do |f|
       f.complex_field label: t('models.network_new_customer_application.send_date') do |c|
         c.date_field 'send_d1'
@@ -25,7 +30,14 @@
         c.date_field 'plan_d1'
         c.date_field 'plan_d2'
       end
+      f.combo_field 'penalty', label: 'ჯარიმა', collection: {
+        'დროულად' => '0', 'ეტაპი I' => '1', 'ეტაპი II' => '2', 'ეტაპი III' => '3'
+        }, empty: '--'
     end
   end
 end %>
-<%= new_customer_table @applications %>
+<%
+  idx = request.url.index('?')
+  xlsx_url = "#{request.url[0..idx-1]}.xlsx?#{request.url[idx+1..-1]}"
+%>
+<%= new_customer_table @applications, xlsx: xlsx_url %>

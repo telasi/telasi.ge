@@ -22,11 +22,11 @@
   <thead>
     <tr>
       <th rowspan="2" style="text-align: center; vertical-align: middle;">ტარიფი</th>
-      <th colspan="2" style="text-align: center;">დროული</th>
-      <th colspan="2" style="text-align: center;">I ეტაპი</th>
-      <th colspan="2" style="text-align: center;">II ეტაპი</th>
-      <th colspan="2" style="text-align: center;">III ეტაპი</th>
-      <th colspan="2" style="text-align: center;">ჯამი</th>
+      <th colspan="2" style="text-align: center;"><%= link_to 'დროული', network_new_customers_url(search: {penalty: 0, send_d1: @d1, send_d2: @d2}) %></th>
+      <th colspan="2" style="text-align: center;"><%= link_to 'I ეტაპი', network_new_customers_url(search: {penalty: 1, send_d1: @d1, send_d2: @d2}) %></th>
+      <th colspan="2" style="text-align: center;"><%= link_to 'II ეტაპი', network_new_customers_url(search: {penalty: 2, send_d1: @d1, send_d2: @d2}) %></th>
+      <th colspan="2" style="text-align: center;"><%= link_to 'III ეტაპი', network_new_customers_url(search: {penalty: 3, send_d1: @d1, send_d2: @d2}) %></th>
+      <th colspan="2" style="text-align: center;"><%= link_to 'ჯამი', network_new_customers_url(search: {send_d1: @d1, send_d2: @d2}) %></th>
     </tr>
     <tr>
       <% 5.times do %>
