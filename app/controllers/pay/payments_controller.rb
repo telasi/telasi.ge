@@ -37,6 +37,7 @@ class Pay::PaymentsController < ApplicationController
     @search = params[:search] == 'clear' ? {} : params[:search]
     rel = Pay::Payment
     rel = rel.where(user: current_user)
+    rel = rel.in(gstatus: [Pay::Payment::GSTATUS_OK, Pay::Payment::GSTATUS_PROCESS, Pay::Payment::GSTATUS_ERROR])
     if @search
       rel = rel.where(serviceid: @search[:serviceid].mongonize) if @search[:serviceid].present?
       rel = rel.where(ordercode: @search[:ordercode]) if @search[:ordercode].present?
