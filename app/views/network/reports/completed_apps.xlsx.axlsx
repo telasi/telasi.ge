@@ -4,7 +4,6 @@ apps2 = @newapps.where(:penalty2.gt => 0, :penalty3 => 0)
 apps3 = @newapps.where(:penalty3.gt => 0)
 
 wb = xlsx_package.workbook
-style_header = wb.styles.add_style b: true, alignment: { horizontal: :center }
 wb.add_worksheet(name: "completed") do |sheet|
   sheet.add_row [ 'საწყისი თარიღი:', @d1.strftime('%d-%b-%Y') ]
   sheet.add_row [ 'საბოლოო თარიღი:', @d2.strftime('%d-%b-%Y') ]
@@ -21,7 +20,6 @@ wb.add_worksheet(name: "completed") do |sheet|
   curr_tariff = tariffs.first
 
   tariffs.each do |t|
-    make_summary = (curr_tariff.voltage != t.voltage)
     a0 = apps0.where(tariff: t)
     a1 = apps1.where(tariff: t)
     a2 = apps2.where(tariff: t)

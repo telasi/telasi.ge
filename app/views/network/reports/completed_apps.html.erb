@@ -6,7 +6,7 @@
 %>
 <h2 class="page-header"><%= @title %></h2>
 <div class="pull-right">
-  <a href="<%= network_completed_apps_report_url(d1: @d1, d2: @d2, format: 'xlsx') %>">
+  <a href="<%= network_completed_apps_report_url(d1: @d1.strftime('%d-%b-%Y'), d2: @d2.strftime('%d-%b-%Y'), format: 'xlsx') %>">
     <img src="/icons/document-excel.png"/> ექსელში გადმოწერა
   </a>
 </div>
