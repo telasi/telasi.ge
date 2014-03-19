@@ -1,23 +1,15 @@
-<!-- <div class="row">
-  <div class="col-sm-8">
-  	<div class="panel panel-default">
-
-	  <div class="panel-heading">
-	    <h4 style="margin: 0;"><%= t('form.confirm') %></h4>
-	  </div>
-
-      <div class="panel-body"> -->
- <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title" id="myModalLabel"><%= t('form.confirm') %></h4>
+<div class="row">
+  <div class="col-sm-3"></div>
+  <div class="col-sm-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 id="myModalLabel"><%= t('form.confirm') %></h4>
       </div> 
- <div class="modal-body"> 
-        <%= form_tag 'https://www.pay.ge/pay', method: :post do  %>
+      <%= form_tag 'https://www.pay.ge/pay', method: :post do  %>
+        <div class="panel-body">
           <% if @error.present? %><div class="alert alert-danger"><%= @error %></div><% end %>
           <%= hidden_field_tag :merchant, @payment.merchant, class: 'form-control' %>
           <%= hidden_field_tag :serviceid, @payment.serviceid, class: 'form-control' %>
-
           <div class="form-group">
            <%= label_tag t('payment.description') %>
            <%= text_field_tag :description_show, @payment.description, disabled: true, class: 'form-control' %>
@@ -44,13 +36,11 @@
           <%= hidden_field_tag :cancelurl, @payment.cancelurl, class: 'form-control' %>
           <%= hidden_field_tag :errorurl, @payment.errorurl, class: 'form-control' %>
           <%= hidden_field_tag :callbackurl, @payment.callbackurl, class: 'form-control' %>
-        <div>
+        </div>
+        <div class="panel-footer">
            <%= submit_tag t('buttons.comfirm'), class: ['btn', 'btn-primary'] %>
         </div>
-
-       <% end %>
-     </div>
-
-   </div> 
-  </div> 
-</div> 
+      <% end %>
+    </div>
+  </div>
+</div>

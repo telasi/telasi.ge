@@ -1,41 +1,28 @@
-<!-- <div class="row">
-  <div class="col-sm-8">
-  	<div class="panel panel-default">
-
-	  <div class="panel-heading">
-	    <h4 style="margin: 0;"><%= servicetext(params[:serviceid]) %></h4>
-	  </div>
-
-	      <div class="panel-body"> -->
- <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
+<div class="row">
+  <div class="col-sm-3"></div>
+  <div class="col-sm-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
         <h4 class="modal-title" id="myModalLabel"><%= servicetext(params[:serviceid]) %></h4>
-      </div> 
- <div class="modal-body"> 	      	
-	        <%= form_for @payment, url: pay_show_form_url, role: 'form', method: 'post' do |f| %>
-	           <%= f.hidden_field :merchant %>
-	           <%= f.hidden_field :serviceid %>
-	           <%= f.hidden_field :ordercode %>
-	           <%= f.hidden_field :clientname %>
-	           <%= f.hidden_field :description %>
-	           <%= f.hidden_field :check %>
-	           <%= f.hidden_field :lng %>
-	           <%= f.hidden_field :testmode %>
-             
-               <%= f.b_text_field @payment.get_user_field(), label: t("models.sys_user.#{@payment.get_user_field()}"), autofocus: true %>
-               <%= f.b_text_field :amount, label: t('form.action.amount')%>
-
-	           <%= f.hidden_field :currency %>
-<!--	           <div class="form-group">
-	           	 <%= label_tag 'currency', t('payment.currency') %> 
-	             <%= f.text_field :currency, disabled: true, placeholder: 'GEL', class: 'form-control' %>
-	           </div> -->
-          <div>
-            <%= submit_tag t('buttons.pay'), class: ['btn', 'btn-primary'] %>
-          </div>
-        <% end %>
-	      </div>
-	</div>
+      </div>
+      <%= form_for @payment, url: pay_show_form_url, role: 'form', method: 'post' do |f| %>
+        <div class="panel-body">
+          <%= f.hidden_field :merchant %>
+          <%= f.hidden_field :serviceid %>
+          <%= f.hidden_field :ordercode %>
+          <%= f.hidden_field :clientname %>
+          <%= f.hidden_field :description %>
+          <%= f.hidden_field :check %>
+          <%= f.hidden_field :lng %>
+          <%= f.hidden_field :testmode %>
+          <%= f.b_text_field @payment.get_user_field(), label: t("models.sys_user.#{@payment.get_user_field()}"), autofocus: true %>
+          <%= f.b_text_field :amount, label: t('form.action.amount')%>
+          <%= f.hidden_field :currency %>
+        </div>
+        <div class="panel-footer">
+          <%= submit_tag t('buttons.pay'), class: ['btn', 'btn-primary'] %>
+        </div>
+      <% end %>
+    </div>
   </div>
 </div>

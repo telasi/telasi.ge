@@ -1,27 +1,27 @@
-<!--<div class="modal fade" id="customer-debt" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
--->  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
+<div class="row">
+  <div class="col-sm-3"></div>
+  <div class="col-sm-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
         <h4 class="modal-title" id="myModalLabel"><%= t('services.title') %></h4>
       </div> 
- <div class="modal-body"> 
-  <ul class="list-group">
-    <% Payge::PAY_SERVICES.each do |service| %>
-      <li class="list-group-item">
-      <i class="fa <%= service[:icon] %>"></i>
-      <div class="pull-right">
-        <%= link_to '<i class="fa fa-arrow-right"></i>'.html_safe, pay_show_form_url(:serviceid => service[:ServiceID]), :class => "btn btn-primary btn-xs" %>
+      <div class="panel-body"> 
+        <ul class="list-group">
+          <% Payge::PAY_SERVICES.each do |service| %>
+            <li class="list-group-item">
+              <i class="fa <%= service[:icon] %>"></i>
+              <div class="pull-right">
+                <%= link_to '<i class="fa fa-arrow-right"></i>'.html_safe, pay_show_form_url(:serviceid => service[:ServiceID]), :class => "btn btn-primary btn-xs" %>
+              </div>
+              &nbsp;  
+              <%= servicetext(service[:ServiceID]) %>
+            </li>
+        <% end %>
+        </ul>
       </div>
-      &nbsp;  
-      <%= servicetext(service[:ServiceID]) %>
-      </li>
-    <% end %>
-  </ul>
-<div style="margin-top:20px;" align="center">
-  <%= link_to t('buttons.history'), pay_user_index_url, :class => "btn btn-primary btn-sm" %>
+      <div class="panel-footer" align="center">
+        <%= link_to t('buttons.history'), pay_user_index_url, :class => "btn btn-primary btn-sm" %>
+      </div>
+    </div>
+  </div>
 </div>
-
-  </div>
-     </div>
-  </div>
- <!--</div> -->
