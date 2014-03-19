@@ -20,9 +20,9 @@
         <li class="<%= active?('calculator#*') ? 'active' : 'common' %>" data-no-turbolink>
           <%= link_to t('menu.calculator'), calculator_url %>
         </li>
-        <li class="<%= active?('services#*') ? 'active' : 'common' %>">
+        <!--li class="<%= active?('services#*') ? 'active' : 'common' %>">
           <%= link_to t('menu.payments'), pay_services_url %>
-        </li>
+        </li-->
         <% if current_user and current_user.tender_admin? %>
          <%= render partial: 'layouts/tender' %>
         <% end %>
