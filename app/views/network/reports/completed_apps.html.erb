@@ -5,6 +5,11 @@
   apps3 = @newapps.where(:penalty3.gt => 0)
 %>
 <h2 class="page-header"><%= @title %></h2>
+<div class="pull-right">
+  <a href="<%= network_completed_apps_report_url(d1: @d1, d2: @d2, format: 'xlsx') %>">
+    <img src="/icons/document-excel.png"/> ექსელში გადმოწერა
+  </a>
+</div>
 <form method="GET">
   თარიღების ინტერვალი:
   <input name="d1" class="datepicker" style="width:100px;" value="<%= @d1.strftime('%d-%b-%Y') %>" />-დან
