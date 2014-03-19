@@ -1,0 +1,16 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "completed") do |sheet|
+  sheet.add_row [ 'საწყისი თარიღი:', @d1.strftime('%d-%b-%Y') ]
+  sheet.add_row [ 'საბოლოო თარიღი:', @d2.strftime('%d-%b-%Y') ]
+  sheet.add_row [  ]
+  sheet.add_row [
+    'ძაბვა', 'რაოდენობა', 'თანხა'
+  ]
+
+  voltage_collection_change_power.values.each do |v|
+    apps = @apps.where(voltage: v)
+    sheet.add_row [
+      "#{v} ", apps.count, (apps.sum(:amount) || 0)
+    ]
+  end
+end

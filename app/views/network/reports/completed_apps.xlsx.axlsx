@@ -1,0 +1,35 @@
+apps0 = @newapps.where(:penalty1    => 0, :penalty2 => 0, :penalty3 => 0)
+apps1 = @newapps.where(:penalty1.gt => 0, :penalty2 => 0, :penalty3 => 0)
+apps2 = @newapps.where(:penalty2.gt => 0, :penalty3 => 0)
+apps3 = @newapps.where(:penalty3.gt => 0)
+
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "completed") do |sheet|
+  sheet.add_row [ 'საწყისი თარიღი:', @d1.strftime('%d-%b-%Y') ]
+  sheet.add_row [ 'საბოლოო თარიღი:', @d2.strftime('%d-%b-%Y') ]
+  sheet.add_row [  ]
+  sheet.add_row [
+    'ძაბვა', 'სიმძლავრე',
+    'დროული: რაოდ', 'დროული: თანხა',
+    'I ეტაპი: რაოდ', 'I ეტაპი: თანხა', 'I ეტაპი: კომპენსაცია',
+    'II ეტაპი: რაოდ', 'II ეტაპი: თანხა', 'II ეტაპი: კომპენსაცია',
+    'III ეტაპი: რაოდ', 'III ეტაპი: თანხა', 'III ეტაპი: კომპენსაცია',
+  ]
+
+  tariffs = Network::NewCustomerTariff.asc(:voltage, :power_from)
+  curr_tariff = tariffs.first
+
+  tariffs.each do |t|
+    a0 = apps0.where(tariff: t)
+    a1 = apps1.where(tariff: t)
+    a2 = apps2.where(tariff: t)
+    a3 = apps3.where(tariff: t)
+    sheet.add_row [
+      "#{t.voltage} ", "#{t.power_from}-#{t.power_to} kWh",
+      a0.count, (a0.sum(:amount) || 0),
+      a1.count, (a1.sum(:amount) || 0), (a1.sum(:penalty1) || 0),
+      a2.count, (a2.sum(:amount) || 0), (a2.sum(:penalty1) || 0) + (a2.sum(:penalty2) || 0),
+      a3.count, (a3.sum(:amount) || 0), (a3.sum(:penalty1) || 0) + (a3.sum(:penalty2) || 0)+ (a3.sum(:penalty3) || 0),
+    ]
+  end
+end

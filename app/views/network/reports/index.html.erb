@@ -2,12 +2,13 @@
 <div class="row">
   <div class="col-sm-6">
     <p>
-      <%= link_to 'განცხადებები სტატუსების მიხედვით &rarr;'.html_safe,
-                  network_by_status_report_url, class: ['btn', 'btn-warning'] %>
+      <%= link_to 'განცხადებები სტატუსების მიხედვით &rarr;'.html_safe, network_by_status_report_url, class: ['btn', 'btn-warning'] %>
     </p>
     <p>
-      <%= link_to 'ქსელზე მიერთების შესრულება &rarr;'.html_safe,
-                  network_completed_apps_report_url, class: ['btn', 'btn-danger'] %>
+      <%= link_to 'ქსელზე მიერთების შესრულება &rarr;'.html_safe, network_completed_apps_report_url, class: ['btn', 'btn-danger'] %>
+    </p>
+    <p>
+      <%= link_to 'ქსელში ცვლილების შესრულება &rarr;'.html_safe, network_completed_apps_change_power_report_url, class: ['btn', 'btn-success'] %>
     </p>
   </div>
   <div class="col-sm-6">
