@@ -268,7 +268,7 @@ class Pay::PaymentsController < ApplicationController
 
   def set_status_from_billing(rel)
     rel.all.select{ |r| r.transactioncode and r.gstatus == Pay::Payment::GSTATUS_PROCESS }.each do |rl|
-     pay = Billing::Payment.where(billnumber: rl.transactioncode).first
+     pay = Billing::Payment.where(billnumber: "#{rl.transactioncode} Web").first
      if pay and pay.status == 2
        rl.gstatus = Pay::Payment::GSTATUS_OK
        rl.save
