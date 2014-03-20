@@ -8,6 +8,10 @@ class Network::MessageStrings
   ]
 
   def self.formatted_texts(application)
-    TEXTS.map { |x| x.gsub('$number', application.effective_number.to_s) }
+    if application.respond_to?(:effective_number)
+      TEXTS.map { |x| x.gsub('$number', application.effective_number.to_s) }
+    else
+      TEXTS.map { |x| x.gsub('$number', application.number) }
+    end
   end
 end
