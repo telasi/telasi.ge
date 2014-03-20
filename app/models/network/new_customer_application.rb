@@ -56,7 +56,7 @@ class Network::NewCustomerApplication
   # plan_end_date / end_date, არის თარიღი (გეგმიური / რეალური), როდესაც დასრულდება
   # ამ განცხადებით გათვალიწინებული ყველა სამუშაო
   field :plan_end_date, type: Date
-  field :plan_end_date_changed_manually, type: Boolean
+  #field :plan_end_date_changed_manually, type: Boolean
   field :end_date, type: Date
   # cancelation_date არის გაუქმების თარიღი
   field :cancelation_date, type: Date
@@ -364,7 +364,7 @@ class Network::NewCustomerApplication
         tariff_days = self.need_resolution ? tariff.days_to_complete : tariff.days_to_complete_without_resolution
         self.amount = tariff.price_gel
         self.days = tariff_days
-        if self.send_date and not self.plan_end_date_changed_manually
+        if self.send_date #and not self.plan_end_date_changed_manually
           self.plan_end_date = self.send_date + self.days
         end
         self.amount = (self.amount / 1.18 * 100).round / 100.0 unless self.pays_non_zero_vat?
