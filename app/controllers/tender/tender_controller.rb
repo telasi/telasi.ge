@@ -4,7 +4,7 @@ class Tender::TenderController < ApplicationController
   #before_action :validate_tender_admin, only: [:report, :item, :delete_file]
 
   def show
-  	@node = Site::Node.where(nid: params[:nid]).first
+  	@node = Site::Node.where(tnid: params[:nid], language: I18n.locale).first
     @tenderuser = Tender::Tenderuser.where(user: current_user).first
   end
 

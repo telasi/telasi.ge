@@ -19,6 +19,8 @@ class Tender::Tenderuser
    field :rs_tin,             type: String
    field :rs_foreigner,       type: Mongoid::Boolean, default: false
 
+   validates :rs_tin, uniqueness: { message: I18n.t('tender.rs_tin_exist') }
+
    def organization_type_name
       I18n.t("tender.organization_types.#{self.organization_type}")
    end
