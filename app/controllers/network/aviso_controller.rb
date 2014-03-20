@@ -6,7 +6,10 @@ class Network::AvisoController < ApplicationController
     rel = Billing::Aviso.where(avtpkey: Billing::Aviso::NEW_CUSTOMER_APP)
     if @search
       rel = rel.where(basepointkey: @search['paypoint'].to_i) if @search['paypoint'].present?
-      rel = rel.where(avdate: Date.strptime(@search['date'])) if @search['date'].present?
+      rel = rel.where("avdate >= ?", Date.strptime(@search['d1'])) if @search['d1'].present?
+      rel = rel.where("avdate <= ?", Date.strptime(@search['d2'])) if @search['d2'].present?
+      rel = rel.where("custname LIKE ?", @search['custname'].to_geo.likefy) if @search['custname'].present?
+      rel = rel.where("note LIKE ?", @search['note'].to_geo.likefy) if @search['note'].present?
       rel = rel.where(status: @search[:complete] == 'yes') if @search[:complete].present?
     end
     @avisos = rel.order('avdetkey DESC').paginate(page: params[:page], per_page: 10)
