@@ -4,6 +4,8 @@
     c.date_field 'd1', default: Date.today
     c.date_field 'd2', default: Date.today
   end
+  f.text_field 'custname', label: 'აბონენტის სახელი'
+  f.text_field 'note', label: t('models.network.aviso.note')
   f.combo_field 'complete', label: t('models.network.aviso.complete'), collection: { 'კი' => 'yes', 'არა' => 'no' }, empty: '--'
 end %>
 <%= table_for @avisos, title: t('models.network.aviso.avisos'), icon: '/icons/money-coin.png', collapsible: true do |t|
