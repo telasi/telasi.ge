@@ -21,3 +21,4 @@
   icon: '/icons/mail.png', submit: t('models.network.change.status_change'),
   cancel_url: network_change_power_url(id: @application.id)
 %>
+<%= render partial: '/network/sms_helpers', locals: { application: @application } %>
