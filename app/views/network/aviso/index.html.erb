@@ -22,11 +22,3 @@ end %>
   t.number_field 'amount', label: t('models.network.aviso.amount'), after: 'GEL'
   t.paginate records: t('models.general.records')
 end %>
-<div class="alert alert-error">
-  <p>
-    ეს ღილაკი არ იქნება მუშა სისტემაში. ტესტირების მიზნით ის დროებით დადებულია აქ.
-  </p>
-  <p>
-    <%= link_to 'ავიზოების სინქრონიზაცია', network_sync_avisos_url, class: ['btn', 'btn-danger'], method: 'post', data: { confirm: 'დაადასტურეთ სინქრონიზაცია.' } %>
-  </p>
-</div>
