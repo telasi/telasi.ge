@@ -25,18 +25,6 @@
             </div>
           </div>
           <%= f.b_text_field 'mobile', label: t('models.sys_user.mobile') %>
-          <!-- customer registration -->
-          <legend><%= t('models.sys_user.account') %></legend>
-          <p class="text-muted" ><%= t('models.sys_user.account_description') %></p>
-          <%= f.b_text_field 'accnumb', label: t('models.sys_user.accnumb') %>
-          <div class="row">
-            <div class="col-sm-6">
-              <%= f.b_text_field 'rs_tin', label: t('models.sys_user.rs_tin') %>
-            </div>
-            <div class="col-sm-6">
-              <%= f.b_date_field 'dob', label: t('models.sys_user.dob') %>
-            </div>
-          </div>
           <div>
             <%= f.submit @title, class: ['btn', 'btn-primary'] %>
           </div>
