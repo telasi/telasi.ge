@@ -45,11 +45,12 @@ class DashboardController < ApplicationController
   def restore
     @title = I18n.t('models.sys_user.actions.restore')
     if request.post?
-      user = Sys::User.where(email: params[:email]).first
-      if user and not user.email_confirmed
-        UserMailer.email_confirmation(user).deliver if user.email_confirm_hash
-      elsif user
-        UserMailer.restore_password(user).deliver
+      @user = Sys::User.where(email: params[:email]).first
+      if @user and not @user.email_confirmed
+        UserMailer.email_confirmation(@user).deliver if @user.email_confirm_hash
+        @confirmation_resent = true
+      elsif @user
+        UserMailer.restore_password(@user).deliver
         redirect_to restore_url(ok: 'ok')
       else
         @error = I18n.t('models.sys_user.errors.illegal_email')

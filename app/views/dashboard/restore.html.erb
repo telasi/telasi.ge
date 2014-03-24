@@ -30,7 +30,11 @@
 <% else %>
 <div class="panel panel-success">
   <div class="panel-body">
-    <%= t('models.sys_user.actions.restore_sent').html_safe %>
+    <% if @confirmation_resent %>
+      <%= t('models.sys_user.actions.confirmation_resent').html_safe %>
+    <% else %>
+      <%= t('models.sys_user.actions.restore_sent').html_safe %>
+    <% end %>
   </div>
 </div>
 <% end %>
