@@ -1,29 +1,29 @@
 # -*- encoding : utf-8 -*-
 require 'rs'
 
-# DEPRECATED: use Customer::Registration instead
-class Billing::CustomerRegistration
+class Customer::Registration
   include Mongoid::Document
   include Mongoid::Timestamps
 
   belongs_to :user, class_name: 'Sys::User'
   field :custkey, type: Integer
+  field :personal, type: Mongoid::Boolean, default: true
   field :rs_tin, type: String
   field :rs_name, type: String
-  field :dob, type: Date
+  field :address, type: String
+  field :address_code, type: String
+
   field :confirmed, type: Mongoid::Boolean, default: false
   field :denied, type: Mongoid::Boolean, default: false
   field :denial_reason, type: String
 
-  validates :custkey, uniqueness: { message: I18n.t('models.billing_customer_registration.errors.customer_duplicate'), scope: :user_id }
-  validates :rs_tin, presence: { message: I18n.t('models.billing_customer_registration.errors.tin_required') }
-  validates :dob, presence: { message: I18n.t('models.billing_customer_registration.errors.dob_required') }
+  validates :custkey, uniqueness: { message: I18n.t('models.customer_registration.errors.customer_duplicate'), scope: :user_id }
+  validates :rs_tin, presence: { message: I18n.t('models.customer_registration.errors.tin_required') }
+  validates :address, presence: { message: I18n.t('models.customer_registration.errors.address_required') }
+  validates :address_code, presence: { message: I18n.t('models.customer_registration.errors.address_code_required') }
   validate :validate_rs_name, :validate_denial_reason
 
   def customer; @customer ||= Billing::Customer.find(self.custkey) end
-  def cra_url; "http://service.telasi.ge/cra/by_name_and_dob?first_name=#{first_name}&last_name=#{last_name}&date=#{dob.strftime('%d-%b-%Y')}" end
-  def first_name; self.rs_name.split(' ')[0] end
-  def last_name; self.rs_name.split(' ')[1] end
 
   private
 

@@ -4,7 +4,7 @@ class Sys::Subscription
   include Mongoid::Timestamps
 
   field :email,  type: String
-  field :active,     type: Mongoid::Boolean, default: true
+  field :active,       type: Mongoid::Boolean, default: true
   field :company_news, type: Mongoid::Boolean, default: true
   field :procurement_news, type: Mongoid::Boolean, default: true
   field :outage_news, type: Mongoid::Boolean, default: true
