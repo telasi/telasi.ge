@@ -153,6 +153,7 @@ ru:
         illegal_tin: неправильный персональный номер
         empty_tin: введите персональный номер
         empty_dob: введите дату рождения
+        email_not_confirmed: Эл.почта не подтвежденна
     billing_customer:
       accnumb: Номер абонента
       custname: Название

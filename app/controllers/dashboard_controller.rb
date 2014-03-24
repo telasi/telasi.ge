@@ -12,6 +12,7 @@ class DashboardController < ApplicationController
         session[:user_id] = user.id
         url = session.delete(:return_url) || root_url
         redirect_to url || root_url
+      elsif not user.email_confirmed then @error = I18n.t('model.sys_user.errors.email_not_confirmed')
       else @error = I18n.t('models.sys_user.errors.illegal_login') end
     end
   end
@@ -27,7 +28,7 @@ class DashboardController < ApplicationController
       @user = Sys::User.new(params.require(:sys_user).permit(:email, :password, :password_confirmation, :first_name, :last_name, :mobile))
       if @user.save
         UserMailer.email_confirmation(@user).deliver if @user.email_confirm_hash
-        redirect_to register_complete_url # (email: @user.email)
+        redirect_to register_complete_url
       end
     else
       @user = Sys::User.new
