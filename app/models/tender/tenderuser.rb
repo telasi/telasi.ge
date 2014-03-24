@@ -19,7 +19,14 @@ class Tender::Tenderuser
    field :rs_tin,             type: String
    field :rs_foreigner,       type: Mongoid::Boolean, default: false
 
+   validates :rs_tin, presence: { message: I18n.t('tender.empty') }
    validates :rs_tin, uniqueness: { message: I18n.t('tender.rs_tin_exist') }
+   validates :organization_name, presence: { message: I18n.t('tender.empty') }
+   validates :director_name, presence: { message: I18n.t('tender.empty') }
+   validates :fact_address, presence: { message: I18n.t('tender.empty') }
+   validates :legal_address, presence: { message: I18n.t('tender.empty') }
+   validates :phones, presence: { message: I18n.t('tender.empty') }
+   validates :work_email, presence: { message: I18n.t('tender.empty') }
 
    def organization_type_name
       I18n.t("tender.organization_types.#{self.organization_type}")
