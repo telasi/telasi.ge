@@ -1,6 +1,4 @@
 # -*- encoding : utf-8 -*-
-require 'rs'
-
 module Sys
   class User
     include KA
@@ -18,15 +16,11 @@ module Sys
     field :first_name, type: String
     field :last_name,  type: String
     field :mobile,     type: String
-    # account registration data
-    field :accnumb,               type: String
-    field :rs_tin,                type: String
-    field :dob,                   type: Date
     # roles
     has_and_belongs_to_many :roles, class_name: 'Sys::Role'
 
     # customer registrations
-    has_many :registrations, class_name: 'Billing::CustomerRegistration'
+    has_many :registrations, class_name: 'Customer::Registration'
 
     index({ email: 1 }, { unique: true })
     index(first_name: 1, last_name: 1)
@@ -37,11 +31,10 @@ module Sys
     validates :first_name, presence: { message: I18n.t('models.sys_user.errors.empty_first_name') }
     validates :last_name, presence: { message: I18n.t('models.sys_user.errors.empty_last_name') }
     validates :mobile, mobile: { message: I18n.t('models.sys_user.errors.illegal_mobile') }
-    validate :password_definition, :customer_validation
+    validate  :password_definition
 
     before_create :user_before_create
     before_save :user_before_save
-    after_save :user_after_create
 
     def full_name; "#{first_name} #{last_name}" end
     def self.encrypt_password(password, salt); Digest::SHA1.hexdigest("#{password}dimitri#{salt}") end
@@ -67,8 +60,7 @@ module Sys
       self.password_restore_hash = nil
     end
 
-    # Authenticate user (even inactive)
-    # using given email and password.
+    # Authenticate user (even inactive) using given email and password.
     def self.authenticate(email, password)
       user = User.where(:email => email).first
       user = nil if user and user.hashed_password != User.encrypt_password(password, user.salt)
@@ -100,20 +92,6 @@ module Sys
 
     private
 
-    def customer_validation
-      if self.new_record? and self.accnumb.present?
-        errors.add(:accnumb, I18n.t('models.sys_user.errors.illegal_accnumb')) if Billing::Customer.where(accnumb: self.accnumb).first.blank?
-        if self.rs_tin.blank?
-          self.errors.add(:rs_tin, I18n.t('models.sys_user.errors.empty_tin'))
-        elsif RS.get_name_from_tin(RS::TELASI_SU.merge(tin: self.rs_tin)).blank?
-          self.errors.add(:rs_tin, I18n.t('models.sys_user.errors.illegal_tin'))
-        end
-        if self.dob.blank?
-          self.errors.add(:dob, I18n.t('models.sys_user.errors.empty_dob'))
-        end
-      end
-    end
-
     def password_definition
       if hashed_password.blank?
         errors.add(:password, I18n.t('models.sys_user.errors.empty_password'))
@@ -132,13 +110,6 @@ module Sys
         self.email_confirm_hash = confirmed ? nil : User.generate_hash(self)
       end
       self.active = true
-    end
-
-    def user_after_create
-      if self.accnumb.present?
-        customer = Billing::Customer.where(accnumb: self.accnumb).first
-        Billing::CustomerRegistration.new(user: self, custkey: customer.custkey, rs_tin: self.rs_tin, dob: self.dob).save if customer
-      end
     end
 
     def user_before_save; self.mobile = compact_mobile(self.mobile) end
