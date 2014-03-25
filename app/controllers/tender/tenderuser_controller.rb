@@ -30,6 +30,7 @@ class Tender::TenderuserController < ApplicationController
 
        if @user.valid? and @tenderuser.valid? 
       	 if @user.save and @tenderuser.save
+          UserMailer.email_confirmation(@user).deliver if @user.email_confirm_hash
   	      redirect_to register_complete_url
   	   	 end
   	   end
