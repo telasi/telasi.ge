@@ -18,7 +18,7 @@ module Sys
     field :first_name, type: String
     field :last_name,  type: String
     field :mobile,     type: String
-    field :country_code, type: Sring, default: '995'
+    field :country_code, type: String, default: '995'
     # account registration data
     field :accnumb,               type: String
     field :rs_tin,                type: String
