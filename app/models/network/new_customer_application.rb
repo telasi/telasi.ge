@@ -178,7 +178,7 @@ class Network::NewCustomerApplication
     end
   end
 
-  def real_days; (self.end_date || Date.today) - self.send_date end
+  def real_days; (self.end_date || Date.today) - self.send_date + 1 end
 
   # პირველი ეტაპის ჯარიმა.
   def penalty_first_stage
@@ -365,7 +365,7 @@ class Network::NewCustomerApplication
         self.amount = tariff.price_gel
         self.days = tariff_days
         if self.send_date #and not self.plan_end_date_changed_manually
-          self.plan_end_date = self.send_date + self.days
+          self.plan_end_date = self.send_date + self.days - 1
         end
         self.amount = (self.amount / 1.18 * 100).round / 100.0 unless self.pays_non_zero_vat?
         self.penalty1 = self.penalty_first_stage

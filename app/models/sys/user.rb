@@ -16,6 +16,8 @@ module Sys
     field :first_name, type: String
     field :last_name,  type: String
     field :mobile,     type: String
+    field :country_code, type: String, default: '995'
+
     # roles
     has_and_belongs_to_many :roles, class_name: 'Sys::Role'
 
@@ -40,7 +42,10 @@ module Sys
     def self.encrypt_password(password, salt); Digest::SHA1.hexdigest("#{password}dimitri#{salt}") end
     def self.generate_hash(user); Digest::MD5.hexdigest("#{Time.now}#{rand(20111111)/11.0}#{user.email}") end
     def to_s; full_name end
-    def formatted_mobile; KA::format_mobile(self.mobile) end
+    def formatted_mobile
+      if self.country_code == '995' then "(+995)#{KA::format_mobile(self.mobile)}"
+      else "(+#{self.country_code})#{self.mobile}" end
+    end
 
     def includes_role?(role); self.role_ids.include?(Moped::BSON::ObjectId(role)) end
     def admin?; self.admin end
