@@ -36,7 +36,7 @@ class Admin::CustomerDoctypesController < ApplicationController
   def delete
     doctype = Customer::DocumentType.find(params[:id])
     doctype.destroy
-    redirect_to admin_customers_url, notice: 'სახეობა წაშლილია'
+    redirect_to admin_customer_doctypes_url, notice: 'სახეობა წაშლილია'
   end
 
   def nav
