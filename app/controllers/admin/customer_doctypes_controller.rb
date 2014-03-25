@@ -33,6 +33,12 @@ class Admin::CustomerDoctypesController < ApplicationController
     end
   end
 
+  def delete
+    doctype = Customer::DocumentType.find(params[:id])
+    doctype.destroy
+    redirect_to admin_customers_url, notice: 'სახეობა წაშლილია'
+  end
+
   def nav
     @nav = {
       'რეგისტრაციები' => admin_customers_url,
