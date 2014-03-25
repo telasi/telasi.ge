@@ -6,6 +6,11 @@ class Admin::CustomerDoctypesController < ApplicationController
     @doctypes = Customer::DocumentType.paginate(page: params[:page], per_page: 100)
   end
 
+  def show
+    @title = t('pages.admin.customers.document_type.show_doctype')
+    @doctype = Customer::DocumentType.find(params[:id])
+  end
+
   def new
     @title = t('pages.admin.customers.document_type.new_doctype')
     if request.post?
