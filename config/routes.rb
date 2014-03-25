@@ -20,10 +20,10 @@ TelasiGe::Application.routes.draw do
     get '/', action: 'index', as: 'customers'
     get '/search', action: 'search', as: 'search_customer'
     match '/info/:custkey', action: 'info', as: 'customer_info', via: ['get', 'post']
-    get '/complete/:custkey', action: 'complete', as: 'add_customer_complete'
-    get '/history/:custkey', action: 'history', as: 'customer_history'
-    get '/trash_history/:custkey', action: 'trash_history', as: 'customer_trash_history'
-    delete '/remove/:id', action: 'remove', as: 'remove_customer'
+    # get '/complete/:custkey', action: 'complete', as: 'add_customer_complete'
+    # get '/history/:custkey', action: 'history', as: 'customer_history'
+    # get '/trash_history/:custkey', action: 'trash_history', as: 'customer_trash_history'
+    # delete '/remove/:id', action: 'remove', as: 'remove_customer'
   end
 
   scope '/calculator', controller: 'calculator' do

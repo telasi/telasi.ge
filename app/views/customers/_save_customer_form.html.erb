@@ -1,7 +1,0 @@
-<%= form_for @registration, url: customer_info_url(custkey: params[:custkey]) do |f| %>
-  <%= f.b_text_field 'rs_tin', label: t('models.billing_customer_registration.rs_tin'), autofocus: true %>
-  <%= f.b_date_field 'dob', label: t('models.billing_customer_registration.dob') %>
-  <div>
-    <%= f.submit t('models.billing_customer_registration.actions.add'), class: ['btn', 'btn-primary'] %>
-  </div>
-<% end %>

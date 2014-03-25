@@ -2,7 +2,7 @@
   <h1><%= @title %></h1>
 </div>
 <% if @registrations.empty? %>
-  <%= render partial: 'customers/empty' %>
+  <div class="well"><%= t('pages.customers.index.empty_list') %></div>
 <% else %>
   <% @registrations.each do |reg| %>
     <%= render partial: 'customers/registration_info', locals: { registration: reg } %>

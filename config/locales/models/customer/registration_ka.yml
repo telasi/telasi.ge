@@ -1,0 +1,14 @@
+ka:
+  models:
+    customer_registration:
+      public_rs_tin: "თქვენი პირადი ნომერი ან საიდენტიფიკაციო კოდი:"
+      public_address: "აბონირების მისამართი:"
+      public_address_code: "აბონირების მისამართის საკადასტრო კოდი:"
+      public_personal: "მიუთითეთ თუ რომელ კატეგორიას მიეკუთვნებით:"
+      public_personal_true: ფიზიკური პირი
+      public_personal_false: იურიდიული პირი
+      public_rent: აარჩიეთ ხართ თუ არა აღნიშნული ფართის მფლობელი
+      public_rent_true: "დიახ, ვარ მფლობელი"
+      public_rent_false: "არა, არ ვარ მფლობელი, მაგრამ მაქვს საიჯარო/ქირის შეთანხმება"
+      actions:
+        public_save: აბონენტის დამახსოვრება

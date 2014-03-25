@@ -1,0 +1,14 @@
+ru:
+  models:
+    customer_registration:
+      public_rs_tin: "Ваш персональный или регистрационный номер:"
+      public_address: "Адресс абонирования:"
+      public_address_code: "Кадастровый код адресса абонирования:"
+      public_personal: "Укажите к какой категории вы относитесь:"
+      public_personal_true: Физическое лицо
+      public_personal_false: Юридическое лицо
+      public_rent: "Укажите, являетесь ли вы собственником:"
+      public_rent_true: "Да, я собтвенник"
+      public_rent_false: "Нет, я не собтвенник, но у меня есть соглашение об аренде"
+      actions:
+        public_save: Запомнить абонента

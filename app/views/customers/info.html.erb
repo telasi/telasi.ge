@@ -9,6 +9,49 @@
     </div>
   </div>
   <div class="col-sm-6">
-    <%= render partial: 'customers/add_customer_full' %>
+    <!-- save customer form -->
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <span class="fa fa-heart"></span>
+        <%= t('pages.customers.register.save_customer') %>
+      </div>
+      <%= form_for @registration, url: customer_info_url(custkey: params[:custkey]) do |f| %>
+        <div class="panel-body">
+          <p class="text-muted"><%= t('pages.customers.register.save_customer_descr') %></p>
+          <div class="form-group">
+            <%= f.label :personal, t('models.customer_registration.public_personal') %>
+            <%= f.select :personal, options_for_select({
+              t('models.customer_registration.public_personal_true') => true,
+              t('models.customer_registration.public_personal_false') => false,
+            }), {}, {class: 'form-control'}%>
+          </div>
+          <%= f.b_text_field :rs_tin, label: t('models.customer_registration.public_rs_tin') %>
+          <%= f.b_text_field :address, label: t('models.customer_registration.public_address') %>
+          <%= f.b_text_field :address_code, label: t('models.customer_registration.public_address_code') %>
+          <div class="form-group">
+            <%= f.label :rent, t('models.customer_registration.public_rent') %>
+            <%= f.select :rent, options_for_select({
+              t('models.customer_registration.public_rent_true') => true,
+              t('models.customer_registration.public_rent_false') => false,
+            }), {}, {class: 'form-control'}%>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <button type="submit" class="btn btn-success">
+            <i class="fa fa-heart"></i> <%= t('models.customer_registration.actions.public_save') %>
+          </button>
+        </div>
+      <% end %>
+    </div>
+    <!-- save customer form -->
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <span class="fa fa-question-circle"></span>
+        <%= t('pages.customers.register.save_customer_info_title') %>
+      </div>
+      <div class="panel-body">
+        <%= t('pages.customers.register.save_customer_info_descr_html') %>
+      </div>
+    </div>
   </div>
 </div>
