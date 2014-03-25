@@ -18,6 +18,16 @@ class Admin::CustomerDoctypesController < ApplicationController
     end
   end
 
+  def edit
+    @title = t('pages.admin.customers.document_type.edit_doctype')
+    @doctype = Customer::DocumentType.find(params[:id])
+    if request.post?
+      if @doctype.update_attributes(doctype_params)
+        redirect_to admin_customer_doctype_url(id: @doctype.id), notice: 'სახეობა შეცვლილია'
+      end
+    end
+  end
+
   def nav
     @nav = {
       'რეგისტრაციები' => admin_customers_url,
