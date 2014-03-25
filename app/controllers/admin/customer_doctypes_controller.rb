@@ -3,7 +3,12 @@ class Admin::CustomerDoctypesController < ApplicationController
   def index
     @title = t('pages.admin.customers.document_type.title')
     @search = params[:search] == 'clear' ? {} : params[:search]
-    @doctypes = Customer::DocumentType.paginate(page: params[:page], per_page: 100)
+    rel = Customer::DocumentType
+    rel = rel.where(owner_personal: @search[:owner_personal] == 'yes') if @search[:owner_personal].present?
+    rel = rel.where(owner_not_personal: @search[:owner_not_personal] == 'yes') if @search[:owner_not_personal].present?
+    rel = rel.where(rent_personal: @search[:rent_personal] == 'yes') if @search[:rent_personal].present?
+    rel = rel.where(rent_not_personal: @search[:rent_not_personal] == 'yes') if @search[:rent_not_personal].present?
+    @doctypes = rel.paginate(page: params[:page], per_page: 100)
   end
 
   def show

@@ -1,3 +1,11 @@
+<%= search_form @search do |f|
+  f.tab do |f|
+    [:owner_personal,:owner_not_personal,:rent_personal,:rent_not_personal].each do |x|
+      f.combo_field x.to_s, label: t("models.customer_document_type.#{x}"),
+        collection: { 'კი' => 'yes', 'არა' => 'no' }, empty: '--'
+    end
+  end
+end %>
 <%= table_for @doctypes, title: @title, icon: '/icons/document-code.png', collapsible: true do |t|
   t.title_action admin_new_customer_doctype_url, label: t('pages.admin.customers.document_type.new_doctype'), icon: '/icons/plus.png'
   t.item_action ->(x) {admin_edit_customer_doctype_url(id: x.id)}, icon: '/icons/pencil.png'
