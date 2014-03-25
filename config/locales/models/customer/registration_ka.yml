@@ -4,11 +4,16 @@ ka:
       public_rs_tin: "თქვენი პირადი ნომერი ან საიდენტიფიკაციო კოდი:"
       public_address: "აბონირების მისამართი:"
       public_address_code: "აბონირების მისამართის საკადასტრო კოდი:"
-      public_personal: "მიუთითეთ თუ რომელ კატეგორიას მიეკუთვნებით:"
-      public_personal_true: ფიზიკური პირი
-      public_personal_false: იურიდიული პირი
-      public_rent: აარჩიეთ ხართ თუ არა აღნიშნული ფართის მფლობელი
-      public_rent_true: "დიახ, ვარ მფლობელი"
-      public_rent_false: "არა, არ ვარ მფლობელი, მაგრამ მაქვს საიჯარო/ქირის შეთანხმება"
+      public_category: "მიუთითეთ თუ რომელ კატეგორიას მიეკუთვნებით:"
+      public_category_personal: ფიზიკური პირი
+      public_category_not_personal: იურიდიული პირი
+      public_ownership: აარჩიეთ ხართ თუ არა აღნიშნული ფართის მფლობელი
+      public_ownership_owner: "დიახ, ვარ მფლობელი"
+      public_ownership_rent: "არა, არ ვარ მფლობელი, მაგრამ მაქვს საიჯარო/ქირის შეთანხმება"
       actions:
         public_save: აბონენტის დამახსოვრება
+      errors:
+        tin_required: პირადი ნომერი აუცილებელია
+        tin_illegal: არასწორი პირადი ნომერი
+        address_required: ჩაწერეთ მისამართი
+        address_code_required: ჩაწერეთ საკადასტრო კოდი

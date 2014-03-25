@@ -4,11 +4,16 @@ ru:
       public_rs_tin: "Ваш персональный или регистрационный номер:"
       public_address: "Адресс абонирования:"
       public_address_code: "Кадастровый код адресса абонирования:"
-      public_personal: "Укажите к какой категории вы относитесь:"
-      public_personal_true: Физическое лицо
-      public_personal_false: Юридическое лицо
-      public_rent: "Укажите, являетесь ли вы собственником:"
-      public_rent_true: "Да, я собтвенник"
-      public_rent_false: "Нет, я не собтвенник, но у меня есть соглашение об аренде"
+      public_category: "Укажите к какой категории вы относитесь:"
+      public_category_personal: Физическое лицо
+      public_category_not_personal: Юридическое лицо
+      public_ownership: "Укажите, являетесь ли вы собственником:"
+      public_ownership_owner: "Да, я собтвенник"
+      public_ownership_rent: "Нет, я не собтвенник, но у меня есть соглашение об аренде"
       actions:
         public_save: Запомнить абонента
+      errors:
+        tin_required: Запишите персональный номер
+        tin_illegal: Неправильный персональный номер
+        address_required: Запишите адресс
+        address_code_required: Запишите кадастровый код
