@@ -20,6 +20,7 @@ ka:
     download_file: დოკუმენტაციის გადმოწერა
     download_count: გადმოწერების რაოდენობა
     registered_as: დარეგისტრირებული როგორ
+    empty: აუცილებელი ველი
     rs_tin_exist: მომხმარებელი უკვე დარეგისტრირებულია ამ საინდეტიფიკაციო ნომრით
     menu: 
       users: მომხმარებლები
@@ -48,6 +49,7 @@ ru:
     download_file: Скачать документ
     download_count: Количество скачиваний
     registered_as: Зарегистрированы как
+    empty: Обязательное поле
     rs_tin_exist: Пользователь с таким регистрационным номером уже существует
     menu: 
       users: Пользователи
@@ -76,6 +78,7 @@ en:
     download_file: Download document
     download_count: Download count
     registered_as: Registered as
+    empty: Required
     rs_tin_exist: User already exists with this registration number
     menu: 
       users: Users
