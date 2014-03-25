@@ -1,7 +1,11 @@
 <%= table_for @doctypes, title: @title, icon: '/icons/document-code.png', collapsible: true do |t|
-  t.text_field :name
+  t.title_action admin_new_customer_doctype_url, label: t('pages.admin.customers.document_type.new_doctype'), icon: '/icons/plus.png'
+  t.item_action ->(x) {admin_edit_customer_doctype_url(id: x.id)}, icon: '/icons/pencil.png'
+  t.item_action ->(x) {admin_delete_customer_doctype_url(id: x.id)}, icon: '/icons/bin.png', method: 'delete', confirm: 'ნამდვილად გინდათ ამ სახეობის წაშლა?'
+  t.text_field :name, url: ->(x) {admin_customer_doctype_url(id:x.id)}
   t.boolean_field :owner_personal
   t.boolean_field :owner_not_personal
   t.boolean_field :rent_personal
   t.boolean_field :rent_not_personal
+  t.paginate records: t('models.general.records')
 end %>

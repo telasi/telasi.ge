@@ -90,7 +90,10 @@ TelasiGe::Application.routes.draw do
       end
       scope '/doctypes', controller: 'customer_doctypes' do
         get '/', action: 'index', as: 'customer_doctypes'
-        # TODO
+        get '/show/:id', action: 'show', as: 'customer_doctype'
+        match '/new', action: 'new', as: 'new_customer_doctype', via: ['get', 'post']
+        match '/edit/:id', action: 'edit', as: 'edit_customer_doctype', via: ['get', 'post']
+        delete '/edit/:id', action: 'delete', as: 'delete_customer_doctype'
       end
     end
     scope '/subscriptions', controller: 'subscriptions' do

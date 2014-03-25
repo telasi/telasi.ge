@@ -1,35 +1,35 @@
 # -*- encoding : utf-8 -*-
 class Admin::CustomerDoctypesController < ApplicationController
   def index
-    @title = t('models.billing_customer_registration.title.pluaral')
+    @title = t('pages.admin.customers.document_type.title')
     @search = params[:search] == 'clear' ? {} : params[:search]
-    rel = Customer::DocumentType
-    # if @search
-    #   if @search[:customer_id].present?
-    #     @search[:customer] = Billing::Customer.find(@search[:customer_id])
-    #     rel = rel.where(custkey: @search[:customer].custkey)
-    #   end
-    #   rel = rel.where(rs_tin: @search[:rs_tin].mongonize) if @search[:rs_tin].present?
-    #   rel = rel.where(rs_name: @search[:rs_name].mongonize) if @search[:rs_name].present?
-    #   rel = rel.where(confirmed: @search[:confirmed] == 'yes') if @search[:confirmed].present?
-    #   rel = rel.where(denied: @search[:denied] == 'yes') if @search[:denied].present?
-    # end
-    @doctypes = rel.paginate(page: params[:page], per_page: 100)
+    @doctypes = Customer::DocumentType.paginate(page: params[:page], per_page: 100)
   end
 
-  def show
-    @title = I18n.t('pages.admin.customers.document_type.title')
-    @registration = Billing::CustomerRegistration.find(params[:id])
+  def new
+    @title = t('pages.admin.customers.document_type.new_doctype')
+    if request.post?
+      @doctype = Customer::DocumentType.new(doctype_params)
+      if @doctype.save
+        redirect_to admin_customer_doctypes_url, notice: 'სახეობა დამატებულია'
+      end
+    else
+      @doctype = Customer::DocumentType.new
+    end
   end
 
   def nav
     @nav = {
       'რეგისტრაციები' => admin_customers_url,
-      I18n.t('pages.admin.customers.document_type.title') => admin_customer_doctypes_url
+      t('pages.admin.customers.document_type.title') => admin_customer_doctypes_url
     }
-    # if @registration
-    #   @nav[@registration.customer.custname.to_ka] = admin_show_customer_url(id: @registration.id)
-    #   @nav[@title] = nil unless action_name == 'show'
-    # end
+    if @doctype
+      @nav[@doctype.name] = admin_customer_doctype_url(id: @doctype.id) unless @doctype.new_record?
+      @nav[@title] = nil unless action_name == 'show'
+    end
   end
+
+  private
+
+  def doctype_params; params.require(:customer_document_type).permit(:name_ka,:name_ru,:owner_personal,:owner_not_personal,:rent_personal,:rent_not_personal) end
 end

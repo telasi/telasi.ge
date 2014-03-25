@@ -1,0 +1,10 @@
+<%= forma_for @doctype, title: @title, icon: '/icons/document-code.png' do |f|
+  f.text_field :name_ka, autofocus: true, required: true, width: 500
+  f.text_field :name_ru, required: true, width: 500
+  f.boolean_field :owner_personal
+  f.boolean_field :owner_not_personal
+  f.boolean_field :rent_personal
+  f.boolean_field :rent_not_personal
+  f.submit 'შენახვა'
+  f.cancel_button admin_customer_doctypes_url
+end %>
