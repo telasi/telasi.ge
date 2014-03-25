@@ -1,0 +1,10 @@
+ka:
+  models:
+    customer_document_type:
+      name: დასახელება
+      name_ka: დასახელება (KA)
+      name_ru: დასახელება (RU)
+      owner_personal: მფლობელი/ფიზ.პირი
+      owner_not_personal: მფლობელი/იურ.პირი
+      rent_personal: ქირა/ფიზ.პირი
+      rent_not_personal: ქირა/ფიზ.პირი

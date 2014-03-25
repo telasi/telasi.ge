@@ -1,0 +1,7 @@
+<%= table_for @doctypes, title: @title, icon: '/icons/document-code.png', collapsible: true do |t|
+  t.text_field :name
+  t.boolean_field :owner_personal
+  t.boolean_field :owner_not_personal
+  t.boolean_field :rent_personal
+  t.boolean_field :rent_not_personal
+end %>

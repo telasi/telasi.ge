@@ -80,12 +80,18 @@ TelasiGe::Application.routes.draw do
       match '/add_role/:permission_id', action: 'add_role', as: 'add_permission_role', via: ['get', 'post']
       delete '/remove_role/:permission_id/:role_id', action: 'remove_role', as: 'remove_permission_role'
     end
-    scope '/customers', controller: 'customers' do
-      get '/', action: 'index', as: 'customers'
-      get '/show/:id', action: 'show', as: 'show_customer'
-      get '/confirm/:id', action: 'confirm', as: 'confirm_customer'
-      match '/deny/:id', action: 'deny', as: 'deny_customer', via: ['get', 'post']
-      delete '/delete/:id', action: 'delete', as: 'delete_customer'
+    scope '/customers' do
+      scope '/', controller: 'customers' do
+        get '/', action: 'index', as: 'customers'
+        get '/show/:id', action: 'show', as: 'show_customer'
+        get '/confirm/:id', action: 'confirm', as: 'confirm_customer'
+        match '/deny/:id', action: 'deny', as: 'deny_customer', via: ['get', 'post']
+        delete '/delete/:id', action: 'delete', as: 'delete_customer'
+      end
+      scope '/doctypes', controller: 'customer_doctypes' do
+        get '/', action: 'index', as: 'customer_doctypes'
+        # TODO
+      end
     end
     scope '/subscriptions', controller: 'subscriptions' do
       get '/', action: 'index', as: 'subscriptions'
