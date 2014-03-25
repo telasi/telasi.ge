@@ -9,8 +9,10 @@ end
 
 class MobileValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
-    unless KA.correct_mobile?(value.to_s)
-      record.errors[attribute] << (options[:message] || "is not mobile")
+    unless record.respond_to?('country_code') and record.country_code != '995'
+      unless KA.correct_mobile?(value.to_s)
+        record.errors[attribute] << (options[:message] || "is not mobile")
+      end
     end
   end
 end
