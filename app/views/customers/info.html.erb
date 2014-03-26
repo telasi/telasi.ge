@@ -23,7 +23,7 @@
             <%= f.select :category, options_for_select({
               t('models.customer_registration.public_category_personal') => Customer::Registration::CAT_PERSONAL,
               t('models.customer_registration.public_category_not_personal') => Customer::Registration::CAT_NOT_PERSONAL,
-            }), {}, {class: 'form-control'}%>
+            }, selected: @registration.category), {}, {class: 'form-control'}%>
           </div>
           <%= f.b_text_field :rs_tin, label: t('models.customer_registration.public_rs_tin') %>
           <%= f.b_text_field :address, label: t('models.customer_registration.public_address') %>
@@ -33,7 +33,7 @@
             <%= f.select :ownership, options_for_select({
               t('models.customer_registration.public_ownership_owner') => Customer::Registration::OWN_OWNER,
               t('models.customer_registration.public_ownership_rent') => Customer::Registration::OWN_RENT,
-            }), {}, {class: 'form-control'} %>
+            }, selected: @registration.ownership), {}, {class: 'form-control'} %>
           </div>
         </div>
         <div class="panel-footer">
