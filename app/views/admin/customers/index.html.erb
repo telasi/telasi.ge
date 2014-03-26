@@ -10,17 +10,16 @@
     f.text_field 'rs_tin', label: 'საიდ. კოდი'
     f.text_field 'rs_name', label: 'დასახელება'
     f.combo_field 'confirmed', label: 'დადასტურებული?', collection: { 'კი' => 'yes', 'არა' => 'no' }, empty: '--'
-    f.combo_field 'denied', label: 'უარყოფილია?', collection: { 'კი' => 'yes', 'არა' => 'no' }, empty: '--'
+    #f.combo_field 'denied', label: 'უარყოფილია?', collection: { 'კი' => 'yes', 'არა' => 'no' }, empty: '--'
   end
 end %>
 <%= table_for @registrations, title: t('models.billing_customer_registration.title.pluaral'), icon: '/icons/user.png', collapsible: true do |t|
   t.item_action ->(x) { admin_delete_customer_url(id: x.id) }, icon: '/icons/bin.png', confirm: 'ნამდვილად გინდათ რეგისტრაციის წაშლა?', method: 'delete'
-  t.date_field 'created_at', i18n: 'added'
+  t.date_field 'created_at', url: ->(x) { admin_show_customer_url(id: x.id) }
   t.complex_field i18n: 'customer' do |c|
     c.text_field 'customer.accnumb', tag: 'code'
     c.text_field 'customer', url: ->(x) { admin_show_customer_url(id: x.id) }
   end
   t.boolean_field 'confirmed'
-  t.boolean_field 'denied'
   t.paginate records: t('models.general.records')
 end %>

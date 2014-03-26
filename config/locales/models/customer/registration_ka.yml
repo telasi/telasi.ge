@@ -1,6 +1,11 @@
 ka:
   models:
     customer_registration:
+      created_at: შექმნა
+      customer: ბილინგის აბონენტი
+      confirmed: დადასტურებული?
+      rs_tin: საიდ.კოდი
+      rs_name: დასახელება
       public_rs_tin: "თქვენი პირადი ნომერი ან საიდენტიფიკაციო კოდი:"
       public_address: "აბონირების მისამართი:"
       public_address_code: "აბონირების მისამართის საკადასტრო კოდი:"

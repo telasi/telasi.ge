@@ -1,31 +1,31 @@
 <%= view_for @registration, title: @title, icon: '/icons/user.png', collapsible: true do |f|
-  f.title_action(admin_confirm_customer_url(id: @registration.id), label: I18n.t('models.billing_customer_registration.actions.confirm'), confirm: I18n.t('models.billing_customer_registration.actions.confirm_confirm'), icon: '/icons/tick.png') unless @registration.confirmed
-  f.title_action(admin_deny_customer_url(id: @registration.id), label: I18n.t('models.billing_customer_registration.actions.deny'), icon: '/icons/cross.png') unless @registration.denied
-  f.title_action(admin_delete_customer_url(id: @registration.id), label: 'წაშლა', icon: '/icons/bin.png', confirm: 'ნამდვილად გინდათ რეგისტრაციის წაშლა?', method: 'delete')
   f.tab title: t('models.billing_customer_registration.title.single_alt'), icon: '/icons/user.png' do |t|
     t.col1 do |c|
+      c.complex_field label: 'მომხმარებელი', required: true do |c|
+        c.email_field 'user.email'
+        c.text_field 'user.full_name', url: admin_user_url(id: @registration.user.id)
+        c.text_field 'user.formatted_mobile'
+      end
       c.complex_field i18n: 'customer', required: true do |c|
         c.text_field 'customer.accnumb', tag: 'code'
         c.text_field 'customer'
+        c.text_field 'customer.address', class: 'text-muted'
       end
-      c.text_field 'customer.address', label: 'მისამართი', required: true
-      c.text_field :rs_tin, required: true, tag: 'code'
-      c.date_field :dob, required: true
-      c.text_field :rs_name, required: true
-      c.text_field :cra, required: true, value: 'შემოწმება რეესტრში', url: ->(x) { x.cra_url }
-    end
-    t.col2 do |c|
       c.boolean_field :confirmed, required: true
-      c.boolean_field :denied, required: true
-      c.text_field :denial_reason
+      c.text_field :rs_tin, required: true, tag: 'code'
+      c.text_field :rs_name, required: true
+      c.complex_field label: 'მისამართი', required: true do |c|
+        c.text_field :address_code, tag: 'code'
+        c.text_field :address
+      end
     end
   end
-  f.tab title: t('models.sys_user.title.single'), icon: '/icons/lock.png' do |t|
-    t.email_field 'user.email', label: t('models.sys_user.email'), required: true
-    t.text_field 'user.full_name', label: t('models.sys_user.full_name'), required: true, url: admin_user_url(id: @registration.user.id)
-    t.text_field 'user.mobile', label: t('models.sys_user.mobile'), required: true
-    t.boolean_field 'user.email_confirmed', label: 'დადასტურებული?', required: true
-  end
+  # f.tab title: t('models.sys_user.title.single'), icon: '/icons/lock.png' do |t|
+  #   t.email_field 'user.email', label: t('models.sys_user.email'), required: true
+  #   t.text_field 'user.full_name', label: t('models.sys_user.full_name'), required: true, url: admin_user_url(id: @registration.user.id)
+  #   t.text_field 'user.mobile', label: t('models.sys_user.mobile'), required: true
+  #   t.boolean_field 'user.email_confirmed', label: 'დადასტურებული?', required: true
+  # end
   f.tab title: t('models.general.system'), icon: '/icons/traffic-cone.png' do |t|
     t.timestamps
   end

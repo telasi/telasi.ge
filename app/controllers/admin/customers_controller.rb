@@ -3,7 +3,7 @@ class Admin::CustomersController < ApplicationController
   def index
     @title = t('models.billing_customer_registration.title.pluaral')
     @search = params[:search] == 'clear' ? {} : params[:search]
-    rel = Billing::CustomerRegistration
+    rel = Customer::Registration
     if @search
       if @search[:customer_id].present?
         @search[:customer] = Billing::Customer.find(@search[:customer_id])
@@ -12,14 +12,13 @@ class Admin::CustomersController < ApplicationController
       rel = rel.where(rs_tin: @search[:rs_tin].mongonize) if @search[:rs_tin].present?
       rel = rel.where(rs_name: @search[:rs_name].mongonize) if @search[:rs_name].present?
       rel = rel.where(confirmed: @search[:confirmed] == 'yes') if @search[:confirmed].present?
-      rel = rel.where(denied: @search[:denied] == 'yes') if @search[:denied].present?
     end
     @registrations = rel.desc(:_id).paginate(page: params[:page], per_page: 20)
   end
 
   def show
-    @title = I18n.t('models.billing_customer_registration.title.single')
-    @registration = Billing::CustomerRegistration.find(params[:id])
+    @title = 'რეგისტრაციის თვისებები'
+    @registration = Customer::Registration.find(params[:id])
   end
 
   def confirm
