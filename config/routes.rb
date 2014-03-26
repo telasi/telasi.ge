@@ -23,7 +23,7 @@ TelasiGe::Application.routes.draw do
     # get '/complete/:custkey', action: 'complete', as: 'add_customer_complete'
     # get '/history/:custkey', action: 'history', as: 'customer_history'
     # get '/trash_history/:custkey', action: 'trash_history', as: 'customer_trash_history'
-    # delete '/remove/:id', action: 'remove', as: 'remove_customer'
+    delete '/remove/:id', action: 'remove', as: 'remove_customer'
   end
 
   scope '/calculator', controller: 'calculator' do

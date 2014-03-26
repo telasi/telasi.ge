@@ -12,6 +12,8 @@ ru:
       public_ownership_rent: "Нет, я не собтвенник, но у меня есть соглашение об аренде"
       actions:
         public_save: Запомнить абонента
+        save_complete: Абонент сохранен
+        remove_complete: Абонент стерт
       errors:
         tin_required: Запишите персональный номер
         tin_illegal: Неправильный персональный номер

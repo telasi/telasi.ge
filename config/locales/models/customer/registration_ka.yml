@@ -12,6 +12,8 @@ ka:
       public_ownership_rent: "არა, არ ვარ მფლობელი, მაგრამ მაქვს საიჯარო/ქირის შეთანხმება"
       actions:
         public_save: აბონენტის დამახსოვრება
+        save_complete: აბონენტი შენახულია
+        remove_complete: აბონენტი წაშლილია
       errors:
         tin_required: პირადი ნომერი აუცილებელია
         tin_illegal: არასწორი პირადი ნომერი

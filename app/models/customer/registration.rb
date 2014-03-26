@@ -21,6 +21,8 @@ class Customer::Registration
   field :address, type: String
   field :address_code, type: String
 
+  field :confirmed, type: Mongoid::Boolean, default: false
+
   # validates :custkey, uniqueness: { message: I18n.t('models.customer_registration.errors.customer_duplicate'), scope: :user_id }
   validates :rs_tin, presence: { message: I18n.t('models.customer_registration.errors.tin_required') }
   validates :address, presence: { message: I18n.t('models.customer_registration.errors.address_required') }

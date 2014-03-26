@@ -23,7 +23,7 @@ class CustomersController < ApplicationController
       # @registration.confirmed = false
       # @registration.denied = false
       if @registration.save
-        redirect_to add_customer_complete_url
+        redirect_to customers_url, notice: I18n.t('models.customer_registration.actions.save_complete')
       end
     else
       @registration = Customer::Registration.new
@@ -32,11 +32,11 @@ class CustomersController < ApplicationController
 
   # def complete; @title = I18n.t('models.billing_customer_registration.actions.add_complete') end
 
-  # def remove
-  #   registration = Billing::CustomerRegistration.find(params[:id])
-  #   registration.destroy
-  #   redirect_to customers_url, notice: I18n.t('models.billing_customer_registration.actions.remove_complete')
-  # end
+  def remove
+    registration = Customer::Registration.find(params[:id])
+    registration.destroy
+    redirect_to customers_url, notice: I18n.t('models.customer_registration.actions.remove_complete')
+  end
 
   # def history
   #   @title = I18n.t('models.billing_customer.actions.history')
