@@ -234,8 +234,9 @@ TelasiGe::Application.routes.draw do
         get  '/',                  action: :index
         match  '/update',          action: :update, via: [:get, :put]
         get  '/list',              action: :list
-        get  '/report/:lgort',     action: 'report', as: 'report'
+        match '/report/:lgort',    action: 'report', as: 'report', via: [:get, :post, :put, :patch]
         match  '/edit/:matnr',     action: 'edit', as: 'edit', via: [:get, :post, :patch]
+        get  '/excel',             action: 'excel', as: 'excel'
     end
   end
 

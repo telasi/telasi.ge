@@ -11,7 +11,7 @@ class Site::Node < ActiveRecord::Base
   def content_type; Site::ContentType.where(entity_type: 'node', bundle: self.type, entity_id: self.nid).first end
   def content_thumbnail; Site::ContentThumbnail; Site::ContentThumbnail.where(entity_type: 'node', bundle: self.type, entity_id: self.nid).first end
   def content; Site::Content.where(entity_type: 'node', bundle: self.type, entity_id: self.nid).first end
-  def file_uploaded?; Tender::Tender.where(nid: self.nid).first end
+  def file_uploaded?; Tender::Tender.where(nid: self.tnid).first end
 
   def thumbnail
     c_thumbnail = self.content_thumbnail

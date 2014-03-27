@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-module Cartridge
+module CartridgeInit
 
   module Sap
     MANDT = '130'
