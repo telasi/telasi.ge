@@ -4,11 +4,7 @@ require 'rs'
 class Customer::Registration
   include Mongoid::Document
   include Mongoid::Timestamps
-
-  CAT_PERSONAL = 'personal'
-  CAT_NOT_PERSONAL = 'not-personal'
-  OWN_OWNER = 'owner'
-  OWN_RENT  = 'rent'
+  include Customer::Constants
 
   belongs_to :user, class_name: 'Sys::User'
   field :custkey, type: Integer
@@ -21,7 +17,7 @@ class Customer::Registration
   field :address, type: String
   field :address_code, type: String
 
-  filed :incomplete, type: Mongoid::Boolean, default: false
+  field :incomplete, type: Mongoid::Boolean, default: false
   field :confirmed, type: Mongoid::Boolean, default: false
 
   # validates :custkey, uniqueness: { message: I18n.t('models.customer_registration.errors.customer_duplicate'), scope: :user_id }
@@ -31,8 +27,6 @@ class Customer::Registration
   validate  :validate_rs_name
 
   def customer; @customer ||= Billing::Customer.find(self.custkey) end
-  def category_name; self.category == CAT_PERSONAL ? 'ფიზიკური' : 'იურიდიული' end
-  def ownership_name; self.ownership == OWN_OWNER ? 'მესაკუთრე' : 'ქირა/იჯარა' end
 
   private
 

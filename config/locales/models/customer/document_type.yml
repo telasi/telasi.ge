@@ -4,7 +4,6 @@ ka:
       name: დასახელება
       name_ka: დასახელება (KA)
       name_ru: დასახელება (RU)
-      owner_personal: მფლობ./ფიზ.პირი
-      owner_not_personal: მფლობ./იურ.პირი
-      rent_personal: ქირა/ფიზ.პირი
-      rent_not_personal: ქირა/ფიზ.პირი
+      category: კატეგორია
+      ownership: საკუთრება
+      required: აუცილებელია?

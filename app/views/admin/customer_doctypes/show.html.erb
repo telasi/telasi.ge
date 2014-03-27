@@ -3,8 +3,7 @@
   v.title_action admin_delete_customer_doctype_url(id: @doctype.id), icon: '/icons/bin.png', method: 'delete', confirm: 'ნამდვილად გინდათ ამ სახეობის წაშლა?', label: 'წაშლა'
   v.text_field :name_ka, required: true
   v.text_field :name_ru, required: true
-  v.boolean_field :owner_personal
-  v.boolean_field :owner_not_personal
-  v.boolean_field :rent_personal
-  v.boolean_field :rent_not_personal
+  v.text_field :category_name, required: true, i18n: 'category'
+  v.text_field :ownership_name, required: true, i18n: 'ownership'
+  v.boolean_field :required, required: true
 end %>

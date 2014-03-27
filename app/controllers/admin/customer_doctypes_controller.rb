@@ -59,5 +59,5 @@ class Admin::CustomerDoctypesController < ApplicationController
 
   private
 
-  def doctype_params; params.require(:customer_document_type).permit(:name_ka,:name_ru,:owner_personal,:owner_not_personal,:rent_personal,:rent_not_personal) end
+  def doctype_params; params.require(:customer_document_type).permit(:name_ka,:name_ru,:ownership,:category,:required) end
 end

@@ -11,9 +11,8 @@ end %>
   t.item_action ->(x) {admin_edit_customer_doctype_url(id: x.id)}, icon: '/icons/pencil.png'
   t.item_action ->(x) {admin_delete_customer_doctype_url(id: x.id)}, icon: '/icons/bin.png', method: 'delete', confirm: 'ნამდვილად გინდათ ამ სახეობის წაშლა?'
   t.text_field :name, url: ->(x) {admin_customer_doctype_url(id:x.id)}
-  t.boolean_field :owner_personal
-  t.boolean_field :owner_not_personal
-  t.boolean_field :rent_personal
-  t.boolean_field :rent_not_personal
+  t.text_field :category_name, i18n: 'category'
+  t.text_field :ownership_name, i18n: 'ownership'
+  t.boolean_field :required
   t.paginate records: t('models.general.records')
 end %>
