@@ -10,6 +10,11 @@ ru:
       public_ownership: "Укажите, являетесь ли вы собственником:"
       public_ownership_owner: "Да, я собтвенник"
       public_ownership_rent: "Нет, я не собтвенник, но у меня есть соглашение об аренде"
+      status_names:
+        start: Идет проверка
+        docs_required: Требуется дополнительная документация
+        complete: Регистрация подтверждена
+        canceled: Регистрация отклонена
       actions:
         public_save: Запомнить абонента
         save_complete: Абонент сохранен

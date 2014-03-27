@@ -3,9 +3,9 @@ ka:
     customer_registration:
       created_at: შექმნა
       customer: ბილინგის აბონენტი
-      confirmed: დადასტურებული?
       rs_tin: საიდ.კოდი
       rs_name: დასახელება
+      status: სტატუსი
       public_rs_tin: "თქვენი პირადი ნომერი ან საიდენტიფიკაციო კოდი:"
       public_address: "აბონირების მისამართი:"
       public_address_code: "აბონირების მისამართის საკადასტრო კოდი:"
@@ -15,6 +15,11 @@ ka:
       public_ownership: აარჩიეთ ხართ თუ არა აღნიშნული ფართის მფლობელი
       public_ownership_owner: "დიახ, ვარ მფლობელი"
       public_ownership_rent: "არა, არ ვარ მფლობელი, მაგრამ მაქვს საიჯარო/ქირის შეთანხმება"
+      status_names:
+        start: მიმდინარეობს განხილვა
+        docs_required: საჭიროა დამატებითი დოკუმენტაცია
+        complete: რეგისტრაცია დადასტურებულია
+        canceled: რეგისტრაცია უარყოფილია
       actions:
         public_save: აბონენტის დამახსოვრება
         save_complete: აბონენტი შენახულია

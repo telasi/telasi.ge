@@ -1,23 +1,24 @@
 <%= view_for @registration, title: @title, icon: '/icons/user.png', collapsible: true do |f|
   f.tab title: t('models.billing_customer_registration.title.single_alt'), icon: '/icons/user.png' do |t|
-    t.col1 do |c|
-      c.complex_field label: 'მომხმარებელი', required: true do |c|
-        c.email_field 'user.email'
-        c.text_field 'user.full_name', url: admin_user_url(id: @registration.user.id)
-        c.text_field 'user.formatted_mobile'
-      end
-      c.complex_field i18n: 'customer', required: true do |c|
-        c.text_field 'customer.accnumb', tag: 'code'
-        c.text_field 'customer'
-        c.text_field 'customer.address', class: 'text-muted'
-      end
-      c.boolean_field :confirmed, required: true
-      c.text_field :rs_tin, required: true, tag: 'code'
-      c.text_field :rs_name, required: true
-      c.complex_field label: 'მისამართი', required: true do |c|
-        c.text_field :address_code, tag: 'code'
-        c.text_field :address
-      end
+    t.complex_field label: 'მომხმარებელი', required: true do |c|
+      c.email_field 'user.email'
+      c.text_field 'user.full_name', url: admin_user_url(id: @registration.user.id)
+      c.text_field 'user.formatted_mobile'
+    end
+    t.complex_field i18n: 'customer', required: true do |c|
+      c.text_field 'customer.accnumb', tag: 'code'
+      c.text_field 'customer'
+      c.text_field 'customer.address', class: 'text-muted'
+    end
+    t.complex_field i18n: 'status', required: true do |c|
+      c.image_field 'status_icon'
+      c.text_field 'status_name'
+    end
+    t.text_field :rs_tin, required: true, tag: 'code'
+    t.text_field :rs_name, required: true
+    t.complex_field label: 'მისამართი', required: true do |c|
+      c.text_field :address_code, tag: 'code'
+      c.text_field :address
     end
   end
   # f.tab title: t('models.sys_user.title.single'), icon: '/icons/lock.png' do |t|
