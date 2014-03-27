@@ -35,8 +35,13 @@ class Admin::CustomersController < ApplicationController
       @message.messageable = @registration
       @message.mobile = @registration.user.mobile
       if @message.save
-        send_sms(@registration, @message.message)
-        redirect_to admin_show_customer_url(id: @registration.id, tab: 'sms'), notice: 'სტატუსი შეცვლილია'
+        @registration.status = params[:new_status].to_i
+        if @registration.save
+          send_sms(@registration, @message.message)
+          redirect_to admin_show_customer_url(id: @registration.id, tab: 'sms'), notice: 'სტატუსი შეცვლილია'
+        else
+          raise "X: #{@registration.errors.full_messages}"
+        end
       end
     else
       @message = Sys::SmsMessage.new
