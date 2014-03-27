@@ -21,29 +21,6 @@ class Admin::CustomersController < ApplicationController
     @registration = Customer::Registration.find(params[:id])
   end
 
-  def confirm
-    @registration = Billing::CustomerRegistration.find(params[:id])
-    @registration.confirmed = true
-    @registration.denied = false
-    @registration.denial_reason = nil
-    @registration.save
-    send_sms(@registration, "Tqveni onlain motxovnis Sesabamisad, abonenti ##{@registration.customer.accnumb} dadasturebulia!")
-    redirect_to admin_show_customer_url(id: @registration.id), notice: I18n.t('models.billing_customer_registration.actions.registration_confirmed')
-  end
-
-  def deny
-    @title = I18n.t('models.billing_customer_registration.actions.deny_alt')
-    @registration = Billing::CustomerRegistration.find(params[:id])
-    if request.post?
-      @registration.confirmed = false
-      @registration.denied = true
-      if @registration.update_attributes(params.require(:billing_customer_registration).permit(:denial_reason))
-        send_sms(@registration, "abonenti ##{@registration.customer.accnumb} ar dagidasturdat, Semdegi mizezis gamo: #{@registration.denial_reason}")
-        redirect_to admin_show_customer_url(id: @registration.id), notice: I18n.t('models.billing_customer_registration.actions.registration_denied')
-      end
-    end
-  end
-
   def delete
     registration = Billing::CustomerRegistration.find(params[:id])
     registration.destroy

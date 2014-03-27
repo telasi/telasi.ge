@@ -20,7 +20,6 @@ TelasiGe::Application.routes.draw do
     get '/', action: 'index', as: 'customers'
     get '/search', action: 'search', as: 'search_customer'
     match '/info/:custkey', action: 'info', as: 'customer_info', via: ['get', 'post']
-    # get '/complete/:custkey', action: 'complete', as: 'add_customer_complete'
     get '/history/:custkey', action: 'history', as: 'customer_history'
     get '/trash_history/:custkey', action: 'trash_history', as: 'customer_trash_history'
     delete '/remove/:id', action: 'remove', as: 'remove_customer'
@@ -84,8 +83,6 @@ TelasiGe::Application.routes.draw do
       scope '/', controller: 'customers' do
         get '/', action: 'index', as: 'customers'
         get '/show/:id', action: 'show', as: 'show_customer'
-        get '/confirm/:id', action: 'confirm', as: 'confirm_customer'
-        match '/deny/:id', action: 'deny', as: 'deny_customer', via: ['get', 'post']
         delete '/delete/:id', action: 'delete', as: 'delete_customer'
       end
       scope '/doctypes', controller: 'customer_doctypes' do
