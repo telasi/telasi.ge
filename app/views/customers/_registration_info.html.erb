@@ -11,10 +11,10 @@
 </div>
 <div class="row">
   <div class="col-sm-8">
-    <%= render partial: 'customers/customer_info', locals: { customer: registration.customer, with_actions: registration.confirmed } %>
+    <%= render partial: 'customers/customer_info', locals: { customer: registration.customer, with_actions: registration.confirmed? } %>
   </div>
   <div class="col-sm-4">
-    <% unless registration.confirmed %>
+    <% unless registration.confirmed? %>
       <div class="alert alert-warning">
         <i class="fa fa-info-circle"></i>
         <%= t('models.billing_customer_registration.errors.not_confirmed').html_safe %>

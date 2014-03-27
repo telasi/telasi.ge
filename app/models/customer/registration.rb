@@ -50,6 +50,7 @@ class Customer::Registration
   def customer; @customer ||= Billing::Customer.find(self.custkey) end
   def status_name; Customer::Registration.status_name(self.status) end
   def status_icon; Customer::Registration.status_icon(self.status) end
+  def confirmed?; self.status == STATUS_COMPLETE end
 
   private
 

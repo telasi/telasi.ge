@@ -9,6 +9,12 @@
     f.select_field 'customer', select_customer_url, label: 'აბონენტი', search_width: 900
     f.text_field 'rs_tin', label: 'საიდ. კოდი'
     f.text_field 'rs_name', label: 'დასახელება'
+    f.combo_field 'status', empty: '(აარჩიეთ სტატუსი)', label: 'სტატუსი', collection: {
+      Customer::Registration.status_name(Customer::Registration::STATUS_START) => Customer::Registration::STATUS_START,
+      Customer::Registration.status_name(Customer::Registration::STATUS_DOCS_REQUIRED) => Customer::Registration::STATUS_DOCS_REQUIRED,
+      Customer::Registration.status_name(Customer::Registration::STATUS_COMPLETE) => Customer::Registration::STATUS_COMPLETE,
+      Customer::Registration.status_name(Customer::Registration::STATUS_CANCELED) => Customer::Registration::STATUS_CANCELED,
+    }
   end
 end %>
 <%= table_for @registrations, title: t('models.billing_customer_registration.title.pluaral'), icon: '/icons/user.png', collapsible: true do |t|
