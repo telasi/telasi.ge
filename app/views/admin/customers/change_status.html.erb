@@ -1,0 +1,17 @@
+<div>
+  <p>
+    <strong>მიმდინარე სტატუსი</strong>:
+    <img src="<%= @registration.status_icon %>"/>
+    <%= @registration.status_name %>
+  </p>
+  <p>
+    <strong>ახალი სტატუსი</strong>:
+    <img src="<%= Customer::Registration.status_icon params[:new_status].to_i %>"/>
+    <%= Customer::Registration.status_name params[:new_status].to_i %>
+  </p>
+</div>
+<%= forma_for @message, title: @title, icon: '/icons/mobile-phone.png', collapsible: true do |f|
+  f.text_field :message, required: true, autofocus: true, width: 500
+  f.submit 'გაგზავნა'
+  f.cancel_button admin_show_customer_url(id: @registration.id)
+end %>

@@ -8,6 +8,11 @@
 %>
 <%= view_for @registration, title: @title, icon: '/icons/user.png', collapsible: true, selected_tab: seltab do |f|
   f.tab title: t('models.billing_customer_registration.title.single_alt'), icon: '/icons/user.png' do |t|
+    @registration.transitions.each do |stat|
+      t.action admin_change_customer_status_url(id: @registration.id, new_status: stat),
+        label: Customer::Registration.status_name(stat),
+        icon: Customer::Registration.status_icon(stat)
+    end
     t.complex_field label: 'მომხმარებელი', required: true do |c|
       c.email_field 'user.email'
       c.text_field 'user.full_name', url: admin_user_url(id: @registration.user.id)
@@ -29,17 +34,21 @@
       c.text_field :address
     end
   end
-  f.tab title: 'დოკუმენტები', icon: '/icons/documents.png' do |t|
+  f.tab title: "დოკუმენტები &mdash; <strong>#{@registration.documents.size}</strong>".html_safe,
+        icon: '/icons/documents.png' do |t|
     t.table_field :documents, table: { title: 'ატვირთული დოკუმენტები', icon: '/icons/documents.png' } do |documents|
       documents.table do |t|
         # TODO: show fields
       end
     end
   end
-  f.tab title: 'შეტყობინებები', icon: '/icons/mobile-phone.png' do |t|
+  f.tab title: "შეტყობინებები &mdash; <strong>#{@registration.messages.size}</strong>".html_safe,
+        icon: '/icons/mobile-phone.png' do |t|
     t.table_field :messages, table: { title: 'გაგზავნილი შეტყობინებები', icon: '/icons/mobile-phone.png' } do |messages|
       messages.table do |t|
-        # TODO: show fields
+        t.date_field 'created_at', formatter: '%d-%b-%Y %H:%M:%S'
+        t.text_field 'mobile', tag: 'code'
+        t.text_field 'message'
       end
     end
   end

@@ -84,6 +84,7 @@ TelasiGe::Application.routes.draw do
         get '/', action: 'index', as: 'customers'
         get '/show/:id', action: 'show', as: 'show_customer'
         delete '/delete/:id', action: 'delete', as: 'delete_customer'
+        match '/change_status/:id', action: 'change_status', as: 'change_customer_status', via: [:get, :post]
       end
       scope '/doctypes', controller: 'customer_doctypes' do
         get '/', action: 'index', as: 'customer_doctypes'

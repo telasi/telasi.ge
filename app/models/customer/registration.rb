@@ -47,6 +47,13 @@ class Customer::Registration
     else nil end
   end
 
+  def transitions
+    case self.status
+    when STATUS_START then [STATUS_DOCS_REQUIRED,STATUS_COMPLETE,STATUS_CANCELED]
+    when STATUS_DOCS_REQUIRED then [STATUS_START,STATUS_CANCELED]
+    else [] end
+  end
+
   def customer; @customer ||= Billing::Customer.find(self.custkey) end
   def status_name; Customer::Registration.status_name(self.status) end
   def status_icon; Customer::Registration.status_icon(self.status) end

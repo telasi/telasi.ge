@@ -27,6 +27,22 @@ class Admin::CustomersController < ApplicationController
     redirect_to admin_customers_url, notice: 'რეგისტრაცია წაშლილია'
   end
 
+  def change_status
+    @title = 'სტატუსის შეცვლა'
+    @registration = Customer::Registration.find(params[:id])
+    if request.post?
+      @message = Sys::SmsMessage.new(params.require(:sys_sms_message).permit(:message))
+      @message.messageable = @registration
+      @message.mobile = @registration.user.mobile
+      if @message.save
+        send_sms(@registration, @message.message)
+        redirect_to admin_show_customer_url(id: @registration.id, tab: 'sms'), notice: 'სტატუსი შეცვლილია'
+      end
+    else
+      @message = Sys::SmsMessage.new
+    end
+  end
+
   def nav
     @nav = { 'რეგისტრაციები' => admin_customers_url }
     if @registration
