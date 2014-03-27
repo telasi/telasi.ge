@@ -1,4 +1,12 @@
-<%= view_for @registration, title: @title, icon: '/icons/user.png', collapsible: true do |f|
+<%
+  seltab = case params[:tab]
+  when 'docs' then 1
+  when 'sms'  then 2
+  when 'sys'  then 3
+  else 0 end
+
+%>
+<%= view_for @registration, title: @title, icon: '/icons/user.png', collapsible: true, selected_tab: seltab do |f|
   f.tab title: t('models.billing_customer_registration.title.single_alt'), icon: '/icons/user.png' do |t|
     t.complex_field label: 'მომხმარებელი', required: true do |c|
       c.email_field 'user.email'
@@ -7,7 +15,7 @@
     end
     t.complex_field i18n: 'customer', required: true do |c|
       c.text_field 'customer.accnumb', tag: 'code'
-      c.text_field 'customer'
+      c.text_field 'customer.custname'
       c.text_field 'customer.address', class: 'text-muted'
     end
     t.complex_field i18n: 'status', required: true do |c|
@@ -21,12 +29,20 @@
       c.text_field :address
     end
   end
-  # f.tab title: t('models.sys_user.title.single'), icon: '/icons/lock.png' do |t|
-  #   t.email_field 'user.email', label: t('models.sys_user.email'), required: true
-  #   t.text_field 'user.full_name', label: t('models.sys_user.full_name'), required: true, url: admin_user_url(id: @registration.user.id)
-  #   t.text_field 'user.mobile', label: t('models.sys_user.mobile'), required: true
-  #   t.boolean_field 'user.email_confirmed', label: 'დადასტურებული?', required: true
-  # end
+  f.tab title: 'დოკუმენტები', icon: '/icons/documents.png' do |t|
+    t.table_field :documents, table: { title: 'ატვირთული დოკუმენტები', icon: '/icons/documents.png' } do |documents|
+      documents.table do |t|
+        # TODO: show fields
+      end
+    end
+  end
+  f.tab title: 'შეტყობინებები', icon: '/icons/mobile-phone.png' do |t|
+    t.table_field :messages, table: { title: 'გაგზავნილი შეტყობინებები', icon: '/icons/mobile-phone.png' } do |messages|
+      messages.table do |t|
+        # TODO: show fields
+      end
+    end
+  end
   f.tab title: t('models.general.system'), icon: '/icons/traffic-cone.png' do |t|
     t.timestamps
   end

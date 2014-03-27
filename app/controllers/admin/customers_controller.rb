@@ -37,7 +37,5 @@ class Admin::CustomersController < ApplicationController
 
   private
 
-  def send_sms(registration, text)
-    Magti.send_sms(registration.user.mobile, text.to_lat) if Magti::SEND
-  end
+  def send_sms(registration, text); Magti.send_sms(registration.user.mobile, text.to_lat) if Magti::SEND end
 end
