@@ -5,10 +5,8 @@ class Admin::CustomerDoctypesController < ApplicationController
     @search = params[:search] == 'clear' ? {} : params[:search]
     rel = Customer::DocumentType
     if @search
-      rel = rel.where(owner_personal: @search[:owner_personal] == 'yes') if @search[:owner_personal].present?
-      rel = rel.where(owner_not_personal: @search[:owner_not_personal] == 'yes') if @search[:owner_not_personal].present?
-      rel = rel.where(rent_personal: @search[:rent_personal] == 'yes') if @search[:rent_personal].present?
-      rel = rel.where(rent_not_personal: @search[:rent_not_personal] == 'yes') if @search[:rent_not_personal].present?
+      rel = rel.where(category: @search[:category]) if @search[:category].present?
+      rel = rel.where(ownership: @search[:ownership]) if @search[:ownership].present?
     end
     @doctypes = rel.paginate(page: params[:page], per_page: 100)
   end
