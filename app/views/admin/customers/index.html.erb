@@ -28,5 +28,9 @@ end %>
     c.image_field 'status_icon'
     c.text_field 'status_name'
   end
+  t.complex_field label: 'სახეობა' do |c|
+    c.text_field 'category_name', after: '/'
+    c.text_field 'ownership_name'
+  end
   t.paginate records: t('models.general.records')
 end %>

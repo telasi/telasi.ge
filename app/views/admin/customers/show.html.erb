@@ -23,6 +23,8 @@
       c.text_field 'customer.custname'
       c.text_field 'customer.address', class: 'text-muted'
     end
+    t.text_field 'category_name', i18n: 'category', required: true
+    t.text_field 'ownership_name', i18n: 'ownership', required: true
     t.complex_field i18n: 'status', required: true do |c|
       c.image_field 'status_icon'
       c.text_field 'status_name'
