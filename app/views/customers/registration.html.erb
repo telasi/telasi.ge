@@ -1,3 +1,56 @@
 <%= render partial: 'customers/registration_top', locals: { registration: @registration } %>
-
-general
+<div class="row">
+  <div class="col-sm-6">
+    <ul class="list-group">
+      <li class="list-group-item">
+        <div class="pull-right">
+          <code><%= @registration.customer.accnumb.to_ka %></code>
+          <%= @registration.customer.custname.to_ka %>
+        </div>
+        <%= t('models.customer_registration.customer') %>
+      </li>
+      <li class="list-group-item">
+        <div class="pull-right"><%= @registration.customer.address %></div>
+        <%= t('models.customer_registration.customer_address') %>
+      </li>
+    </ul>
+    <ul class="list-group">
+      <li class="list-group-item">
+        <div class="pull-right">
+          <%= @registration.created_at.strftime('%d-%b-%Y') %>
+        </div>
+        <%= t('models.customer_registration.created_at') %>
+      </li>
+      <li class="list-group-item">
+        <div class="pull-right">
+          <img src="<%= @registration.status_icon %>"/>
+          <%= @registration.status_name %>
+        </div>
+        <%= t('models.customer_registration.public_status') %>
+      </li>
+    </ul>
+  </div>
+  <div class="col-sm-6">
+    <ul class="list-group">
+      <li class="list-group-item">
+        <div class="pull-right">
+          <code><%= @registration.rs_tin %></code>
+          <%= @registration.rs_name %>
+        </div>
+        <%= t('models.customer_registration.rs_name') %>
+      </li>
+      <li class="list-group-item">
+        <div class="pull-right">
+          <%= @registration.category_name %>
+        </div>
+        <%= t('models.customer_registration.category') %>
+      </li>
+      <li class="list-group-item">
+        <div class="pull-right">
+          <%= @registration.ownership_name %>
+        </div>
+        <%= t('models.customer_registration.ownership') %>
+      </li>
+    </ul>
+  </div>
+</div>

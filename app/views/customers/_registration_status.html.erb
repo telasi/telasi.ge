@@ -25,4 +25,11 @@
     </div>
     <%= t('models.customer_registration.ownership') %>
   </li>
+  <li class="list-group-item">
+    <div class="pull-right">
+      <code><%= registration.rs_tin %></code>
+      <%= link_to registration.rs_name, url %>
+    </div>
+    <%= t('models.customer_registration.rs_name') %>
+  </li>
 </ul>
