@@ -12,7 +12,7 @@ class Customer::Registration
   STATUS_CANCELED = 4
 
   belongs_to :user, class_name: 'Sys::User'
-  has_many :documents, class_name: 'Customer::Document', as: 'registation'
+  has_many :documents, class_name: 'Customer::Document', inverse_of: 'registration'
   has_many :messages, class_name: 'Sys::SmsMessage', as: 'messageable'
   field :status, type: Integer, default: STATUS_START
   field :custkey, type: Integer
@@ -58,6 +58,14 @@ class Customer::Registration
   def status_name; Customer::Registration.status_name(self.status) end
   def status_icon; Customer::Registration.status_icon(self.status) end
   def confirmed?; self.status == STATUS_COMPLETE end
+
+  def generate_docs
+    Customer::DocumentType.where(category: self.category, ownership: self.ownership).each do |type|
+      if self.documents.where(document_type: type, denied: false).count == 0
+        Customer::Document.new(document_type: type, registration: self, complete: false, denied: false).save
+      end
+    end
+  end
 
   private
 

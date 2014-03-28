@@ -38,9 +38,13 @@
   end
   f.tab title: "დოკუმენტები &mdash; <strong>#{@registration.documents.size}</strong>".html_safe,
         icon: '/icons/documents.png' do |t|
+    t.action admin_generate_customer_docs_url(id: @registration.id), label: 'დოკუმენტების გენერაცია', icon: '/icons/wand.png', method: 'post', confirm: 'ნამდვილად გინდათ დოკუმენტების გენერაცია?'
     t.table_field :documents, table: { title: 'ატვირთული დოკუმენტები', icon: '/icons/documents.png' } do |documents|
       documents.table do |t|
-        # TODO: show fields
+        t.text_field 'file_name', label: 'მომაგრებული ფაილი', url: ->(x) { x.file.url }
+        t.text_field 'document_type.name', label: 'დოკუმენტის სახეობა'
+        t.boolean_field 'denied', label: 'უარყოფილი?'
+        t.text_field 'denial_reason', label: 'უარყოფის მიზეზი'
       end
     end
   end

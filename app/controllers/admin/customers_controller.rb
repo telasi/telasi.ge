@@ -40,12 +40,18 @@ class Admin::CustomersController < ApplicationController
           send_sms(@registration, @message.message)
           redirect_to admin_show_customer_url(id: @registration.id, tab: 'sms'), notice: 'სტატუსი შეცვლილია'
         else
-          raise "X: #{@registration.errors.full_messages}"
+          raise "#{@registration.errors.full_messages}"
         end
       end
     else
       @message = Sys::SmsMessage.new
     end
+  end
+
+  def generate_docs
+    registration = Customer::Registration.find(params[:id])
+    registration.generate_docs
+    redirect_to admin_show_customer_url(id: registration.id, tab: 'docs'), notice: 'დოკუმენტები გენერირებულია'
   end
 
   def nav
