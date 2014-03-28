@@ -19,6 +19,7 @@ ka:
         documents: დოკუმენტები
         no_file: ფაილი არაა ატვირთული
         add_file: ფაილის ატვირთვა
+        change_file: ფაილის შეცვლა
         denied_docs: დაწუნებული დოკუმენტები
         messages: SMS შეტყობინებები
         doc_upload_complete: ფაილი ატვირთულია
