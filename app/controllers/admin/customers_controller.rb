@@ -22,7 +22,7 @@ class Admin::CustomersController < ApplicationController
   end
 
   def delete
-    registration = Billing::CustomerRegistration.find(params[:id])
+    registration = Customer::Registration.find(params[:id])
     registration.destroy
     redirect_to admin_customers_url, notice: 'რეგისტრაცია წაშლილია'
   end
