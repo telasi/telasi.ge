@@ -1,8 +1,15 @@
 <div class="page-header">
   <div class="pull-right">
-    <a class="btn btn-default" href="<%= remove_customer_url(id: registration.id) %>" data-method="delete" data-confirm="<%= t('models.billing_customer_registration.actions.remove_confirm') %>">
-      <i class="fa fa-trash-o"></i>
-    </a>
+    <div class="btn-group">
+      <a class="btn btn-default" href="<%= remove_customer_url(id: registration.id) %>"
+         data-method="delete" data-confirm="<%= t('models.billing_customer_registration.actions.remove_confirm') %>">
+        <i class="fa fa-trash-o"></i>
+      </a>
+      <a class="btn btn-info" href="<%= customer_registration_url(id: registration.id) %>">
+        <i class="fa fa-eye"></i>
+        <%= t('models.customer_registration.actions.more').html_safe %>
+      </a>
+    </div>
   </div>
   <h3>
     <code>#<%= registration.customer.accnumb.to_ka %></code>

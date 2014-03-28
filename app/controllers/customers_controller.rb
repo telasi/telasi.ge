@@ -20,8 +20,6 @@ class CustomersController < ApplicationController
       @registration = Customer::Registration.new(params.require(:customer_registration).permit(:category, :ownership, :rs_tin, :address, :address_code))
       @registration.custkey = @customer.custkey
       @registration.user = current_user
-      # @registration.confirmed = false
-      # @registration.denied = false
       if @registration.save
         redirect_to customers_url, notice: I18n.t('models.customer_registration.actions.save_complete')
       end
@@ -30,12 +28,25 @@ class CustomersController < ApplicationController
     end
   end
 
-  # def complete; @title = I18n.t('models.billing_customer_registration.actions.add_complete') end
-
   def remove
     registration = Customer::Registration.find(params[:id])
     registration.destroy
     redirect_to customers_url, notice: I18n.t('models.customer_registration.actions.remove_complete')
+  end
+
+  def registration
+    @title = t('pages.customers.registration.title')
+    @registration = Customer::Registration.find(params[:id])
+  end
+
+  def registration_docs
+    @title = t('pages.customers.registration.documents')
+    @registration = Customer::Registration.find(params[:id])
+  end
+
+  def registration_messages
+    @title = t('pages.customers.registration.messages')
+    @registration = Customer::Registration.find(params[:id])
   end
 
   # def history
@@ -59,4 +70,12 @@ class CustomersController < ApplicationController
   #     redirect_to customers_url, notice: 'not allowed'
   #   end
   # end
+
+  def nav
+    @nav = { t('menu.customers') => customers_url }
+    if @registration
+      @nav[t('pages.customers.registration.title')] = customer_registration_url(id: @registration.id)
+    end
+    @nav
+  end
 end

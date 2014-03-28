@@ -1,4 +1,4 @@
-<% url = nil %>
+<% url = customer_registration_url(id: registration.id) %>
 <ul class="list-group">
   <li class="list-group-item">
     <div class="pull-right">
@@ -26,6 +26,3 @@
     <%= t('models.customer_registration.ownership') %>
   </li>
 </ul>
-<div class="text-center">
-  <%= link_to t('models.customer_registration.actions.more').html_safe, url, class: ['btn', 'btn-info', 'btn-sm'] %>
-</div>

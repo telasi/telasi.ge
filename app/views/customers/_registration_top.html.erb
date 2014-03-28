@@ -1,0 +1,16 @@
+<h2 class="page-header">
+  <%= t('pages.customers.registration.title') %>
+  <code>#<%= registration.customer.accnumb.to_ka %></code>
+</h2>
+<%
+  links = {
+    t('pages.customers.registration.general') => customer_registration_url(id: registration.id),
+    "#{t('pages.customers.registration.documents')} &mdash; #{@registration.documents.size}".html_safe => customer_registration_docs_url(id: registration.id),
+    "#{t('pages.customers.registration.messages')} &mdash; #{@registration.messages.size}".html_safe => customer_registration_messages_url(id: registration.id)
+  }
+%>
+<ul class="nav nav-pills nav-justified-x" style="margin: 16px 0;">
+  <% links.each do |text, url| %>
+    <li class="<%= request.url == url ? 'active' : 'inactive' %>"><%= link_to text, url %></li>
+  <% end %>
+</ul>
