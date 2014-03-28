@@ -1,2 +1,19 @@
 <%= render partial: 'customers/registration_top', locals: { registration: @registration } %>
-messages
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th width="30">#</th>
+      <th width="150"><%= t('models.sys_sms_message.created_at') %></th>
+      <th><%= t('models.sys_sms_message.message') %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @registration.messages.each_with_index do |msg,i| %>
+      <tr>
+        <td class="text-right"><strong><%=i+1%></strong></td>
+        <td><%= msg.created_at.strftime('%d-%b-%Y %H:%M') %></td>
+        <td><code><%= msg.mobile %></code> &rarr; <%= msg.message %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
