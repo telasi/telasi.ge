@@ -58,10 +58,12 @@ class Customer::Registration
   def status_name; Customer::Registration.status_name(self.status) end
   def status_icon; Customer::Registration.status_icon(self.status) end
   def confirmed?; self.status == STATUS_COMPLETE end
+  def not_denied_documents; self.documents.where(denied: false) end
+  def denied_documents; self.documents.where(denied: true) end
 
   def generate_docs
     Customer::DocumentType.where(category: self.category, ownership: self.ownership).each do |type|
-      if self.documents.where(document_type: type, denied: false).count == 0
+      if self.not_denied_documents.where(document_type: type).count == 0
         Customer::Document.new(document_type: type, registration: self, complete: false, denied: false).save
       end
     end
