@@ -17,6 +17,7 @@ ka:
         title: "აბონენტის რეგისტრაცია"
         general: ძირითადი
         documents: დოკუმენტები
+        denied_documents: უარყოფილი დოკუმენტები
         no_file: ფაილი არაა ატვირთული
         add_file: ფაილის ატვირთვა
         change_file: ფაილის შეცვლა

@@ -3,35 +3,62 @@
    denied_docs = @registration.documents.where(denied: true)
 %>
 <% if docs.any? %>
-<h3 class="page-header"><%= t('pages.customers.registration.documents') %> &mdash; <code><%= docs.count %></code></h3>
+<h3 class="page-header">
+  <%= t('pages.customers.registration.documents') %>
+  &mdash; <code><%= docs.count %></code>
+</h3>
 <table class="table table-bordered">
   <thead>
     <tr>
       <th width="40">#</th>
-      <th width="300"><%= t('models.customer_document.document_type') %></th>
-      <th><%= t('models.customer_document.file') %></th>
+      <th><%= t('models.customer_document.document_type') %></th>
+      <th width="500"><%= t('models.customer_document.file') %></th>
     </tr>
   </thead>
-  <% docs.each_with_index do |doc,i| %>
+  <tbody>
+    <% docs.each_with_index do |doc,i| %>
+      <tr>
+        <td class="text-right"><strong><%=i+1%></strong></td>
+        <td><%=doc.document_type.name%></td>
+        <td>
+          <% if doc.file %>
+            <a class="btn btn-warning btn-sm" href="<%= customer_registration_doc_upload_url(doc_id: doc.id) %>">
+              <i class="fa fa-pencil"></i>
+              <%= t('pages.customers.registration.change_file')%>
+            </a>
+            <%= link_to doc.file.file.filename, doc.file.file.url %>
+          <% else %>
+            <a class="btn btn-success btn-sm" href="<%= customer_registration_doc_upload_url(doc_id: doc.id) %>">
+              <i class="fa fa-plus"></i>
+              <%= t('pages.customers.registration.add_file')%>
+            </a>
+            <span class="text-muted"><%= t('pages.customers.registration.no_file') %></span>
+        <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% end %>
+<% if denied_docs.any? %>
+<h3 class="page-header">
+  <%= t('pages.customers.registration.denied_documents') %>
+  &mdash; <code><%= denied_docs.count %></code>
+</h3>
+<table class="table table-bordered">
+  <thead>
     <tr>
-      <td class="text-right"><strong><%=i+1%></strong></td>
-      <td><%=doc.document_type.name%></td>
-      <td>
-        <% if doc.file %>
-          <a class="btn btn-warning btn-sm" href="<%= customer_registration_doc_upload_url(doc_id: doc.id) %>">
-            <i class="fa fa-pencil"></i>
-            <%= t('pages.customers.registration.change_file')%>
-          </a>
-          <%= link_to doc.file.file.filename, doc.file.file.url %>
-        <% else %>
-          <a class="btn btn-success btn-sm" href="<%= customer_registration_doc_upload_url(doc_id: doc.id) %>">
-            <i class="fa fa-plus"></i>
-            <%= t('pages.customers.registration.add_file')%>
-          </a>
-          <span class="text-muted"><%= t('pages.customers.registration.no_file') %></span>
-      <% end %>
-      </td>
+      <th width="40">#</th>
+      <th><%= t('models.customer_document.document_type') %></th>
+      <th width="500"><%= t('models.customer_document.file') %></th>
     </tr>
-  <% end %>
+  </thead>
+  <tbody>
+    <% denied_docs.each_with_index do |doc,i| %>
+      <td class="text-right"><strong><%=i+1%></strong></td>
+      <td><%=doc.document_type.name%> &rarr; <span class="text-danger"><%= doc.denial_reason %></span></td>
+      <td><%= link_to doc.file.file.filename, doc.file.file.url %></td>
+    <% end %>
+  </tbody>
 </table>
 <% end %>
