@@ -3,3 +3,4 @@ ka:
     customer_document:
       document_type: დოკუმენტის სახეობა
       file: ფაილი
+      deny_reason: უარყოფის მიზეზი

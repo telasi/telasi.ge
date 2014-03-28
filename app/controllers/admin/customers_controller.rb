@@ -54,6 +54,18 @@ class Admin::CustomersController < ApplicationController
     redirect_to admin_show_customer_url(id: registration.id, tab: 'docs'), notice: 'დოკუმენტები გენერირებულია'
   end
 
+  def deny_doc
+    @title = 'დოკუმენტის უარყოფა'
+    @document = Customer::Document.find(params[:id])
+    @registration = @document.registration
+    if request.post?
+      @document.denied = true
+      if @document.update_attributes(params.require(:customer_document).permit(:denial_reason))
+        redirect_to admin_show_customer_url(id: @registration.id, tab: 'docs'), notice: 'დოკუმენტი უარყოფილია'
+      end
+    end
+  end
+
   def nav
     @nav = { 'რეგისტრაციები' => admin_customers_url }
     if @registration

@@ -41,6 +41,7 @@
     t.action admin_generate_customer_docs_url(id: @registration.id), label: 'დოკუმენტების გენერაცია', icon: '/icons/wand.png', method: 'post', confirm: 'ნამდვილად გინდათ დოკუმენტების გენერაცია?'
     t.table_field :documents, table: { title: 'ატვირთული დოკუმენტები', icon: '/icons/documents.png' } do |documents|
       documents.table do |t|
+        t.item_action ->(x) { admin_deny_customer_doc_url(id: x.id) }, label: 'უარყოფა', condition: ->(x) { x.can_deny? }, icon: '/icons/cross.png'
         t.text_field 'file.file.filename', label: 'მომაგრებული ფაილი', url: ->(x) { x.file.file.url }
         t.text_field 'document_type.name', label: 'დოკუმენტის სახეობა'
         t.boolean_field 'denied', label: 'უარყოფილი?'

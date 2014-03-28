@@ -9,6 +9,17 @@ class Customer::Document
   field :complete, type: Mongoid::Boolean, default: false
   field :denied, type: Mongoid::Boolean, default: false
   field :denial_reason, type: String
+  validate :validate_denial_reason
 
-  def file_name; file.name if self.file end
+  def can_deny?; self.file and !denied end
+
+  private
+
+  def validate_denial_reason
+    if self.denied
+      if self.denial_reason.blank?
+        errors.add(:denial_reason, 'ჩაწერეთ უარყოფის მიზეზი')
+      end
+    end
+  end
 end
