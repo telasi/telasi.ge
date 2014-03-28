@@ -4,7 +4,6 @@
   when 'sms'  then 2
   when 'sys'  then 3
   else 0 end
-
 %>
 <%= view_for @registration, title: @title, icon: '/icons/user.png', collapsible: true, selected_tab: seltab do |f|
   f.tab title: t('models.billing_customer_registration.title.single_alt'), icon: '/icons/user.png' do |t|
