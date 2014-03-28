@@ -41,6 +41,13 @@
       </li>
       <li class="list-group-item">
         <div class="pull-right">
+          <code><%= @registration.address_code %></code>
+          <%= @registration.address %>
+        </div>
+        <%= t('models.customer_registration.address') %>
+      </li>
+      <li class="list-group-item">
+        <div class="pull-right">
           <%= @registration.category_name %>
         </div>
         <%= t('models.customer_registration.category') %>

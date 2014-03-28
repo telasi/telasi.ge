@@ -4,6 +4,8 @@ ka:
       created_at: შევსების თარიღი
       customer: ბილინგის აბონენტი
       customer_address: ბილინგის მისამართი
+      address: მისამართი
+      address_code: საკადასტრო კოდი
       rs_tin: საიდ.კოდი
       rs_name: განმცხადებელი
       status: სტატუსი
