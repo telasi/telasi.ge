@@ -17,5 +17,8 @@ ka:
         title: "აბონენტის რეგისტრაცია"
         general: ძირითადი
         documents: დოკუმენტები
+        no_file: ფაილი არაა ატვირთული
+        add_file: ფაილის ატვირთვა
         denied_docs: დაწუნებული დოკუმენტები
         messages: SMS შეტყობინებები
+        doc_upload_complete: ფაილი ატვირთულია

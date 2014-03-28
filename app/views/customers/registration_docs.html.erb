@@ -8,15 +8,25 @@
   <thead>
     <tr>
       <th width="40">#</th>
-      <th width="300"><%= t('models.customer_document.doctype') %></th>
-      <th></th>
+      <th width="300"><%= t('models.customer_document.document_type') %></th>
+      <th><%= t('models.customer_document.file') %></th>
     </tr>
   </thead>
   <% docs.each_with_index do |doc,i| %>
     <tr>
       <td class="text-right"><strong><%=i+1%></strong></td>
       <td><%=doc.document_type.name%></td>
-      <td></td>
+      <td>
+        <% if doc.file %>
+          <%= link_to doc.file.file.filename, doc.file.file.url %>
+        <% else %>
+          <a class="btn btn-success btn-sm" href="<%= customer_registration_doc_upload_url(doc_id: doc.id) %>">
+            <i class="fa fa-plus"></i>
+            <%= t('pages.customers.registration.add_file')%>
+          </a>
+          <span class="text-muted"><%= t('pages.customers.registration.no_file') %></span>
+      <% end %>
+      </td>
     </tr>
   <% end %>
 </table>

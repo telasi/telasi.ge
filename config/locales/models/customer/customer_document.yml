@@ -1,4 +1,5 @@
 ka:
   models:
     customer_document:
-      doctype: დოკუმენტის სახეობა
+      document_type: დოკუმენტის სახეობა
+      file: ფაილი

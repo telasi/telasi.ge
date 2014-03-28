@@ -24,8 +24,9 @@ TelasiGe::Application.routes.draw do
     get '/trash_history/:custkey', action: 'trash_history', as: 'customer_trash_history'
     delete '/remove/:id', action: 'remove', as: 'remove_customer'
     get '/registration/:id', action: 'registration', as: 'customer_registration'
-    get '/registration/:id/docs', action: 'registration_docs', as: 'customer_registration_docs'
     get '/registration/:id/messages', action: 'registration_messages', as: 'customer_registration_messages'
+    get '/registration/:id/docs', action: 'registration_docs', as: 'customer_registration_docs'
+    match '/registration/docs/upload/:doc_id', action: 'registration_upload_doc', as: 'customer_registration_doc_upload', via: [:get, :post]
   end
 
   scope '/calculator', controller: 'calculator' do

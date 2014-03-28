@@ -39,14 +39,29 @@ class CustomersController < ApplicationController
     @registration = Customer::Registration.find(params[:id])
   end
 
+  def registration_messages
+    @title = t('pages.customers.registration.messages')
+    @registration = Customer::Registration.find(params[:id])
+  end
+
   def registration_docs
     @title = t('pages.customers.registration.documents')
     @registration = Customer::Registration.find(params[:id])
   end
 
-  def registration_messages
-    @title = t('pages.customers.registration.messages')
-    @registration = Customer::Registration.find(params[:id])
+  def registration_upload_doc
+    @title = t('pages.customers.registration.add_file')
+    @document = Customer::Document.find(params[:doc_id])
+    @registration = @document.registration
+    if request.post?
+      @file = Sys::File.new(params.require(:sys_file).permit(:file))
+      if @file.save
+        @document.file = @file; @document.save
+        redirect_to customer_registration_docs_url(id: @registration.id), notice: I18n.t('pages.customers.registration.doc_upload_complete')
+      end
+    else
+      @file = Sys::File.new
+    end
   end
 
   # def history
@@ -75,6 +90,8 @@ class CustomersController < ApplicationController
     @nav = { t('menu.customers') => customers_url }
     if @registration
       @nav[t('pages.customers.registration.title')] = customer_registration_url(id: @registration.id)
+      @nav[t('pages.customers.registration.documents')] = customer_registration_docs_url(id: @registration.id) if action_name == 'registration_upload_doc'
+      @nav[@title] = nil unless action_name == 'registration'
     end
     @nav
   end
