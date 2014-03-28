@@ -1,2 +1,23 @@
 <%= render partial: 'customers/registration_top', locals: { registration: @registration } %>
-documents
+<% docs = @registration.documents.where(denied: false)
+   denied_docs = @registration.documents.where(denied: true)
+%>
+<% if docs.any? %>
+<h3 class="page-header"><%= t('pages.customers.registration.documents') %> &mdash; <code><%= docs.count %></code></h3>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th width="40">#</th>
+      <th width="300"><%= t('models.customer_document.doctype') %></th>
+      <th></th>
+    </tr>
+  </thead>
+  <% docs.each_with_index do |doc,i| %>
+    <tr>
+      <td class="text-right"><strong><%=i+1%></strong></td>
+      <td><%=doc.document_type.name%></td>
+      <td></td>
+    </tr>
+  <% end %>
+</table>
+<% end %>

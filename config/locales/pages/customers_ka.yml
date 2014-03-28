@@ -17,4 +17,5 @@ ka:
         title: "აბონენტის რეგისტრაცია"
         general: ძირითადი
         documents: დოკუმენტები
+        denied_docs: დაწუნებული დოკუმენტები
         messages: SMS შეტყობინებები

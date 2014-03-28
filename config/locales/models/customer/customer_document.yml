@@ -1,0 +1,4 @@
+ka:
+  models:
+    customer_document:
+      doctype: დოკუმენტის სახეობა
