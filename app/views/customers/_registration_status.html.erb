@@ -1,0 +1,31 @@
+<% url = nil %>
+<ul class="list-group">
+  <li class="list-group-item">
+    <div class="pull-right">
+      <%= link_to registration.created_at.strftime('%d-%b-%Y'), url %>
+    </div>
+    <%= t('models.customer_registration.created_at') %>
+  </li>
+  <li class="list-group-item">
+    <div class="pull-right">
+      <img src="<%= registration.status_icon %>"/>
+      <%= link_to registration.status_name, url %>
+    </div>
+    <%= t('models.customer_registration.public_status') %>
+  </li>
+  <li class="list-group-item">
+    <div class="pull-right">
+      <%= link_to registration.category_name, url %>
+    </div>
+    <%= t('models.customer_registration.category') %>
+  </li>
+  <li class="list-group-item">
+    <div class="pull-right">
+      <%= link_to registration.ownership_name, url %>
+    </div>
+    <%= t('models.customer_registration.ownership') %>
+  </li>
+</ul>
+<div class="text-center">
+  <%= link_to t('models.customer_registration.actions.more').html_safe, url, class: ['btn', 'btn-info', 'btn-sm'] %>
+</div>

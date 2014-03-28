@@ -10,16 +10,22 @@
   </h3>
 </div>
 <div class="row">
-  <div class="col-sm-8">
-    <%= render partial: 'customers/customer_info', locals: { customer: registration.customer, with_actions: registration.confirmed? } %>
-  </div>
-  <div class="col-sm-4">
-    <% unless registration.confirmed? %>
+  <% if registration.confirmed? %> <!-- confirmed customer -->
+    <div class="col-sm-12">
+      <%= render partial: 'customers/customer_info', locals: { customer: registration.customer, with_actions: true } %>
+    </div>
+  <% else %>                       <!-- not-confirmed customer -->
+    <div class="col-sm-12">
       <div class="alert alert-warning">
         <i class="fa fa-info-circle"></i>
         <%= t('models.billing_customer_registration.errors.not_confirmed').html_safe %>
       </div>
-    <% else %>
-    <% end %>
-  </div>
+    </div>
+    <div class="col-sm-6">
+      <%= render partial: 'customers/customer_info', locals: { customer: registration.customer, with_actions: false } %>
+    </div>
+    <div class="col-sm-6">
+      <%= render partial: 'customers/registration_status', locals: { registration: registration } %>
+    </div>
+  <% end %>
 </div>

@@ -1,7 +1,7 @@
 ka:
   models:
     customer_registration:
-      created_at: შექმნა
+      created_at: შევსების თარიღი
       customer: ბილინგის აბონენტი
       rs_tin: საიდ.კოდი
       rs_name: დასახელება
@@ -17,6 +17,7 @@ ka:
       public_ownership: აარჩიეთ ხართ თუ არა აღნიშნული ფართის მფლობელი
       public_ownership_owner: "დიახ, ვარ მფლობელი"
       public_ownership_rent: "არა, არ ვარ მფლობელი, მაგრამ მაქვს საიჯარო/ქირის შეთანხმება"
+      public_status: განაცხადის სტატუსი
       status_names:
         start: მიმდინარეობს განხილვა
         docs_required: საჭიროა დამატებითი დოკუმენტაცია
@@ -26,6 +27,7 @@ ka:
         public_save: აბონენტის დამახსოვრება
         save_complete: აბონენტი შენახულია
         remove_complete: აბონენტი წაშლილია
+        more: "განაცხადის ნახვა &rarr;"
       errors:
         tin_required: პირადი ნომერი აუცილებელია
         tin_illegal: არასწორი პირადი ნომერი
