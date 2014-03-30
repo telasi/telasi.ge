@@ -71,16 +71,16 @@ class CustomersController < ApplicationController
     redirect_to customer_registration_url(id: registration.id), notice: t('pages.customers.register.resend_complete')
   end
 
-  # def history
-  #   @title = I18n.t('models.billing_customer.actions.history')
-  #   @registration = Billing::CustomerRegistration.where(user: current_user, custkey: params[:custkey]).first
-  #   if @registration
-  #     @customer = @registration.customer
-  #     @items = Billing::Item.where(customer: @customer).order('itemkey DESC').paginate(per_page: 10, page: params[:page])
-  #   else
-  #     redirect_to customers_url, notice: 'not allowed'
-  #   end
-  # end
+  def history
+    @title = I18n.t('models.billing_customer.actions.history')
+    @registration = Customer::Registration.where(user: current_user, custkey: params[:custkey]).first
+    if @registration
+      @customer = @registration.customer
+      @items = Billing::Item.where(customer: @customer).order('itemkey DESC').paginate(per_page: 10, page: params[:page])
+    else
+      redirect_to customers_url, notice: 'not allowed'
+    end
+  end
 
   # def trash_history
   #   @title = I18n.t('models.billing_customer.actions.trash_history')
