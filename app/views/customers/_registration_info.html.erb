@@ -27,6 +27,7 @@
         <i class="fa fa-info-circle"></i>
         <%= t('models.billing_customer_registration.errors.not_confirmed').html_safe %>
       </div>
+      <%= render partial: '/customers/alerts', locals: { registration: registration } %>
     </div>
     <div class="col-sm-6">
       <%= render partial: 'customers/customer_info', locals: { customer: registration.customer, with_actions: false } %>

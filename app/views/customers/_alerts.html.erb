@@ -1,0 +1,5 @@
+<% if registration.show_docs_required_warning? %>
+  <div class="alert alert-danger">
+    <%= t('pages.customers.register.show_docs_required_warning', url: customer_registration_docs_url(id: registration.id)).html_safe %>
+  </div>
+<% end %>

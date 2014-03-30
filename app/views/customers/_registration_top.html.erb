@@ -14,3 +14,5 @@
     <li class="<%= request.url == url ? 'active' : 'inactive' %>"><%= link_to text, url %></li>
   <% end %>
 </ul>
+<!-- alerts -->
+<%= render partial: '/customers/alerts', locals: { registration: registration } %>

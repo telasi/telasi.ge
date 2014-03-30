@@ -12,6 +12,7 @@ class Customer::Document
   validate :validate_denial_reason
 
   def can_deny?; self.file and !denied end
+  def has_file?; self.file.present? end
 
   private
 
