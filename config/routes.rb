@@ -89,6 +89,7 @@ TelasiGe::Application.routes.draw do
         get '/show/:id', action: 'show', as: 'show_customer'
         delete '/delete/:id', action: 'delete', as: 'delete_customer'
         match '/change_status/:id', action: 'change_status', as: 'change_customer_status', via: [:get, :post]
+        match '/send_sms/:id', action: 'send_message', as: 'send_customer_sms', via: [:get, :post]
         post '/generate_docs/:id', action: 'generate_docs', as: 'generate_customer_docs'
         match '/deny_doc/:id', action: 'deny_doc', as: 'deny_customer_doc', via: [:get, :post]
       end

@@ -1,0 +1,5 @@
+<%= forma_for @message, title: @title, icon: '/icons/mobile-phone.png', collapsible: true do |f|
+  f.text_field :message, required: true, autofocus: true, width: 500
+  f.submit 'გაგზავნა'
+  f.cancel_button admin_show_customer_url(id: @registration.id, tab: 'sms')
+end %>

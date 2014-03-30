@@ -58,6 +58,7 @@
         icon: '/icons/mobile-phone.png' do |t|
     t.table_field :messages, table: { title: 'გაგზავნილი შეტყობინებები', icon: '/icons/mobile-phone.png' } do |messages|
       messages.table do |t|
+        t.title_action admin_send_customer_sms_url(id: @registration.id), label: 'შეტყობინების გაგზავნა', icon: '/icons/mobile-phone--plus.png'
         t.date_field 'created_at', formatter: '%d-%b-%Y %H:%M:%S'
         t.text_field 'mobile', tag: 'code'
         t.text_field 'message'
