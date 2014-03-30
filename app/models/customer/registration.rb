@@ -62,7 +62,7 @@ class Customer::Registration
   def denied_documents; self.documents.where(denied: true) end
   def all_docs_uploaded?; self.not_denied_documents.select{|x| not x.has_file? }.empty? end
   def show_docs_required_warning?; self.status == STATUS_DOCS_REQUIRED and not self.all_docs_uploaded? end
-  def show_send_back_warning?; self.status == STATUS_DOCS_REQUIRED and self.all_docs_uploaded? end
+  def show_resend_warning?; self.status == STATUS_DOCS_REQUIRED and self.all_docs_uploaded? end
 
   def generate_docs
     Customer::DocumentType.where(category: self.category, ownership: self.ownership).each do |type|
