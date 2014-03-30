@@ -1,9 +1,11 @@
-<% if registration.show_docs_required_warning? %>
+<% if registration.show_docs_required_warning? and request.url != customer_registration_docs_url(id: registration.id) %>
+<!-- docs required warning -->
   <div class="alert alert-danger">
     <i class="fa fa-warning"></i>
     <%= t('pages.customers.register.show_docs_required_warning', url: customer_registration_docs_url(id: registration.id)).html_safe %>
   </div>
-<% elsif registration.show_resend_warning? %>
+<% elsif registration.show_resend_warning? and request.url != customer_registration_url(id: registration.id) %>
+<!-- resend required warning -->
   <div class="alert alert-warning">
     <i class="fa fa-warning"></i>
     <%= t('pages.customers.register.show_resend_warning', url: customer_registration_url(id: registration.id)).html_safe %>
