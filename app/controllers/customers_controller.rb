@@ -64,6 +64,13 @@ class CustomersController < ApplicationController
     end
   end
 
+  def resend
+    registration = Customer::Registration.find(params[:id])
+    registration.status = Customer::Registration::STATUS_START
+    registration.save
+    redirect_to customer_registration_url(id: registration.id), notice: t('pages.customers.register.resend_complete')
+  end
+
   # def history
   #   @title = I18n.t('models.billing_customer.actions.history')
   #   @registration = Billing::CustomerRegistration.where(user: current_user, custkey: params[:custkey]).first

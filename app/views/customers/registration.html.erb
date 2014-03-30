@@ -1,4 +1,12 @@
 <%= render partial: 'customers/registration_top', locals: { registration: @registration } %>
+<% if @registration.show_resend_warning? %>
+  <div class="alert alert-warning">
+    <p><%= t('pages.customers.register.resend_description') %></p>
+    <p>
+      <%= link_to t('pages.customers.register.resend_action'), resend_customer_url(id: @registration.id), class: ['btn', 'btn-success'], data: { method: 'post', confirm: t('pages.customers.register.resend_confirm') } %>
+    </p>
+  </div>
+<% end %>
 <div class="row">
   <div class="col-sm-6">
     <ul class="list-group">
