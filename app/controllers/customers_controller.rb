@@ -82,22 +82,24 @@ class CustomersController < ApplicationController
     end
   end
 
-  # def trash_history
-  #   @title = I18n.t('models.billing_customer.actions.trash_history')
-  #   @registration = Billing::CustomerRegistration.where(user: current_user, custkey: params[:custkey]).first
-  #   if @registration
-  #     @customer = @registration.customer
-  #     @items = Billing::TrashItem.where(customer: @customer).order('trashitemid DESC').paginate(per_page: 10, page: params[:page])
-  #   else
-  #     redirect_to customers_url, notice: 'not allowed'
-  #   end
-  # end
+  def trash_history
+    @title = I18n.t('models.billing_customer.actions.trash_history')
+    @registration = Customer::Registration.where(user: current_user, custkey: params[:custkey]).first
+    if @registration
+      @customer = @registration.customer
+      @items = Billing::TrashItem.where(customer: @customer).order('trashitemid DESC').paginate(per_page: 10, page: params[:page])
+    else
+      redirect_to customers_url, notice: 'not allowed'
+    end
+  end
 
   def nav
     @nav = { t('menu.customers') => customers_url }
     if @registration
-      @nav[t('pages.customers.registration.title')] = customer_registration_url(id: @registration.id)
-      @nav[t('pages.customers.registration.documents')] = customer_registration_docs_url(id: @registration.id) if action_name == 'registration_upload_doc'
+      if not ['history','trash_history'].include?(action_name)
+        @nav[t('pages.customers.registration.title')] = customer_registration_url(id: @registration.id)
+        @nav[t('pages.customers.registration.documents')] = customer_registration_docs_url(id: @registration.id) if action_name == 'registration_upload_doc'
+      end
       @nav[@title] = nil unless action_name == 'registration'
     end
     @nav
