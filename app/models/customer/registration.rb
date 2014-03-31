@@ -28,6 +28,7 @@ class Customer::Registration
   validates :address, presence: { message: I18n.t('models.customer_registration.errors.address_required') }
   validates :address_code, presence: { message: I18n.t('models.customer_registration.errors.address_code_required') }
   validate  :validate_rs_name
+  before_create :on_before_create
 
   def self.status_name(stat)
     case stat
@@ -61,12 +62,14 @@ class Customer::Registration
   def not_denied_documents; self.documents.where(denied: false) end
   def denied_documents; self.documents.where(denied: true) end
   def all_docs_uploaded?; self.not_denied_documents.select{|x| not x.has_file? }.empty? end
-  def show_docs_required_warning?; self.status == STATUS_DOCS_REQUIRED and not self.all_docs_uploaded? end
+  def show_docs_required_warning?; [STATUS_START,STATUS_DOCS_REQUIRED].include?(self.status) and not self.all_docs_uploaded? end
   def show_resend_warning?; self.status == STATUS_DOCS_REQUIRED and self.all_docs_uploaded? end
   def allow_edit?; not [STATUS_COMPLETE,STATUS_CANCELED].include?(self.status) end
 
-  def generate_docs
-    Customer::DocumentType.where(category: self.category, ownership: self.ownership).each do |type|
+  def generate_docs(only_required=false)
+    doctypes = Customer::DocumentType.where(category: self.category, ownership: self.ownership)
+    doctypes = doctypes.where(required:true) if only_required
+    doctypes.each do |type|
       if self.not_denied_documents.where(document_type: type).count == 0
         Customer::Document.new(document_type: type, registration: self, complete: false, denied: false).save
       end
@@ -81,4 +84,6 @@ class Customer::Registration
       errors.add(:rs_tin, I18n.t('models.customer_registration.errors.tin_illegal')) if self.rs_name.blank?
     end
   end
+
+  def on_before_create; self.generate_docs(true) end
 end
