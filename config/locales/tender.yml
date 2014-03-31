@@ -24,6 +24,8 @@ ka:
     registered_as: დარეგისტრირებული როგორ
     empty: აუცილებელი ველი
     rs_tin_exist: მომხმარებელი უკვე დარეგისტრირებულია ამ საინდეტიფიკაციო ნომრით
+    technical_questions: "ტექნიკური საკითხების გასარკვევად მიმართეთ ადმისტრატორს:"
+    userexists: თქვენ უკვე ხართ დარეგისტრირებული 
     menu: 
       users: მომხმარებლები
       report: ანგარიში
@@ -55,6 +57,8 @@ ru:
     registered_as: Зарегистрированы как
     empty: Обязательное поле
     rs_tin_exist: Пользователь с таким регистрационным номером уже существует
+    technical_questions: "В случае технических проблем обращайтесь к администратору:"
+    userexists: Вы уже зарегистрированы
     menu: 
       users: Пользователи
       report: Отчет
@@ -86,6 +90,8 @@ en:
     registered_as: Registered as
     empty: Required
     rs_tin_exist: User already exists with this registration number
+    technical_questions: "For technical questions please contact administrator:"
+    userexists: You have already registered
     menu: 
       users: Users
       report: Report

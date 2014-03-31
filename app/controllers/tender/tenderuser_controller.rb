@@ -35,6 +35,10 @@ class Tender::TenderuserController < ApplicationController
   	   	 end
   	   end
   	else
+      @tenderuser = Tender::Tenderuser.where(user: current_user)
+      if @tenderuser
+        redirect_to tender_userexists_url
+      end
   	  @tenderuser = Tender::Tenderuser.new
   	  @tenderuser.user = current_user || Sys::User.new
   	end
