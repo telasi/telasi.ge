@@ -22,16 +22,20 @@
         <td><%=doc.document_type.name%></td>
         <td>
           <% if doc.file %>
-            <a class="btn btn-warning btn-sm" href="<%= customer_registration_doc_upload_url(doc_id: doc.id) %>">
-              <i class="fa fa-pencil"></i>
-              <%= t('pages.customers.registration.change_file')%>
-            </a>
+            <%if @registration.allow_edit?%>
+              <a class="btn btn-warning btn-sm" href="<%= customer_registration_doc_upload_url(doc_id: doc.id) %>">
+                <i class="fa fa-pencil"></i>
+                <%= t('pages.customers.registration.change_file')%>
+              </a>
+            <%end%>
             <%= link_to doc.file.file.filename, doc.file.file.url %>
           <% else %>
-            <a class="btn btn-success btn-sm" href="<%= customer_registration_doc_upload_url(doc_id: doc.id) %>">
-              <i class="fa fa-plus"></i>
-              <%= t('pages.customers.registration.add_file')%>
-            </a>
+            <%if @registration.allow_edit?%>
+              <a class="btn btn-success btn-sm" href="<%= customer_registration_doc_upload_url(doc_id: doc.id) %>">
+                <i class="fa fa-plus"></i>
+                <%= t('pages.customers.registration.add_file')%>
+              </a>
+            <%end%>
             <span class="text-muted"><%= t('pages.customers.registration.no_file') %></span>
         <% end %>
         </td>
