@@ -30,7 +30,7 @@
           </div>
           <div class="row">
             <div class="col-sm-12">
-              <%= f.b_text_field 'prop', label: 'Prop' %>
+              <%= f.select 'prop', Cartridge::Cartridge::CARTRIDGETYPES, {}, { class: 'form-control' }%>
             </div>
           </div>
             <%= f.submit @title, class: ['btn', 'btn-primary'] %>

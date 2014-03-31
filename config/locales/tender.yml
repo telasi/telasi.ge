@@ -8,6 +8,8 @@ ka:
       OT_LTD: 'შ.პ.ს.'
       OT_IND: 'ინდ. მეწარმე'
       OT_PHY: 'რეგ. ფიზ. პირი'
+    country_code: ქვეყნის კოდი
+    other: სხვა
     organization_data: ორგანიზაციის მონაცემები
     organization_type_label: ორგანიზაციის ტიპი
     organization_name: ორგანიზაციის დასახელება
@@ -37,6 +39,8 @@ ru:
       OT_LTD: 'ООО'
       OT_IND: 'Инд.'
       OT_PHY: 'Рег. физ. лицо'
+    country_code: Код страны
+    other: Другой
     organization_data: Данные огранизации
     organization_type_label: Тип огранизации
     organization_name: Название организации
@@ -66,6 +70,8 @@ en:
       OT_LTD: 'Ltd'
       OT_IND: 'Ind.'
       OT_PHY: 'Reg. '
+    country_code: Country code
+    other: Other
     organization_data: Organization data
     organization_type_label: Organization type
     organization_name: Name of organization

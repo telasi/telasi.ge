@@ -1,31 +1,136 @@
-<div class="page-header">
+<script src="tablednd.js"></script>
+<div id="head" class="page-header">
+        <div class="pull-right"></div>
   <h3>კარტრიჯები</h3>
 </div>
 <%= form_tag("", method: 'put') do %>
-<table class="table table-bordered table-striped">
+<table id="table-1" class="cartridgetable">
   <thead>
     <tr>
-      <th width="50">SAP id</th>
-      <th width="50">დასახელება</th>
-      <th width="50" class="center">აქტიური?</th>
+      <th width="20%">Manufacturer</th>
+      <th width="20%">Type</th>
+      <th width="10%">SAP id</th>
+      <th width="20%">დასახელება</th>
+      <th width="15%">რაოდენობა</th>
+      <th width="15%">საჭირო რაოდენობა</th>
     </tr>
   </thead>
   <tbody>
-      <% current_item = @cartridges.first
+      <% manuf = nil
+         type = nil
+         open_manuf_tag = false
+         open_type_tag = false
+         iter = 0
+         iter2 = 0
+         table = ''
+
          for item in @cartridges 
-         if current_item != item 
-         %>
-      <tr>
-        <td colspan='3'><%= item.manuf %></td>
-      </tr>
+           if !manuf || manuf != item.manuf
+
+            if open_type_tag %>
+               </tbody>
+              </table>
+            </td></tr>
+         <%  open_type_tag = false
+            end
+            if open_manuf_tag %>
+               </tbody>
+              </table>
+            </td></tr>
+        <% open_manuf_tag = true
+            end
+            manuf = item.manuf
+            type = nil
+            open_manuf_tag = true
+            iter += 1
+            table = "subtable-#{iter}"
+            @table_list << table if @table_list
+           %>
+            <tr id="<%= item.manuf %>">
+              <td colspan='7'>
+                <div class="manuf"><%= item.manuf %></div>
+                <table id="<%= table %>" class="cartridgetable">
+                <col width="20%">
+                <col width="20%">
+                <col width="10%">
+                <col width="20%">
+                <col width="15%">
+                <col width="15%">                  
+                <tbody>
+        <% end %>
+                <% if !type || type != item.prop
+
+                    if open_type_tag %>
+                       </tbody>
+                      </table>
+                    </td></tr>
+                <%   open_type_tag = false
+                    end
+                    type = item.prop
+                    open_type_tag = true
+                    iter2 += 1
+                    table = "subsubtable-#{iter2}"
+                    @table_list << table if @table_list
+                %>
+                    <tr id="<%= item.prop %>">
+                    <td></td>
+                    <td colspan='7'><div class="prop"><%= item.prop %></div>
+                     <table id="<%= table %>" class="cartridgetable">
+                      <col width="23%">
+                      <col width="14%">
+                      <col width="25%">
+                      <col width="21%">
+                      <col width="21%">
+                       <tbody>
+                <% end %>
+                       <tr id="<%= item.matnr %>">
+                        <td></td>
+                        <td name='matnr'>
+                          <input type="text" name="matnr[]" hidden="true" value="<%= item.matnr %>"></input>
+                          <%= item.matnr.to_i.to_s %></td>
+                        <td><%= item.name %></td>
+                        <td><%= item.saldo %></td>
+                        <td><input type="number" name="quantity[]" class="enterbox" value="0"></input></td>
+                      </tr>
       <% end %>
-      <tr>
-        <td></td>
-        <td><%= item.name %></td>
-        <td><%= item.prop %></td>
-      </tr>
-      <% end %>
+                      </tbody>
+                     </table>
+                    </td>
+                    </tr>
+           </tbody>
+          </table>
+        </td></tr>
   </tbody>
 </table>
-  <%= submit_tag "განახლება", class: ['btn', 'btn-primary' ] %>
+ <%= submit_tag "თანიმდევრობის განახლება", class: ['btn', 'btn-primary' ] %>
+ <%= submit_tag "Export to Excel", class: ['btn', 'btn-primary' ] %>
 <% end %>
+
+<script type="text/javascript">
+
+  var tablelist = <%= raw @table_list %>;
+
+  var table = document.getElementById('table-1');
+  var tableDnD = new TableDnD();
+  tableDnD.init(table);
+
+  for( var i in tablelist ){
+    var table = document.getElementById(tablelist[i]);
+    var tableDnD = new TableDnD();
+    tableDnD.init(table);
+
+  }
+
+  // function buttonclick(){
+  //   var Str = "Order: ";
+  //   var rows = document.getElementById('table-1').tBodies[0].rows;
+  //   for (var i=0; i<rows.length; i++) {
+  //       //Str += rows[i].id+" ";
+  //       var subrows = rows[i].getElementsByTagName("tr");
+  //       for (var k=0; k<subrows.length; k++) {
+  //          Str += subrows[k].cells.namedItem("matnr").innerHTML+" ";
+  //       }
+  //   }
+  // }
+
+</script>

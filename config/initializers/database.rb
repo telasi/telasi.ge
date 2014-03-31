@@ -45,4 +45,5 @@ Site::File.establish_connection :telasi_site
 # SAP
 Sap::Material.establish_connection :sap
 Sap::MaterialStock.establish_connection :sap
+Sap::MaterialStockSPP.establish_connection :sap
 Sap::MaterialText.establish_connection :sap

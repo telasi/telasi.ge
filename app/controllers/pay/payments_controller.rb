@@ -79,7 +79,15 @@ class Pay::PaymentsController < ApplicationController
 
       params[:serviceid] = params[:pay_payment][:serviceid]
     else 
-      @payment = Pay::Payment.new(accnumb: current_user.accnumb, clientname: current_user.accnumb, rs_tin: current_user.rs_tin, amount: ( params[:amount] || 0 ), serviceid: params[:serviceid], merchant: get_current_merchant(params[:serviceid]) )
+      if params[:accnumb]
+        accnumb = params[:accnumb]
+        rs_tin  = nil
+      else
+        default_registration = current_user.registrations[0] || Customer::Registration.new
+        accnumb = default_registration.custkey
+        rs_tin  = default_registration.rs_tin
+      end
+      @payment = Pay::Payment.new(accnumb: accnumb, clientname: accnumb, rs_tin: rs_tin, amount: ( params[:amount] || 0 ), serviceid: params[:serviceid], merchant: get_current_merchant(params[:serviceid]) )
     end
   end
 
