@@ -1,4 +1,9 @@
 <div class="page-header">
+  <div class="pull-right">
+    <a href="<%=search_customer_url%>" class="btn btn-success">
+      <i class="fa fa-search"></i> <%=t('models.billing_customer.actions.add')%>
+    </a>
+  </div>
   <h1><%= @title %></h1>
 </div>
 <% if @registrations.empty? %>
@@ -10,5 +15,7 @@
 <% end %>
 <hr />
 <div class="btn-toolbar" style="text-align: center;">
-   <%= link_to "#{t('models.billing_customer.actions.add')} &rarr;".html_safe, search_customer_url, class: ['btn', 'btn-success', 'btn-lg'] %>
+  <a href="<%=search_customer_url%>" class="btn btn-success btn-lg">
+    <i class="fa fa-search"></i> <%=t('models.billing_customer.actions.add')%> &rarr;
+  </a>
 </div>
