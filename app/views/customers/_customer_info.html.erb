@@ -4,13 +4,11 @@
     <div class="pull-right">
       <i class="fa fa-bolt"></i>
       <code><%= number_with_precision customer.balance, precision: 2 %></code> GEL
+      &nbsp;
       <% if with_actions %>
-        &nbsp;
         <%= link_to t('models.general.history'), customer_history_url(custkey: customer.custkey), class: ['btn', 'btn-xs', 'btn-info'] %>
       <% end %>
-      <% if can_pay? %>
-        <%= link_to t('pay'), pay_show_form_url(serviceid: 'ENERGY', amount: ( customer.balance > 0 ? number_with_precision(customer.balance, precision: 2) : 0 )), class: ['btn', 'btn-primary', 'btn-xs', 'active'] %>
-      <% end %>
+      <%= link_to t('pay'), pay_show_form_url(serviceid: 'ENERGY', amount: (customer.balance>0 ? customer.balance : 0), accnumb: customer.accnumb.to_ka), class: ['btn', 'btn-primary', 'btn-xs'] %>
     </div>
     <%= t('models.billing_customer.balance') %>
   </li>
@@ -18,13 +16,11 @@
     <div class="pull-right">
       <i class="fa fa-trash-o"></i>
       <code><%= number_with_precision customer.trash_balance, precision: 2 %></code> GEL
+      &nbsp;
       <% if with_actions %>
-        &nbsp;
         <%= link_to t('models.general.history'), customer_trash_history_url(custkey: customer.custkey), class: ['btn', 'btn-xs', 'btn-primary'] %>
       <% end %>
-      <% if can_pay? %>
-        <%= link_to t('pay'), pay_show_form_url(serviceid: 'TRASH', amount: ( customer.trash_balance > 0 ? number_with_precision(customer.trash_balance, precision: 2) : 0 )), class: ['btn', 'btn-primary', 'btn-xs', 'active'] %>
-      <% end %>
+      <%= link_to t('pay'), pay_show_form_url(serviceid: 'TRASH', amount: (customer.trash_balance>0 ? customer.trash_balance : 0), accnumb: customer.accnumb.to_ka), class: ['btn', 'btn-primary', 'btn-xs'] %>
     </div>
     <%= t('models.billing_customer.trash_balance') %>
   </li>
@@ -36,6 +32,7 @@
         &nbsp;
         <%= link_to t('models.general.history'), nil, class: ['btn', 'btn-xs', 'btn-default'], disabled: true %>
       <% end %>
+      <%= link_to t('pay'), nil, class: ['btn', 'btn-xs', 'btn-default'], disabled: true %>
     </div>
     <%= t('models.billing_customer.current_water_balance') %>
   </li>
