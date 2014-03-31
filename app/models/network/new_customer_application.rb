@@ -268,6 +268,9 @@ class Network::NewCustomerApplication
 
   # ბილინგში გაგზავნა.
   def send_to_bs!
+    # don't resend an application the second time
+    return unless self.status==STATUS_IN_BS
+
     # sync customers
     self.sync_customers!
 
