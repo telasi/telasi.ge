@@ -31,6 +31,8 @@ ka:
         save_complete: აბონენტი შენახულია
         remove_complete: აბონენტი წაშლილია
         more: "განაცხადის ნახვა &rarr;"
+        edit: განცხადების შეცვლა
+        edit_complete: განცხადება შეცვლილია
       errors:
         tin_required: პირადი ნომერი აუცილებელია
         tin_illegal: არასწორი პირადი ნომერი

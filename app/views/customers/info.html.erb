@@ -15,33 +15,7 @@
         <span class="fa fa-heart"></span>
         <%= t('pages.customers.register.save_customer') %>
       </div>
-      <%= form_for @registration, url: customer_info_url(custkey: params[:custkey]) do |f| %>
-        <div class="panel-body">
-          <p class="text-muted"><%= t('pages.customers.register.save_customer_descr') %></p>
-          <div class="form-group">
-            <%= f.label :category, t('models.customer_registration.public_category') %>
-            <%= f.select :category, options_for_select({
-              t('models.customer_registration.public_category_personal') => Customer::Registration::CAT_PERSONAL,
-              t('models.customer_registration.public_category_not_personal') => Customer::Registration::CAT_NOT_PERSONAL,
-            }, selected: @registration.category), {}, {class: 'form-control'}%>
-          </div>
-          <%= f.b_text_field :rs_tin, label: t('models.customer_registration.public_rs_tin') %>
-          <%= f.b_text_field :address, label: t('models.customer_registration.public_address') %>
-          <%= f.b_text_field :address_code, label: t('models.customer_registration.public_address_code') %>
-          <div class="form-group">
-            <%= f.label :ownership, t('models.customer_registration.public_ownership') %>
-            <%= f.select :ownership, options_for_select({
-              t('models.customer_registration.public_ownership_owner') => Customer::Registration::OWN_OWNER,
-              t('models.customer_registration.public_ownership_rent') => Customer::Registration::OWN_RENT,
-            }, selected: @registration.ownership), {}, {class: 'form-control'} %>
-          </div>
-        </div>
-        <div class="panel-footer">
-          <button type="submit" class="btn btn-success">
-            <i class="fa fa-heart"></i> <%= t('models.customer_registration.actions.public_save') %>
-          </button>
-        </div>
-      <% end %>
+      <%=render partial: 'customers/form', locals: {registration:@registration}%>
     </div>
     <!-- save customer form -->
     <div class="panel panel-info">

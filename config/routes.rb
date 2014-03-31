@@ -26,6 +26,7 @@ TelasiGe::Application.routes.draw do
     get '/registration/:id/docs', action: 'registration_docs', as: 'customer_registration_docs'
     match '/registration/docs/upload/:doc_id', action: 'registration_upload_doc', as: 'customer_registration_doc_upload', via: [:get, :post]
     post '/resend/:id', action: 'resend', as: 'resend_customer'
+    match '/edit/:id', action: 'edit', as: 'edit_customer', via: [:get,:patch]
     # histories
     get '/history/:custkey', action: 'history', as: 'customer_history'
     get '/trash_history/:custkey', action: 'trash_history', as: 'customer_trash_history'

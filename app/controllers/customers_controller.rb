@@ -17,7 +17,7 @@ class CustomersController < ApplicationController
     @title = I18n.t('models.billing_customer.actions.info')
     @customer = Billing::Customer.find(params[:custkey])
     if request.post?
-      @registration = Customer::Registration.new(params.require(:customer_registration).permit(:category, :ownership, :rs_tin, :address, :address_code))
+      @registration = Customer::Registration.new(customer_params)
       @registration.custkey = @customer.custkey
       @registration.user = current_user
       if @registration.save
@@ -32,6 +32,16 @@ class CustomersController < ApplicationController
     registration = Customer::Registration.find(params[:id])
     registration.destroy
     redirect_to customers_url, notice: I18n.t('models.customer_registration.actions.remove_complete')
+  end
+
+  def edit
+    @title = t('models.customer_registration.actions.edit')
+    @registration = Customer::Registration.find(params[:id])
+    if request.patch?
+      if @registration.update_attributes(customer_params)
+        redirect_to customer_registration_url(id:@registration.id), notice:t('models.customer_registration.actions.edit_complete')
+      end
+    end
   end
 
   def registration
@@ -96,12 +106,15 @@ class CustomersController < ApplicationController
   def nav
     @nav = { t('menu.customers') => customers_url }
     if @registration
-      if not ['history','trash_history'].include?(action_name)
-        @nav[t('pages.customers.registration.title')] = customer_registration_url(id: @registration.id)
+      if not ['history','trash_history','info'].include?(action_name)
+        @nav["#{t('pages.customers.registration.title')} ##{@registration.customer.accnumb.to_ka}"] = customer_registration_url(id: @registration.id)
         @nav[t('pages.customers.registration.documents')] = customer_registration_docs_url(id: @registration.id) if action_name == 'registration_upload_doc'
       end
       @nav[@title] = nil unless action_name == 'registration'
     end
     @nav
   end
+
+  private
+  def customer_params; params.require(:customer_registration).permit(:category, :ownership, :rs_tin, :address, :address_code) end
 end
