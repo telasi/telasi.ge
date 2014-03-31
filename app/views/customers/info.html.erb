@@ -9,23 +9,25 @@
     </div>
   </div>
   <div class="col-sm-6">
-    <!-- save customer form -->
-    <div class="panel panel-primary">
-      <div class="panel-heading">
-        <span class="fa fa-heart"></span>
-        <%= t('pages.customers.register.save_customer') %>
+    <%if Customer::Registration.where(user:current_user,custkey:@customer.custkey).empty?%>
+      <!-- save customer form -->
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <span class="fa fa-heart"></span>
+          <%= t('pages.customers.register.save_customer') %>
+        </div>
+        <%=render partial: 'customers/form', locals: {registration:@registration}%>
       </div>
-      <%=render partial: 'customers/form', locals: {registration:@registration}%>
-    </div>
-    <!-- save customer form -->
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <span class="fa fa-question-circle"></span>
-        <%= t('pages.customers.register.save_customer_info_title') %>
+      <!-- save customer form -->
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <span class="fa fa-question-circle"></span>
+          <%= t('pages.customers.register.save_customer_info_title') %>
+        </div>
+        <div class="panel-body">
+          <%= t('pages.customers.register.save_customer_info_descr_html') %>
+        </div>
       </div>
-      <div class="panel-body">
-        <%= t('pages.customers.register.save_customer_info_descr_html') %>
-      </div>
-    </div>
+    <%end%>
   </div>
 </div>
