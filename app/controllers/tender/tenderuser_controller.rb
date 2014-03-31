@@ -35,7 +35,7 @@ class Tender::TenderuserController < ApplicationController
   	   	 end
   	   end
   	else
-      @tenderuser = Tender::Tenderuser.where(user: current_user)
+      @tenderuser = Tender::Tenderuser.where(user: current_user).first
       if @tenderuser
         redirect_to tender_userexists_url
       end
