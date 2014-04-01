@@ -86,7 +86,7 @@ class Tender::TenderController < ApplicationController
   def item
     node = Site::Node.where(nid: params[:nid]).first
     @title = node.title
-  	@tender = Tender::Tender.where(nid: params[:nid]).first || Tender::Tender.new(nid: params[:nid], tenderno: node.tenderno)
+  	@tender = Tender::Tender.where(nid: node.tnid).first || Tender::Tender.new(nid: node.tnid, tenderno: node.tenderno)
 
     if request.post? and params[:sys_file]
       @file = Sys::File.new(params.require(:sys_file).permit(:file))
@@ -101,8 +101,9 @@ class Tender::TenderController < ApplicationController
   def download_file
   	@tenderuser = Tender::Tenderuser.where(user: current_user).first
   	if @tenderuser
-  		@download = Tender::Download.new(tenderuser: @tenderuser, nid: params[:nid], datetime: Time.now)
-  		@tender = Tender::Tender.where(nid: params[:nid]).first
+      @node = Site::Node.where(nid: params[:nid]).first
+  		@download = Tender::Download.new(tenderuser: @tenderuser, nid: @node.tnid, datetime: Time.now)
+  		@tender = Tender::Tender.where(nid: @node.tnid).first if @node
   		if @tender and @tender.files
 	  	    send_file "#{Dir.getwd}/public/#{@tender.files.last.file_url}"
 	  	    @download.save
@@ -111,7 +112,8 @@ class Tender::TenderController < ApplicationController
   end
 
   def delete_file
-   @tender = Tender::Tender.where(nid: params[:nid]).first
+   @node = Site::Node.where(nid: params[:nid]).first
+   @tender = Tender::Tender.where(nid: @node.tnid).first if @node
    if @tender 
     if @tender.files
    	 @tender.files.destroy
