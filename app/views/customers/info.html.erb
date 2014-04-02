@@ -9,7 +9,7 @@
     </div>
   </div>
   <div class="col-sm-6">
-    <%if Customer::Registration.where(user:current_user,custkey:@customer.custkey).empty?%>
+    <%if current_user && Customer::Registration.where(user:current_user,custkey:@customer.custkey).empty?%>
       <!-- save customer form -->
       <div class="panel panel-primary">
         <div class="panel-heading">

@@ -1,8 +1,12 @@
 # -*- encoding : utf-8 -*-
 class CustomersController < ApplicationController
   def index
-    @title = I18n.t('menu.customers')
-    @registrations = Customer::Registration.where(user: current_user).asc(:_id)
+    if current_user
+      @title = I18n.t('menu.customers')
+      @registrations = Customer::Registration.where(user: current_user).asc(:_id)
+    else
+      redirect_to search_customer_url
+    end
   end
 
   def search
