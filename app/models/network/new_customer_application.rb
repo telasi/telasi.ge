@@ -100,8 +100,8 @@ class Network::NewCustomerApplication
   def self.correct_number?(number); not not (/^(CNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number) end
 
   def customer; Billing::Customer.find(self.customer_id) if self.customer_id.present? end
-  def payments; self.billing_items.select { |x| x.billoperkey == 116 } end
-  def paid; self.payments.map{ |x| x.amount }.inject{ |sum, x| sum + x } || 0  end
+  def payments; self.billing_items.select { |x| [116,1005,1012].include?(x.billoperkey) } end
+  def paid; self.payments.map{ |x| x.operation.opertpkey == 3 ? x.amount : -x.amount }.inject{ |sum, x| sum + x } || 0  end
   def remaining
     if self.amount.present?
       if self.effective_amount < 0
@@ -268,6 +268,9 @@ class Network::NewCustomerApplication
 
   # ბილინგში გაგზავნა.
   def send_to_bs!
+    # don't resend an application the second time
+    return if self.status==STATUS_IN_BS
+
     # sync customers
     self.sync_customers!
 

@@ -14,6 +14,7 @@ end %>
   t.text_field 'matnr', label: 'SAP ID'
   t.text_field 'name', label: 'Name'
   t.text_field 'manuf', label: 'Manufacturer'
+  t.text_field 'prop', label: 'Type'
   t.text_field 'maktx', label: 'SAP Name'
   t.item_action ->(x) { cartridge_edit_url(x.matnr) }, icon: '/icons/pencil.png'
   t.paginate records: t('models.general.records')

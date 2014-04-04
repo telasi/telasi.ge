@@ -296,3 +296,52 @@
    padding-top: 10px;
    max-width:100% !important;
 }
+
+.cartridgetable { 
+	 /*background:#D3E4E5;*/
+	 /*border:1px solid gray;*/
+	 border-collapse:collapse;
+	 color:#fff;
+	 /*font:normal 12px verdana, arial, helvetica, sans-serif;*/
+	 font:normal Verdana, Geneva, Arial, Helvetica, sans-serif ;
+	 width: 100%;
+}
+
+.cartridgetable td { 
+     color:#363636;
+	 padding:.4em;
+}
+.cartridgetable thead { 
+	 background:#5C444A;
+	 color:#FFFFFF;
+	 padding: 3px 10px 3px 10px;
+	 text-align: left;
+}
+
+.cartridgetable tr { 
+ /*border:1px dotted gray;*/
+}
+
+.manuf{
+   -webkit-box-shadow: 4px 4px 4px -3px rgba(0,0,0,0.75);
+   -moz-box-shadow: 4px 4px 4px -3px rgba(0,0,0,0.75);
+   box-shadow: 4px 4px 4px -3px rgba(0,0,0,0.75);
+   padding: 2px 10px 3px 2px;
+   background:#D3E4E5;
+}
+
+.prop{
+   -webkit-box-shadow: 4px 4px 4px -3px rgba(0,0,0,0.75);
+   -moz-box-shadow: 4px 4px 4px -3px rgba(0,0,0,0.75);
+   box-shadow: 4px 4px 4px -3px rgba(0,0,0,0.75);
+   padding: 2px 10px 3px 2px;
+   background:#D3E4B0;
+}
+
+.enterbox {
+	width: 50px;
+}
+
+.dragobj {
+	position: absolute;
+}

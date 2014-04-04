@@ -10,6 +10,9 @@ module Network::BsBase
     1008,  # charge correction
     1009,  # penalty I correction
     1010,  # penalty II correction
+    1012,
+    1004,
+    1005,
   ]
 
   def billing_items

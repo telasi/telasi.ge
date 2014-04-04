@@ -213,6 +213,7 @@ TelasiGe::Application.routes.draw do
   namespace 'tender' do
     scope '/tenderuser', controller: :tenderuser do
       match '/register',     action: :register, via: [:get, :post]
+      get '/userexists',     action: 'userexists', as: 'userexists'
       get  '/',              action: :index, as: 'user_index'
       get '/showuser/:id',   action: 'showuser', as: 'showuser'
       match '/print/:id',    action: 'print', as: 'print', via: [:get, :post, :patch]
@@ -234,8 +235,9 @@ TelasiGe::Application.routes.draw do
         get  '/',                  action: :index
         match  '/update',          action: :update, via: [:get, :put]
         get  '/list',              action: :list
-        get  '/report/:lgort',     action: 'report', as: 'report'
+        match '/report/:lgort',    action: 'report', as: 'report', via: [:get, :post, :put, :patch]
         match  '/edit/:matnr',     action: 'edit', as: 'edit', via: [:get, :post, :patch]
+        get  '/excel',             action: 'excel', as: 'excel'
     end
   end
 

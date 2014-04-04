@@ -24,16 +24,21 @@ class Tender::TenderuserController < ApplicationController
   def register
     @title = I18n.t('menu.register')
   	if request.post?
-  	   @user = current_user || Sys::User.new(params.require(:tender_tenderuser).require(:sys_user).permit(:email, :password, :password_confirmation, :first_name, :last_name, :mobile))
+  	   @user = current_user || Sys::User.new(params.require(:tender_tenderuser).require(:sys_user).permit(:email, :password, :password_confirmation, :first_name, :last_name, :mobile, :country_code))
        @tenderuser = Tender::Tenderuser.new(params.require(:tender_tenderuser).permit(:organization_type, :organization_name, :director_name, :fact_address, :legal_address, :phones, :work_email, :rs_tin))
   	   @tenderuser.user = @user
 
        if @user.valid? and @tenderuser.valid? 
       	 if @user.save and @tenderuser.save
+          UserMailer.email_confirmation(@user).deliver if @user.email_confirm_hash
   	      redirect_to register_complete_url
   	   	 end
   	   end
   	else
+      @tenderuser = Tender::Tenderuser.where(user: current_user).first
+      if @tenderuser
+        redirect_to tender_userexists_url
+      end
   	  @tenderuser = Tender::Tenderuser.new
   	  @tenderuser.user = current_user || Sys::User.new
   	end

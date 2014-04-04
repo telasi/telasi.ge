@@ -43,7 +43,14 @@
                           <%= u.b_text_field 'last_name', label: t('models.sys_user.last_name') %>
                         </div>
                       </div>
-                      <%= u.b_text_field 'mobile', label: t('models.sys_user.mobile') %>
+                      <div class="row">
+                        <div class="col-sm-2">
+                         <%= u.b_text_field 'country_code', label: t('tender.country_code') %> 
+                        </div>
+                        <div class="col-sm-10">
+                         <%= u.b_text_field 'mobile', label: t('models.sys_user.mobile') %>
+                        </div>
+                      </div>
                 <% end %>
           <% end %>
           <!-- tenderuser registration -->
@@ -95,12 +102,11 @@
           <div>
             <%= f.submit @title, class: ['btn', 'btn-primary'] %>
           </div>
-          <div>
-            <%= f.submit @title, class: ['btn', 'btn-primary'] %>
-          </div>
         <% end %>
       </div>
     </div>
+    <%= t('tender.technical_questions') %>
+    <%= mail_to "webtender@telasi.ge" %>
   </div>
  <% if not @tenderuser.user.email_confirmed %>
   <div class="col-sm-4">
