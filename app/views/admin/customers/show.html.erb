@@ -83,8 +83,8 @@ end %>
       values = {
         'დასახელება' => [customer.custname.to_ka,@registration.rs_name,'custname'],
         'საიდ.კოდი'  => [customer.taxid,@registration.rs_tin,'taxid'],
-        'მისამართი'  => [customer.address.to_s,@registration.address,'address'],
-        'საკად.კოდი' => ['??',@registration.address_code,'address_code'],
+        'მისამართი'  => [customer.address.to_s,@registration.address,nil],
+        'საკად.კოდი' => [(customer.customer_cust.register_code rescue nil),@registration.address_code,nil],
         'ელ.ფოსტა'   => [customer.email,@registration.user.email,'email'],
         'მობილური'   => [customer.tel,@registration.user.mobile,'phone'],
       }
@@ -94,9 +94,9 @@ end %>
       <tr class="<%=is_same ? 'success' : 'danger'%>">
         <th><%=k%></th>
         <td><%=v[1]%></td>
-        <td><%=v[0]%></td>
+        <td><%if v[0].blank?%><span class="text-muted">(ცარიელი)</span><%else%><%=v[0]%><%end%></td>
         <td>
-          <%if not is_same%>
+          <%if v[2] and not is_same%>
             <%=link_to '<i class="fa fa-refresh"></i>'.html_safe, admin_sync_customer_data_url(id:@registration.id,type:v[2]), method:'post', confirm: 'ნამდვილად გინდათ სინქრონიზაცია ბილინგის ბაზასთან?'%>
           <%end%>
         </td>
