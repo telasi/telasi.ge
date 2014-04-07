@@ -82,6 +82,12 @@ class Admin::CustomersController < ApplicationController
     end
   end
 
+  def sync_data
+    registration=Customer::Registration.find(params[:id])
+    registration.sync_with_billing(params[:type])
+    redirect_to admin_show_customer_url(id:registration.id),notice:"პარამეტრი შეცვლილია: #{params[:type]}"
+  end
+
   def nav
     @nav = { 'რეგისტრაციები' => admin_customers_url }
     if @registration

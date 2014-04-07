@@ -1,10 +1,8 @@
-<%
-  seltab = case params[:tab]
+<%seltab = case params[:tab]
   when 'docs' then 1
   when 'sms'  then 2
   when 'sys'  then 3
-  else 0 end
-%>
+  else 0 end %>
 <%= view_for @registration, title: @title, icon: '/icons/user.png', collapsible: true, selected_tab: seltab do |f|
   f.tab title: t('models.billing_customer_registration.title.single_alt'), icon: '/icons/user.png' do |t|
     @registration.transitions.each do |stat|
@@ -69,3 +67,40 @@
     t.timestamps
   end
 end %>
+<h3 class="page-header">მონაცემების შედარება</h3>
+<%customer=@registration.customer%>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th width="200">პარამეტრი</th>
+      <th>მნიშვ.განცხადებაში</th>
+      <th>მნიშვ.ბილინგში</th>
+      <th width="16" class="text-center"><i class="fa fa-cog"></i></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%
+      values = {
+        'დასახელება' => [customer.custname.to_ka,@registration.rs_name,'custname'],
+        'საიდ.კოდი'  => [customer.taxid,@registration.rs_tin,'taxid'],
+        'მისამართი'  => [customer.address.to_s,@registration.address,'address'],
+        'საკად.კოდი' => ['??',@registration.address_code,'address_code'],
+        'ელ.ფოსტა'   => [customer.email,@registration.user.email,'email'],
+        'მობილური'   => [customer.tel,@registration.user.mobile,'phone'],
+      }
+    %>
+    <%values.each do |k,v|%>
+      <%is_same=((v[0].blank? and v[1].blank?) or (v[0].present? and v[1].present? and v[0].strip==v[1].strip))%>
+      <tr class="<%=is_same ? 'success' : 'danger'%>">
+        <th><%=k%></th>
+        <td><%=v[1]%></td>
+        <td><%=v[0]%></td>
+        <td>
+          <%if not is_same%>
+            <%=link_to '<i class="fa fa-refresh"></i>'.html_safe, admin_sync_customer_data_url(id:@registration.id,type:v[2]), method:'post', confirm: 'ნამდვილად გინდათ სინქრონიზაცია ბილინგის ბაზასთან?'%>
+          <%end%>
+        </td>
+      </tr>
+    <%end%>
+  </tbody>
+</table>

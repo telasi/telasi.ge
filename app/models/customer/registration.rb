@@ -76,6 +76,20 @@ class Customer::Registration
     end
   end
 
+  def sync_with_billing(type)
+    customer=self.customer
+    case type
+    when 'custname' then customer.custname=self.rs_name.to_geo
+    when 'taxid' then customer.taxid=self.rs_tin
+    when 'email' then customer.email=self.user.email
+    when 'phone'
+      unless customer.tel.include?(self.user.mobile)
+        customer.tel="#{customer.tel}; #{self.user.mobile}"
+      end
+    end
+    customer.save if customer.changed?
+  end
+
   private
 
   def validate_rs_name
