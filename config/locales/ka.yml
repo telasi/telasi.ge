@@ -318,8 +318,8 @@ ka:
       type_5: აბონირება
       amount: ღირებულება
       days: ვადა
-      send_date: გამოგზავნის თარიღი
-      start_date: დაწყების თარიღი
+      send_date: ათვლის თარიღი
+      start_date: რეგისტრაციის თარიღი
       end_date: დასრულების თარიღი
       status_name: სტატუსი
       old_voltage: არსებული ძაბვა
@@ -396,10 +396,10 @@ ka:
       factura_sent?: გაგზავნილია?
       need_resolution: სპეც.ნებართვა?
       need_resolution_hint: საჭიროებს თუ არა ეს განცხადება სპეციალურ ნებართვას?
-      send_date: გამოგზავნის თარიღი
+      send_date: ათვლის თარიღი
       send_date_hint: განცხადების თელასში გამოგზავნის თარიღი
-      start_date: დაწყების თარიღი
-      start_date_hint: განცხადების დაწყების თარიღი
+      start_date: რეგისტრაციის თარიღი
+      start_date_hint: განცხადების რეგისტრაციის თარიღი
       real_date: რეალური თარიღი
       plan_end_date: გეგმიური დასრულების თარიღი
       plan_end_date_hint: სამუშაოების დასრულების გეგმიური თარიღი
