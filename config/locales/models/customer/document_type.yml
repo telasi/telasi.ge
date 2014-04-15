@@ -7,3 +7,12 @@ ka:
       category: კატეგორია
       ownership: საკუთრება
       required: აუცილებელია?
+ru:
+  models:
+    customer_document_type:
+      name: დასახელება
+      name_ka: დასახელება (KA)
+      name_ru: დასახელება (RU)
+      category: კატეგორია
+      ownership: საკუთრება
+      required: აუცილებელია?

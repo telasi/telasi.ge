@@ -1,6 +1,16 @@
 ru:
   models:
     customer_registration:
+      created_at: Дата создания
+      customer: Абонент билинга
+      customer_address: Адрес по билингу
+      address: Адрес
+      address_code: Кадастровый код
+      rs_tin: Идентиф.Код
+      rs_name: Заявитель
+      status: Статус
+      category: Категория
+      ownership: საკუთრების სახე
       public_rs_tin: "Ваш персональный или регистрационный номер:"
       public_address: "Адресс абонирования:"
       public_address_code: "Кадастровый код адресса абонирования:"
