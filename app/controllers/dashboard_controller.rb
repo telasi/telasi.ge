@@ -12,7 +12,7 @@ class DashboardController < ApplicationController
         session[:user_id] = user.id
         url = session.delete(:return_url) || root_url
         redirect_to url || root_url
-      elsif not user.email_confirmed then @error = I18n.t('model.sys_user.errors.email_not_confirmed')
+      elsif user and not user.email_confirmed then @error = I18n.t('model.sys_user.errors.email_not_confirmed')
       else @error = I18n.t('models.sys_user.errors.illegal_login') end
     end
   end
