@@ -21,6 +21,7 @@
       c.text_field 'customer.address', class: 'text-muted'
     end
     t.text_field 'category_name', i18n: 'category', required: true
+    t.boolean_field 'need_factura', required: true if @registration.not_personal?
     t.text_field 'ownership_name', i18n: 'ownership', required: true
     t.complex_field i18n: 'status', required: true do |c|
       c.image_field 'status_icon'
@@ -32,6 +33,7 @@
       c.text_field :address_code, tag: 'code'
       c.text_field :address
     end
+    t.boolean_field 'change_data', required: true
   end
   f.tab title: "დოკუმენტები &mdash; <strong>#{@registration.documents.size}</strong>".html_safe,
         icon: '/icons/documents.png' do |t|
