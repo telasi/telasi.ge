@@ -68,6 +68,8 @@ class Customer::Registration
   def show_docs_required_warning?; [STATUS_START,STATUS_DOCS_REQUIRED].include?(self.status) and not self.all_docs_uploaded? end
   def show_resend_warning?; self.status == STATUS_DOCS_REQUIRED and self.all_docs_uploaded? end
   def allow_edit?; not [STATUS_COMPLETE,STATUS_CANCELED].include?(self.status) end
+  def personal?; self.category==CAT_PERSONAL end
+  def not_personal?; self.category==CAT_NOT_PERSONAL end
 
   def generate_docs(only_required=false)
     doctypes = Customer::DocumentType.where(category: self.category, ownership: self.ownership)
@@ -104,5 +106,5 @@ class Customer::Registration
 
   def on_before_create; self.generate_docs(true) end
   def change_data_validation; errors.add(:change_data,I18n.t('models.customer_registration.errors.change_data_confirmed')) unless self.change_data end
-  def on_save; self.need_factura=false if self.category==CAT_PERSONAL end
+  def on_save; self.need_factura=false if self.category==CAT_PERSONAL; true end
 end

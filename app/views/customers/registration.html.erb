@@ -60,11 +60,19 @@
         </div>
         <%= t('models.customer_registration.category') %>
       </li>
+      <%if @registration.not_personal?%>
+        <li class="list-group-item">
+          <div class="pull-right"><%= yes_no @registration.need_factura %></div>
+          <%= t('models.customer_registration.need_factura') %>
+        </li>
+      <%end%>
       <li class="list-group-item">
-        <div class="pull-right">
-          <%= @registration.ownership_name %>
-        </div>
+        <div class="pull-right"><%= @registration.ownership_name %></div>
         <%= t('models.customer_registration.ownership') %>
+      </li>
+      <li class="list-group-item">
+        <div class="pull-right"><%= yes_no @registration.change_data %></div>
+        <%= t('models.customer_registration.change_data') %>
       </li>
     </ul>
   </div>
