@@ -22,6 +22,8 @@ class Customer::Registration
   field :address_code, type: String
   field :category, type: String, default: CAT_PERSONAL
   field :ownership, type: String, default: OWN_OWNER
+  field :need_factura, type: Mongoid::Boolean, default: false
+  field :change_data, type: Mongoid::Boolean, default: false
 
   # validates :custkey, uniqueness: { message: I18n.t('models.customer_registration.errors.customer_duplicate'), scope: :user_id }
   validates :rs_tin, presence: { message: I18n.t('models.customer_registration.errors.tin_required') }
@@ -29,6 +31,7 @@ class Customer::Registration
   validates :address_code, presence: { message: I18n.t('models.customer_registration.errors.address_code_required') }
   validate  :validate_rs_name
   before_create :on_before_create
+  before_save :on_save
 
   def self.status_name(stat)
     case stat
@@ -100,4 +103,10 @@ class Customer::Registration
   end
 
   def on_before_create; self.generate_docs(true) end
+
+  def on_save
+    if self.change_data==false
+      self.errors.add(:change_data,I18n.t('models.customer_registration.errors.change_data_confirmed'));
+    end
+  end
 end
