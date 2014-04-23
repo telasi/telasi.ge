@@ -105,7 +105,8 @@ class Customer::Registration
   def on_before_create; self.generate_docs(true) end
 
   def on_save
-    if self.change_data==false
+    self.need_factura=false if self.category==CAT_PERSONAL
+    unless self.change_data
       self.errors.add(:change_data,I18n.t('models.customer_registration.errors.change_data_confirmed'));
     end
   end
