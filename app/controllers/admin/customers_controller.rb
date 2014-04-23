@@ -44,7 +44,8 @@ class Admin::CustomersController < ApplicationController
         end
       end
     else
-      @message = Sys::SmsMessage.new
+      msg=Customer::Registration.status_sms(params[:new_status].to_i) rescue nil
+      @message = Sys::SmsMessage.new(message:msg)
     end
   end
 

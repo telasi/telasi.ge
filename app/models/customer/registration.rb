@@ -51,6 +51,15 @@ class Customer::Registration
     else nil end
   end
 
+  def self.status_sms(stat)
+    case stat
+    when STATUS_START then I18n.t('models.customer_registration.status_sms.start')
+    when STATUS_DOCS_REQUIRED then I18n.t('models.customer_registration.status_sms.docs_required')
+    when STATUS_COMPLETE then I18n.t('models.customer_registration.status_sms.complete')
+    when STATUS_CANCELED then I18n.t('models.customer_registration.status_sms.canceled')
+    else '?' end
+  end
+
   def transitions
     case self.status
     when STATUS_START then [STATUS_DOCS_REQUIRED,STATUS_COMPLETE,STATUS_CANCELED]
