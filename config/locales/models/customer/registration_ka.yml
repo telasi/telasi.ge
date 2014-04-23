@@ -11,16 +11,20 @@ ka:
       status: სტატუსი
       category: კატეგორია
       ownership: საკუთრების სახე
+      need_factura: სჭირდება ფაქტურა?
+      change_data: თანხმობა რეკვიზიტების ცვლილებაზე
       public_rs_tin: "თქვენი პირადი ნომერი ან საიდენტიფიკაციო კოდი:"
       public_address: "აბონირების მისამართი:"
       public_address_code: "აბონირების მისამართის საკადასტრო კოდი:"
       public_category: "მიუთითეთ თუ რომელ კატეგორიას მიეკუთვნებით:"
       public_category_personal: ფიზიკური პირი
       public_category_not_personal: იურიდიული პირი
-      public_ownership: აარჩიეთ ხართ თუ არა აღნიშნული ფართის მფლობელი
-      public_ownership_owner: "დიახ, ვარ მფლობელი"
-      public_ownership_rent: "არა, არ ვარ მფლობელი, მაგრამ მაქვს საიჯარო/ქირის შეთანხმება"
+      public_ownership: "აარჩიეთ ხართ თუ არა აღნიშნული ფართის მესაკუთრე:"
+      public_ownership_owner: "დიახ, ვარ მესაკუთრე"
+      public_ownership_rent: "არა, არ ვარ მესაკუთრე, მაგრამ მაქვს საიჯარო/ქირის შეთანხმება"
       public_status: განაცხადის სტატუსი
+      public_need_factura: "მონიშნეთ, თუ გჭირდებათ საგადასახადო ანგარიშ-ფაქტურა"
+      public_change_data: "თანახმავარ, რომ საჭიროების შემთხვევაში, სს თელასს აქვს უფლება შეიტანოს ცვლილება აბონენტის ბარათში აქ შევსებული მონაცემების შესაბამისად"
       status_names:
         start: მიმდინარეობს განხილვა
         docs_required: საჭიროა დამატებითი დოკუმენტაცია
@@ -38,3 +42,4 @@ ka:
         tin_illegal: არასწორი პირადი ნომერი
         address_required: ჩაწერეთ მისამართი
         address_code_required: ჩაწერეთ საკადასტრო კოდი
+        change_data_confirmed: უნდა დაეთანხმოთ
