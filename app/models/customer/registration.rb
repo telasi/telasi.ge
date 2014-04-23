@@ -29,7 +29,7 @@ class Customer::Registration
   validates :rs_tin, presence: { message: I18n.t('models.customer_registration.errors.tin_required') }
   validates :address, presence: { message: I18n.t('models.customer_registration.errors.address_required') }
   validates :address_code, presence: { message: I18n.t('models.customer_registration.errors.address_code_required') }
-  validate  :validate_rs_name
+  validate  :validate_rs_name, :change_data_validation
   before_create :on_before_create
   before_save :on_save
 
@@ -103,11 +103,6 @@ class Customer::Registration
   end
 
   def on_before_create; self.generate_docs(true) end
-
-  def on_save
-    self.need_factura=false if self.category==CAT_PERSONAL
-    unless self.change_data
-      self.errors.add(:change_data,I18n.t('models.customer_registration.errors.change_data_confirmed'));
-    end
-  end
+  def change_data_validation; errors.add(:change_data,I18n.t('models.customer_registration.errors.change_data_confirmed')) unless self.change_data end
+  def on_save; self.need_factura=false if self.category==CAT_PERSONAL end
 end

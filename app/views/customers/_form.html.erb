@@ -38,8 +38,11 @@ $(function(){
       }, selected: registration.ownership), {}, {class: 'form-control'} %>
     </div>
     <div class="form-group">
-      <%= f.check_box :change_data %>
+      <%= f.check_box :change_data%>
       <%= f.label :change_data, t('models.customer_registration.public_change_data'), style:'display:inline;' %>
+      <%if registration.errors[:change_data].any?%>
+        <div class="text-danger"><%=registration.errors[:change_data].join('; ')%></div>
+      <%end%>
     </div>
   </div>
   <div class="panel-footer">
