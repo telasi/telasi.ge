@@ -110,7 +110,11 @@ class Network::NewCustomerController < ApplicationController
         @message.send_sms!(lat: true)
         @application.status = params[:status].to_i
         if @application.save
-          redirect_to network_new_customer_url(id: @application.id), notice: I18n.t('models.network_new_customer_application.actions.status.changed')
+          if @application.status==Network::NewCustomerApplication::STATUS_COMPLETE
+            redirect_to network_change_dates_url(id: @application.id), alert: 'შეამოწმეთ განცხადების თარიღების სისწორე!'
+          else
+            redirect_to network_new_customer_url(id: @application.id), notice: I18n.t('models.network_new_customer_application.actions.status.changed')
+          end
         else
           @error = @application.errors.full_messages
         end
