@@ -1,0 +1,9 @@
+ka:
+  models:
+    billing_item:
+      date: "თარიღი"
+      operation: ოპერაცია
+      reading: წაკითხვა
+      kwh: დარიცხვა
+      amount: თანხა
+      balance: წინა ბალანსი

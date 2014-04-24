@@ -90,7 +90,7 @@ class CustomersController < ApplicationController
     @registration = Customer::Registration.where(user: current_user, custkey: params[:custkey]).first
     if @registration
       @customer = @registration.customer
-      @items = Billing::Item.where(customer: @customer).order('itemkey DESC').paginate(per_page: 10, page: params[:page])
+      @items = Billing::Item.where(customer: @customer).order('itemkey DESC').paginate(per_page: 15, page: params[:page])
     else
       redirect_to customers_url, notice: 'not allowed'
     end

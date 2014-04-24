@@ -11,31 +11,42 @@
 <div class="page-header">
   <h4><i class="fa fa-bolt"></i> <%= @title %></h4>
 </div>
-<ul class="list-group">
-  <% @items.each do |item| %>
-    <li class="list-group-item">
-      <div class="row">
-        <div class="col-sm-6">
-          <code><%= item.itemdate.strftime('%d-%b-%Y') %></code><br>
-          <%= item.operation %>
-        </div>
-        <div class="col-sm-6">
-          <i class="fa fa-tachometer"></i>
-          <code><%= number_with_precision item.reading, precision: 2 %></code> kWh
-          <span class="text-muted">&mdash; <%= t('models.billing_customer.reading') %></span>
-          <br/>
-          <i class="fa fa-bolt"></i>
-          <code><%= number_with_precision item.kwt, precision: 2 %></code> kWh
-          <span class="text-muted">&mdash; <%= t('models.billing_customer.charge') %></span>
-          <br >
-          <i class="fa fa-dollar"></i>
-          <code><%= number_with_precision item.amount, precision: 2 %></code> GEL
-          <span class="text-muted">&mdash; <%= t('models.billing_customer.charge_gel') %></span>
-        </div>
-      </div>
-    </li>
-  <% end %>
-</ul>
+<table class="table table-bordered table-striped table-hover">
+  <thead>
+    <tr>
+      <th width="120"><%=t('models.billing_item.date')%></th>
+      <th><%=t('models.billing_item.operation')%></th>
+      <th width="150"><%=t('models.billing_item.reading')%></th>
+      <th width="150"><%=t('models.billing_item.kwh')%></th>
+      <th width="150"><%=t('models.billing_item.amount')%></th>
+      <th width="150"><%=t('models.billing_item.balance')%></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%@items.each do |item|%>
+    <tr>
+      <td><code><%=item.itemdate.strftime('%d-%b-%Y')%></code></td>
+      <td><%=item.operation%></td>
+      <td class="text-right">
+        <code><%=number_with_precision item.reading,precision:2,delimiter:',',separator:'.'%></code>
+        kWh
+      </td>
+      <td class="text-right">
+        <code><%=number_with_precision item.kwt,precision:2,delimiter:',',separator:'.'%></code>
+        kWh
+      </td>
+      <td class="text-right">
+        <code><%=number_with_precision item.amount,precision:2,delimiter:',',separator:'.'%></code>
+        GEL
+      </td>
+      <td class="text-right">
+        <code><%=number_with_precision item.balance,precision:2,delimiter:',',separator:'.'%></code>
+        GEL
+      </td>
+    </tr>
+    <%end%>
+  </tbody>
+</table>
 <div style="margin-top:-20px;">
 <%= will_paginate @items %>
 </div>
