@@ -1,0 +1,7 @@
+ka:
+  models:
+    billing_trash_item:
+      operdate: "თარიღი"
+      operation: ოპერაცია
+      amount: თანხა
+      balance: წინა ვალი
