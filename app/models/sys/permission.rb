@@ -44,6 +44,11 @@ class Sys::Permission
     end
   end
 
+  def self.has_permission_for_path?(user, path)
+    ca=Rails.application.routes.recognize_path(path)
+    Sys::Permission.has_permission?(user,ca[:controller],ca[:action])
+  end
+
   def roles2
     self.roles.map { |x| x.name }.join(', ')
   end
