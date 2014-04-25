@@ -4,7 +4,7 @@ ka:
       index:
         empty_list: არც ერთი აბონენტი არაა დამახსოვრებული.
       register:
-        save_customer: აბონენტის რეგისტრაცია
+        save_customer: აბონენტის რეგისტრაცია/რეკვიზიტების ცვლილება
         save_customer_descr: "აბონენტის დასარეგისტრირებლად აუცილებელია შემდეგი მონაცემების შევსება:"
         save_customer_info_title: "წარმატებული რეგისტრაციის შემთხვევაში"
         save_customer_info_descr_html: "<ul>
