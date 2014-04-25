@@ -84,7 +84,7 @@ end %>
     <%
       lastcust=customer.customer_custs.where(status:0).last
       values = {
-        'დასახელება' => [customer.custname.to_ka,@registration.rs_name,'custname'],
+        'დასახელება' => [customer.custname.to_ka,@registration.suggested_name,'custname'],
         'საიდ.კოდი'  => [customer.taxid,@registration.rs_tin,'taxid'],
         'მისამართი'  => [customer.address.to_s,@registration.address,nil],
         'საკად.კოდი' => [(lastcust.register_code if lastcust.present?),@registration.address_code,nil],

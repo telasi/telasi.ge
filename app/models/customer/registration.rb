@@ -79,6 +79,7 @@ class Customer::Registration
   def allow_edit?; not [STATUS_COMPLETE,STATUS_CANCELED].include?(self.status) end
   def personal?; self.category==CAT_PERSONAL end
   def not_personal?; self.category==CAT_NOT_PERSONAL end
+  def suggested_name; self.rs_name.split(' ').reverse.join(' ') end
 
   def generate_docs(only_required=false)
     doctypes = Customer::DocumentType.where(category: self.category, ownership: self.ownership)
@@ -93,7 +94,7 @@ class Customer::Registration
   def sync_with_billing(type)
     customer=self.customer
     case type
-    when 'custname' then customer.custname=self.rs_name.to_geo
+    when 'custname' then customer.custname=self.suggested_name.to_geo
     when 'taxid' then customer.taxid=self.rs_tin
     when 'email' then customer.email=self.user.email
     when 'phone'
