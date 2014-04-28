@@ -3,7 +3,7 @@ ka:
     billing_item:
       date: "თარიღი"
       operation: ოპერაცია
-      reading: წაკითხვა
-      kwh: დარიცხვა
-      amount: თანხა
-      balance: წინა ვალი
+      reading: "ჩვენება (kWh)"
+      kwh: "დარიცხვა (kWh)"
+      amount: "თანხა (GEL)"
+      balance: "წინა ვალი (GEL)"
