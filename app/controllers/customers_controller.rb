@@ -120,5 +120,5 @@ class CustomersController < ApplicationController
   end
 
   private
-  def customer_params; params.require(:customer_registration).permit(:category, :ownership, :rs_tin, :address, :address_code, :need_factura, :change_data) end
+  def customer_params; params.require(:customer_registration).permit(:category, :ownership, :rs_tin, :address, :address_code, :need_factura, :change_data, :bank_code, :bank_account) end
 end

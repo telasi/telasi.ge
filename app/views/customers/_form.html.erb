@@ -2,11 +2,8 @@
 var CAT_PERSONAL="<%=Customer::Registration::CAT_PERSONAL%>";
 var resetForm=function() {
   var category=$('#customer_registration_category').val();
-  if (category===CAT_PERSONAL){
-    $('#factura-box').hide();
-  } else {
-    $('#factura-box').show();
-  }
+  if (category===CAT_PERSONAL){ $('#not-residential-category-data').hide(); }
+  else{ $('#not-residential-category-data').show(); }
 };
 $(function(){
   $('#customer_registration_category').change(resetForm);
@@ -23,9 +20,16 @@ $(function(){
         t('models.customer_registration.public_category_not_personal') => Customer::Registration::CAT_NOT_PERSONAL,
       }, selected: registration.category), {}, {class: 'form-control'}%>
     </div>
-    <div class="form-group" id="factura-box">
-      <%= f.check_box :need_factura %>
-      <%= f.label :need_factura, t('models.customer_registration.public_need_factura'), style:'display:inline;' %>
+    <div id="not-residential-category-data">
+      <div class="form-group">
+        <%= f.check_box :need_factura %>
+        <%= f.label :need_factura, t('models.customer_registration.public_need_factura'), style:'display:inline;' %>
+      </div>
+      <div class="form-group">
+        <%=f.label :bank_code,t('models.customer_registration.public_bank_code')%>
+        <%=f.select :bank_code, banks, {include_blank:"-- #{t('models.customer_registration.public_bank_code')} --"}, {class: 'form-control'}%>
+      </div>
+      <%=f.b_text_field :bank_account, label: t('models.customer_registration.public_bank_account')%>
     </div>
     <%= f.b_text_field :rs_tin, label: t('models.customer_registration.public_rs_tin') %>
     <%= f.b_text_field :address, label: t('models.customer_registration.public_address') %>
