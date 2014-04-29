@@ -1,0 +1,7 @@
+ka:
+  models:
+    billing_trash_item:
+      operdate: "Дата"
+      operation: Операция
+      amount: Сумма (GEL)
+      balance: "Прев. Задолж (GEL)"
