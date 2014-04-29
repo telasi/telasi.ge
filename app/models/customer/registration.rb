@@ -23,7 +23,7 @@ class Customer::Registration
   field :category, type: String, default: CAT_PERSONAL
   field :ownership, type: String, default: OWN_OWNER
   field :need_factura, type: Mongoid::Boolean, default: false
-  field :change_data, type: Mongoid::Boolean, default: false
+  field :change_data, type: Mongoid::Boolean, default: true
   field :bank_code, type: String
   field :bank_account, type: String
 
@@ -31,7 +31,7 @@ class Customer::Registration
   validates :rs_tin, presence: { message: I18n.t('models.customer_registration.errors.tin_required') }
   validates :address, presence: { message: I18n.t('models.customer_registration.errors.address_required') }
   validates :address_code, presence: { message: I18n.t('models.customer_registration.errors.address_code_required') }
-  validate  :validate_rs_name, :change_data_validation
+  validate  :validate_rs_name#, :change_data_validation
   before_create :on_before_create
   before_save :on_save
 
@@ -117,6 +117,5 @@ class Customer::Registration
   end
 
   def on_before_create; self.generate_docs(true) end
-  def change_data_validation; errors.add(:change_data,I18n.t('models.customer_registration.errors.change_data_confirmed')) unless self.change_data end
   def on_save; self.need_factura=false if self.category==CAT_PERSONAL; true end
 end
