@@ -33,6 +33,10 @@
       c.text_field :address_code, tag: 'code'
       c.text_field :address
     end
+    t.complex_field label: 'საბანკო აბგარიში' do |c|
+      c.text_field 'bank_code', tag: 'code', empty: false
+      c.text_field 'bank_account', empty: false
+    end
     t.boolean_field 'change_data', required: true
   end
   f.tab title: "დოკუმენტები &mdash; <strong>#{@registration.documents.size}</strong>".html_safe,
