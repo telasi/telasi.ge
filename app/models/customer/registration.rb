@@ -24,6 +24,8 @@ class Customer::Registration
   field :ownership, type: String, default: OWN_OWNER
   field :need_factura, type: Mongoid::Boolean, default: false
   field :change_data, type: Mongoid::Boolean, default: false
+  field :bank_code, type: String
+  field :bank_account, type: String
 
   # validates :custkey, uniqueness: { message: I18n.t('models.customer_registration.errors.customer_duplicate'), scope: :user_id }
   validates :rs_tin, presence: { message: I18n.t('models.customer_registration.errors.tin_required') }
