@@ -19,7 +19,7 @@
 <div class="row">
   <% if registration.confirmed? %> <!-- confirmed customer -->
     <div class="col-sm-12">
-      <%= render partial: 'customers/customer_info', locals: { customer: registration.customer, with_actions: true } %>
+      <%= render partial: 'customers/customer_info', locals:{registration: registration, customer: registration.customer, with_actions: true } %>
     </div>
   <% else %>                       <!-- not-confirmed customer -->
     <div class="col-sm-12">

@@ -49,6 +49,9 @@ ka:
         more: "განაცხადის ნახვა &rarr;"
         edit: განცხადების შეცვლა
         edit_complete: განცხადება შეცვლილია
+        toggle_sms: შეცვლა
+        toggle_sms_confirm: დაადასტურეთ SMS მიღების შეცვლა
+        toggle_sms_complete: SMS მიღების პარამეტრი შეცვლილია
       errors:
         tin_required: პირადი ნომერი აუცილებელია
         tin_illegal: არასწორი პირადი ნომერი

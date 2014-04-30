@@ -85,6 +85,13 @@ class CustomersController < ApplicationController
     redirect_to customer_registration_url(id: registration.id), notice: t('pages.customers.register.resend_complete')
   end
 
+  def toggle_sms
+    registration=Customer::Registration.find(params[:id])
+    registration.receive_sms=(!registration.receive_sms)
+    registration.save
+    redirect_to customers_url, notice: t('models.customer_registration.actions.toggle_sms_complete')
+  end
+
   def history
     @title = I18n.t('models.billing_customer.actions.history')
     @registration = Customer::Registration.where(user: current_user, custkey: params[:custkey]).first

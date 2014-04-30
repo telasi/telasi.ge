@@ -33,6 +33,9 @@ ru:
         public_save: Запомнить абонента
         save_complete: Абонент сохранен
         remove_complete: Абонент стерт
+        toggle_sms: Изменить
+        toggle_sms_confirm: Подтвердите изменение параметра SMS сообщений
+        toggle_sms_complete: Параметр SMS сообщений изменен
       errors:
         tin_required: Запишите персональный номер
         tin_illegal: Неправильный персональный номер
