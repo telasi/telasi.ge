@@ -103,7 +103,7 @@ class Customer::Registration
     when 'phone'
       if customer.tel.blank?
         customer.tel=self.user.mobile
-      elsif customer.tel not customer.tel.include?(self.user.mobile)
+      elsif customer.tel and not customer.tel.include?(self.user.mobile)
         customer.tel="#{customer.tel}; #{self.user.mobile}"
       end
     end
