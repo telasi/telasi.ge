@@ -83,6 +83,13 @@ class Admin::CustomersController < ApplicationController
     end
   end
 
+  def delete_doc
+    document=Customer::Document.find(params[:id])
+    registration=document.registration
+    document.delete
+    redirect_to admin_show_customer_url(id: registration.id, tab: 'docs'), notice: 'დოკუმენტი წაშლილია'
+  end
+
   def sync_data
     registration=Customer::Registration.find(params[:id])
     registration.sync_with_billing(params[:type])
