@@ -26,6 +26,7 @@ class Customer::Registration
   field :change_data, type: Mongoid::Boolean, default: true
   field :bank_code, type: String
   field :bank_account, type: String
+  field :receive_sms, type: Mongoid::Boolean, default: true
 
   # validates :custkey, uniqueness: { message: I18n.t('models.customer_registration.errors.customer_duplicate'), scope: :user_id }
   validates :rs_tin, presence: { message: I18n.t('models.customer_registration.errors.tin_required') }

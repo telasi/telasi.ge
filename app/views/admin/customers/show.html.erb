@@ -38,6 +38,7 @@
       c.text_field 'bank_account', empty: false
     end
     t.boolean_field 'change_data', required: true
+    t.boolean_field 'receive_sms', required: true
   end
   f.tab title: "დოკუმენტები &mdash; <strong>#{@registration.documents.size}</strong>".html_safe,
         icon: '/icons/documents.png' do |t|
