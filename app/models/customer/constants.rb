@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module Customer::Constants
   CAT_PERSONAL = 'personal'
   CAT_NOT_PERSONAL = 'not-personal'
