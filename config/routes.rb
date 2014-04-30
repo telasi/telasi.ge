@@ -20,10 +20,16 @@ TelasiGe::Application.routes.draw do
     get '/', action: 'index', as: 'customers'
     get '/search', action: 'search', as: 'search_customer'
     match '/info/:custkey', action: 'info', as: 'customer_info', via: ['get', 'post']
-    get '/complete/:custkey', action: 'complete', as: 'add_customer_complete'
+    delete '/remove/:id', action: 'remove', as: 'remove_customer'
+    get '/registration/:id', action: 'registration', as: 'customer_registration'
+    get '/registration/:id/messages', action: 'registration_messages', as: 'customer_registration_messages'
+    get '/registration/:id/docs', action: 'registration_docs', as: 'customer_registration_docs'
+    match '/registration/docs/upload/:doc_id', action: 'registration_upload_doc', as: 'customer_registration_doc_upload', via: [:get, :post]
+    post '/resend/:id', action: 'resend', as: 'resend_customer'
+    match '/edit/:id', action: 'edit', as: 'edit_customer', via: [:get,:patch]
+    # histories
     get '/history/:custkey', action: 'history', as: 'customer_history'
     get '/trash_history/:custkey', action: 'trash_history', as: 'customer_trash_history'
-    delete '/remove/:id', action: 'remove', as: 'remove_customer'
   end
 
   scope '/calculator', controller: 'calculator' do
@@ -80,12 +86,24 @@ TelasiGe::Application.routes.draw do
       match '/add_role/:permission_id', action: 'add_role', as: 'add_permission_role', via: ['get', 'post']
       delete '/remove_role/:permission_id/:role_id', action: 'remove_role', as: 'remove_permission_role'
     end
-    scope '/customers', controller: 'customers' do
-      get '/', action: 'index', as: 'customers'
-      get '/show/:id', action: 'show', as: 'show_customer'
-      get '/confirm/:id', action: 'confirm', as: 'confirm_customer'
-      match '/deny/:id', action: 'deny', as: 'deny_customer', via: ['get', 'post']
-      delete '/delete/:id', action: 'delete', as: 'delete_customer'
+    scope '/customers' do
+      scope '/', controller: 'customers' do
+        get '/', action: 'index', as: 'customers'
+        get '/show/:id', action: 'show', as: 'show_customer'
+        delete '/delete/:id', action: 'delete', as: 'delete_customer'
+        match '/change_status/:id', action: 'change_status', as: 'change_customer_status', via: [:get, :post]
+        match '/send_sms/:id', action: 'send_message', as: 'send_customer_sms', via: [:get, :post]
+        post '/generate_docs/:id', action: 'generate_docs', as: 'generate_customer_docs'
+        match '/deny_doc/:id', action: 'deny_doc', as: 'deny_customer_doc', via: [:get, :post]
+        post '/sync_data/:id/:type', action: 'sync_data', as: 'sync_customer_data'
+      end
+      scope '/doctypes', controller: 'customer_doctypes' do
+        get '/', action: 'index', as: 'customer_doctypes'
+        get '/show/:id', action: 'show', as: 'customer_doctype'
+        match '/new', action: 'new', as: 'new_customer_doctype', via: ['get', 'post']
+        match '/edit/:id', action: 'edit', as: 'edit_customer_doctype', via: ['get', 'post']
+        delete '/edit/:id', action: 'delete', as: 'delete_customer_doctype'
+      end
     end
     scope '/subscriptions', controller: 'subscriptions' do
       get '/', action: 'index', as: 'subscriptions'

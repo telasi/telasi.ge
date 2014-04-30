@@ -1,0 +1,28 @@
+<div class="page-header">
+  <div class="pull-right">
+    <%if registration.allow_edit?%>
+      <a href="<%=edit_customer_url(id:registration.id)%>" class="btn btn-default">
+        <i class="fa fa-pencil"></i>
+        <%=t('models.general.actions.edit')%>
+      </a>
+    <%end%>
+  </div>
+  <h2>
+    <%= t('pages.customers.registration.title') %>
+    <code>#<%= registration.customer.accnumb.to_ka %></code>
+  </h2>
+</div>
+<%
+  links = {
+    t('pages.customers.registration.general') => customer_registration_url(id: registration.id),
+    "#{t('pages.customers.registration.documents')} &mdash; #{@registration.documents.size}".html_safe => customer_registration_docs_url(id: registration.id),
+    "#{t('pages.customers.registration.messages')} &mdash; #{@registration.messages.size}".html_safe => customer_registration_messages_url(id: registration.id)
+  }
+%>
+<ul class="nav nav-pills nav-justified-x" style="margin: 16px 0;">
+  <% links.each do |text, url| %>
+    <li class="<%= request.url == url ? 'active' : 'inactive' %>"><%= link_to text, url %></li>
+  <% end %>
+</ul>
+<!-- alerts -->
+<%= render partial: '/customers/alerts', locals: { registration: registration } %>

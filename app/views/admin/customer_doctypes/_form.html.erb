@@ -1,0 +1,15 @@
+<%= forma_for doctype, title: @title, icon: '/icons/document-code.png', collapsible: true do |f|
+  f.text_field :name_ka, autofocus: true, required: true, width: 500
+  f.text_field :name_ru, required: true, width: 500
+  f.combo_field :category, collection: {
+    Customer::Constants.cat_name(Customer::Constants::CAT_PERSONAL) => Customer::Constants::CAT_PERSONAL,
+    Customer::Constants.cat_name(Customer::Constants::CAT_NOT_PERSONAL) => Customer::Constants::CAT_NOT_PERSONAL,
+  }, empty: false, required: true
+  f.combo_field :ownership, collection: {
+    Customer::Constants.owner_name(Customer::Constants::OWN_OWNER) => Customer::Constants::OWN_OWNER,
+    Customer::Constants.owner_name(Customer::Constants::OWN_RENT) => Customer::Constants::OWN_RENT,
+  }, empty: false, required: true
+  f.boolean_field :required, required: true
+  f.submit 'შენახვა'
+  f.cancel_button cancel_url
+end %>

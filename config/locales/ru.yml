@@ -159,7 +159,7 @@ ru:
       accnumb: Номер абонента
       custname: Название
       balance: Задолженность
-      trash_balance: Задолж. (Уборка)
+      trash_balance: Задолж. (Сан.Очистка)
       current_water_balance: Задолж. (Водоснабжение)
       operation: Операция
       kwh: Начисление
@@ -177,7 +177,7 @@ ru:
         info: Сводка Абонента
         back_to_customers: '&larr; назад в задолженость'
         history: История начисления
-        trash_history: Начисления по уборке мусора
+        trash_history: Начисления по сан. очистке
       errors:
         cut_warning: "Для предотвращения отключения эл.энергии, просьба вовремя расплатиться! Последний день платежа:"
     billing_customer_registration:

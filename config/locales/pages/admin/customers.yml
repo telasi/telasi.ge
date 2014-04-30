@@ -1,0 +1,9 @@
+ka:
+  pages:
+    admin:
+      customers:
+        document_type:
+          title: დოკუმენტის სახეობები
+          new_doctype: ახალი სახეობა
+          edit_doctype: სახეობის შეცვლა
+          show_doctype: სახეობის თვისებები

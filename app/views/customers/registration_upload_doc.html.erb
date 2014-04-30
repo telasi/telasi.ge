@@ -1,0 +1,33 @@
+<h2 class="page-header"><%= @title %></h2>
+<div class="row">
+  <div class="col-sm-6">
+    <ul class="list-group">
+      <li class="list-group-item">
+        <div class="pull-right">
+          <code>#<%= @registration.customer.accnumb.to_ka %></code>
+          <%= @registration.customer.custname.to_ka %>
+        </div>
+        <%= t('models.customer_registration.customer') %>
+      </li>
+      <li class="list-group-item">
+        <div class="pull-right">
+          <%= @document.document_type.name %>
+        </div>
+        <%= t('models.customer_document.document_type') %>
+      </li>
+    </ul>
+  </div>
+</div>
+<%= form_for @file, url: request.url do |f| %>
+  <p class="text-info">
+    <%= t 'models.network_new_customer_application.actions.upload_hint' %>
+  </p>
+  <%= f.file_field :file %>
+  <div style="padding-top: 32px;">
+    <%= f.submit @title, class: 'btn btn-primary' %>
+    <a href="<%= customer_registration_docs_url(id: @registration.id) %>" class="btn btn-default">
+      <i class="fa fa-times-circle"></i>
+      <%= t 'models.general.actions.cancel' %>
+    </a>
+  </div>
+<% end %> 

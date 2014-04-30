@@ -1,0 +1,9 @@
+ka:
+  models:
+    billing_item:
+      date: "Дата"
+      operation: Операция
+      reading: "Показание (kWh)"
+      kwh: "Начисление (kWh)"
+      amount: "Сумма (GEL)"
+      balance: "Прев. Задолж (GEL)"

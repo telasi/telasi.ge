@@ -3,7 +3,7 @@ class Admin::CustomersController < ApplicationController
   def index
     @title = t('models.billing_customer_registration.title.pluaral')
     @search = params[:search] == 'clear' ? {} : params[:search]
-    rel = Billing::CustomerRegistration
+    rel = Customer::Registration
     if @search
       if @search[:customer_id].present?
         @search[:customer] = Billing::Customer.find(@search[:customer_id])
@@ -11,44 +11,82 @@ class Admin::CustomersController < ApplicationController
       end
       rel = rel.where(rs_tin: @search[:rs_tin].mongonize) if @search[:rs_tin].present?
       rel = rel.where(rs_name: @search[:rs_name].mongonize) if @search[:rs_name].present?
-      rel = rel.where(confirmed: @search[:confirmed] == 'yes') if @search[:confirmed].present?
-      rel = rel.where(denied: @search[:denied] == 'yes') if @search[:denied].present?
+      rel = rel.where(status: @search[:status].to_i) if @search[:status].present?
     end
     @registrations = rel.desc(:_id).paginate(page: params[:page], per_page: 20)
   end
 
   def show
-    @title = I18n.t('models.billing_customer_registration.title.single')
-    @registration = Billing::CustomerRegistration.find(params[:id])
+    @title = 'რეგისტრაციის თვისებები'
+    @registration = Customer::Registration.find(params[:id])
   end
 
-  def confirm
-    @registration = Billing::CustomerRegistration.find(params[:id])
-    @registration.confirmed = true
-    @registration.denied = false
-    @registration.denial_reason = nil
-    @registration.save
-    send_sms(@registration, "Tqveni onlain motxovnis Sesabamisad, abonenti ##{@registration.customer.accnumb} dadasturebulia!")
-    redirect_to admin_show_customer_url(id: @registration.id), notice: I18n.t('models.billing_customer_registration.actions.registration_confirmed')
+  def delete
+    registration = Customer::Registration.find(params[:id])
+    registration.destroy
+    redirect_to admin_customers_url, notice: 'რეგისტრაცია წაშლილია'
   end
 
-  def deny
-    @title = I18n.t('models.billing_customer_registration.actions.deny_alt')
-    @registration = Billing::CustomerRegistration.find(params[:id])
+  def change_status
+    @title = 'სტატუსის შეცვლა'
+    @registration = Customer::Registration.find(params[:id])
     if request.post?
-      @registration.confirmed = false
-      @registration.denied = true
-      if @registration.update_attributes(params.require(:billing_customer_registration).permit(:denial_reason))
-        send_sms(@registration, "abonenti ##{@registration.customer.accnumb} ar dagidasturdat, Semdegi mizezis gamo: #{@registration.denial_reason}")
-        redirect_to admin_show_customer_url(id: @registration.id), notice: I18n.t('models.billing_customer_registration.actions.registration_denied')
+      @message = Sys::SmsMessage.new(params.require(:sys_sms_message).permit(:message))
+      @message.messageable = @registration
+      @message.mobile = @registration.user.mobile
+      if @message.save
+        @registration.status = params[:new_status].to_i
+        if @registration.save
+          send_sms(@registration, @message.message)
+          redirect_to admin_show_customer_url(id: @registration.id, tab: 'general'), notice: 'სტატუსი შეცვლილია'
+        else
+          raise "#{@registration.errors.full_messages}"
+        end
+      end
+    else
+      msg=Customer::Registration.status_sms(params[:new_status].to_i) rescue nil
+      @message = Sys::SmsMessage.new(message:msg)
+    end
+  end
+
+  def send_message
+    @title = 'შეტყობინების გაგზავნა'
+    @registration = Customer::Registration.find(params[:id])
+    if request.post?
+      @message = Sys::SmsMessage.new(params.require(:sys_sms_message).permit(:message))
+      @message.messageable = @registration
+      @message.mobile = @registration.user.mobile
+      if @message.save
+        send_sms(@registration, @message.message)
+        redirect_to admin_show_customer_url(id: @registration.id, tab: 'sms'), notice: 'შეტყობინება გაგზავნილია'
+      end
+    else
+      @message = Sys::SmsMessage.new
+    end
+  end
+
+  def generate_docs
+    registration = Customer::Registration.find(params[:id])
+    registration.generate_docs
+    redirect_to admin_show_customer_url(id: registration.id, tab: 'docs'), notice: 'დოკუმენტები გენერირებულია'
+  end
+
+  def deny_doc
+    @title = 'დოკუმენტის უარყოფა'
+    @document = Customer::Document.find(params[:id])
+    @registration = @document.registration
+    if request.post?
+      @document.denied = true
+      if @document.update_attributes(params.require(:customer_document).permit(:denial_reason))
+        redirect_to admin_show_customer_url(id: @registration.id, tab: 'docs'), notice: 'დოკუმენტი უარყოფილია'
       end
     end
   end
 
-  def delete
-    registration = Billing::CustomerRegistration.find(params[:id])
-    registration.destroy
-    redirect_to admin_customers_url, notice: 'რეგისტრაცია წაშლილია'
+  def sync_data
+    registration=Customer::Registration.find(params[:id])
+    registration.sync_with_billing(params[:type])
+    redirect_to admin_show_customer_url(id:registration.id),notice:"პარამეტრი შეცვლილია: #{params[:type]}"
   end
 
   def nav
@@ -61,7 +99,5 @@ class Admin::CustomersController < ApplicationController
 
   private
 
-  def send_sms(registration, text)
-    Magti.send_sms(registration.user.mobile, text.to_lat) if Magti::SEND
-  end
+  def send_sms(registration, text); Magti.send_sms(registration.user.mobile, text.to_lat) if Magti::SEND end
 end

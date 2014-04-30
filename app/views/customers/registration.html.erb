@@ -1,0 +1,79 @@
+<%= render partial: 'customers/registration_top', locals: { registration: @registration } %>
+<% if @registration.show_resend_warning? %>
+  <div class="alert alert-warning">
+    <p><%= t('pages.customers.register.resend_description') %></p>
+    <p>
+      <%= link_to t('pages.customers.register.resend_action'), resend_customer_url(id: @registration.id), class: ['btn', 'btn-success'], data: { method: 'post', confirm: t('pages.customers.register.resend_confirm') } %>
+    </p>
+  </div>
+<% end %>
+<div class="row">
+  <div class="col-sm-6">
+    <ul class="list-group">
+      <li class="list-group-item">
+        <div class="pull-right">
+          <code><%= @registration.customer.accnumb.to_ka %></code>
+          <%= @registration.customer.custname.to_ka %>
+        </div>
+        <%= t('models.customer_registration.customer') %>
+      </li>
+      <li class="list-group-item">
+        <div class="pull-right"><%= @registration.customer.address %></div>
+        <%= t('models.customer_registration.customer_address') %>
+      </li>
+    </ul>
+    <ul class="list-group">
+      <li class="list-group-item">
+        <div class="pull-right">
+          <%= @registration.created_at.strftime('%d-%b-%Y %H:%M') %>
+        </div>
+        <%= t('models.customer_registration.created_at') %>
+      </li>
+      <li class="list-group-item">
+        <div class="pull-right">
+          <img src="<%= @registration.status_icon %>"/>
+          <%= @registration.status_name %>
+        </div>
+        <%= t('models.customer_registration.public_status') %>
+      </li>
+    </ul>
+  </div>
+  <div class="col-sm-6">
+    <ul class="list-group">
+      <li class="list-group-item">
+        <div class="pull-right">
+          <code><%= @registration.rs_tin %></code>
+          <%= @registration.rs_name %>
+        </div>
+        <%= t('models.customer_registration.rs_name') %>
+      </li>
+      <li class="list-group-item">
+        <div class="pull-right">
+          <code><%= @registration.address_code %></code>
+          <%= @registration.address %>
+        </div>
+        <%= t('models.customer_registration.address') %>
+      </li>
+      <li class="list-group-item">
+        <div class="pull-right">
+          <%= @registration.category_name %>
+        </div>
+        <%= t('models.customer_registration.category') %>
+      </li>
+      <%if @registration.not_personal?%>
+        <li class="list-group-item">
+          <div class="pull-right"><%= yes_no @registration.need_factura %></div>
+          <%= t('models.customer_registration.need_factura') %>
+        </li>
+      <%end%>
+      <li class="list-group-item">
+        <div class="pull-right"><%= @registration.ownership_name %></div>
+        <%= t('models.customer_registration.ownership') %>
+      </li>
+      <li class="list-group-item">
+        <div class="pull-right"><%= yes_no @registration.change_data %></div>
+        <%= t('models.customer_registration.change_data') %>
+      </li>
+    </ul>
+  </div>
+</div>

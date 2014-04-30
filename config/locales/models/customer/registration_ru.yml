@@ -1,0 +1,40 @@
+ru:
+  models:
+    customer_registration:
+      created_at: Дата создания
+      customer: Абонент билинга
+      customer_address: Адрес по билингу
+      address: Адрес
+      address_code: Кадастровый код
+      rs_tin: Идентиф.Код
+      rs_name: Заявитель
+      status: Статус
+      category: Категория
+      ownership: საკუთრების სახე
+      public_rs_tin: "Ваш персональный или регистрационный номер:"
+      public_address: "Адресс абонирования:"
+      public_address_code: "Кадастровый код адресса абонирования:"
+      public_category: "Укажите к какой категории вы относитесь:"
+      public_category_personal: Физическое лицо
+      public_category_not_personal: Юридическое лицо
+      public_ownership: "Укажите, являетесь ли вы собственником:"
+      public_ownership_owner: "Да, я собтвенник"
+      public_ownership_rent: "Нет, я не собтвенник, но у меня есть соглашение об аренде"
+      public_need_factura: "Выделите, если вам требуется счет-фактура"
+      public_change_data: |
+        Согласен, что на основании предоствленой мною информации,
+        могут быть внесены изменения на карточке абонента ОО Теласи
+      status_names:
+        start: Идет проверка
+        docs_required: Требуется дополнительная документация
+        complete: Регистрация подтверждена
+        canceled: Регистрация отклонена
+      actions:
+        public_save: Запомнить абонента
+        save_complete: Абонент сохранен
+        remove_complete: Абонент стерт
+      errors:
+        tin_required: Запишите персональный номер
+        tin_illegal: Неправильный персональный номер
+        address_required: Запишите адресс
+        address_code_required: Запишите кадастровый код

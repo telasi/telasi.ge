@@ -1,0 +1,56 @@
+ka:
+  models:
+    customer_registration:
+      created_at: შევსების თარიღი
+      customer: ბილინგის აბონენტი
+      customer_address: ბილინგის მისამართი
+      address: მისამართი
+      address_code: საკადასტრო კოდი
+      rs_tin: საიდ.კოდი
+      rs_name: განმცხადებელი
+      status: სტატუსი
+      category: კატეგორია
+      ownership: საკუთრების სახე
+      need_factura: სჭირდება ფაქტურა?
+      change_data: თანხმობა რეკვიზიტების ცვლილებაზე
+      receive_sms: SMS მიღება ვალზე?
+      receive_sms_yes: აქტივირებულია
+      receive_sms_no: გამორთულია
+      public_rs_tin: "თქვენი პირადი ნომერი ან საიდენტიფიკაციო კოდი:"
+      public_address: "აბონირების მისამართი:"
+      public_address_code: "აბონირების მისამართის საკადასტრო კოდი:"
+      public_category: "მიუთითეთ თუ რომელ კატეგორიას მიეკუთვნებით:"
+      public_category_personal: ფიზიკური პირი
+      public_category_not_personal: იურიდიული პირი
+      public_ownership: "აარჩიეთ ხართ თუ არა აღნიშნული ფართის მესაკუთრე:"
+      public_ownership_owner: "დიახ, ვარ მესაკუთრე"
+      public_ownership_rent: "არა, არ ვარ მესაკუთრე, მაგრამ მაქვს საიჯარო/ქირის შეთანხმება"
+      public_status: განაცხადის სტატუსი
+      public_need_factura: "მონიშნეთ, თუ გჭირდებათ საგადასახადო ანგარიშ-ფაქტურა"
+      public_change_data: |
+        თანახმა ვარ, რომ ჩემს მიერ წარმოდგენილი საბუთების საფუძველზე, სს თელასის სააბონენტო ბარათზე,
+        განხორციელდეს რეკვიზიტების ცვლილება
+      public_bank_code: "აარჩიეთ ბანკი"
+      public_bank_account: "საბანკო ანგარიში"
+      status_names:
+        start: მიმდინარეობს განხილვა
+        docs_required: საჭიროა დამატებითი დოკუმენტაცია
+        complete: რეგისტრაცია დადასტურებულია
+        canceled: რეგისტრაცია უარყოფილია
+      status_sms:
+        start: განხილვის ეტაპზე დაბრუნება
+        docs_required: საჭიროა დამატებითი დოკუმენტაციის წარმოდგენა
+        complete: თქვენ წარმატებით გაიარეთ რეგისტრაცია
+        canceled: "თქვენი ვერ გაიარეთ რეგისტრაცია: თქვენი მონაცემები არ ემთხვევა საჯარო ინფორმაციას"
+      actions:
+        public_save: აბონენტის რეგისტრაცია
+        save_complete: აბონენტი შენახულია
+        remove_complete: აბონენტი წაშლილია
+        more: "განაცხადის ნახვა &rarr;"
+        edit: განცხადების შეცვლა
+        edit_complete: განცხადება შეცვლილია
+      errors:
+        tin_required: პირადი ნომერი აუცილებელია
+        tin_illegal: არასწორი პირადი ნომერი
+        address_required: ჩაწერეთ მისამართი
+        address_code_required: ჩაწერეთ საკადასტრო კოდი

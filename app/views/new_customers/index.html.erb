@@ -9,21 +9,18 @@
   <% if @applications.any? %>
       <% @applications.each do |app| %>
         <div class="page-header">
+          <div class="pull-right">
+            <a class="btn btn-default" href="<%= new_customer_url(id: app.id, format: 'pdf') %>">
+              <i class="fa fa-print"></i> <%= t('models.general.actions.print') %>
+            </a>
+            <a class="btn btn-default" href="<%= new_customer_url(id: app.id) %>">
+              <i class="fa fa-eye"></i>
+              <%= t('models.general.detailed') %>
+            </a>
+          </div>
           <h3><%= t('models.network_new_customer_application.application') %> <code>#<%= app.effective_number %></code></h3>
         </div>
-        <div class="row">
-          <div class="col-sm-6">
-            <%= render partial: 'new_customers/item', locals: { app: app } %>
-          </div>
-          <div class="col-sm-4">
-            <div class="btn-group">
-              <a class="btn btn-primary" href="<%= new_customer_url(id: app.id) %>"><i class="fa fa-eye"></i> <%= t('models.general.detailed') %></a>
-              <a class="btn btn-default" href="<%= new_customer_url(id: app.id, format: 'pdf') %>">
-                <i class="fa fa-print"></i> <%= t('models.general.actions.print') %>
-              </a>
-            </div>
-          </div>
-        </div>
+        <%= render partial: 'new_customers/item', locals: { app: app } %>
       <% end %>
   <% else %>
     <div class="well">

@@ -1,0 +1,9 @@
+ka:
+  models:
+    billing_item:
+      date: "თარიღი"
+      operation: ოპერაცია
+      reading: "ჩვენება (kWh)"
+      kwh: "დარიცხვა (kWh)"
+      amount: "თანხა (GEL)"
+      balance: "წინა ვალი (GEL)"

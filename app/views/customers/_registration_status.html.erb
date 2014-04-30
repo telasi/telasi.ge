@@ -1,0 +1,35 @@
+<% url = customer_registration_url(id: registration.id) %>
+<ul class="list-group">
+  <li class="list-group-item">
+    <div class="pull-right">
+      <%= link_to registration.created_at.strftime('%d-%b-%Y'), url %>
+    </div>
+    <%= t('models.customer_registration.created_at') %>
+  </li>
+  <li class="list-group-item">
+    <div class="pull-right">
+      <img src="<%= registration.status_icon %>"/>
+      <%= link_to registration.status_name, url %>
+    </div>
+    <%= t('models.customer_registration.public_status') %>
+  </li>
+  <li class="list-group-item">
+    <div class="pull-right">
+      <%= link_to registration.category_name, url %>
+    </div>
+    <%= t('models.customer_registration.category') %>
+  </li>
+  <li class="list-group-item">
+    <div class="pull-right">
+      <%= link_to registration.ownership_name, url %>
+    </div>
+    <%= t('models.customer_registration.ownership') %>
+  </li>
+  <li class="list-group-item">
+    <div class="pull-right">
+      <code><%= registration.rs_tin %></code>
+      <%= link_to registration.rs_name, url %>
+    </div>
+    <%= t('models.customer_registration.rs_name') %>
+  </li>
+</ul>

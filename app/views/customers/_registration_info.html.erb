@@ -1,8 +1,15 @@
 <div class="page-header">
   <div class="pull-right">
-    <a class="btn btn-default" href="<%= remove_customer_url(id: registration.id) %>" data-method="delete" data-confirm="<%= t('models.billing_customer_registration.actions.remove_confirm') %>">
-      <i class="fa fa-trash-o"></i>
-    </a>
+    <div class="btn-group">
+      <a class="btn btn-default" href="<%= remove_customer_url(id: registration.id) %>"
+         data-method="delete" data-confirm="<%= t('models.billing_customer_registration.actions.remove_confirm') %>">
+        <i class="fa fa-trash-o"></i>
+      </a>
+      <a class="btn btn-info" href="<%= customer_registration_url(id: registration.id) %>">
+        <i class="fa fa-eye"></i>
+        <%= t('models.customer_registration.actions.more').html_safe %>
+      </a>
+    </div>
   </div>
   <h3>
     <code>#<%= registration.customer.accnumb.to_ka %></code>
@@ -10,16 +17,23 @@
   </h3>
 </div>
 <div class="row">
-  <div class="col-sm-8">
-    <%= render partial: 'customers/customer_info', locals: { customer: registration.customer, with_actions: registration.confirmed } %>
-  </div>
-  <div class="col-sm-4">
-    <% unless registration.confirmed %>
+  <% if registration.confirmed? %> <!-- confirmed customer -->
+    <div class="col-sm-12">
+      <%= render partial: 'customers/customer_info', locals: { customer: registration.customer, with_actions: true } %>
+    </div>
+  <% else %>                       <!-- not-confirmed customer -->
+    <div class="col-sm-12">
       <div class="alert alert-warning">
         <i class="fa fa-info-circle"></i>
         <%= t('models.billing_customer_registration.errors.not_confirmed').html_safe %>
       </div>
-    <% else %>
-    <% end %>
-  </div>
+      <%= render partial: '/customers/alerts', locals: { registration: registration } %>
+    </div>
+    <div class="col-sm-6">
+      <%= render partial: 'customers/customer_info', locals: { customer: registration.customer, with_actions: false } %>
+    </div>
+    <div class="col-sm-6">
+      <%= render partial: 'customers/registration_status', locals: { registration: registration } %>
+    </div>
+  <% end %>
 </div>

@@ -1,0 +1,10 @@
+<h3 class="page-header"><%=@title%></h3>
+<p>
+  <strong><%= @document.document_type.name %></strong>:
+  <%= link_to @document.file.file.filename, @document.file.file.url %>
+</p>
+<%= forma_for @document, title: @title, icon: '/icons/cross.png', collapsible: true do |f|
+  f.text_field 'denial_reason', required: true, autofocus: true, width: 500
+  f.submit 'შენახვა'
+  f.cancel_button admin_show_customer_url(id: @registration.id, tab: 'docs')
+end %>

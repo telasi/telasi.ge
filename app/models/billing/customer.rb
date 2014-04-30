@@ -14,9 +14,12 @@ class Billing::Customer < ActiveRecord::Base
   has_many :water_items,    -> { order 'year, month' }, class_name: 'Billing::WaterItem', foreign_key: :custkey
   has_many :item_bills,     -> { order 'itemkey' },     class_name: 'Billing::ItemBill',  foreign_key: :custkey
   has_many :accounts,       class_name: 'Billing::Account',       foreign_key: :custkey
+  has_many :customer_custs, class_name: 'Billing::CustomerCust',  foreign_key: :custkey
   has_one  :note,           class_name: 'Billing::Note',          foreign_key: :notekey
   belongs_to :category,     class_name: 'Billing::Custcateg',     foreign_key: :custcatkey
   belongs_to :activity,     class_name: 'Billing::Custcateg',     foreign_key: :activity
+
+  def self.active; Billing::Customer.where(statuskey:ACTIVE) end
 
   def region; self.address.region end
   # def last_water_item; self.water_items.last end

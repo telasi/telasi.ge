@@ -1,32 +1,114 @@
-<%= view_for @registration, title: @title, icon: '/icons/user.png', collapsible: true do |f|
-  f.title_action(admin_confirm_customer_url(id: @registration.id), label: I18n.t('models.billing_customer_registration.actions.confirm'), confirm: I18n.t('models.billing_customer_registration.actions.confirm_confirm'), icon: '/icons/tick.png') unless @registration.confirmed
-  f.title_action(admin_deny_customer_url(id: @registration.id), label: I18n.t('models.billing_customer_registration.actions.deny'), icon: '/icons/cross.png') unless @registration.denied
-  f.title_action(admin_delete_customer_url(id: @registration.id), label: 'წაშლა', icon: '/icons/bin.png', confirm: 'ნამდვილად გინდათ რეგისტრაციის წაშლა?', method: 'delete')
+<%seltab = case params[:tab]
+  when 'docs' then 1
+  when 'sms'  then 2
+  when 'sys'  then 3
+  else 0 end %>
+<%= view_for @registration, title: @title, icon: '/icons/user.png', collapsible: true, selected_tab: seltab do |f|
   f.tab title: t('models.billing_customer_registration.title.single_alt'), icon: '/icons/user.png' do |t|
-    t.col1 do |c|
-      c.complex_field i18n: 'customer', required: true do |c|
-        c.text_field 'customer.accnumb', tag: 'code'
-        c.text_field 'customer'
-      end
-      c.text_field 'customer.address', label: 'მისამართი', required: true
-      c.text_field :rs_tin, required: true, tag: 'code'
-      c.date_field :dob, required: true
-      c.text_field :rs_name, required: true
-      c.text_field :cra, required: true, value: 'შემოწმება რეესტრში', url: ->(x) { x.cra_url }
+    @registration.transitions.each do |stat|
+      t.action admin_change_customer_status_url(id: @registration.id, new_status: stat),
+        label: Customer::Registration.status_name(stat),
+        icon: Customer::Registration.status_icon(stat)
     end
-    t.col2 do |c|
-      c.boolean_field :confirmed, required: true
-      c.boolean_field :denied, required: true
-      c.text_field :denial_reason
+    t.complex_field label: 'მომხმარებელი', required: true do |c|
+      c.email_field 'user.email'
+      c.text_field 'user.full_name', url: admin_user_url(id: @registration.user.id)
+      c.text_field 'user.formatted_mobile'
+    end
+    t.complex_field i18n: 'customer', required: true do |c|
+      c.text_field 'customer.accnumb', tag: 'code'
+      c.text_field 'customer.custname'
+      c.text_field 'customer.address', class: 'text-muted'
+    end
+    t.text_field 'category_name', i18n: 'category', required: true
+    t.boolean_field 'need_factura', required: true if @registration.not_personal?
+    t.text_field 'ownership_name', i18n: 'ownership', required: true
+    t.complex_field i18n: 'status', required: true do |c|
+      c.image_field 'status_icon'
+      c.text_field 'status_name'
+    end
+    t.text_field :rs_tin, required: true, tag: 'code'
+    t.text_field :rs_name, required: true
+    t.complex_field label: 'მისამართი', required: true do |c|
+      c.text_field :address_code, tag: 'code'
+      c.text_field :address
+    end
+    t.complex_field label: 'საბანკო აბგარიში' do |c|
+      c.text_field 'bank_code', tag: 'code', empty: false
+      c.text_field 'bank_account', empty: false
+    end
+    t.boolean_field 'change_data', required: true
+    t.boolean_field 'receive_sms', required: true
+  end
+  f.tab title: "დოკუმენტები &mdash; <strong>#{@registration.documents.size}</strong>".html_safe,
+        icon: '/icons/documents.png' do |t|
+    t.action admin_generate_customer_docs_url(id: @registration.id), label: 'დოკუმენტების გენერაცია', icon: '/icons/wand.png', method: 'post', confirm: 'ნამდვილად გინდათ დოკუმენტების გენერაცია?'
+    t.table_field :not_denied_documents,table: {title:'ატვირთული დოკუმენტები',icon:'/icons/documents.png'}do |documents|
+      documents.table do |t|
+        t.item_action ->(x) { admin_deny_customer_doc_url(id: x.id) }, label: 'უარყოფა', condition: ->(x) { x.can_deny? }, icon: '/icons/cross.png'
+        t.text_field 'document_type.name', label: 'დოკუმენტის სახეობა'
+        t.text_field 'file.file.filename', label: 'მომაგრებული ფაილი', url: ->(x) { x.file.file.url }
+      end
+    end
+    t.table_field :denied_documents,table: {title:'უარყოფილი დოკუმენტები',icon:'/icons/cross.png'}do |documents|
+      documents.table do |t|
+        t.item_action ->(x) { admin_deny_customer_doc_url(id: x.id) }, label: 'უარყოფა', condition: ->(x) { x.can_deny? }, icon: '/icons/cross.png'
+        t.text_field 'document_type.name', label: 'დოკუმენტის სახეობა'
+        t.text_field 'denial_reason', label: 'უარყოფის მიზეზი', class: 'text-danger'
+        t.text_field 'file.file.filename', label: 'მომაგრებული ფაილი', url: ->(x) { x.file.file.url }
+      end
     end
   end
-  f.tab title: t('models.sys_user.title.single'), icon: '/icons/lock.png' do |t|
-    t.email_field 'user.email', label: t('models.sys_user.email'), required: true
-    t.text_field 'user.full_name', label: t('models.sys_user.full_name'), required: true, url: admin_user_url(id: @registration.user.id)
-    t.text_field 'user.mobile', label: t('models.sys_user.mobile'), required: true
-    t.boolean_field 'user.email_confirmed', label: 'დადასტურებული?', required: true
+  f.tab title: "შეტყობინებები &mdash; <strong>#{@registration.messages.size}</strong>".html_safe,
+        icon: '/icons/mobile-phone.png' do |t|
+    t.table_field :messages, table: { title: 'გაგზავნილი შეტყობინებები', icon: '/icons/mobile-phone.png' } do |messages|
+      messages.table do |t|
+        t.title_action admin_send_customer_sms_url(id: @registration.id), label: 'შეტყობინების გაგზავნა', icon: '/icons/mobile-phone--plus.png'
+        t.date_field 'created_at', formatter: '%d-%b-%Y %H:%M:%S'
+        t.text_field 'mobile', tag: 'code'
+        t.text_field 'message'
+      end
+    end
   end
   f.tab title: t('models.general.system'), icon: '/icons/traffic-cone.png' do |t|
     t.timestamps
   end
 end %>
+<h3 class="page-header">მონაცემების შედარება</h3>
+<%customer=@registration.customer%>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th width="200">პარამეტრი</th>
+      <th>მნიშვ.განცხადებაში</th>
+      <th>მნიშვ.ბილინგში</th>
+      <th width="16" class="text-center"><i class="fa fa-cog"></i></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%
+      lastcust=customer.customer_custs.where(status:0).last
+      values = {
+        'დასახელება' => [customer.custname.to_ka,@registration.suggested_name,'custname'],
+        'საიდ.კოდი'  => [customer.taxid,@registration.rs_tin,'taxid'],
+        'მისამართი'  => [customer.address.to_s,@registration.address,nil],
+        'საკად.კოდი' => [(lastcust.register_code if lastcust.present?),@registration.address_code,nil],
+        'ელ.ფოსტა'   => [customer.email,@registration.user.email,'email'],
+        'მობილური'   => [customer.tel,@registration.user.mobile,'phone'],
+      }
+    %>
+    <%values.each do |k,v|%>
+      <%is_same=((v[0].blank? and v[1].blank?) or (v[0].present? and v[1].present? and v[0].strip==v[1].strip))%>
+      <tr class="<%=is_same ? 'success' : 'danger'%>">
+        <th><%=k%></th>
+        <td><%=v[1]%></td>
+        <td><%if v[0].blank?%><span class="text-muted">(ცარიელი)</span><%else%><%=v[0]%><%end%></td>
+        <td>
+          <%if v[2] and not is_same%>
+            <%=link_to '<i class="fa fa-refresh"></i>'.html_safe, admin_sync_customer_data_url(id:@registration.id,type:v[2]), method:'post', confirm: 'ნამდვილად გინდათ სინქრონიზაცია ბილინგის ბაზასთან?'%>
+          <%end%>
+        </td>
+      </tr>
+    <%end%>
+  </tbody>
+</table>
