@@ -32,6 +32,8 @@ ka:
         განხორციელდეს რეკვიზიტების ცვლილება
       public_bank_code: "აარჩიეთ ბანკი"
       public_bank_account: "საბანკო ანგარიში"
+      ownership_owner: მესაკუთრე
+      ownership_rent: ქირა/იჯარა
       status_names:
         start: მიმდინარეობს განხილვა
         docs_required: საჭიროა დამატებითი დოკუმენტაცია

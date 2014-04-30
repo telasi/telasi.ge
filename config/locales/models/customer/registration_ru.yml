@@ -10,7 +10,7 @@ ru:
       rs_name: Заявитель
       status: Статус
       category: Категория
-      ownership: საკუთრების სახე
+      ownership: Тип собственности
       receive_sms: Получать SMS сообщения по задолжености?
       receive_sms_yes: Активно
       receive_sms_no: Отключено
@@ -23,10 +23,15 @@ ru:
       public_ownership: "Укажите, являетесь ли вы собственником:"
       public_ownership_owner: "Да, я собтвенник"
       public_ownership_rent: "Нет, я не собтвенник, но у меня есть соглашение об аренде"
+      ownership_owner: Собственик
+      ownership_rent: Аренда
       public_need_factura: "Выделите, если вам требуется счет-фактура"
       public_change_data: |
         Согласен, что на основании предоствленой мною информации,
         могут быть внесены изменения на карточке абонента ОО Теласи
+      public_bank_code: "Выберите банк"
+      public_bank_account: "Банковский счет"
+      public_status: Статус заявки
       status_names:
         start: Идет проверка
         docs_required: Требуется дополнительная документация
@@ -39,6 +44,7 @@ ru:
         toggle_sms: Изменить
         toggle_sms_confirm: Подтвердите изменение параметра SMS сообщений
         toggle_sms_complete: Параметр SMS сообщений изменен
+        more: "Посмотреть заявку &rarr;"
       errors:
         tin_required: Запишите персональный номер
         tin_illegal: Неправильный персональный номер
