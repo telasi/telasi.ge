@@ -14,6 +14,8 @@ ka:
       need_factura: სჭირდება ფაქტურა?
       change_data: თანხმობა რეკვიზიტების ცვლილებაზე
       receive_sms: SMS მიღება ვალზე?
+      receive_sms_yes: აქტივირებულია
+      receive_sms_no: გამორთულია
       public_rs_tin: "თქვენი პირადი ნომერი ან საიდენტიფიკაციო კოდი:"
       public_address: "აბონირების მისამართი:"
       public_address_code: "აბონირების მისამართის საკადასტრო კოდი:"

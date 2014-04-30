@@ -59,4 +59,10 @@
     </div>
     <%= t('models.billing_customer.cut_deadline') %>
   </li>
+  <li class="list-group-item">
+    <div class="pull-right">
+      <%=yes_no true, t('models.customer_registration.receive_sms_yes'), t('models.customer_registration.receive_sms_no')%>
+    </div>
+    <%= t('models.customer_registration.receive_sms') %>
+  </li>
 </ul>
