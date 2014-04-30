@@ -101,7 +101,9 @@ class Customer::Registration
     when 'taxid' then customer.taxid=self.rs_tin
     when 'email' then customer.email=self.user.email
     when 'phone'
-      unless customer.tel.include?(self.user.mobile)
+      if customer.tel.blank?
+        customer.tel=self.user.mobile
+      elsif customer.tel not customer.tel.include?(self.user.mobile)
         customer.tel="#{customer.tel}; #{self.user.mobile}"
       end
     end
