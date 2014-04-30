@@ -2,7 +2,10 @@
   <div class="col-sm-8">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h4 style="margin: 0;"><%= t('models.sys_user.actions.register') %></h4>
+        <h4 style="margin: 0;">
+          <i class="fa fa-gear"></i>
+          <%= t('models.sys_user.actions.register') %>
+        </h4>
       </div>
       <div class="panel-body">
         <%= form_for @user, url: register_url, role: 'form' do |f| %>

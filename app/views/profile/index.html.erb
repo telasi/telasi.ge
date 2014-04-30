@@ -1,6 +1,9 @@
 <div class="row">
   <div class="col-sm-6">
-    <h2 class="page-header"><%= @title %></h2>
+    <h2 class="page-header">
+      <i class="fa fa-user"></i>
+      <%= @title %>
+    </h2>
     <ul class="list-group">
       <li class="list-group-item">
         <div class="pull-right"><%= mail_to @user.email %></div>
@@ -34,7 +37,10 @@
     </div>
   </div>
   <div class="col-sm-6">
-    <h2 class="page-header"><%= t('models.sys_subscription.actions.subscribe') %></h2>
+    <h2 class="page-header">
+      <i class="fa fa-envelope-o"></i>
+      <%= t('models.sys_subscription.actions.subscribe') %>
+    </h2>
     <% if @subscription.present? %>
       <ul class="list-group">
         <li class="list-group-item">

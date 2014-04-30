@@ -2,10 +2,16 @@
   <h2><%= t('info.slide') %></h2>
   <div>
     <% unless current_user.present? %>
-      <a href="<%= login_url %>" class="btn btn-success"><%= t('menu.login') %></a>
-      <a href="<%= register_url %>" class="btn btn-primary"><%= t('menu.register') %></a>
+      <a href="<%= login_url %>" class="btn btn-success">
+        <i class="fa fa-user"></i> <%= t('menu.login') %>
+      </a>
+      <a href="<%= register_url %>" class="btn btn-primary">
+        <i class="fa fa-gear"></i> <%= t('menu.register') %>
+      </a>
     <% else %>
-      <a href="<%= profile_url %>" class="btn btn-primary"><%= t('menu.profile') %></a>
+      <a href="<%= profile_url %>" class="btn btn-primary">
+        <i class="fa fa-user"></i> <%= t('menu.profile') %>
+      </a>
     <% end %>
   </div>
 </div>
