@@ -11,6 +11,9 @@ ru:
       status: Статус
       category: Категория
       ownership: საკუთრების სახე
+      receive_sms: Получать SMS сообщения по задолжености?
+      receive_sms_yes: Активно
+      receive_sms_no: Отключено
       public_rs_tin: "Ваш персональный или регистрационный номер:"
       public_address: "Адресс абонирования:"
       public_address_code: "Кадастровый код адресса абонирования:"
