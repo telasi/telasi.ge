@@ -105,7 +105,7 @@ class Network::ChangePowerApplication
     if [VOLTAGE_610, VOLTAGE_35110].include?(self.voltage) then I18n.t('models.network_change_power_application.unit_kvolt')
     else I18n.t('models.network_change_power_application.unit_volt') end
   end
-  def bank_name; Bank.bank_name(self.bank_code) end
+  def bank_name; Bank.bank_name(self.bank_code) if self.bank_code.present? end
   def customer; Billing::Customer.find(self.customer_id) if self.customer_id.present? end
   def self.status_name(status); I18n.t("models.network_change_power_application.status_#{status}") end
   def self.status_icon(status)
