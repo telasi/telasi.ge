@@ -113,7 +113,7 @@ class Customer::Registration
 ## DEBT SMS
 
   def self.send_sms_for_today
-    Customer::Registration.where(status:STATUS_COMPLETE).each do |reg|
+    Customer::Registration.where(status:STATUS_COMPLETE,receive_sms: true).each do |reg|
       last_notification=Customer::DebtNotification.where(registration:reg).desc(:_id).first
       deadline=reg.customer.cut_deadline
       if deadline and deadline>Date.today and (last_notification.blank? or deadline!=last_notification.for_deadline)
