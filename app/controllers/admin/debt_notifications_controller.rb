@@ -6,6 +6,11 @@ class Admin::DebtNotificationsController < ApplicationController
   end
 
 
+  def send_sms
+    Customer::Registration.send_sms_for_today
+    redirect_to admin_debt_notifications_url, notice: 'შეტყობინებები დაგზავნილია'
+  end
+
   def nav
     @nav = {
       'რეგისტრაციები' => admin_customers_url,

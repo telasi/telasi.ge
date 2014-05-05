@@ -108,6 +108,7 @@ TelasiGe::Application.routes.draw do
       end
       scope '/debt_notifications', controller: 'debt_notifications' do
         get '/', action: 'index', as: 'debt_notifications'
+        post '/send', action: 'send_sms', as: 'send_debt_notifications'
       end
     end
     scope '/subscriptions', controller: 'subscriptions' do
