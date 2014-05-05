@@ -1,6 +1,6 @@
 <%=table_for @notifications, title:@title, icon:'/icons/mobile-phone.png',collapsible:true do |t|
   t.title_action admin_send_debt_notifications_url, label: 'შეტყობინებების დაგზავნა', icon: '/icons/wand.png', method: 'post', confirm: 'ნამდვილად გინდათ შეტყობინებების დაგზავნა?'
-  t.date_field 'created_at', label: 'გაგზავნა'
+  t.date_field 'for_deadline', label: 'ჩაჭრა'
   t.complex_field label: 'აბონენტი' do |c|
     c.text_field 'registration.customer.accnumb',tag:'code'
     c.text_field 'registration.customer.custname',class:'text-muted'
