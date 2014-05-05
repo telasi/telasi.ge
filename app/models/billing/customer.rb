@@ -71,10 +71,10 @@ class Billing::Customer < ActiveRecord::Base
   end
 
   def balance_sms
-    txt=%Q{თქვენი დავალიანებაა შეადგენს:
-      \nსს "თელასი"-#{self.balance}GEL;
-      \nდასუფთავება-#{self.trash_balance}GEL;
-      \nწყალმომარაგება-#{self.water_balance}.
+    txt=%Q{დღეისთვის თქვენი დავალიანება შეადგენს:
+      \nსს "თელასი" (#{self.balance})GEL;
+      \nდასუფთავება (#{self.trash_balance})GEL;
+      \nწყალმომარაგება (#{self.water_balance})GEL.
       \nგთხოვთ დროულად დაფაროთ დავალიანება!}
     deadline=self.cut_deadline
     txt+=%Q{\nდავალიანების დაფარვის ბოლო თარიღია-#{deadline.strftime('%d-%b-%Y')}.} if deadline
