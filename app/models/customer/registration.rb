@@ -110,6 +110,15 @@ class Customer::Registration
     customer.save if customer.changed?
   end
 
+## DEBT SMS
+
+  def send_debt_sms
+    cust=self.customer
+    notification=Customer::DebtNotification.create(registration:self)
+    msg=Sys::SmsMessage.create(message:cust.balance_sms, mobile:self.user.mobile, messageable:notification)
+    msg.send_sms!(lat:true)
+  end
+
   private
 
   def validate_rs_name
