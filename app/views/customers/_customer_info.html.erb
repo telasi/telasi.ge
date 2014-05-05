@@ -3,6 +3,14 @@
 <ul class="list-group">
   <li class="list-group-item">
     <div class="pull-right">
+      <%pre_payment=customer.pre_payment ; pre_payment_date=customer.pre_payment_date%>
+      <%if pre_payment_date%>
+        <span class="alert alert-warning" style="padding: 8px 5px;">
+          დაუდასტ.გადახდა: <code><%=pre_payment%></code>GEL
+          <span class="text-muted"><%=(pre_payment_date||Time.now).strftime('%d-%b-%Y %H:%M:%S')%></span>
+        </span>
+        &nbsp;
+      <%end%>
       <i class="fa fa-bolt"></i>
       <code><%= number_with_precision customer.balance, precision: 2 %></code> GEL
       &nbsp;
