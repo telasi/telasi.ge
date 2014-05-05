@@ -112,6 +112,18 @@ class Customer::Registration
 
 ## DEBT SMS
 
+  def self.send_sms_for_today
+    Customer::Registration.where(status:STATUS_COMPLETE).each do |reg|
+      last_notification=Customer::DebtNotification.where(registration:self).desc(:_id).first
+      unless last_notification and last_notification.created_at.month==Date.today.month
+        deadline=reg.customer.cut_deadline
+        if deadline.month==Date.today.month
+          reg.send_debt_sms
+        end
+      end
+    end
+  end
+
   def send_debt_sms
     cust=self.customer
     notification=Customer::DebtNotification.create(registration:self)
