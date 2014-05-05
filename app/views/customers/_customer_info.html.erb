@@ -50,6 +50,13 @@
       <%= link_to t('pay'), nil, class: ['btn', 'btn-xs', 'btn-default'], disabled: true %>
     </div>
     <%= t('models.billing_customer.current_water_balance') %>
+    <%pre_water_payment=customer.pre_water_payment ; pre_water_payment_date=customer.pre_water_payment_date%>
+    <%if pre_water_payment_date%>
+      <div class="alert alert-warning" style="padding: 8px 5px; margin:4px 0 0 0;">
+        დაუდასტურებელი გადახდა: <code><%=pre_water_payment%></code>GEL
+        <span class="text-muted"><%=pre_water_payment_date.strftime('%d-%b-%Y %H:%M:%S')%></span>
+      </div>
+    <%end%>
   </li>
   <li class="list-group-item">
     <div class="pull-right">
