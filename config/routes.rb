@@ -106,6 +106,9 @@ TelasiGe::Application.routes.draw do
         match '/edit/:id', action: 'edit', as: 'edit_customer_doctype', via: ['get', 'post']
         delete '/edit/:id', action: 'delete', as: 'delete_customer_doctype'
       end
+      scope '/debt_notifications', controller: 'debt_notifications' do
+        get '/', action: 'index', as: 'debt_notifications'
+      end
     end
     scope '/subscriptions', controller: 'subscriptions' do
       get '/', action: 'index', as: 'subscriptions'

@@ -1,0 +1,10 @@
+<%=table_for @notifications, title:@title, icon:'/icons/mobile-phone.png',collapsible:true do |t|
+  t.date_field 'created_at', label: 'გაგზავნა'
+  t.complex_field label: 'აბონენტი' do |c|
+    c.text_field 'registration.customer.accnumb',tag:'code'
+    c.text_field 'registration.customer.custname',class:'text-muted'
+  end
+  t.text_field 'message.mobile', label:'მობილური'
+  t.text_field 'message.message', label:'შეტყობინება'
+  t.paginate records: 'ჩანაწერი'
+end%>
