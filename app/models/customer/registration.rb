@@ -115,18 +115,16 @@ class Customer::Registration
   def self.send_sms_for_today
     Customer::Registration.where(status:STATUS_COMPLETE).each do |reg|
       last_notification=Customer::DebtNotification.where(registration:reg).desc(:_id).first
-      unless last_notification and last_notification.created_at.month==Date.today.month
-        deadline=reg.customer.cut_deadline
-        if deadline and deadline.month==Date.today.month
-          reg.send_debt_sms
-        end
+      deadline=reg.customer.cut_deadline
+      if deadline and deadline>Date.today and deadline!=last_notification.for_deadline
+        reg.send_debt_sms
       end
     end
   end
 
   def send_debt_sms
     cust=self.customer
-    notification=Customer::DebtNotification.create(registration:self)
+    notification=Customer::DebtNotification.create(registration:self,for_deadline:cust.cut_deadline)
     msg=Sys::SmsMessage.create(message:cust.balance_sms, mobile:self.user.mobile, messageable:notification)
     msg.send_sms!(lat:true)
   end
