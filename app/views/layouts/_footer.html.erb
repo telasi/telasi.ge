@@ -1,5 +1,8 @@
 <div class="footer">
   <div class="container">
-    &copy; 2013 <a href="http://www.telasi.ge/<%= session[:locale] unless session[:locale] == 'ka' %>"><%= t('info.telasi') %></a>
+    &copy; <!--2013--><%=Date.today.year%>
+    <a href="http://www.telasi.ge/<%= session[:locale] unless session[:locale] == 'ka' %>">
+      <%= t('info.telasi') %>
+    </a>
   </div>
 </div>
