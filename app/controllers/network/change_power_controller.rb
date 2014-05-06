@@ -20,6 +20,8 @@ class Network::ChangePowerController < ApplicationController
       rel = rel.where(voltage: @search[:voltage]) if @search[:voltage].present?
       rel = rel.where(:power.gte => @search[:power1]) if @search[:power1].present?
       rel = rel.where(:power.lte => @search[:power2]) if @search[:power2].present?
+      rel = rel.where(proeqti: @search[:proeqti].mongonize) if @search[:proeqti].present?
+      rel = rel.where(oqmi: @search[:oqmi].mongonize) if @search[:oqmi].present?
     end
     @applications = rel.desc(:_id).paginate(page: params[:page_change], per_page: 10)
   end

@@ -26,6 +26,8 @@ class Network::NewCustomerController < ApplicationController
       rel = rel.where(voltage: @search[:voltage]) if @search[:voltage].present?
       rel = rel.where(:power.gte => @search[:power1]) if @search[:power1] and @search[:power1].to_i > 0
       rel = rel.where(:power.lte => @search[:power2]) if @search[:power2] and @search[:power1].to_i > 0
+      rel = rel.where(proeqti: @search[:proeqti].mongonize) if @search[:proeqti].present?
+      rel = rel.where(oqmi: @search[:oqmi].mongonize) if @search[:oqmi].present?
       if @search[:penalty].present?
         rel = rel.where(:status.in => [Network::NewCustomerApplication::STATUS_COMPLETE, Network::NewCustomerApplication::STATUS_IN_BS])
         case @search[:penalty]
