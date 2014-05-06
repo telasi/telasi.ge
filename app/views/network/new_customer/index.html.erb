@@ -33,6 +33,8 @@
       f.combo_field 'penalty', label: 'ჯარიმა', collection: {
         'დროულად' => '0', 'ეტაპი I' => '1', 'ეტაპი II' => '2', 'ეტაპი III' => '3'
         }, empty: '--'
+      f.text_field 'oqmi', label: t('models.network_new_customer_application.oqmi')
+      f.text_field 'proeqti', label: t('models.network_new_customer_application.proeqti')
     end
   end
 end %>
