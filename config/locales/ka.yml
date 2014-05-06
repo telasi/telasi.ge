@@ -338,6 +338,8 @@ ka:
       factura_id: საიდ. კოდი
       factura_number: ნომერი
       region: რაიონი
+      proeqti: "პროექტის #"
+      oqmi: "ოქმის #"
     network_new_customer_application:
       application: განცხადება
       contact_info: საკონტაქტო ინფორმაცია
@@ -429,6 +431,8 @@ ka:
       docs_complete: "ყველა აუცილებელი დოკუმენტი მითითებულია."
       docs_list: "აუცილებელი დოკუმენტების სია"
       region: რაიონი
+      proeqti: "პროექტის #"
+      oqmi: "ოქმის #"
       files:
         date: "თარიღი, დრო"
         filename: ფაილის დასახელება
