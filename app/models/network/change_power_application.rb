@@ -54,6 +54,8 @@ class Network::ChangePowerApplication
   field :start_date, type: Date
   field :end_date, type: Date
   field :note, type: String
+  field :oqmi, type: String
+  field :proeqti, type: String
   # factura fields
   field :factura_id, type: Integer
   field :factura_seria, type: String

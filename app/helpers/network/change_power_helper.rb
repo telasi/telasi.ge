@@ -58,6 +58,8 @@ module Network::ChangePowerHelper
         t.combo_field :voltage, collection: voltage_collection_change_power, empty: false, required: true
         t.number_field :power, after: 'kWh', width: 100, required: true
         t.text_field :note, width: 400
+        t.text_field :oqmi
+        t.text_field :proeqti
       end
       f.submit (opts[:submit] || opts[:title])
       f.bottom_action opts[:cancel_url], label: 'გაუქმება', icon: '/icons/cross.png'
@@ -138,6 +140,8 @@ module Network::ChangePowerHelper
           c.number_field :power, after: 'კვტ'
         end
         t.text_field :note
+        t.text_field :oqmi
+        t.text_field :proeqti
         t.col2 do |c|
           c.text_field 'stage', label: 'მიმდინარე ეტაპი'
           c.complex_field label: 'ბილინგის აბონენტი', required: true do |c|

@@ -38,6 +38,8 @@ class Network::NewCustomerApplication
   field :status,     type: Integer, default: STATUS_DEFAULT
   field :personal_use, type: Mongoid::Boolean, default: true
   field :notes, type: String
+  field :oqmi, type: String
+  field :proeqti, type: String
   # გამოთვლის დეტალები და ბილინგთან კავშირი
   field :need_resolution,  type: Mongoid::Boolean, default: true
   field :voltage,     type: String

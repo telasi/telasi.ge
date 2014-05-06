@@ -71,6 +71,8 @@ module Network::NewCustomerHelper
         t.number_field :power, after: 'kWh', width: 100, required: true
         t.boolean_field :need_resolution, required: true
         t.text_field :notes, width: 500
+        t.text_field :oqmi
+        t.text_field :proeqti
       end
       f.submit (opts[:submit] || opts[:title])
       f.bottom_action opts[:cancel_url], label: 'გაუქმება', icon: '/icons/cross.png'
@@ -171,6 +173,8 @@ module Network::NewCustomerHelper
         end
         t.boolean_field :need_resolution, required: true
         t.text_field :notes
+        t.text_field :oqmi
+        t.text_field :proeqti
         t.col2 do |c|
           c.text_field 'stage', label: 'მიმდინარე ეტაპი'
           c.complex_field label: 'ბილინგის აბონენტი' do |c|
