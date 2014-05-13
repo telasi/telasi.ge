@@ -1,5 +1,6 @@
 # -*- encoding : utf-8 -*-
 class Billing::Customer < ActiveRecord::Base
+  include ActionView::Helpers::NumberHelper
   ACTIVE = 0
   INACTIVE = 1
   CLOSED = 2
