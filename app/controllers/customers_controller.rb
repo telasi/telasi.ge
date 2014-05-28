@@ -12,7 +12,7 @@ class CustomersController < ApplicationController
   def search
     @title = I18n.t('models.billing_customer.actions.search')
     if params[:accnumb].present?
-      customer=Billing::Customer.active.where(accnumb: params[:accnumb].to_lat).first
+      customer=Billing::Customer.where(accnumb: params[:accnumb].to_lat).first
       redirect_to customer_info_url(custkey: customer.custkey) if customer
     end
   end

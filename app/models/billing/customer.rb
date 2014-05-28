@@ -20,7 +20,6 @@ class Billing::Customer < ActiveRecord::Base
   belongs_to :category,     class_name: 'Billing::Custcateg',     foreign_key: :custcatkey
   belongs_to :activity,     class_name: 'Billing::Custcateg',     foreign_key: :activity
 
-  def self.active; Billing::Customer.where(statuskey:ACTIVE) end
   def region; self.address.region end
   def water_balance; self.water_customer.new_balance rescue 0 end
   def current_water_balance; self.water_customer.curr_charge rescue 0 end
