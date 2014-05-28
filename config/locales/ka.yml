@@ -160,7 +160,7 @@ ka:
     billing_customer:
       accnumb: აბონენტის ნომერი
       custname: დასახელება
-      balance: ელენერგიის დავალიანება
+      balance: ელ.ენერგიის დავალიანება
       trash_balance: დასუფთავების დავალიანება
       current_water_balance: წყალმომარაგების დავალიანება
       operation: ოპერაცია
