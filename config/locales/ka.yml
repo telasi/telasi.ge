@@ -170,7 +170,7 @@ ka:
       reading: ჩვენება
       charge: დარიცხვა
       charge_gel: დარიცხვა (ლარი)
-      cut_deadline: სავარაუდო ჩაჭრის თარიღი
+      cut_deadline: გადახდის ბოლო ვადა
       last_bill: ბოლო ქვითარი
       actions:
         empty_customer_list: თქვენ არ გაქვთ დამახსოვრებული არც ერთი აბონენტი.

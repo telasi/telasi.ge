@@ -158,14 +158,14 @@ ru:
     billing_customer:
       accnumb: Номер абонента
       custname: Название
-      balance: Задолженность
+      balance: Задолженность (Электричество)
       trash_balance: Задолж. (Сан.Очистка)
       current_water_balance: Задолж. (Водоснабжение)
       operation: Операция
       kwh: Начисление
       gel: Сумма
       prev_balance: Прев.Баланс
-      cut_deadline: Предполагаемая дата отключения
+      cut_deadline: Крайний срок оплаты
       last_bill: Последняя квитанция
       actions:
         empty_customer_list: Вы не сохранили ни одного абонента.
