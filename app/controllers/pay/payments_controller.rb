@@ -83,7 +83,7 @@ class Pay::PaymentsController < ApplicationController
         accnumb = params[:accnumb]
         rs_tin  = nil
       else
-        default_registration = current_user.registrations[0] || Customer::Registration.new
+        default_registration = (current_user&&current_user.registrations[0]) || Customer::Registration.new
         accnumb = default_registration.custkey
         rs_tin  = default_registration.rs_tin
       end
