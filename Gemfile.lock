@@ -17,13 +17,6 @@ GIT
       activesupport
       savon (~> 2.2)
 
-PATH
-  remote: ../forma
-  specs:
-    forma (0.1.4)
-      activesupport
-      railties (>= 3.1)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -94,6 +87,9 @@ GEM
     debugger-ruby_core_source (1.3.2)
     erubis (2.7.0)
     execjs (2.0.2)
+    forma (0.1.5)
+      activesupport
+      railties (>= 3.1)
     gyoku (1.1.1)
       builder (>= 2.1.2)
     hike (1.2.3)
@@ -234,7 +230,7 @@ DEPENDENCIES
   carrierwave-mongoid
   composite_primary_keys
   debugger
-  forma!
+  forma (~> 0.1)
   jbuilder (~> 1.0.1)
   jquery-rails (~> 3)
   jquery-turbolinks

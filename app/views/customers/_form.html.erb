@@ -34,13 +34,13 @@ $(function(){
     <%= f.b_text_field :rs_tin, label: t('models.customer_registration.public_rs_tin') %>
     <%= f.b_text_field :address, label: t('models.customer_registration.public_address') %>
     <%= f.b_text_field :address_code, label: t('models.customer_registration.public_address_code') %>
-    <div class="form-group">
-      <%= f.label :ownership, t('models.customer_registration.public_ownership') %>
-      <%= f.select :ownership, options_for_select({
+    <!--div class="form-group">
+      < %= f.label :ownership, t('models.customer_registration.public_ownership') %>
+      < %= f.select :ownership, options_for_select({
         t('models.customer_registration.public_ownership_owner') => Customer::Registration::OWN_OWNER,
         t('models.customer_registration.public_ownership_rent') => Customer::Registration::OWN_RENT,
       }, selected: registration.ownership), {}, {class: 'form-control'} %>
-    </div>
+    </div-->
     <div class="form-group">
       <%= f.check_box :change_data%>
       <%= f.label :change_data, t('models.customer_registration.public_change_data'), style:'display:inline;' %>

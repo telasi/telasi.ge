@@ -33,8 +33,8 @@ gem 'rest-client'
 gem 'jbuilder', '~> 1.0.1'
 
 # forms
-gem 'forma', path: '../forma'
-#gem 'forma', '~> 0.1'
+#gem 'forma', path: '../forma'
+gem 'forma', '~> 0.1'
 gem 'bootstrap-will_paginate'
 gem 'will_paginate_mongoid'
 gem 'carrierwave'
