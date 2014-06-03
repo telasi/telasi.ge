@@ -256,12 +256,12 @@ class Network::NewCustomerApplication
     # III. bs.item - third stage penalty
     third_stage = -self.penalty_third_stage
     if third_stage < 0
-      bs_item3 = Billing::Item.new(billoperkey: 120, acckey: account.acckey, custkey: customer.custkey,
+      bs_item3 = Billing::Item.new(billoperkey: 1120, acckey: account.acckey, custkey: customer.custkey,
         perskey: 1, signkey: 1, itemdate: item_date, reading: 0, kwt: 0, amount: third_stage,
         enterdate: Time.now, itemcatkey: 0)
       bs_item3.save!
       network_item3 = Billing::NetworkItem.new(zdepozit_cust_id: deposit_customer.zdepozit_cust_id, amount: third_stage,
-        operkey: 120, enterdate: Time.now, operdate: item_date, perskey: 1)
+        operkey: 1120, enterdate: Time.now, operdate: item_date, perskey: 1)
       network_item3.save!
     end
   end
@@ -309,16 +309,16 @@ class Network::NewCustomerApplication
         end
         # remove compensation from main account (if any) => XXX: which operation???
         if compensation > 0
-          bs_item = Billing::Item.new(billoperkey: 120, acckey: customer.accounts.first.acckey, custkey: customer.custkey,
+          bs_item = Billing::Item.new(billoperkey: 1120, acckey: customer.accounts.first.acckey, custkey: customer.custkey,
             perskey: 1, signkey: 1, itemdate: item_date, reading: 0, kwt: 0, amount: compensation,
             enterdate: Time.now, itemcatkey: 0)
           bs_item.save!
           network_item = Billing::NetworkItem.new(zdepozit_cust_id: deposit_customer.zdepozit_cust_id, amount: compensation,
-            operkey: 120, enterdate: Time.now, operdate: item_date, perskey: 1)
+            operkey: 1120, enterdate: Time.now, operdate: item_date, perskey: 1)
           network_item.save!
         end
         # distribute remaining amount on subcustomers => 1000
-        # distribute compensation on subcustomers (if any) => 120
+        # distribute compensation on subcustomers (if any) => 1120
         if remaining > 0 || compensation > 0
           self.items.each do |item|
             cust = item.customer
@@ -331,7 +331,7 @@ class Network::NewCustomerApplication
               bs_item.save
             elsif item.amount_compensation > 0
               # XXX: operation?
-              bs_item = Billing::Item.new(billoperkey: 120, acckey: acct.acckey, custkey: cust.custkey,
+              bs_item = Billing::Item.new(billoperkey: 1120, acckey: acct.acckey, custkey: cust.custkey,
                 perskey: 1, signkey: 1, itemdate: item_date, reading: 0, kwt: 0, amount: -item.amount_compensation,
                 enterdate: Time.now, itemcatkey: 0)
               bs_item.save
@@ -467,12 +467,12 @@ class Network::NewCustomerApplication
           # # III. bs.item - third stage penalty
           # third_stage = -self.penalty_third_stage
           # if third_stage < 0
-          #   bs_item3 = Billing::Item.new(billoperkey: 120, acckey: account.acckey, custkey: customer.custkey,
+          #   bs_item3 = Billing::Item.new(billoperkey: 1120, acckey: account.acckey, custkey: customer.custkey,
           #     perskey: 1, signkey: 1, itemdate: item_date, reading: 0, kwt: 0, amount: third_stage,
           #     enterdate: Time.now, itemcatkey: 0)
           #   bs_item3.save!
           #   network_item3 = Billing::NetworkItem.new(zdepozit_cust_id: network_customer.zdepozit_cust_id, amount: third_stage,
-          #     operkey: 120, enterdate: Time.now, operdate: item_date, perskey: 1)
+          #     operkey: 1120, enterdate: Time.now, operdate: item_date, perskey: 1)
           #   network_item3.save!
           # end
         else
