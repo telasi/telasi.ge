@@ -151,7 +151,7 @@ class Network::NewCustomerApplication
     when STATUS_CONFIRMED then [ STATUS_COMPLETE, STATUS_CANCELED ]
     when STATUS_COMPLETE  then [ STATUS_CANCELED ]
     when STATUS_IN_BS     then [ STATUS_CANCELED ]
-    when STATUS_CANCELED  then [ STATUS_DEFAULT, STATUS_CONFIRMED ]
+    when STATUS_CANCELED  then [ STATUS_DEFAULT, STATUS_SENT ]
     else [ ]
     end
   end
