@@ -105,11 +105,11 @@
     <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL
   </td>
   <td style="text-align: right;">
-    <% amnt = 0 %>
+    <% amnt=(apps3.sum(:penalty3) || 0) %>
     <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL
   </td>
   <td style="text-align: right;">
-    <% amnt =(apps.sum(:penalty3) || 0) %>
+    <% amnt=(apps.sum(:penalty3) || 0) %>
     <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL
   </td>
 </tr>
