@@ -14,19 +14,19 @@
     end
   %>
   <% if summary_record %>
-    <td rowspan="2" style="vertical-align: middle;">ჯამი</td>
+    <td rowspan="3" style="vertical-align: middle;">ჯამი</td>
   <% elsif detail_record %>
-    <td rowspan="2" style="vertical-align: middle;">
+    <td rowspan="3" style="vertical-align: middle;">
       <code><%= voltage%></code>
     </td>
   <% else %>
-    <td rowspan="2" style="vertical-align: middle;">
+    <td rowspan="3" style="vertical-align: middle;">
       <code><%= voltage %></code> <br>
       <code><%= power_from %></code>/<code><%= power_to %></code>kWh
     </td>
   <% end %>
   <!-- apps0 -->
-  <td rowspan="2" style="text-align: right; vertical-align: middle;">
+  <td style="text-align: right; vertical-align: middle;"  rowspan="3">
     <code><%= link_to apps0.count, network_new_customers_url(search: srch_params.merge(penalty: 0)) %></code>
   </td>
   <td style="text-align: right;">
@@ -34,7 +34,7 @@
     <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL
   </td>
   <!-- apps1 -->
-  <td style="text-align: right; vertical-align: middle;" rowspan="2">
+  <td style="text-align: right; vertical-align: middle;" rowspan="3">
     <code><%= link_to apps1.count, network_new_customers_url(search: srch_params.merge(penalty: 1)) %></code>
   </td>
   <td style="text-align: right;">
@@ -42,7 +42,7 @@
     <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL
   </td>
   <!-- apps2 -->
-  <td style="text-align: right; vertical-align: middle;" rowspan="2">
+  <td style="text-align: right; vertical-align: middle;" rowspan="3">
     <code><%= link_to apps2.count, network_new_customers_url(search: srch_params.merge(penalty: 2)) %></code>
   </td>
   <td style="text-align: right;">
@@ -50,7 +50,7 @@
     <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL
   </td>
   <!-- apps3 -->
-  <td style="text-align: right; vertical-align: middle;" rowspan="2">
+  <td style="text-align: right; vertical-align: middle;" rowspan="3">
     <code><%= link_to apps3.count, network_new_customers_url(search: srch_params.merge(penalty: 3)) %></code>
   </td>
   <td style="text-align: right;">
@@ -58,7 +58,7 @@
     <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL
   </td>
   <!-- all apps -->
-  <td style="text-align: right; vertical-align: middle;" rowspan="2">
+  <td style="text-align: right; vertical-align: middle;" rowspan="3">
     <code><%= link_to apps.count, network_new_customers_url(search: srch_params) %></code>
   </td>
   <td style="text-align: right;">
@@ -66,6 +66,8 @@
     <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL
   </td>
 </tr>
+
+<!-- losses -->
 <tr class="<%= clazz %>">
   <td style="text-align: right;">
     <code><%= number_with_precision 0, precision: 2, delimiter: ',' %></code> GEL
@@ -85,6 +87,29 @@
   <td style="text-align: right;">
     <%
       amnt = (apps.sum(:penalty1) || 0) + (apps.sum(:penalty2) || 0) + (apps.sum(:penalty3) || 0) %>
+    <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL
+  </td>
+</tr>
+
+<!-- compensation -->
+<tr class="<%= clazz %>">
+  <td style="text-align: right;">
+    <code><%= number_with_precision 0, precision: 2, delimiter: ',' %></code> GEL
+  </td>
+  <td style="text-align: right;">
+    <% amnt = 0 %>
+    <code><%= number_with_precision 0, precision: 2, delimiter: ',' %></code> GEL
+  </td>
+  <td style="text-align: right;">
+    <% amnt = 0 %>
+    <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL
+  </td>
+  <td style="text-align: right;">
+    <% amnt = 0 %>
+    <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL
+  </td>
+  <td style="text-align: right;">
+    <% amnt =(apps.sum(:penalty3) || 0) %>
     <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL
   </td>
 </tr>

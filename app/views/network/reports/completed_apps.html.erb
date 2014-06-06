@@ -19,8 +19,8 @@
 <hr/>
 
 <%
-  tariffs = Network::NewCustomerTariff.asc(:voltage, :power_from)
-  curr_tariff = tariffs.first
+  tariffs=Network::NewCustomerTariff.asc(:voltage, :power_from)
+  curr_tariff=tariffs.first
 %>
 
 <table class="table table-bordered">
@@ -36,7 +36,7 @@
     <tr>
       <% 5.times do %>
       <th width="50" style="text-align: center;">რაოდ.</th>
-      <th width="150" style="text-align: center;">თანხა/კომპ.</th>
+      <th width="150" style="text-align: center;">თანხა/ზარ./კომპ.</th>
       <% end %>
     </tr>
   </thead>
