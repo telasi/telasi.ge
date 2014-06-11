@@ -24,5 +24,6 @@ module TelasiGe
 
     # js calculation
     config.assets.precompile += [ 'calculator.js']
+    config.assets.precompile += [ 'tablednd.js']
   end
 end

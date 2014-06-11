@@ -6,14 +6,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><% if @title.present? %><%= @title %> &mdash; <% end %>telasi.ge</title>
 <%= stylesheet_link_tag 'application', media: "all" %>
-<%= javascript_include_tag 'tablednd' %>
 <%= favicon_link_tag('/favicon.ico') %>
 <%= csrf_meta_tags %>
 </head>
 <body class="telasi">
-<%= render partial: 'layouts/cartridge/header' %>
+<%= render partial: 'layouts/stamba/header' %>
 <div id="contentcart">
-  <%= render partial: 'layouts/cartridge/sidebar' %>
+  <%= render partial: 'layouts/stamba/sidebar' %>
   <div class="mainbar">
   	<div class="containerx">
       <%= yield %>

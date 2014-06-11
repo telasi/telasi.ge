@@ -1,0 +1,58 @@
+<div class="row">
+  <div class="col-sm-6">
+    <h2 class="page-header"><%= @asset.invnr %></h2>
+    <ul class="list-group">
+      <li class="list-group-item">
+        <div class="pull-right"><%= "#{@asset.stort} / #{@asset.stort_name}" %></div>
+        <%= t('printers.stort') %>
+      </li>
+      <li class="list-group-item">
+        <div class="pull-right"><%= "#{@asset.pernr} / #{@asset.mol_name}" %></div>
+        <%= t('printers.pernr') %>
+      </li>
+      <li class="list-group-item">
+        <div class="pull-right"><%= @asset.mol_orgname %></div>
+        <%= t('printers.orgname') %>
+      </li>
+    </ul>
+    <%= form_for @printer, url: stamba_asset_url do |f| %>
+    <%= f.hidden_field "invno", value: params[:invno] %>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="form-group">
+          <%= f.label 'model_label', t('printers.model') %>
+          <%= f.select 'model', @models, {}, { class: 'form-control' } do %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <%= f.b_text_field 'ip', label: 'IP' %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <%= f.b_text_field 'conn_type', label: t('printers.conn_type') %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <%= f.b_text_field 'serialno', label: t('printers.serialno') %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <%= f.b_text_field 'productid', label: t('printers.productid') %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <%= f.b_text_field 'adate', label: t('printers.adate') %>
+      </div>
+    </div>
+     <%= f.submit t('models.general.actions.save'), class: ['btn', 'btn-primary'] %>
+    </div>
+   <% end %>
+  </div>
+</div>

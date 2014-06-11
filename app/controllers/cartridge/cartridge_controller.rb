@@ -138,7 +138,7 @@ class Cartridge::CartridgeController < ActionController::Base
     end
     respond_to do |format|
       format.html
-      format.csv { send_data to_csv(@cartridges) }
+      format.csv { render text: self.to_csv(@cartridges) } 
     end
   end
 

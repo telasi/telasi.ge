@@ -1,0 +1,613 @@
+ka:
+  menu:
+    login: შესვლა
+    register: რეგისტრაცია
+    home: საწყისი
+    profile: თქვენი პროფილი
+    logout: "გასვლა"
+    logout_confirm: ნამდვილად გინდათ გასვლა?
+    customers: დავალიანება
+    payments: გადახდები
+    applications: ყველა
+    applications_alt: პროგრამები
+    new_customer: ახალი აბონენტი
+    calculator: კალკულატორი
+  applications:
+    pay_order: საგადახდო დავალება
+    customers_title: აბონენტები
+    customers_description: აბონენტის ისტორია და ვალები.
+    admin:
+      title: ადმინისტრირება
+      users: მომხმარებლები
+      network: ქსელის მართვა
+      customers: აბონენეტები
+      subscriptions: სიახლეების დაგზავნა
+    new_customer_title: ქსელზე მიერთება
+    new_customer_description: ახალ აბონენტად დარეგისტრირება.
+    new_customer:
+      general: ძირითადი
+      items: ოპერაციები
+      files: დოკუმენტები
+      messages: SMS შეტყობინებები
+      operations: ოპერაციები
+    calculator_title: კალკულატორი
+    calculator_description: გაიგეთ რამდენს ხარჯავთ
+  info:
+    telasi: "სს თელასი"
+    department: ინფორმაციული ტექნოლოგიების დეპარტამენტი
+    support_text: ტექნიკურ საკითხებზე მოგვწერეთ
+    slide: თელასის ელექტრონული სერვისები
+  dashboard:
+    title: საწყისი
+    login: შესვლა
+    details: "გადასვლა &rarr;"
+    your_debt: თქვენი დავალიანება
+    your_debt_descr: "გაიგეთ თქვენი დავალიანება, ნახეთ დარიცხვის ისტორია, მიიღეთ SMS შეტყობინენბები დაგვიანებულ გადახდებზე."
+    new_customer: გახდით აბონენტი
+    new_customer_description: "აპირებთ გახდეთ თელასის აბონენტი? შეავსეთ განაცხადი ინტერნეტით და აკონტროლეთ მთელი პროცესი."
+  register:
+    invite:
+      title: პირველად ხართ აქ?
+      action: "გაიარეთ რეგისტრაცია &rarr;"
+      description: როგორც რეგისტრირებულ მომხმარებელს შეგეძლებათ მრავალი სასრგებლო ფუნქციით სარგებლობა!
+  login:
+    invite:
+      title: უკვე რეგისტრირებული ხართ?
+      action: "შესვლა &rarr;"
+  models:
+    calculator:
+      charge: ხარჯი
+      charge_unit: კვტ.სთ.
+      period: პერიოდი
+      period_unit: დღე
+      accnumb: ჩაწერეთ აბონენტის ნომერი
+      account: აარჩიეთ მრიცხველი
+      tariff: ტარიფი
+    general:
+      yes: კი
+      no: არა
+      records: ჩანაწერი
+      history: ისტორია
+      system: სისტემური
+      created_at: შექმნილია
+      updated_at: ბოლო ცვლილება
+      search: ძებნა
+      search_clear: ფორმის გასუფთავება
+      more: მეტი
+      undefined: გაურკვეველი
+      detailed: დეტალურად
+      chose_file: აარჩიეთ ფაილი
+      actions:
+        save: შენახვა
+        cancel: გაუქმება
+        search: ძებნა
+        show: ნახვა
+        edit: შეცვლა
+        print: ბეჭდვა
+        send: გაგზავნა
+        link: დაკავშირება
+        delete: წაშლა
+    sys_user:
+      title:
+        single: მომხმარებელი
+      email: ელ.ფოსტა
+      password: პაროლი
+      password_confirmation: დადასტურება
+      old_password: ძველი პაროლი
+      first_name: სახელი
+      last_name: გვარი
+      mobile: მობილური
+      full_name: "სახელი, გვარი"
+      general_info: პირადი ინფორმაცია
+      email_confirmed: დადასტურებული?
+      admin: ადმინისტრატორი?
+      admin_hint: ყველაფრის უფლება აქვს?
+      created_at: რეგისტრირებულია
+      updated_at: ბოლო ცვლილება
+      account: აბონენტის რეგისტრაცია
+      account_description: "თუ უკვე ხართ თელასის აბონენტი შეგიძლიათ მიუთითოთ აქ მისი ნომერი. აბონენტის რეგისტრაციისთვის ასევე აუცილებელია პირადი ინფორმაციის მითითება."
+      accnumb: აბონენტის ნომერი
+      rs_tin: პირადი ნომერი
+      dob: დაბადების თარიღი
+      actions:
+        login: სისტემაში შესვლა
+        login_description: თქვენ უნდა იყოთ რეგისტრირებული მომხმარებელი
+        register: User registration
+        register_short: რეგისტრაცია
+        register_description: "შეავსეთ ყველა მოცემული ველი. განსაკუთრებული ყურადღება მიაქციეთ ელექტრონული ფოსტის მისამართს &mdash; ეს უნდა იყოს მოქმედი მისამართი."
+        register_complete: რეგისტრაცია დასრულებულია
+        register_complete_description: "რეგისტრაცია წარმატებით დასრულდა. ახლა საჭიროა თქვენი ელ.ფოსტის მისამართის დადასტურება. ჩვენ უკვე გამოგზავნილია წერილი აქტივაციის ბმულით; გთხოვთ შეამოწმოთ თქვენი ფოსტა &mdash; წერილი რამოდენიმე წუთის ინტერვალში თქვენს საფოსტო ყუთში იქნება."
+        not_registered_yet: ჯერ არ ხართ რეგისტრირებული?
+        already_registered: "თუ უკვე რეგისტრირებული ხართ, ხელმეორედ რეგისტრაცია არ არის საჭირო."
+        restore: პაროლის აღდგენა
+        restore_sent: პაროლის აღდგენის ლინკი გაგზავნილია თქვენს ელ. ფოსტაზე.
+        restore_description: პაროლი დაგავიწყდათ?
+        restore_description2: პაროლის აღსადგენად შეიყვანეთ თქვენი ელ.ფოსტის მისამართი.
+        restore_incorrect_hash: პაროლის აღდგენის ლინკი არასწორია; გთხოვთ სცადოთ პაროლის აღდგენა ხელახლა.
+        restore_complete: პაროლი შეცვლილია.
+        confirm_email: ელ.ფოსტსის მისამართის დადასტურება
+        confirm_success: ელ.ფოსტა დადასტურებულია.
+        confirm_failure: დადასტურება ვერ მოხერხდა.
+        profile: თქვენი პროფილი
+        change_password: პაროლის შეცვლა
+        change_password_description: "პაროლის შესაცვლელად ჯერ ჩაწერეთ თქვენი ძველი პაროლი, შემდეგ კი &mdash; ახალი პაროლი და მისი დადასტურება."
+        change_password_complete: პაროლი შეცვლილია
+        change_password_description2: შეიყვანეთ ახალი პაროლი და მისი დადასტურება.
+        edit_profile: პირადი ინფორმაციის შეცვლა
+        edit_profile_complete: პირადი ინფორმაცია შეცვლილია
+        admin_show: მომხმარებლის თვისებები
+        admin_all_users: ყველა მომხმარებელი
+        edit: მომხმარებლის შეცვლა
+        edit_complete: მომხმარებელი განახლებულია
+      errors:
+        illegal_email: Wrong e-mail
+        email_is_taken: E-mail already registered
+        empty_password: Enter password
+        empty_first_name: Enter name
+        empty_last_name: Enter name
+        illegal_mobile: Wrong mobile number
+        password_not_match: Password does not match
+        illegal_login: არასწორი მომხმარებელი ან პაროლი
+        login_required: საჭიროა სისტემაში ავტორიზაცია.
+        no_permission: "არ გაქვთ სათანადო უფლება: სცადეთ სხვა მომხმარებლით ავტორიზაცია."
+        admin_required: საჭიროა ადმინისტრატორის უფლებები.
+        illegal_accnumb: არასწორი აბონენტის ნომერი
+        illegal_tin: არასწორი პირადი ნომერი
+        empty_tin: ჩაწერეთ პირადი ნომერი
+        empty_dob: ჩაწერეთ დაბ. თარიღი
+    billing_customer:
+      accnumb: აბონენტის ნომერი
+      custname: დასახელება
+      balance: ვალი
+      trash_balance: დასუფთავების ვალი
+      current_water_balance: წყალმომარაგების ვალი
+      operation: ოპერაცია
+      kwh: დარიცხვა
+      gel: თანხა
+      prev_balance: წინა ბალანსი
+      reading: ჩვენება
+      charge: დარიცხვა
+      charge_gel: დარიცხვა (ლარი)
+      cut_deadline: სავარაუდო ჩაჭრის თარიღი
+      last_bill: ბოლო ქვითარი
+      actions:
+        empty_customer_list: თქვენ არ გაქვთ დამახსოვრებული არც ერთი აბონენტი.
+        resolve_empty_customer_list: აბონენტის დავალიანების სანახავად დააჭირეთ ღილაკს <strong>აბონენტის ძებნა</strong>.
+        add: აბონენტის ძებნა
+        add_description: თქვენ შეგიძლიათ ნაპოვნი აბონენტის დამახსოვრება
+        search: აბონენტის ძებნა
+        search_description: აბონენტის მოსაძებნად შეიყვანეთ მისი 7-ნიშნა აბონეტის ნომერი.
+        info: ინფორმაცია აბონენტზე
+        back_to_customers: '&larr; უკან აბონენტებში'
+        history: დარიცხვის ისტორია
+        trash_history: დასუფთავების ისტორია
+      errors:
+        cut_warning: "ელ.ენერგიის შეზღუდვის აცილების მიზნით, გთხოვთ დროულად დაფაროთ დავალიანება! გადახდის ბოლო თარიღია:"
+    billing_customer_registration:
+      title:
+        single: აბონენტის რეგისრაცია
+        single_alt: რეგისრაცია
+        pluaral: აბონენტთა რეგისტრაციები
+      rs_tin: პირადი ნომერი
+      rs_name: დასახელება (rs.ge)
+      dob: დაბადების თარიღი
+      added: დაემატა
+      customer: აბონენტი
+      confirmed: დადასტურებული?
+      denied: უარყოფილი?
+      denial_reason: უარყოფის მიზეზი
+      cra: შემოწმება
+      errors:
+        tin_required: ჩაწერეთ პირადი ნომერი
+        tin_illegal: არასწორი პირადი ნომერი
+        dob_required: ჩაწერეთ დაბადების თარიღი
+        customer_duplicate: ეს აბონენტი უკვე დამახსოვრებულია
+        passport_required: ჩაწერეთ პირადობის საბუთის ნომერი
+        empty_serial: ჩაწერეთ პირადობის საბუთის სერიული ნომერი
+        illegal_passport: არასწორი პირადობის საბუთის ნომერი
+        not_confirmed: აბონენტი ჯერ არაა დადასტურებული. დადასტურებას <strong>2 სამუშაო დღემდე</strong> შეიძლება დასჭირდეს.
+        denial_reason_empty: ჩაწერეთ უარყოფის მიზეზი.
+      actions:
+        add: დამახსოვრება
+        add_complete: აბონენტი დამახსოვრებულია
+        registration_confirmed: აბონენტი დადასტურებულია
+        registration_denied: აბონენტი უარყოფილია
+        confirm: დადასტურება
+        confirm_confirm: ნამდვილად გინდათ ამ აბონენტის დადასტურება?
+        deny: უარყოფა
+        deny_alt: რეგისტრაციის უარყოფა
+        remove_confirm: ნამდვილად გინდათ აბონენტის წაშლა?
+        remove_complete: აბონენტი წაშლილია
+    network:
+      network: ქსელი
+      action:
+        manage: ავიზოების მართვა
+      aviso:
+        aviso: ავიზო
+        avisos: ავიზოები
+        abonent: აბონენტი
+        account_param: ანგარიშის თვისებები
+        number: აბ. ნომერი
+        name: დასახელება
+        count_no: "მრიხცველის #"
+        created: შეიქმნა
+        abonent_bound: 'აბონენტის მიბმა !!!'
+        abonent_bound_confirm: 'ნამდვილად გინდათ ამ აბონენტის მოცემულ ავიზოზე მიბმა?'
+        abonent_search: მოძებნეთ აბონენტი
+        abonent_search_hint: აქ შეგიძლიათ იპოვოთ აბონენტი მრიხცველის ნომრის მიხედვით.
+        bound_aviso: დასაკავშირებელი ავიზო
+        avido_param: ავიზოს თვისებები
+        date: თარიღი
+        bank: ბანკი
+        amount: თანხა
+        abonent_no: "აბ.#"
+        invoice_no: "ინვოისის #"
+        note: შენიშვნა
+        complete: დამუშავებული?
+        cmpl: დმშ?
+        complete_hint: დამუშავებულია თუ არა ეს ავიზო?
+        abonent_def: აბონენტის განსაზღვრა
+        abonent_created: აბონ. შექმნილია?
+        abonent_created_hint: შექმნილია თუ არა ახალი აბონენტი ამ განცხადების საფუძველზე?
+        oper_billing: ოპერ. ბილინგშია?
+        oper_billing_hint: გატარებულია თუ არა ეს ოპერაცია ბილინგში?
+        linked_oper: დაკავშირებული განცხადება
+        delete_link: კავშირის წაშლა
+        delete_link_confirm: ნამდვილად გინდათ კავშირის წაშლა?
+        application_found: "მოიძებნა განცხადება, რომელიც შესაძლოა იყოს დაკავშირებული ამ ავიზოსთან (იხ. ქვემოთ)."
+        application_confirm_question: "თუ განცხადება სწორადაა ნაპოვნი, გთხოვთ დაადასტუროთ ეს მწვანე ღილაკზე დაჭერით."
+        application_link: განცხადების დაკავშირება
+        application_link_confirm: ნამდვილად გინდათ ავიზოს დაკავშირება ამ განცხადებასთან?
+        application_not_found: ვერ მოიძებნა დაკავშირებული განცხადება!
+      change:
+        currenct_status: მიმდინარე სტატუსი
+        new_status: ახალი სტატუსი
+        sms: SMS შეტყობინება
+        status_change: სტატუსის შეცვლა
+        send_new_file: ახალი ფაილის ატვირთვა
+      stages:
+        stages: ეტაპები
+        new_stage: ახალი ეტაპი
+        added: ეტაპი დამატებულია
+        del_confirm: ნამდვილად გინდათ წაშლა?
+        change: ეტაპის შეცვლა
+        changed: ეტაპი შეცვლილია
+        deleted: ეტაპი წაშლილია
+      tariffs:
+        tariff: ტარიფები
+        generation: გენერაცია
+        generated: ტარიფები გენერირებულია
+        sure: ნამდვილად?
+    network_change_power_application:
+      actions:
+        change: ქსელში ცვლილება
+      type: სახეობა
+      number: ნომერი
+      rs_name: განმცხადებელი
+      rs_tin: პირადი ნომერი ან საიდენტიფიკაციო კოდი
+      rs_tin_hint: "ფიზიკური პირებისთვის ჩაწერეთ 11 ნიშნა პირადი ნომერი, ხოლო ორგანიზაციებისთვის &mdash; 9-ნიშნა საიდენტიფიკაციო ნომერი"
+      rs_vat_payer: დღგ-ს გადამხდელი?
+      rs_vat_payer_hint: არის თუ არა ეს ორგანიზაცია დღგ-ს გადამხდელი?
+      mobile: მობილური
+      email: ელ.ფოსტა
+      vat_name: დღგ-ს გადამხდელი
+      address: იურიდიული მისამართი
+      address_code: საკადასტრო კოდი
+      address_hint: იურიდიული ან რეგისტრაციის მისამართი
+      work_address: გამრიცხველიანების მისამართი
+      work_address_hint: "დატოვეთ ცარიელი, თუ ემთხვევა იურიდიულ მისამართს"
+      bank_code: ბანკის SWIFT კოდი
+      bank_account: საბანკო ანგარიშის ნომერი IBAN ფორმატში
+      bank_account_alt: საბანკო ანგარიში
+      bank_account_hint: თქვენი პირადი ან ორგანიზაციის კუთვნილი საბანკო ანგარიშის ნომერი.
+      bank_account_separator: საბანკო ანგარიში
+      status: სტატუსი
+      status_0: გაუგზავნელი
+      status_1: გადაგზავნილი
+      status_2: უარყოფილი
+      status_3: მიღებული
+      status_4: შესრულებული
+      status_5: ბილინგში ასახული
+      type_0: სიმძლავრის გაზრდა
+      type_1: წყაროს შეცვლა
+      type_2: გამიჯვნა
+      type_3: სარეზერვო კვება
+      type_4: დროებითი მშენებლობა
+      type_5: აბონირება
+      amount: ღირებულება
+      days: ვადა
+      send_date: გამოგზავნის თარიღი
+      start_date: დაწყების თარიღი
+      end_date: დასრულების თარიღი
+      status_name: სტატუსი
+      old_voltage: არსებული ძაბვა
+      old_power: არსებული სიმძლავრე
+      voltage: ახალი ძაბვა
+      power: ახალი სიმძლავრე
+      unit_volt: ვ
+      unit_kvolt: კვ
+      unit_kwt: კვტ
+      unit_days: დღე
+      note: შენიშვნა
+      need_factura: სჭირდება ფაქტურა?
+      work_by_telasi: თელასი აკეთებს?
+      work_by_telasi_hint: "მონიშნეთ, თუ სამუშაოებს ასრულებს თელასი"
+      "factura_sent?": "გაგზავნილია?"
+      factura_id: საიდ. კოდი
+      factura_number: ნომერი
+      region: რაიონი
+    network_new_customer_application:
+      application: განცხადება
+      contact_info: საკონტაქტო ინფორმაცია
+      tech_detail: ტექნიკური დეტალები
+      bank_info: განმცხადებლის საბანკო რეკვიზიტები
+      chose_bank: -- აარჩიეთ ბანკი --
+      chose: -- აარჩიეთ --
+      general_data: ძირითადი მონაცემები
+      progress: მიმდინარეობა
+      number: ნომერი
+      online: ონლაინ?
+      online_hint: არის თუ არა ეს განცხადება შევსებული ონალაინ?
+      vat_name: დღგ-ს გადამხდელი?
+      rs_name: განმცხადებელი
+      rs_id: განმცხადებელის საიდ. კოდი
+      rs_tin: პირადი ნომერი ან საიდენტიფიკაციო კოდი
+      rs_foreigner: უცხოელია?
+      rs_tin_hint: "ფიზიკური პირებისთვის ჩაწერეთ 11 ნიშნა პირადი ნომერი, ხოლო ორგანიზაციებისთვის &mdash; 9-ნიშნა საიდენტიფიკაციო ნომერი"
+      rs_vat_payer: დღგ-ს გადამხდელი?
+      rs_vat_payer_hint: არის თუ არა ეს ორგანიზაცია დღგ-ს გადამხდელი?
+      personal_use: საყოფაცხოვრებო?
+      personal_use_hint: არის თუ არა საყოფაცხოვრებო გამოყენებისთვის განკუთვნილი?
+      mobile: მობილური
+      formatted_mobile: მობილური
+      email: ელ.ფოსტა
+      address: იურიდიული მისამართი
+      address_code: საკადასტრო კოდი
+      address_hint: იურიდიული ან რეგისტრაციის მისამართი
+      work_address: გამრიცხველიანების მისამართი
+      work_address_hint: "დატოვეთ ცარიელი, თუ ემთხვევა იურიდიულ მისამართს"
+      work_address_2: გამრიცხველიანების მისამართი
+      bank_code: ბანკის SWIFT კოდი
+      bank_account: საბანკო ანგარიშის ნომერი IBAN ფორმატში
+      bank_account_alt: საბანკო ანგარიში
+      bank_account_hint: თქვენი პირადი ან ორგანიზაციის კუთვნილი საბანკო ანგარიშის ნომერი.
+      bank_account_separator: საბანკო ანგარიში
+      status: სტატუსი
+      status_0: გაუგზავნელი
+      status_1: გადაგზავნილი
+      status_2: უარყოფილი
+      status_3: მიღებული
+      status_4: შესრულებული
+      status_5: ბილინგში ასახული
+      amount: ღირებულება
+      days: ვადა
+      status_name: სტატუსი
+      files_description: აქ შეგიძლიათ ატვირთოთ ამ განცხადებასთან დაკავშირებული დოკუმენტები და სხვა ელექტრონული მასალები.
+      payments: გადახდები
+      paid: გადახდილია
+      remaining: დარჩენილია
+      penalty_first_stage: ჯარიმა (I ეტაპი)
+      penalty_second_stage: ჯარიმა (II ეტაპი)
+      penalty_third_stage: კომპენსაცია (III ეტაპი)
+      effective_amount: ფაქტურის თანხა
+      effective_amount_hint: ფაქტურაზე გამოსაწერი სრული თანხა
+      factura_sent?: გაგზავნილია?
+      need_resolution: სპეც.ნებართვა?
+      need_resolution_hint: საჭიროებს თუ არა ეს განცხადება სპეციალურ ნებართვას?
+      send_date: გამოგზავნის თარიღი
+      send_date_hint: განცხადების თელასში გამოგზავნის თარიღი
+      start_date: დაწყების თარიღი
+      start_date_hint: განცხადების დაწყების თარიღი
+      real_date: რეალური თარიღი
+      plan_end_date: გეგმიური დასრულების თარიღი
+      plan_end_date_hint: სამუშაოების დასრულების გეგმიური თარიღი
+      end_date: რეალური დასრულება
+      end_date_hint: სამუშაოების დასრულების რეალური თარიღი
+      voltage: ძაბვა
+      power: სიმძლავრე
+      power_hint: ჩაწერეთ სასურველი სიმძლავრე კილოვატ-საათებში
+      payment_id: გადახდის კოდი
+      payment_id_hint: ამ კოდით ახორციელებს კლიენტი გადახდას
+      factura_id: საიდ. კოდი
+      factura_id_hint: ფაქტურის საიდენტიფიკაციო კოდი
+      factura_number: ნომერი
+      factura_number_hint: ფაქტურის ნომერი და სერია
+      need_factura: ჭირდება ფაქტურა?
+      need_factura_hint: ჭირდება თუ არა ამ აბონენტს ფაქტურის გაგზავნა?
+      show_tin_on_print: ვაჩვენო საიდ. კოდი
+      show_tin_on_print_hint: გამოიტანოს თუ არა აბონენტის საიდენტიფიკაციო კოდი საბეჭდ ფორმაში?
+      technical_parameters: ტექნიკური პარამეტრები
+      notes: შენიშვნები
+      customer: ბილინგის აბონენტი
+      unit_days: დღე
+      invoice_amount: საგადახდო დავალების თანხა
+      enter_amount: ჩაწერეთ თანხა
+      docs: "ქვემოთ მოცემულია ყველა აუცილებელი დოკუმენტი, რომელიც თან უნდა ახლდეს თქვენ განცხადებას. დოკუმენტების განცხადებასთან დასაკვშირებლად გამოიყენეთ ღილაკი წარწერით 'დოკუმენტის დამატება' (იხილეთ მწვანე ღილაკი ზემოთ). ყოველი დოკუმენტის დაკავშირების შემდეგ უნდა დააჭიროთ შესაბამის შესრულების ღილაკს, რითიც დაადასტურებთ, რომ საბუთების ატვირთვა დასრულდა და მათში მოცემული ინფორმაცია სწორია."
+      docs_incomplete: "ყველა აუცილებელი დოკუმენტი ჯერ არაა მითითებული განცხადებაში."
+      docs_complete: "ყველა აუცილებელი დოკუმენტი მითითებულია."
+      docs_list: "აუცილებელი დოკუმენტების სია"
+      region: რაიონი
+      files:
+        date: "თარიღი, დრო"
+        filename: ფაილის დასახელება
+        filesize: ფაილის ზომა
+      errors:
+        user_required: მომხმარებელი არაა მითითებული
+        tin_required: საიდ.კოდის მითითება აუცილებელია
+        tin_illegal: არასწორი საიდენტიფიკაციო კოდი
+        mobile_required: მობილურის მითითება აუცილებელია
+        mobile_incorrect: "არასწორი მობილური: ჩაწერეთ 9 ნიშნა ნომერი"
+        email_required: ელ.ფოსტის მითითება აუცილებელია
+        address_required: მისამართის მითითება აუცილებელია
+        address_code_required: ჩაწერეთ საკადასტრო კოდი
+        bank_code_required: ბანკის კოდის მითითება აუცილებელია
+        bank_account_required: საბანკო ანგარიშის მითითება აუცილებელია
+        number_required: ჩაწერეთ ნომერი
+        volt_required: აარჩიეთ ძაბვის საფეხური
+      actions:
+        new: ახალი განცხადება
+        new2: განცხადების დამატება
+        created: განცხადება შექმნილია
+        added: განცხადება დამატებულია
+        add_account: ანგარიშის დამატება
+        change_account: ანგარიშის შეცვლა
+        bound_billing: ბილინგის აბონენტის მიბმა
+        new_description: "გთხოვთ გულდასმით შეავსოთ ქსელზე მიერთების განცხადება. განმცხადებლის როლში შეიძლება გამოდიოდეს როგორც ფიზიკური პირი, ასევე იურიდიული პირი ან ორგანიზაცია. თქვენი პირადი მონაცემების გარდა, აუცილებელია თქვენი საბანკო ანგარიშის მითითება, რომელზეც მოხდება ფულის დაბრუნება, განცხადების გაუქმების შემთხვევაში."
+        index_page:
+          title: ქსელზე მიერთება
+          under_construction: "პროგრამა ჯერ არაა გაშვებული &mdash; ჩვენ აქტიურად ვმუშაობთ მის დასახვეწად. გვეწვიეთ მოგვიანებით."
+        show_page:
+          title: განცხადების დეტალები
+          general: ძირითადი ინფორმაცია
+          edit: ძირითადი ინფორმაციის შეცვლა
+          all_applications: ყველა განცხადება
+          goto_accounts: აბონენტების მართვა
+        upload: დოკუმენტის დამატება
+        upload_hint: დოკუმენტის დასამატებლად აარჩიეთ მისი შესაბამისი ფაილი თქვენი კომპიუტერიდან
+        upload_complete: დოკუმენტი დამატებულია
+        edit:
+          title: განცხადების შეცვლა
+          changed: განცხადება შეცვლილია.
+          deleted: განცხადება წაშლილია!
+        status: 
+          title: სტატუსის ცვლილება
+          changed: სტატუსი შეცვლილია
+        file: 
+          title: ფაილის ატვირთვა
+          loaded: ფაილი დამატებულია
+          deleted: ფაილი წაშლილია
+        message:
+          title: შეტყობინების გაგზავნა
+          sent: შეტყობინება გაგზავნილია
+        control:
+          title: ახალი საკონტროლო ჩანაწერი
+          added: საკონტროლო ჩანაწერი დამატებულია
+          change: საკონტროლო ჩანაწერის შეცვლა
+          changed: საკონტროლო ჩანაწერი შეცვლილია
+          deleted: საკონტროლო ჩანაწერი წაშლილია
+        amount:
+          title: თანხის შეცვლა
+          changed: თანხა შეცვლილია
+        back_to_application: უკან განცხადებაში
+        accounts_page:
+          title: აბონენტები
+          empty_description: არც ერთი აბონენტი არ არის განსაზღვრული. თქვენ შეგიძლიათ ერთ განცხადებაში ერთი ან რამდენიმე აბონენტის დამატება.
+          calculations: პაკეტის ღირებულება
+          calculations_description: "პაკეტის ღირებულება დაითვლება აბონენტების რაოდენობის, ძაბვის საფეხურის და მოთხოვნილი სიმძლავრის მიხედვით."
+        delete_confirm: ნამდვილად გინდათ ამ ფაილის წაშლა?
+        delete_complete: ფაილი წაშლილია
+        unregistered: თქვენ არც ერთი განცხადება არ გაქვთ რეგისტრირებული. ქსელზე მიერთების რეგისტრაციის დასაწყებად მიაჭირეთ ღილაკს "ახალი განცხადება".
+      page_flow:
+        doc_id: პირადობის დამადასტურებელი საბუთი ან ამონაწერი მეწარმეთა რეესტრიდან
+        doc_id_confirm: "დაადასტურეთ, რომ პირადობის დამადასტურებელი საბუთი ან ამონაწერი მეწარმეთა რეესტრიდან ნამდვილად ატვირთულია!"
+        doc_id_descr: "თუ განაცხადი როგორც <strong>ფიზიკურ პირს</strong> ისე შემოგაქვთ, მაშინ დაასკანერეთ თქვენი პირადობის დამადასტურებელი საბუთი ან პასპორტი. <strong>იურიდიული პირების</strong> შემთხვევაში, უნდა მოგვაწოდოთ მეწარმეთა რეესტრიდან თქვენი კომპანიის ამონაწერი."
+        doc_ownership: საკუთრების დამადასტურებელი საბუთი
+        doc_ownership_confirm: "დაადასტურეთ, რომ საკუთრების დამადასტურებელი საბუთი ნამდვილად ატვირთულია!"
+        doc_ownership_descr: "თუ იმ ფართის <strong>მესაკუთრე</strong> ბრძანდებით, სადაც გინდათ გამრიცხველიანება, მაშინ უნდა წარმოადგინოთ საჯარო რეესტირს ამონაწერი და საკადასტრო რუკა. <strong>მეიჯარის</strong> შემთხვევაში უნდა წარმოადგინოთ იჯარის ხელშეკრულება და მესაკუთრის თანხმობა \"თელასში\" აბონენტად აყვანაზე."
+        doc_project: ელ.მომარაგების პროექტი
+        doc_project_confirm: "დაადასტურეთ, რომ პროექტი ნამდვილად ატვირთულია!\n===\nთუ თქვენ შემოგაქვთ განაცხადი 1 ან 2 აბონენტის გამრიცხველიანებაზე, ამ საბუთების მითითება არაა სავალდებულო."
+        doc_project_descr: "წარმოადგინეთ <strong>შიდა ელ. მომარაგების პროექტი</strong> (დატვირთვის უწყისი), თუ გასამრიცხველიანებელი აბონენტების რაოდენობა აღემატება <code>3</code>-ს. თუ გასამრიცხველიანებელი აბონენტების რიცხვია <code>1</code> ან <code>2</code>, ამ საბუთის წარმოდგენა არაა სავალდებულო."
+        doc_payment: გადახდის საბუთი
+        doc_payment_confirm: "დაადასტურეთ, რომ ნამდვილად გადაიხადეთ მინიმალური თანხა და ატვირთეთ მისი დამადასტურებელი საბუთი."
+        doc_payment_descr: თქვენ ასევე ვალდებულიხართ წინასწარ გადაიხადოთ პროექტის სრული ღირებულების <code>50</code>%. გთხოვთ ამობეჭდოთ საგადახდო დავალება (იხ. ღილაკი წარწერით "საგადახდო დავალება") და გადაიხადოთ აღნიშნული თანხა ბანკში. შემდეგ დაასკანეროთ გადახდის საბუთი და დაურთოთ ამ განაცხადს.
+        doc_complete: "დაადასტურეთ, რომ საბუთი #%{step} ატვირთულია"
+      mintopay: "თქვენი მინიმალური წინასწარი გადასახადია: "
+    network_new_customer_item:
+      type_individual: ინდივიდუალური
+      type_summary: ჯამური
+      address: მისამართი
+      address_hint: მიუთითეთ გამრიცხველიანების ობიექტის ზუსტი მისამართი
+      address_code: საკადასტრო კოდი
+      address_code_hint: მიუთითეთ გამრიცხველიანების ობიექტის საკადასტრო კოდი
+      voltage: ძაბვის საფეხური
+      voltage_220: 220 ვ
+      voltage_380: 380 ვ
+      voltage_610: 6/10 კვ
+      voltage_35110: 35/110 კვ
+      unit_volt: ვ
+      unit_kvolt: კვ
+      unit_kwt: კვტ
+      unit_days: დღე
+      power: "სიმძლავრე, კვტ"
+      voltage_and_power: ძაბვა და სიმძლავრე
+      use: მრიცხველის სახეობა
+      use_personal: საყოფაცხოვრებო
+      use_not_personal: არა საყოფაცხოვრებო
+      use_shared: საერთო სარგებლობის
+      count: აბონენტთა ჯამური რაოდენობა
+      count_hint: აქ ჩაწერეთ ამ ჯამური განცხადების აბონენტთა საერთო რაოდენობა
+      rs_tin: საიდენტიფიკაციო კოდი
+      rs_tin_hint: "ფიზიკური პირის შემთხვევაში ჩაწერეთ 11 ნიშნა პირადი ნომერი, ხოლო ორგანიზაციის შემთხვევაში &mdash; 9 ნიშნა საიდენტიფიკაციო კოდი."
+      details: დეტალები
+      customer_count: აბონენტი
+      amount: ვალი
+      actions:
+        new_account: ახალი აბონენტი
+        new_account_complete: აბონენტი დამატებულია
+        edit_account: აბონენტის შეცვლა
+        edit_account_complete: აბონენტი შეცვლილია
+        delete_confirm: ნამდვილად გინდათ ამ აბონენტის წაშლა?
+        delete_complete: აბონენტი წაშლილია
+      errors:
+        address_required: ჩაწერეთ მისამართი
+        address_code_required: ჩაწერეთ საკადასტრო კოდი
+        illegal_power: სიმძლავრე უნდა იყოს რიცხვი
+        tin_required: ჩაწერეთ საიდენტიფიკაციო კოდი
+        tin_illegal: არასწორი საიდენტიფიკაციო კოდი
+        illegal_count: ჯამური რაოდენობა უნდა იყოს რიცხვი და > 0
+        illegal_power: სიმძლავრე უნდა იყოს რიცხვი და > 0
+      billing_operations: ოპერაციები გამოჩნდება მათი ბილინგის სისტემაში დამატების პარალელურად.
+      no_operations: ჯერ არც ერთი ოპერაცია არ არის გატარებული!
+      messages:
+        title: შეტყობინებები მოგივათ SMS საშუალებით თქვენს მობილურ ტელეფონზე. აქ თავმოყრილია ამ განცხადებასთან დაკავშირებული ყველა შეტყობინება
+        datetime: "თარიღი, დრო"
+        messagetext: შეტყობინების ტექსტი
+        mobile: "მობილურის #"
+        no_message: ჯერ არც ერთი შეტყობინება არ არის!
+    network_new_customer_tariff:
+      voltage: ძაბვა
+      power: სიმძლავრე
+      days_to_complete: ვადა
+      days_to_complete_without_resolution: ვადა
+      price_gel: ფასი
+    network_new_customer_calculation:
+      power: სიმძლავრე
+      voltage: ძაბვა
+      amount: საფასური
+      days: ვადა
+      summary: შეჯამება
+      no_items_description: "ამ განცხადებაში ჯერ არც ერთი აბონენტი არ არის განსაზღვრული. პაკეტის ღირებულება გამოჩნდება მას შემდეგ, რაც შეიტანთ ერთ ან რამდენიმე აბონენტს."
+      errors:
+        not_compatible_volatage_and_power: სიმძლავრე არ შეესაბამება ძაბვის საფეხურს!
+    network_request_item:
+      date: თარიღი
+      type: სახეობა
+      description: მოკლე აღწერილობა
+      stage: ეტაპი
+    network_stage:
+      name: დასახელება
+      numb: "#"
+    sys_sms_message:
+      message: შეტყობინება
+      mobile: მობილური
+      created_at: გაგზავნის თარიღი
+    sys_subscription:
+      email: ელექტრონული ფოსტის მისამართი
+      company_news: კომპანიის სიახლეები
+      procurement_news: სიახლეები ტენდერებზე
+      outage_news: ენერგომომარაგების შეზღუდვა
+      actions:
+        subscribe: სიახლეების გამოწერა
+        unsubscribe: გამოწერის გაუქმება
+        company_news: კომპანიის სიახლეების გამოწერა
+        procurement_news: ტენდერებზე სიახლეების გამოწერა
+        outage_news: ენერგომომარაგების შეზღუდვის შეტყობინებების გამოწერა
+        subscribe_short: გამოწერა
+        subscribe_complete: გამოწერა დასრულებულია!
+        subscribe_complete_full: თქვენ წარმატებით გამოიწერეთ თელასის სიახლეები!
+        unsubscribe_complete: სიახლეების გამოწერა გაუქმებულია.
+        unsubscribe_confirm: ნამდვილად გინდათ სიახლეების გამოწერაზე უარის თქმა?
+      errors:
+        empty_email: ჩაწერეთ ელ.ფოსტა
+        duplicated_email: ელ. ფოსტა უკვე გამოყენებულია
+        not_subscribed: თქვენ არ გაქვთ გამოწერილი სიახლეები!

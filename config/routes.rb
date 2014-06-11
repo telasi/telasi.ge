@@ -265,5 +265,12 @@ TelasiGe::Application.routes.draw do
     end
   end
 
+  namespace 'stamba' do
+    get    '/',      controller: :printer, action: :index
+    get    '/find',  controller: :printer, action: :find
+    match  '/asset', controller: :printer, action: :asset, via: [:get, :post, :patch]
+    get    '/list',  controller: :printer, action: :list
+  end
+
   root 'dashboard#index'
 end

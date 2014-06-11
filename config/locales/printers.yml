@@ -1,0 +1,30 @@
+en:
+    printers:
+      stort: Location
+      pernr: Personnel Number
+      orgname: Ogranization Name
+      model: Model
+      conn_type: Connection type
+      serialno: Serial No
+      productid: Product ID
+      adate: Operating readiness date
+ka:
+    printers:
+      stort: მდებარეობა
+      pernr: სატაბელო ნომერი
+      orgname: ორგანიზაციის სახელი
+      model: მოდელი
+      conn_type: დაკავშირების ტიპი
+      serialno: Serial No
+      productid: Product ID
+      adate: ექსპლუატაციაში შესვლის თარიღი
+ru:
+    printers:
+      stort: Местоположение
+      pernr: Табельный номер МОЛ
+      orgname: Огранизация
+      model: Модель
+      conn_type: Тип соединения
+      serialno: Серийный номер
+      productid: Product ID
+      adate: Дата ввода в эксплуатацию
