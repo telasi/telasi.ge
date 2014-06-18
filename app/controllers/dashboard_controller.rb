@@ -6,7 +6,7 @@ class DashboardController < ApplicationController
 
   def login
     @title = I18n.t('dashboard.login')
-    user = Sys::User.authenticate(params[:email], params[:password])
+    user = Sys::User.authenticate(params[:email].downcase, params[:password]) if params[:email]
     if request.post?
       if user and user.email_confirmed and user.active 
         session[:user_id] = user.id
