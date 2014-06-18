@@ -112,6 +112,7 @@ module Sys
         self.email_confirm_hash = confirmed ? nil : User.generate_hash(self)
       end
       self.active = true
+      self.email=self.email.downcase if self.email
     end
 
     def user_before_save; self.mobile = compact_mobile(self.mobile) end
