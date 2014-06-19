@@ -266,6 +266,15 @@ class Network::NewCustomerApplication
     end
   end
 
+  def get_deposit_customer
+    cust=Billing::NetworkCustomer.where(customer: customer).first
+    if cust.blank?
+      Billing::NetworkCustomer.from_bs_customer(customer)
+      cust=Billing::NetworkCustomer.where(customer: customer).first
+    end
+    cust
+  end
+
   public
 
   # ბილინგში გაგზავნა.
@@ -284,7 +293,7 @@ class Network::NewCustomerApplication
     main_amount = self.amount
 
     # find zdeposit customer
-    deposit_customer = Billing::NetworkCustomer.where(customer: customer).first
+    deposit_customer = get_deposit_customer
     raise "სადეპოზიტო აბონენტი ვერ მოიძებნა: #{customer.accnumb}!" if deposit_customer.blank?
 
     # sending to billing
@@ -432,7 +441,7 @@ class Network::NewCustomerApplication
           customer.except = false
           customer.save!
           # find zdeposit customer
-          network_customer = Billing::NetworkCustomer.where(customer: customer).first
+          network_customer = get_deposit_customer
           raise "სადეპოზიტო აბონენტი ვერ მოიძებნა!" if network_customer.blank?
           network_customer.exception_end_date = nil
           network_customer.save!
