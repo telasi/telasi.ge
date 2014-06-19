@@ -202,7 +202,7 @@ class Network::NewCustomerApplication
   def penalty_third_stage
     if self.send_date and self.start_date
       r_days = self.real_days
-      if r_days > 2*days then
+      if r_days > 2*days and days>0 then
         ((r_days-2*days-1).to_i/days)*self.amount/2
       else 0 end
     else 0 end
