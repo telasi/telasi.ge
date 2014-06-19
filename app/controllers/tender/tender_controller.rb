@@ -50,7 +50,8 @@ class Tender::TenderController < ApplicationController
                      organization_type: @user.organization_type,
                      director_name: @user.director_name,
                      tenderno: @tender.tenderno,
-                     count: d['value']['count']
+                     count: d['value']['count'],
+                     nid: @tender.nid,
                   }
        end
      end
