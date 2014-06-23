@@ -35,7 +35,7 @@ class Sys::SubscriptionMessage
     Sys::SubscriptionMessage.where(sent: false).each do |m|
       RestClient.post "https://api:#{Telasi::MAILGUN_KEY}"\
         "@api.mailgun.net/v2/telasi.ge/messages",
-        from: "Telasi <hello@telasi.ge>",
+        from: "Telasi <subscriptions@telasi.ge>",
         to: m.email,
         subject: m.subject,
         html: %Q{
