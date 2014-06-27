@@ -260,9 +260,9 @@ class Network::NewCustomerApplication
         perskey: 1, signkey: 1, itemdate: item_date, reading: 0, kwt: 0, amount: third_stage,
         enterdate: Time.now, itemcatkey: 0)
       bs_item3.save!
-      network_item3 = Billing::NetworkItem.new(zdepozit_cust_id: deposit_customer.zdepozit_cust_id, amount: third_stage,
-        operkey: 1120, enterdate: Time.now, operdate: item_date, perskey: 1)
-      network_item3.save!
+      # network_item3 = Billing::NetworkItem.new(zdepozit_cust_id: deposit_customer.zdepozit_cust_id, amount: third_stage,
+      #   operkey: 1120, enterdate: Time.now, operdate: item_date, perskey: 1)
+      # network_item3.save!
     end
   end
 
