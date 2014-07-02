@@ -1,29 +1,11 @@
-<%= table_for @subscriptions, title: @title, collapsible: true, icon: '/icons/newspaper--pencil.png' do |t|
-  t.title_action admin_generate_messages_url, method: 'post', label: 'გასაგზავნი სიის გენერაცია', confirm: 'ნამდვილად გინდათ გასაგზავნი სიის გენერაცია?', icon: '/icons/mail-share.png'
-  t.email_field 'email', label: 'ელ.ფოსტა'
-  t.text_field 'user', label: 'მომხმარებელი', url: ->(x) { admin_user_url(id: x.user.id) }
-  t.text_field 'locale', tag: 'code', label: 'ენა'
-  t.boolean_field 'company_news', label: 'კომპანია'
-  t.boolean_field 'procurement_news', label: 'ტენდერები'
-  t.boolean_field 'outage_news', label: 'გათიშვები'
-  t.paginate records: t('models.general.records')
-end %>
-
-<%= table_for @news, title: 'სიახლეები', collapsible: true, icon: '/icons/newspaper.png' do |t|
-  t.text_field 'nid', tag: 'code', label: 'ID'
-  t.text_field 'language', tag: 'code', label: 'ენა'
-  t.text_field 'content_type.field_content_type_value', label: 'სახეობა'
-  t.date_field 'created_at', label: 'შექმნა'
-  t.text_field 'title', label: 'სათაური', url: ->(x) { admin_headline_url(id: x.nid) }
-
-  t.paginate records: t('models.general.records'), param_name: 'news_page'
-end %>
-
-<%= table_for @not_sent, title: 'გასაგზავნი წერილები', icon: '/icons/mail-open.png', collapsible: true do |t|
-  t.title_action admin_send_messages_url, method: 'post', label: 'წერილების დაგზავნა', confirm: 'ნამდვილად გინდათ წერილების დაგზავნა?', icon: '/icons/mail-send.png'
-  t.text_field 'nid', label: 'ID', tag: 'code'
-  t.text_field 'message_type', label: 'ტიპი', tag: 'code'
-  t.text_field 'subject', url: ->(x) { admin_headline_url(id: x.nid) }
-  t.email_field 'email', label: 'ფოსტა'
-  t.boolean_field 'sent', label: 'გაგზავნილია?'
-end %>
+<h1 class="page-header"><%=@title%></h1>
+<div>
+  <a href="<%=admin_subscribers_url%>" class="btn btn-default btn-lg">
+    <img src="/icons/users.png"/>
+    ხელმომწერთა სია (<%=Sys::Subscription.count%>)
+  </a>
+  <a href="<%=admin_headlines_url%>" class="btn btn-default btn-lg">
+    <img src="/icons/users.png"/>
+    ყველა სიახლე (<%=Site::Node.where(type: 'news').count%>)
+  </a>
+</div>

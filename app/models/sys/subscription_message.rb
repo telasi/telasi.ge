@@ -37,7 +37,6 @@ class Sys::SubscriptionMessage
     nodes.each do |node|
       while true do
         node_messages=messages.where(nid: node).paginate(per_page:500, page:1)
-        debugger
         break if node_messages.empty?
         m=node_messages.first
         recipient_variables={}

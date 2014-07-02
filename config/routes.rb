@@ -113,6 +113,8 @@ TelasiGe::Application.routes.draw do
     end
     scope '/subscriptions', controller: 'subscriptions' do
       get '/', action: 'index', as: 'subscriptions'
+      get '/subscribers', action: 'subscribers', as: 'subscribers'
+      get '/headlines', action: 'headlines', as: 'headlines'
       get '/headline/:id', action: 'headline', as: 'headline'
       post '/generate_messages', action: 'generate_messages'
       post '/send_messages', action: 'send_messages'
