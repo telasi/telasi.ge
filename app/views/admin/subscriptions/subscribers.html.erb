@@ -1,0 +1,10 @@
+<%= table_for @subscriptions, title: @title, collapsible: true, icon: '/icons/newspaper--pencil.png' do |t|
+  t.title_action admin_generate_messages_url, method: 'post', label: 'გასაგზავნი სიის გენერაცია', confirm: 'ნამდვილად გინდათ გასაგზავნი სიის გენერაცია?', icon: '/icons/mail-share.png'
+  t.email_field 'email', label: 'ელ.ფოსტა'
+  t.text_field 'user', label: 'მომხმარებელი', url: ->(x) { admin_user_url(id: x.user.id) }
+  t.text_field 'locale', tag: 'code', label: 'ენა'
+  t.boolean_field 'company_news', label: 'კომპანია'
+  t.boolean_field 'procurement_news', label: 'ტენდერები'
+  t.boolean_field 'outage_news', label: 'გათიშვები'
+  t.paginate records: t('models.general.records')
+end %>
