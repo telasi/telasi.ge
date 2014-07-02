@@ -1,0 +1,8 @@
+<%= table_for @headlines, title: 'სიახლეები', collapsible: true, icon: '/icons/newspaper.png' do |t|
+  t.text_field 'nid', tag: 'code', label: 'ID'
+  t.text_field 'language', tag: 'code', label: 'ენა'
+  t.text_field 'content_type.field_content_type_value', label: 'სახეობა'
+  t.date_field 'created_at', label: 'შექმნა'
+  t.text_field 'title', label: 'სათაური', url: ->(x) { admin_headline_url(id: x.nid) }
+  t.paginate records: t('models.general.records'), param_name: 'news_page'
+end %>
