@@ -32,22 +32,30 @@ class Sys::SubscriptionMessage
   end
 
   def self.send_subscription_messages
-    Sys::SubscriptionMessage.where(sent: false).each do |m|
-      RestClient.post "https://api:#{Telasi::MAILGUN_KEY}"\
-        "@api.mailgun.net/v2/telasi.ge/messages",
-        from: "Telasi <subscriptions@telasi.ge>",
-        to: m.email,
-        subject: m.subject,
-        html: %Q{
-          <html>
-          <body>
-            <h1 class="page-header"><a href="http://telasi.ge/#{m.locale}/node/#{m.nid}?ref=email">#{m.subject}</a></h1>
+    messages=Sys::SubscriptionMessage.where(sent: false)
+    nodes=messages.map{|x| x.nid}.uniq
+    nodes.each do |node|
+      while true do
+        node_messages=messages.where(nid: node).paginate(per_page:500, page:1)
+        debugger
+        break if node_messages.empty?
+        m=node_messages.first
+        recipient_variables={}
+        node_messages.each{ |msg| recipient_variables[msg.email]={id:msg.id.to_s} }
+        RestClient.post "https://api:#{Telasi::MAILGUN_KEY}"\
+          "@api.mailgun.net/v2/telasi.ge/messages",
+          from: "Telasi <subscriptions@telasi.ge>",
+          to: node_messages.map{|x| x.email}.join(', '),
+          subject: m.subject,
+          html: %Q{<html><body>
+            <h1 class="page-header">
+            <a href="http://telasi.ge/#{m.locale}/node/#{m.nid}?ref=email">#{m.subject}</a>
+            </h1>
             #{m.body}
-          </body>
-          </html>
-        }
-      m.sent = true
-      m.save
+            </body></html>},
+          :'recipient-variables' => recipient_variables.to_json
+        node_messages.each { |msg| msg.sent=true ; msg.save }
+      end
     end
   end
 end
