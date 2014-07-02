@@ -2,7 +2,7 @@
 class Admin::SubscriptionsController < ApplicationController
   def index
     @title = I18n.t('applications.admin.subscriptions')
-    #@not_sent = Sys::SubscriptionMessage.where(sent: false).asc(:_id)
+    @not_sent = Sys::SubscriptionMessage.where(sent: false).asc(:_id).paginate(per_page: 20, page: params[:page])
   end
 
   def subscribers

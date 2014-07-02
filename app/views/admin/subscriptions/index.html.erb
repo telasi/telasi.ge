@@ -1,5 +1,9 @@
 <h1 class="page-header"><%=@title%></h1>
 <div>
+  <a href="<%=admin_generate_messages_url%>" data-method="post" data-confirm="ნამდვილად გინდათ გასაგზავნი სიის გენერაცია?" class="btn btn-danger btn-lg">
+    <img src="/icons/newspaper--exclamation.png" />
+    დაგზავნის გენერაცია
+  </a>
   <a href="<%=admin_subscribers_url%>" class="btn btn-default btn-lg">
     <img src="/icons/users.png"/>
     ხელმომწერთა სია (<%=Sys::Subscription.count%>)
@@ -8,4 +12,51 @@
     <img src="/icons/newspaper.png"/>
     ყველა სიახლე (<%=Site::Node.where(type: 'news').count%>)
   </a>
+</div>
+<div style="margin-top: 16px;">
+  <% if @not_sent.empty? %>
+    <div class="well" style="text-align: center;">
+      <h4>არაფერია დასაგზავნი</h4>
+      <p class="text-muted">
+        ამ მომენტისთვის არაფერია გასაგზავნი. დააჭირეთ ღილაკს "დაგზავნის გენერაცია"
+        გასაგზავნი წერილების გენერაციისთვის.
+      </p>
+    </div>
+  <% else %>
+    <div class="well" style="text-align: center;">
+      <h4>სულ <code><%= @not_sent.total_entries %></code> წერილია გასაგზავნი</h4>
+      <p class="text-muted">
+        თუ წერილები აკმაყოფილებს ყველა საჭირო სტანდარტს, დააჭირეთ მწვანე ღილაკს წარწერით "წერილების დაგზავნა" და <strong style="text-decoration:underline;">დაელოდეთ შედეგს</strong>.
+      </p>
+      <p>
+        <a href="<%= admin_send_messages_url %>" data-method="post" data-confirm="ნამდვილად გინდათ წერილების დაგზავნა?" class="btn btn-success btn-lg">
+          <img src="/icons/mail-send.png" />
+          წერილების დაგზავნა
+        </a>
+      </p>
+    </div>
+    <table class="table table-striped table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>ელ.ფოსტა</th>
+          <th>სათაური</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @not_sent.each do |msg| %>
+          <tr>
+            <td width="50"><code><%=msg.nid%></code></td>
+            <td width="250"><%= msg.email %></td>
+            <td><%=link_to msg.subject, admin_headline_url(id: msg.nid)%></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <%= will_paginate @not_sent %>
+  <% end %>
+</div>
+<div style="margin-top: 16px">
+  <% cnt = 123+1000*Sys::SubscriptionMessage.where(sent: true).count %>
+  დღემდე სულ <code><%= cnt %></code> წერილია დაგზავნილი
 </div>
