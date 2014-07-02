@@ -57,6 +57,6 @@
   <% end %>
 </div>
 <div style="margin-top: 16px">
-  <% cnt = 123+1000*Sys::SubscriptionMessage.where(sent: true).count %>
-  დღემდე სულ <code><%= cnt %></code> წერილია დაგზავნილი
+  <% cnt = Sys::SubscriptionMessage.where(sent: true).count %>
+  დღემდე სულ <code><%= number_with_delimiter cnt %></code> წერილია დაგზავნილი
 </div>
