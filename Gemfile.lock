@@ -1,15 +1,4 @@
 GIT
-  remote: git://github.com/mongoid/mongoid.git
-  revision: 3d1b8aa48340b79b8481ab96b56e0681433b0bcb
-  ref: 3d1b8aa48340b79b8481ab96b56e0681433b0bcb
-  specs:
-    mongoid (4.0.0)
-      activemodel (~> 4.0.0)
-      moped (~> 1.5)
-      origin (~> 1.0)
-      tzinfo (~> 0.3.37)
-
-GIT
   remote: https://github.com/dimakura/rs.ge
   revision: f1994cf54b6d22b515f1af89d66131e5b662b46a
   specs:
@@ -58,6 +47,7 @@ GEM
       rails (>= 3.1)
     bootstrap-will_paginate (0.0.10)
       will_paginate
+    bson (2.3.0)
     builder (3.1.4)
     carrierwave (0.10.0)
       activemodel (>= 3.2.0)
@@ -79,6 +69,7 @@ GEM
     commonjs (0.2.7)
     composite_primary_keys (6.0.6)
       activerecord (~> 4.0.0)
+    connection_pool (2.0.0)
     debugger (1.6.8)
       columnize (>= 0.3.1)
       debugger-linecache (~> 1.2.0)
@@ -125,10 +116,18 @@ GEM
     mime-types (1.25.1)
     mini_portile (0.6.0)
     minitest (4.7.5)
+    mongoid (4.0.0)
+      activemodel (~> 4.0)
+      moped (~> 2.0.0)
+      origin (~> 2.1)
+      tzinfo (>= 0.3.37)
     mongoid-grid_fs (2.1.0)
       mime-types (>= 1.0, < 3.0)
       mongoid (>= 3.0, < 5.0)
-    moped (1.5.2)
+    moped (2.0.0)
+      bson (~> 2.2)
+      connection_pool (~> 2.0)
+      optionable (~> 0.2.0)
     multi_json (1.10.1)
     multi_xml (0.5.5)
     mysql2 (0.3.16)
@@ -138,12 +137,13 @@ GEM
     nokogiri (1.6.2.1-x86-mingw32)
       mini_portile (= 0.6.0)
     nori (2.3.0)
-    origin (1.1.0)
+    optionable (0.2.0)
+    origin (2.1.1)
     pdf-core (0.2.5)
     polyglot (0.3.5)
-    prawn (1.1.0)
-      pdf-core (~> 0.2.5)
-      ttfunk (~> 1.2.0)
+    prawn (1.0.0)
+      pdf-core (~> 0.2.2)
+      ttfunk (~> 1.1.1)
     prawn_rails (0.0.11)
       prawn (>= 0.11.1)
       railties (>= 3.0.0)
@@ -208,7 +208,7 @@ GEM
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
-    ttfunk (1.2.0)
+    ttfunk (1.1.1)
     turbolinks (2.2.0)
       coffee-rails
     tzinfo (0.3.40)
@@ -244,10 +244,9 @@ DEPENDENCIES
   ka
   less (~> 2)
   magti
-  mongoid!
-  mongoid-grid_fs
+  mongoid (~> 4.0)
   mysql2
-  prawn
+  prawn (= 1.0.0)
   prawn_rails
   rails (= 4.0.0)
   rest-client

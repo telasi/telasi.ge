@@ -19,8 +19,9 @@ gem 'savon', '2.3.2'
 
 # db
 gem 'sqlite3'
-gem 'mongoid', github: 'mongoid/mongoid', ref: '3d1b8aa48340b79b8481ab96b56e0681433b0bcb'
-gem 'mongoid-grid_fs'
+# gem 'mongoid', github: 'mongoid/mongoid', ref: '3d1b8aa48340b79b8481ab96b56e0681433b0bcb'
+# gem 'mongoid-grid_fs'
+gem 'mongoid', '~> 4.0'
 gem 'ruby-oci8', '2.1.5'
 gem 'activerecord-oracle_enhanced-adapter', '1.5.4'
 gem 'mysql2'
@@ -46,7 +47,7 @@ gem 'ka'
 gem 'magti'
 
 # pdf
-gem 'prawn'
+gem 'prawn', '1.0.0'
 gem 'prawn_rails'
 # excel
 gem 'axlsx_rails'
