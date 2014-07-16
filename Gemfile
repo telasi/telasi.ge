@@ -12,7 +12,7 @@ gem 'therubyracer', platforms: :ruby
 gem 'less', '~> 2'
 gem 'uglifier', '>= 1.3.0'
 gem 'jquery-rails', '~> 3'
-gem 'jquery-ui-rails'
+gem 'jquery-ui-rails', '~> 4'
 
 # soap
 gem 'savon', '2.3.2'
@@ -22,7 +22,7 @@ gem 'sqlite3'
 gem 'mongoid', github: 'mongoid/mongoid', ref: '3d1b8aa48340b79b8481ab96b56e0681433b0bcb'
 gem 'mongoid-grid_fs'
 gem 'ruby-oci8', '2.1.5'
-gem 'activerecord-oracle_enhanced-adapter', '~> 1.5.0'
+gem 'activerecord-oracle_enhanced-adapter', '1.5.4'
 gem 'mysql2'
 gem 'safe_attributes'
 

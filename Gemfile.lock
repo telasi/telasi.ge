@@ -38,7 +38,7 @@ GEM
       activesupport (= 4.0.0)
       arel (~> 4.0.0)
     activerecord-deprecated_finders (1.0.3)
-    activerecord-oracle_enhanced-adapter (1.5.5)
+    activerecord-oracle_enhanced-adapter (1.5.4)
     activesupport (4.0.0)
       i18n (~> 0.6, >= 0.6.4)
       minitest (~> 4.2)
@@ -110,7 +110,7 @@ GEM
     jquery-turbolinks (2.0.2)
       railties (>= 3.1.0)
       turbolinks
-    jquery-ui-rails (5.0.0)
+    jquery-ui-rails (4.2.1)
       railties (>= 3.2.16)
     json (1.8.1)
     ka (0.1.0)
@@ -229,7 +229,7 @@ PLATFORMS
   x86-mingw32
 
 DEPENDENCIES
-  activerecord-oracle_enhanced-adapter (~> 1.5.0)
+  activerecord-oracle_enhanced-adapter (= 1.5.4)
   axlsx_rails
   bootstrap-will_paginate
   carrierwave
@@ -240,7 +240,7 @@ DEPENDENCIES
   jbuilder (~> 1.0.1)
   jquery-rails (~> 3)
   jquery-turbolinks
-  jquery-ui-rails
+  jquery-ui-rails (~> 4)
   ka
   less (~> 2)
   magti
