@@ -47,7 +47,7 @@ module Sys
       else "(+#{self.country_code})#{self.mobile}" end
     end
 
-    def includes_role?(role); self.role_ids.include?(Moped::BSON::ObjectId(role)) end
+    def includes_role?(role); self.role_ids.include?(Moped::BSON::ObjectId.from_string(role)) end
     def admin?; self.admin end
     def tender_admin?; self.admin? or self.includes_role?(Telasi::PERMISSIONS[:tender_admin_id]) or self.includes_role?(Telasi::PERMISSIONS[:tender_report_id]) end
 
