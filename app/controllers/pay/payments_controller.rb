@@ -143,7 +143,7 @@ class Pay::PaymentsController < ApplicationController
       @payment.check_callback = params[:check]
 
       # if payment successfully was sent and we recieved COMPLETED status
-      if @payment.status == Pay::Payment::STATUS_COMPLETED && @payment.instatus == Pay::Payment::INSTATUS_OK
+      if @payment.status == Pay::Payment::STATUS_COMPLETED # && @payment.instatus == Pay::Payment::INSTATUS_OK
         @payment.resultcode = RESULTCODE_OK
         @payment.gstatus = Pay::Payment::GSTATUS_PROCESS
 
