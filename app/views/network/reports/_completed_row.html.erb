@@ -30,40 +30,60 @@
     <code><%= link_to apps0.count, network_new_customers_url(search: srch_params.merge(penalty: 0)) %></code>
   </td>
   <td style="text-align: right;">
-    <% amnt = apps0.sum(:amount) || 0 %>
-    <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL
+    <%
+      amnt = apps0.sum(:amount) || 0
+      kwh = apps0.sum(:kwh) || 0
+    %>
+    <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL <br/>
+    <code><%= number_with_precision kwh, precision: 2, delimiter: ',' %></code> kWh
   </td>
   <!-- apps1 -->
   <td style="text-align: right; vertical-align: middle;" rowspan="3">
     <code><%= link_to apps1.count, network_new_customers_url(search: srch_params.merge(penalty: 1)) %></code>
   </td>
   <td style="text-align: right;">
-    <% amnt = apps1.sum(:amount) || 0 %>
-    <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL
+    <%
+      amnt = apps1.sum(:amount) || 0
+      kwh = apps1.sum(:kwh) || 0
+    %>
+    <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL <br/>
+    <code><%= number_with_precision kwh, precision: 2, delimiter: ',' %></code> kWh
   </td>
   <!-- apps2 -->
   <td style="text-align: right; vertical-align: middle;" rowspan="3">
     <code><%= link_to apps2.count, network_new_customers_url(search: srch_params.merge(penalty: 2)) %></code>
   </td>
   <td style="text-align: right;">
-    <% amnt = apps2.sum(:amount) || 0 %>
-    <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL
+    <%
+      amnt = apps2.sum(:amount) || 0
+      kwh = apps2.sum(:kwh) || 0
+    %>
+    <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL <br/>
+    <code><%= number_with_precision kwh, precision: 2, delimiter: ',' %></code> kWh
   </td>
   <!-- apps3 -->
   <td style="text-align: right; vertical-align: middle;" rowspan="3">
     <code><%= link_to apps3.count, network_new_customers_url(search: srch_params.merge(penalty: 3)) %></code>
   </td>
   <td style="text-align: right;">
-    <% amnt = apps3.sum(:amount) || 0 %>
-    <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL
+    <%
+      amnt = apps3.sum(:amount) || 0
+      kwh = apps3.sum(:kwh) || 0
+    %>
+    <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL <br/>
+    <code><%= number_with_precision kwh, precision: 2, delimiter: ',' %></code> kWh
   </td>
   <!-- all apps -->
   <td style="text-align: right; vertical-align: middle;" rowspan="3">
     <code><%= link_to apps.count, network_new_customers_url(search: srch_params) %></code>
   </td>
   <td style="text-align: right;">
-    <% amnt = apps.sum(:amount) || 0 %>
-    <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL
+    <%
+      amnt = apps.sum(:amount) || 0
+      kwh = apps.sum(:kwh) || 0
+    %>
+    <code><%= number_with_precision amnt, precision: 2, delimiter: ',' %></code> GEL <br/>
+    <code><%= number_with_precision kwh, precision: 2, delimiter: ',' %></code> kWh
   </td>
 </tr>
 
@@ -94,7 +114,7 @@
 <!-- compensation -->
 <tr class="<%= clazz %>">
   <td style="text-align: right;">
-    <code><%= number_with_precision 0, precision: 2, delimiter: ',' %></code> GEL
+    <code><%= number_with_precision 0, precision: 2, delimiter: ',' %></code> GEL <br>
   </td>
   <td style="text-align: right;">
     <% amnt = 0 %>
