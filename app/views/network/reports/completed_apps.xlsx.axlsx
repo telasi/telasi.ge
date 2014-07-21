@@ -10,10 +10,10 @@ wb.add_worksheet(name: "completed") do |sheet|
   sheet.add_row [  ]
   sheet.add_row [
     'ძაბვა', 'სიმძლავრე',
-    'დროული: რაოდ', 'დროული: თანხა',
-    'I ეტაპი: რაოდ', 'I ეტაპი: თანხა', 'I ეტაპი: კომპენსაცია',
-    'II ეტაპი: რაოდ', 'II ეტაპი: თანხა', 'II ეტაპი: კომპენსაცია',
-    'III ეტაპი: რაოდ', 'III ეტაპი: თანხა', 'III ეტაპი: კომპენსაცია',
+    'დროული: რაოდ', 'დროული: თანხა', 'დროული: kWh',
+    'I ეტაპი: რაოდ', 'I ეტაპი: თანხა', 'I ეტაპი: kWh', 'I ეტაპი: კომპენსაცია',
+    'II ეტაპი: რაოდ', 'II ეტაპი: თანხა', 'II ეტაპი: kWh', 'II ეტაპი: კომპენსაცია',
+    'III ეტაპი: რაოდ', 'III ეტაპი: თანხა', 'III ეტაპი: kWh', 'III ეტაპი: კომპენსაცია',
   ]
 
   tariffs = Network::NewCustomerTariff.asc(:voltage, :power_from)
@@ -26,10 +26,10 @@ wb.add_worksheet(name: "completed") do |sheet|
     a3 = apps3.where(tariff: t)
     sheet.add_row [
       "#{t.voltage} ", "#{t.power_from}-#{t.power_to} kWh",
-      a0.count, (a0.sum(:amount) || 0),
-      a1.count, (a1.sum(:amount) || 0), (a1.sum(:penalty1) || 0),
-      a2.count, (a2.sum(:amount) || 0), (a2.sum(:penalty1) || 0) + (a2.sum(:penalty2) || 0),
-      a3.count, (a3.sum(:amount) || 0), (a3.sum(:penalty1) || 0) + (a3.sum(:penalty2) || 0)+ (a3.sum(:penalty3) || 0),
+      a0.count, (a0.sum(:amount) || 0), (a0.sum(:power) || 0),
+      a1.count, (a1.sum(:amount) || 0), (a1.sum(:power) || 0), (a1.sum(:penalty1) || 0),
+      a2.count, (a2.sum(:amount) || 0), (a2.sum(:power) || 0), (a2.sum(:penalty1) || 0) + (a2.sum(:penalty2) || 0),
+      a3.count, (a3.sum(:amount) || 0), (a3.sum(:power) || 0), (a3.sum(:penalty1) || 0) + (a3.sum(:penalty2) || 0)+ (a3.sum(:penalty3) || 0),
     ]
   end
 end
