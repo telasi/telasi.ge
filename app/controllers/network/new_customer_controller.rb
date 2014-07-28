@@ -2,35 +2,35 @@
 require 'rs'
 
 class Network::NewCustomerController < ApplicationController
-  def index
-    @title = I18n.t('models.network_new_customer_item.actions.new_account')
-    @search = params[:search] == 'clear' ? nil : params[:search]
+  include Sys::BackgroundJobConstants
+
+  def self.filter_applications(search)
     rel = Network::NewCustomerApplication
-    if @search
-      rel = rel.where(number: @search[:number].mongonize) if @search[:number].present?
-      rel = rel.where(rs_name: @search[:rs_name].mongonize) if @search[:rs_name].present?
-      rel = rel.where(rs_tin: @search[:rs_tin].mongonize) if @search[:rs_tin].present?
-      rel = rel.where(address: @search[:address].mongonize) if @search[:address].present?
-      rel = rel.where(work_address: @search[:work_address].mongonize) if @search[:work_address].present?
-      rel = rel.where(status: @search[:status].to_i) if @search[:status].present?
-      rel = rel.where(stage: Network::Stage.find(@search[:stage])) if @search[:stage].present?
-      rel = rel.where(online: @search[:online] == 'yes') if @search[:online].present?
-      rel = rel.where(:send_date.gte => @search[:send_d1]) if @search[:send_d1].present?
-      rel = rel.where(:send_date.lte => @search[:send_d2]) if @search[:send_d2].present?
-      rel = rel.where(:start_date.gte => @search[:start_d1]) if @search[:start_d1].present?
-      rel = rel.where(:start_date.lte => @search[:start_d2]) if @search[:start_d2].present?
-      rel = rel.where(:plan_end_date.gte => @search[:plan_d1]) if @search[:plan_d1].present?
-      rel = rel.where(:plan_end_date.lte => @search[:plan_d2]) if @search[:plan_d2].present?
-      rel = rel.where(:end_date.gte => @search[:real_d1]) if @search[:real_d1].present?
-      rel = rel.where(:end_date.lte => @search[:real_d2]) if @search[:real_d2].present?
-      rel = rel.where(voltage: @search[:voltage]) if @search[:voltage].present?
-      rel = rel.where(:power.gte => @search[:power1]) if @search[:power1] and @search[:power1].to_i > 0
-      rel = rel.where(:power.lte => @search[:power2]) if @search[:power2] and @search[:power1].to_i > 0
-      rel = rel.where(proeqti: @search[:proeqti].mongonize) if @search[:proeqti].present?
-      rel = rel.where(oqmi: @search[:oqmi].mongonize) if @search[:oqmi].present?
-      if @search[:penalty].present?
+    if search
+      rel = rel.where(number: search[:number].mongonize) if search[:number].present?
+      rel = rel.where(rs_name: search[:rs_name].mongonize) if search[:rs_name].present?
+      rel = rel.where(rs_tin: search[:rs_tin].mongonize) if search[:rs_tin].present?
+      rel = rel.where(address: search[:address].mongonize) if search[:address].present?
+      rel = rel.where(work_address: search[:work_address].mongonize) if search[:work_address].present?
+      rel = rel.where(status: search[:status].to_i) if search[:status].present?
+      rel = rel.where(stage: Network::Stage.find(search[:stage])) if search[:stage].present?
+      rel = rel.where(online: search[:online] == 'yes') if search[:online].present?
+      rel = rel.where(:send_date.gte => search[:send_d1]) if search[:send_d1].present?
+      rel = rel.where(:send_date.lte => search[:send_d2]) if search[:send_d2].present?
+      rel = rel.where(:start_date.gte => search[:start_d1]) if search[:start_d1].present?
+      rel = rel.where(:start_date.lte => search[:start_d2]) if search[:start_d2].present?
+      rel = rel.where(:plan_end_date.gte => search[:plan_d1]) if search[:plan_d1].present?
+      rel = rel.where(:plan_end_date.lte => search[:plan_d2]) if search[:plan_d2].present?
+      rel = rel.where(:end_date.gte => search[:real_d1]) if search[:real_d1].present?
+      rel = rel.where(:end_date.lte => search[:real_d2]) if search[:real_d2].present?
+      rel = rel.where(voltage: search[:voltage]) if search[:voltage].present?
+      rel = rel.where(:power.gte => search[:power1]) if search[:power1] and search[:power1].to_i > 0
+      rel = rel.where(:power.lte => search[:power2]) if search[:power2] and search[:power1].to_i > 0
+      rel = rel.where(proeqti: search[:proeqti].mongonize) if search[:proeqti].present?
+      rel = rel.where(oqmi: search[:oqmi].mongonize) if search[:oqmi].present?
+      if search[:penalty].present?
         rel = rel.where(:status.in => [Network::NewCustomerApplication::STATUS_COMPLETE, Network::NewCustomerApplication::STATUS_IN_BS])
-        case @search[:penalty]
+        case search[:penalty]
         when '0' then rel = rel.where(:penalty1    => 0, :penalty2 => 0, :penalty3 => 0)
         when '1' then rel = rel.where(:penalty1.gt => 0, :penalty2 => 0, :penalty3 => 0)
         when '2' then rel = rel.where(:penalty2.gt => 0, :penalty3 => 0)
@@ -38,9 +38,19 @@ class Network::NewCustomerController < ApplicationController
         end
       end
     end
+    rel
+  end
+
+  def index
+    @title = I18n.t('models.network_new_customer_item.actions.new_account')
+    @search = params[:search] == 'clear' ? nil : params[:search]
+    rel = Network::NewCustomerController.filter_applications(@search)
     respond_to do |format|
       format.html { @applications = rel.desc(:_id).paginate(page: params[:page_new], per_page: 10) }
-      format.xlsx { @applications = rel.desc(:_id).paginate(page: 1, per_page: 1000) }
+      format.xlsx do
+        @job = Sys::BackgroundJob.create(user:current_user, name: NETWORK_NEWCUSTOMER_TO_XLSX, data: params.to_s)
+        render action: '../../layouts/background_job', formats: ['html'], content_type: 'text/html'
+      end
     end
   end
 

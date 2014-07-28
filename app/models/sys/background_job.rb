@@ -2,14 +2,14 @@
 class Sys::BackgroundJob
   include Mongoid::Document
   include Mongoid::Timestamps
-
-  NETWORK_NEWCUSTOMER_TO_XLSX = 'network-new-customer-application-to-xlsx'
-  NETWORK_CHANGEPOWER_TO_XLSX = 'network-change-power-application-to-xlsx'
+  include Sys::BackgroundJobConstants
 
   belongs_to :user, class_name: 'Sys::User'
   field :name, type: String
   field :data, type: String
-  field :success, type: Mongoid::Boolean
-  field :failed, type: Mongoid::Boolean
+  field :success, type: Mongoid::Boolean, default: false
+  field :failed,  type: Mongoid::Boolean, default: false
   field :trace, type: String
+
+  def completed?; self.success or self.failed end
 end

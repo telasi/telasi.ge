@@ -1,0 +1,16 @@
+<script type="text/javascript">
+var JOBID = '<%= @job.id %>';
+$(function() {
+  console.log(JOBID);
+});
+</script>
+<h3 class="page-header">
+  <i class="fa fa-clock-o"></i>
+  მიმდინარეობს თქვენი ფაილის მომზადება
+</h3>
+<div class="alert alert-warning">
+  თქვენი ფაილის მომზადებას შესაძლოა დასჭირდეს რამდენიმე წუთი.
+</div>
+<p style="text-align: center; font-size: 1.5em; color: #aaa; padding: 32px;">
+  <img src="/images/wait.gif" /> მიმდინარეობს გენერაცია...
+</p>
