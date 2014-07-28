@@ -12,4 +12,10 @@ class Sys::BackgroundJob
   field :trace, type: String
 
   def completed?; self.success or self.failed end
+
+  def self.perform(params)
+    job = Sys::BackgroundJob.create(params)
+    BackgroundJobProcessor.perform_async(job.id.to_s)
+    job
+  end
 end

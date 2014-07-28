@@ -48,7 +48,7 @@ class Network::NewCustomerController < ApplicationController
     respond_to do |format|
       format.html { @applications = rel.desc(:_id).paginate(page: params[:page_new], per_page: 10) }
       format.xlsx do
-        @job = Sys::BackgroundJob.create(user:current_user, name: NETWORK_NEWCUSTOMER_TO_XLSX, data: params.to_s)
+        @job = Sys::BackgroundJob.perform(user:current_user, name: NETWORK_NEWCUSTOMER_TO_XLSX, data: params.to_s)
         render action: '../../layouts/background_job', formats: ['html'], content_type: 'text/html'
       end
     end
