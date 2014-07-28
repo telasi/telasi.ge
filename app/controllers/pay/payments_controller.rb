@@ -277,7 +277,7 @@ class Pay::PaymentsController < ApplicationController
   def set_status_from_billing(rel)
     rel.all.select{ |r| r.transactioncode and r.gstatus == Pay::Payment::GSTATUS_PROCESS }.each do |rl|
 
-    case payment.serviceid
+    case rl.serviceid
       when 'ENERGY'
         pay = Billing::Payment.where(billnumber: "#{rl.transactioncode} Web").first
       when 'TRASH'
