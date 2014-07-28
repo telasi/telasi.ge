@@ -7,6 +7,6 @@ class Api::JobsController < Api::ApiController
 
   def download
     job = Sys::BackgroundJob.find(params[:id])
-    send_file job.path #, type: job.type
+    send_file job.path
   end
 end

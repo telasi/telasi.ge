@@ -7,9 +7,8 @@ class Sys::BackgroundJob
   belongs_to :user, class_name: 'Sys::User'
   field :name, type: String
   field :data, type: String
-  field :type, type: String
-  field :success, type: Mongoid::Boolean, default: false
   field :path, type: String
+  field :success, type: Mongoid::Boolean, default: false
   field :failed,  type: Mongoid::Boolean, default: false
   field :trace, type: String
 
