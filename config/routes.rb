@@ -151,6 +151,7 @@ TelasiGe::Application.routes.draw do
     end
     scope '/new_customer', controller: 'new_customer' do
       get '/', action: 'index', as: 'new_customers'
+      get '/printing/:jobid', action: 'printing', as: 'printing_new_customer'
       # application actions
       match '/new', action: 'add_new_customer', as: 'add_new_customer', via: ['get', 'post']
       get   '/:id', action: 'new_customer', as: 'new_customer'
@@ -224,6 +225,7 @@ TelasiGe::Application.routes.draw do
     end
     scope 'jobs', controller: 'jobs' do
       get '/status/:id', action: 'status'
+      get '/download/:id', action: 'download'
     end
   end
 

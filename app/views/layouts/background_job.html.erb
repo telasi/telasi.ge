@@ -1,8 +1,30 @@
 <script type="text/javascript">
+var MAX_COUNT = 10;
+var INTERVAL = 2000;
 var JOBID = '<%= @job.id %>';
+var RETURN_URL = '<%= @return_url %>';
+var curr_count = 0;
 $(function() {
-  console.log(JOBID);
+  checkJob();
 });
+
+var checkJob = function() {
+  curr_count += 1;
+  if (curr_count <= MAX_COUNT) {
+    console.log('try ' + curr_count);
+    $.get('/api/jobs/status/' + JOBID, function(data) {
+      if(typeof data.completed !== 'undefined') {
+        if (data.completed) {
+          // TODO: do something
+          console.log('completed', data);
+          window.location = '/api/jobs/download/' + JOBID;
+        } else {
+          setTimeout(checkJob, INTERVAL);
+        }
+      }
+    });
+  }
+};
 </script>
 <h3 class="page-header">
   <i class="fa fa-clock-o"></i>
@@ -14,3 +36,13 @@ $(function() {
 <p style="text-align: center; font-size: 1.5em; color: #aaa; padding: 32px;">
   <img src="/images/wait.gif" /> მიმდინარეობს გენერაცია...
 </p>
+
+<% if @return_url %>
+<hr/>
+<div class="btn-toolbar">
+  <a class="btn btn-danger" href="<%= @return_url %>">
+    <i class="fa fa-times-circle"></i>
+    ბეჭდვის გაუქმება
+  </a>
+</div>
+<% end %>

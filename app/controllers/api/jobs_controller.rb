@@ -4,4 +4,9 @@ class Api::JobsController < Api::ApiController
     job = Sys::BackgroundJob.find(params[:id])
     render json: { completed: job.completed? }
   end
+
+  def download
+    job = Sys::BackgroundJob.find(params[:id])
+    send_file job.path #, type: job.type
+  end
 end
