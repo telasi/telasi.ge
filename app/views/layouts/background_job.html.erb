@@ -11,38 +11,63 @@ $(function() {
 var checkJob = function() {
   curr_count += 1;
   if (curr_count <= MAX_COUNT) {
-    console.log('try ' + curr_count);
     $.get('/api/jobs/status/' + JOBID, function(data) {
-      if(typeof data.completed !== 'undefined') {
-        if (data.completed) {
-          // TODO: do something
-          console.log('completed', data);
-          window.location = '/api/jobs/download/' + JOBID;
-        } else {
-          setTimeout(checkJob, INTERVAL);
-        }
+      if (data.failed) {
+        onFailedJob();
+      } else if (data.success) {
+        onSuccessfulJob();
+      } else {
+        setTimeout(checkJob, INTERVAL);
       }
     });
   }
 };
-</script>
-<h3 class="page-header">
-  <i class="fa fa-clock-o"></i>
-  მიმდინარეობს თქვენი ფაილის მომზადება
-</h3>
-<div class="alert alert-warning">
-  თქვენი ფაილის მომზადებას შესაძლოა დასჭირდეს რამდენიმე წუთი.
-</div>
-<p style="text-align: center; font-size: 1.5em; color: #aaa; padding: 32px;">
-  <img src="/images/wait.gif" /> მიმდინარეობს გენერაცია...
-</p>
 
-<% if @return_url %>
-<hr/>
-<div class="btn-toolbar">
-  <a class="btn btn-danger" href="<%= @return_url %>">
-    <i class="fa fa-times-circle"></i>
-    ბეჭდვის გაუქმება
-  </a>
+var onSuccessfulJob = function() {
+  downloadURL('/api/jobs/download/' + JOBID);
+  $('#wait').hide();
+  //window.location = '<%= @return_url %>';
+};
+
+var onFailedJob = function() {
+  $('#wait').hide();
+  $('#failure').show();
+};
+
+var downloadURL = function downloadURL(url) {
+    var hiddenIFrameID = 'hiddenDownloader',
+        iframe = document.getElementById(hiddenIFrameID);
+    if (iframe === null) {
+        iframe = document.createElement('iframe');
+        iframe.id = hiddenIFrameID;
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+    }
+    iframe.src = url;
+};
+</script>
+<div id="wait">
+  <p style="text-align: center; font-size: 1.5em; color: #aaa; padding: 128px 0;">
+    <img src="/images/wait.gif" /> გთხოვთ დაელოდეთ: მიმდინარეობს გენერაცია...
+  </p>
+  <hr />
+  <div class="btn-toolbar text-center">
+    <a href="<%= @return_url %>" class="btn btn-default" data-no-turbolink>
+      <i class="fa fa-times-circle"></i>
+      გაუქმება
+    </a>
+  </div>
 </div>
-<% end %>
+<div id="failure" style="display:none;">
+  <div class="alert alert-danger">ფაილის გენერაცია ვერ მოხერხდა.</div>
+  <div class="btn-toolbar text-center">
+    <a href="<%= request.url %>" class="btn btn-success">
+      <i class="fa fa-refresh"></i>
+      სცადეთ ხელახლა
+    </a>
+    <a href="<%= @return_url %>" class="btn btn-default" data-no-turbolink>
+      <i class="fa fa-times-circle"></i>
+      გაუქმება
+    </a>
+  </div>
+</div>

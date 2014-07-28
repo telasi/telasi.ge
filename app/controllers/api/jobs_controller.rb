@@ -2,7 +2,7 @@
 class Api::JobsController < Api::ApiController
   def status
     job = Sys::BackgroundJob.find(params[:id])
-    render json: { completed: job.completed? }
+    render json: { success: job.success, failed: job.failed }
   end
 
   def download
