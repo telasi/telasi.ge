@@ -46,33 +46,15 @@ gem 'rs.ge', git: 'https://github.com/dimakura/rs.ge'
 gem 'ka'
 gem 'magti'
 
-# pdf
 gem 'prawn', '1.0.0'
 gem 'prawn_rails'
-# excel
 gem 'axlsx_rails'
+gem 'sidekiq'
+gem 'sinatra', '>= 1.3.0', :require => nil
 
 group :test do
   gem 'ruby-prof'
   gem 'test-unit'
 end
 
-# social media
-# gem 'omniauth-facebook'
-
-# group :doc do
-#   # bundle exec rake doc:rails generates the API under doc/api.
-#   gem 'sdoc', require: false
-# end
-
-# Use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
-
-# Use unicorn as the app server
-# gem 'unicorn'
-
-# Use Capistrano for deployment
-# gem 'capistrano', group: :development
-
-# Use debugger
 gem 'debugger', group: [:development, :test]
