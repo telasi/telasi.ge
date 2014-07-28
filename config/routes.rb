@@ -1,5 +1,9 @@
 # -*- encoding : utf-8 -*-
+require 'sidekiq/web'
+
 TelasiGe::Application.routes.draw do
+  mount Sidekiq::Web => '/sidekiq'
+
   scope controller: 'dashboard' do
     match '/login', action: 'login', as: 'login', via: ['get', 'post']
     get '/logout', action: 'logout', as: 'logout'
