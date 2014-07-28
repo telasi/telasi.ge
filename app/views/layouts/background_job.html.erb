@@ -24,9 +24,10 @@ var checkJob = function() {
 };
 
 var onSuccessfulJob = function() {
-  downloadURL('/api/jobs/download/' + JOBID);
-  $('#wait').hide();
-  //window.location = '<%= @return_url %>';
+  downloadURL('/api/jobs/download/' + JOBID, function() {
+    $('#wait').hide();
+    window.location = '<%= @return_url %>';
+  });
 };
 
 var onFailedJob = function() {
@@ -34,13 +35,14 @@ var onFailedJob = function() {
   $('#failure').show();
 };
 
-var downloadURL = function downloadURL(url) {
+var downloadURL = function downloadURL(url, callback) {
     var hiddenIFrameID = 'hiddenDownloader',
         iframe = document.getElementById(hiddenIFrameID);
     if (iframe === null) {
         iframe = document.createElement('iframe');
         iframe.id = hiddenIFrameID;
         iframe.style.display = 'none';
+        iframe.onload = callback;
         document.body.appendChild(iframe);
     }
     iframe.src = url;
