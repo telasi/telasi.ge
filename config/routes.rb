@@ -222,6 +222,9 @@ TelasiGe::Application.routes.draw do
     scope '/customers', controller: 'customers' do
       get '/tariffs', action: 'tariffs'
     end
+    scope 'jobs', controller: 'jobs' do
+      get '/status/:id', action: 'status'
+    end
   end
 
   namespace 'pay' do
