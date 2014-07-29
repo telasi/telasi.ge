@@ -28,4 +28,29 @@
     end
   end
 end %>
-<%= change_power_table @applications %>
+
+<%
+  idx = request.url.index('?')
+  if idx
+    xlsx_url = "#{request.url[0..idx-1]}.xlsx?#{request.url[idx+1..-1]}"
+  else
+    xlsx_url = "#{request.url}.xlsx"
+  end
+%>
+
+<%= change_power_table @applications, xlsx: xlsx_url %>
+
+<script type="text/javascript">
+$(function() {
+  var wait_text = 'გთხოვთ დაელოდოთ...';
+  $('a[href*=".xlsx"]').click(function(event) {
+    var $link = $(this);
+    var $span = $($link.children('span')[0]);
+    if ($span.html() === wait_text) {
+      event.preventDefault();
+    } else {
+      $span.html(wait_text);
+    }
+  });
+});
+</script>

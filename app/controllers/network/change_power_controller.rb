@@ -23,7 +23,11 @@ class Network::ChangePowerController < ApplicationController
       rel = rel.where(proeqti: @search[:proeqti].mongonize) if @search[:proeqti].present?
       rel = rel.where(oqmi: @search[:oqmi].mongonize) if @search[:oqmi].present?
     end
-    @applications = rel.desc(:_id).paginate(page: params[:page_change], per_page: 10)
+    
+    respond_to do |format|
+      format.html { @applications = rel.desc(:_id).paginate(page: params[:page_change], per_page: 10) }
+      format.xlsx { @applications = rel.desc(:_id).paginate(per_page: 3000) }
+    end
   end
 
   def new
