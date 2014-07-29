@@ -9,7 +9,7 @@ module NavHelper
           el('li', attrs: { class: 'active' }, text: lbl)
         else
           el('li', children: [
-            el('a', attrs: { href: url}, text: lbl)
+            el('a', attrs: { href: url, 'data-no-turbolink' => true }, text: lbl)
           ])
         end
       }).to_s
