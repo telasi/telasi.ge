@@ -48,15 +48,15 @@ class Network::NewCustomerController < ApplicationController
     respond_to do |format|
       format.html { @applications = rel.desc(:_id).paginate(page: params[:page_new], per_page: 10) }
       format.xlsx do
-        #job = Sys::BackgroundJob.perform(user:current_user, name: NETWORK_NEWCUSTOMER_TO_XLSX, data: params[:search].to_s)
-        #redirect_to network_printing_new_customer_url(jobid: job.id, return_url: network_new_customers_url(search: params[:search]))
-        @applications = rel.desc(:_id).paginate(per_page: 1000)
+        # job = Sys::BackgroundJob.perform(user:current_user, name: NETWORK_NEWCUSTOMER_TO_XLSX, data: params[:search].to_s)
+        # redirect_to network_printing_new_customer_url(jobid: job.id, return_url: network_new_customers_url(search: params[:search]))
+        @applications = rel.desc(:_id).paginate(per_page: 3000)
       end
     end
   end
 
   def printing
-    @title = 'ბეჭდვა...'
+    @title = 'ბეჭდვა ...'
     @job = Sys::BackgroundJob.find(params[:jobid])
     @return_url = params[:return_url]
     render action: '../../layouts/background_job' #, formats: ['html'], content_type: 'text/html'

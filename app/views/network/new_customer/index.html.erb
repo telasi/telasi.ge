@@ -47,3 +47,17 @@ end %>
   end
 %>
 <%= new_customer_table @applications, xlsx: xlsx_url %>
+<script type="text/javascript">
+$(function() {
+  var wait_text = 'გთხოვთ დაელოდოთ...';
+  $('a[href*=".xlsx"]').click(function(event) {
+    var $link = $(this);
+    var $span = $($link.children('span')[0]);
+    if ($span.html() === wait_text) {
+      event.preventDefault();
+    } else {
+      $span.html(wait_text);
+    }
+  });
+});
+</script>
