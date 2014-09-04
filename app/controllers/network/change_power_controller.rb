@@ -170,7 +170,8 @@ class Network::ChangePowerController < ApplicationController
   def send_factura
     application = Network::ChangePowerApplication.find(params[:id])
     raise 'ფაქტურის გაგზავნა დაუშვებელია' unless application.can_send_factura?
-    factura = RS::Factura.new(date: Time.now, seller_id: RS::TELASI_PAYER_ID)
+    # factura = RS::Factura.new(date: Time.now, seller_id: RS::TELASI_PAYER_ID)
+    factura = RS::Factura.new(date: application.end_date, seller_id: RS::TELASI_PAYER_ID)
     amount = application.amount
     raise 'თანხა უნდა იყოს > 0' unless amount > 0
     raise 'ფაქტურის გაგზავნა ვერ ხერხდება!' unless RS.save_factura(factura, RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, buyer_tin: application.rs_tin))
