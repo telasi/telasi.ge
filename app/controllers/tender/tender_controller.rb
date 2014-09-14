@@ -6,6 +6,7 @@ class Tender::TenderController < ApplicationController
   def show
   	@node = Site::Node.where(tnid: params[:nid], language: I18n.locale).first
     @tenderuser = Tender::Tenderuser.where(user: current_user).first
+    @tender = Tender::Tender.where(nid: @node.tnid).first if @node
   end
 
   def report
@@ -106,7 +107,15 @@ class Tender::TenderController < ApplicationController
   		@download = Tender::Download.new(tenderuser: @tenderuser, nid: @node.tnid, datetime: Time.now)
   		@tender = Tender::Tender.where(nid: @node.tnid).first if @node
   		if @tender and @tender.files
-	  	    send_file "#{Dir.getwd}/public/#{@tender.files.last.file_url}"
+          if params[:file_id]
+            @id = BSON::ObjectId.from_string(params[:file_id])
+            @f = @tender.files.where( _id: @id ).first
+            if @f
+             send_file "#{Dir.getwd}/public/#{@f.file_url}"
+            end
+          else
+	  	     send_file "#{Dir.getwd}/public/#{@tender.files.last.file_url}"
+          end
 	  	    @download.save
 	  	end
     end

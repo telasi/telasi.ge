@@ -20,6 +20,7 @@ ka:
     phones: საკონტაქტო ტელეფონები
     work_mail: სამსახურეობრივი ელ. ფოსტა
     download_file: დოკუმენტაციის გადმოწერა
+    file: ფაილი
     download_count: გადმოწერების რაოდენობა
     registered_as: დარეგისტრირებული როგორ
     empty: აუცილებელი ველი
@@ -31,6 +32,8 @@ ka:
       report: ანგარიში
       tenders: ტენდერების სია ადმინისტრირებისთვის
       download: დოკუმენტაციის გადმოწერა
+      protocol: ოქმები
+      protocoladd: ოქმების დამატება
 ru:
   tender:
     tender: Тендер
@@ -53,6 +56,7 @@ ru:
     phones: Контактные телефоны
     work_mail: Рабочая эл. почта
     download_file: Скачать документ
+    file: Файл
     download_count: Количество скачиваний
     registered_as: Зарегистрированы как
     empty: Обязательное поле
@@ -64,6 +68,8 @@ ru:
       report: Отчет
       tenders: Список тендеров для администрирования
       download: Документация
+      protocol: Протоколы
+      protocoladd: Добавление протоколов
 en:
   tender:
     tender: Procurement
@@ -86,6 +92,7 @@ en:
     phones: Phones
     work_mail: Email
     download_file: Download document
+    file: File
     download_count: Download count
     registered_as: Registered as
     empty: Required
@@ -97,3 +104,5 @@ en:
       report: Report
       tenders: Tender list for upload
       download: Documentation download
+      protocol: Protocol
+      protocoladd: Add protocol

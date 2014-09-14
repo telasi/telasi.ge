@@ -9,13 +9,21 @@
   </div>
 </div>
 <div align='center'>
-<%= 
-   if @node.file_uploaded?
-    form_tag(tender_download_file_url(nid: @node.nid), method: 'post') do 
-      submit_tag t('tender.download_file'), class: ['btn', 'btn-primary' ]
-    end
-   end 
-%>
+<% if @node.file_uploaded? %>
+ <% if @tender.files.count > 1 %>
+  <h3><%= t('tender.download_file') %></h3>
+  <%= form_tag(tender_download_file_url(nid: @node.nid), method: 'post', class: ['btn-group-vertical']) do %>
+      <% @tender.files.each do |f| 
+        %>
+        <%= button_tag "#{t('tender.file')} - #{f.file.filename}", name: 'file_id', class: ['btn', 'btn-primary'], value: f._id %>
+       <%  end
+     end  
+    else %>
+    <%= form_tag(tender_download_file_url(nid: @node.nid), method: 'post') do 
+         submit_tag t('tender.download_file'), class: ['btn', 'btn-primary' ]
+       end %>
+  <%  end %>
+<%  end %>
 </div>
 
 <div class="panel-body">
