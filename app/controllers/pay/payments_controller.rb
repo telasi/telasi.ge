@@ -150,7 +150,7 @@ class Pay::PaymentsController < ApplicationController
         check_callback = @payment.prepare_for_step(Payge::STEP_CALLBACK)
         # check on callback CRC
         if check_callback != @payment.check_callback
-          @payment.resultcode = RESULTCODE_PROBLEM 
+          @payment.resultcode = RESULTCODE_PARAMETER
           @payment.instatus = Pay::Payment::INSTATUS_CAL_CHECK_ERROR
           @payment.gstatus = Pay::Payment::GSTATUS_ERROR
         else
