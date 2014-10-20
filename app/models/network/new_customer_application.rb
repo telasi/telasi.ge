@@ -184,7 +184,7 @@ class Network::NewCustomerApplication
 
   # პირველი ეტაპის ჯარიმა.
   def penalty_first_stage
-    if self.send_date and self.start_date
+    if self.status != STATUS_CANCELED and self.send_date and self.start_date
       if real_days > days then self.amount / 2
       else 0 end
     else 0 end
@@ -192,7 +192,7 @@ class Network::NewCustomerApplication
 
   # მეორე ეტაპის ჯარიმა.
   def penalty_second_stage
-    if self.send_date and self.start_date
+    if self.status != STATUS_CANCELED and self.send_date and self.start_date
       if real_days > 2 * days then self.amount / 2
       else 0 end
     else 0 end
@@ -200,7 +200,7 @@ class Network::NewCustomerApplication
 
   # მესამე ეტაპის ჯარიმა (კომპენსაცია).
   def penalty_third_stage
-    if self.send_date and self.start_date
+    if self.status != STATUS_CANCELED and self.send_date and self.start_date
       r_days = self.real_days
       if r_days > 2*days and days>0 then
         ((r_days-2*days-1).to_i/days)*self.amount/2
