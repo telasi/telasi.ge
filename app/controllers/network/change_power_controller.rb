@@ -22,8 +22,11 @@ class Network::ChangePowerController < ApplicationController
       rel = rel.where(:power.lte => @search[:power2]) if @search[:power2].present?
       rel = rel.where(proeqti: @search[:proeqti].mongonize) if @search[:proeqti].present?
       rel = rel.where(oqmi: @search[:oqmi].mongonize) if @search[:oqmi].present?
+      if @search[:accnumb].present?
+        cust = Billing::Customer.where(accnumb: @search[:accnumb].strip.to_lat).first
+        rel = rel.where(customer_id: cust.custkey) if cust.present?
+      end
     end
-    
     respond_to do |format|
       format.html { @applications = rel.desc(:_id).paginate(page: params[:page_change], per_page: 10) }
       format.xlsx { @applications = rel.desc(:_id).paginate(per_page: 3000) }

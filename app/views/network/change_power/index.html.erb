@@ -2,6 +2,7 @@
   f.tab do |f|
     f.number_field 'number', label: t('models.network_change_power_application.number')
     f.combo_field 'status', label: t('models.network_change_power_application.status'), collection: Hash[ * (Network::NewCustomerApplication::STATUSES.map { |x| [Network::NewCustomerApplication.status_name(x), x] }).flatten ], empty: '--ყველა სტატუსი--'
+    f.text_field 'accnumb', label: 'აბონენტის ნომერი'
     f.text_field 'rs_name', label: t('models.network_change_power_application.rs_name')
     f.text_field 'rs_tin', label: t('models.network_change_power_application.rs_tin')
     f.combo_field 'stage', label: t('models.network_request_item.stage'), collection: Hash[*(Network::Stage.asc(:numb).map{|x| [x.name, x.id]}.flatten)], empty: '--ყველა ეტაპი--'
