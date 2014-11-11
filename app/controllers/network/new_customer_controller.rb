@@ -1,5 +1,6 @@
 # -*- encoding : utf-8 -*-
 require 'rs'
+require 'rest_client'
 
 class Network::NewCustomerController < ApplicationController
   include Sys::BackgroundJobConstants
@@ -222,6 +223,39 @@ class Network::NewCustomerController < ApplicationController
   end
 
   def print; @application = Network::NewCustomerApplication.find(params[:id]) end
+
+  def sign
+
+# raise Network::SDWEB_URL
+
+    # @application = Network::NewCustomerApplication.find(params[:id])
+    # data = render_to_string '/network/new_customer/print', formats: [ 'pdf' ]
+    # t = Tempfile.new(@application.id.to_s, encoding: 'ascii-8bit')
+    # t << data
+    # t.close
+
+begin
+
+    RestClient.post(Network::SDWEB_URL, {
+      docdata: File.new('/home/dimitri/Desktop/5462033f74656c5b3f160000.pdf'),
+      cmd: Network::SDWEB_CMD,
+      resulturl: 'http://google.com/'
+    })
+
+rescue Exception => ex
+
+  render text: " #{ex.class}: #{ex.public_methods}"
+
+end
+
+    # upload: {
+    #   docdata: file
+    # },
+    # cmd: Network::SDWEB_CMD,
+    # resulturl: 'http://google.com'
+    # })
+    # render text: 'ok'
+  end
 
   def send_factura
     application = Network::NewCustomerApplication.find(params[:id])
