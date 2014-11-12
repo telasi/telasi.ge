@@ -225,49 +225,33 @@ class Network::NewCustomerController < ApplicationController
   def print; @application = Network::NewCustomerApplication.find(params[:id]) end
 
   def sign
-    application = Network::NewCustomerApplication.find(params[:id])
+    @application = Network::NewCustomerApplication.find(params[:id])
     if params[:sdweb_result].present?
       if params[:sdweb_result] == 'success'
-        application.signed = true
-        application.save
+        @application.signed = true
+        @application.save
       end
       redirect_to network_new_customer_url  , notice: "ხელმოწერის შედეგი: #{params[:sdweb_result]}"
     else
       begin
         text = render_to_string 'print', formats: ['pdf']
-        file = Tempfile.new(application.id.to_s, encoding: 'ascii-8bit')
+        file = Tempfile.new(@application.id.to_s, encoding: 'ascii-8bit')
         file.write text
         file.close
         RestClient.post(Network::SDWEB_UPLOAD_URL, {
           docdata: File.new(file.path),
           cmd: Network::SDWEB_CMD,
-          resulturl: network_new_customer_sign_url(id: application.id),
-          docid: application.id.to_s,
+          resulturl: network_new_customer_sign_url(id: @application.id),
+          docid: @application.id.to_s,
           dmsid: Network::SDWEB_DMSID
         }, {
           'Content-Type' => 'multipart/form-data'
         }) do |response, request, result, &block|
-          # redirect_to response.headers[:location]
-          redirect_to result['Location']
+          redirect_to response.headers[:location]
         end
       ensure
         file.unlink if file
       end
-    end
-  end
-
-  def load_signed
-    application = Network::NewCustomerApplication.find(params[:id])
-    RestClient.post(Network::SDWEB_LOAD_URL, {
-      # resulturl: network_new_customer_url(id: application.id),
-      docid: application.id.to_s,
-      dmsid: Network::SDWEB_DMSID,
-      # opendoc: 'open document'
-    }, {
-      'Content-Type' => 'multipart/form-data'
-    }) do |response, request, result, &block|
-      # raise "#{result.code}: #{result['Location']} #{result['Server']}"
-      redirect_to result['Location']
     end
   end
 

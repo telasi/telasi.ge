@@ -61,6 +61,8 @@ class Network::ChangePowerApplication
   field :factura_seria, type: String
   field :factura_number, type: Integer
   field :need_factura, type: Mongoid::Boolean, default: true
+  # sign field
+  field :signed, type: Mongoid::Boolean, default: false
   # field :show_tin_on_print, type: Mongoid::Boolean, default: true
   # relations
   has_many :messages, class_name: 'Sys::SmsMessage', as: 'messageable'

@@ -1,4 +1,6 @@
 # -*- encoding : utf-8 -*-
+require 'rest_client'
+
 class Network::ChangePowerController < ApplicationController
   def index
     @title = 'სიმძლავრის შეცვლა'
@@ -50,6 +52,40 @@ class Network::ChangePowerController < ApplicationController
   def show
     @application = Network::ChangePowerApplication.find(params[:id])
     @title = I18n.t('models.network_new_customer_application.actions.edit.title')
+  end
+
+  def sign
+    @application = Network::ChangePowerApplication.find(params[:id])
+    if params[:sdweb_result].present?
+      if params[:sdweb_result] == 'success'
+        @application.signed = true
+        @application.save
+      end
+      redirect_to network_change_power_url  , notice: "ხელმოწერის შედეგი: #{params[:sdweb_result]}"
+    else
+      begin
+        text = render_to_string 'show', formats: ['pdf']
+        file = Tempfile.new(@application.id.to_s, encoding: 'ascii-8bit')
+        file.write text
+        file.close
+        RestClient.post(Network::SDWEB_UPLOAD_URL, {
+          docdata: File.new(file.path),
+          cmd: Network::SDWEB_CMD,
+          resulturl: network_new_customer_sign_url(id: @application.id),
+          docid: @application.id.to_s,
+          dmsid: Network::SDWEB_DMSID
+        }, {
+          'Content-Type' => 'multipart/form-data'
+        }) do |response, request, result, &block|
+
+raise "resp: #{response}"
+
+          redirect_to response.headers[:location]
+        end
+      ensure
+        file.unlink if file
+      end
+    end
   end
 
   def edit

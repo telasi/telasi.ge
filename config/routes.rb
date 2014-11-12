@@ -175,7 +175,6 @@ TelasiGe::Application.routes.draw do
       get '/paybill/:id', action: 'paybill', as: 'new_customer_paybill'
       get '/print/:id', action: 'print', as: 'new_customer_print'
       get '/sign/:id', action: 'sign', as: 'new_customer_sign'
-      get '/loadsigned/:id', action: 'load_signed', as: 'new_customer_loadsigned'
       post '/send_factura/:id', action: 'send_factura', as: 'new_customer_send_factura'
       # control items
       match '/new_control_item/:id', action: 'new_control_item', as: 'new_customer_new_control_item', via: ['get','post']
@@ -188,6 +187,7 @@ TelasiGe::Application.routes.draw do
       match '/new', action: 'new', as: 'add_change_power', via: ['get', 'post']
       match '/edit/:id', action: 'edit', as: 'edit_change_power', via: ['get', 'post']
       get   '/:id', action: 'show', as: 'change_power'
+      get '/sign/:id', action: 'sign', as: 'change_power_sign'
       delete '/delete/:id', action: 'delete', as: 'delete_change_power'
       # status operations
       match '/change_status/:id', action: 'change_status', as: 'change_change_power_status', via: ['get', 'post']
