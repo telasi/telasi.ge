@@ -78,6 +78,9 @@ class Network::NewCustomerApplication
   field :doc_payment,   type: Mongoid::Boolean, default: false
   field :confirm_correctness,  type: Mongoid::Boolean, default: false
 
+  # digital signature
+  field :signed, type: Mongoid::Boolean, default: false
+
   embeds_many :items, class_name: 'Network::NewCustomerItem', inverse_of: :application
   has_many :files, class_name: 'Sys::File', as: 'mountable'
   has_many :messages, class_name: 'Sys::SmsMessage', as: 'messageable'

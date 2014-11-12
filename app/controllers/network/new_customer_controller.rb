@@ -227,13 +227,20 @@ class Network::NewCustomerController < ApplicationController
   def sign
     @application = Network::NewCustomerApplication.find(params[:id])
     if params[:sdweb_result].present?
-      render text: "#{params}"
+      if params[:sdweb_result] == 'success'
+        @application.signed = true
+        @application.save
+      end
+      redirect_to network_new_customer_url  , notice: "ხელმოწერის შედეგი: #{params[:sdweb_result]}"
     else
-      RestClient.post(Network::SDWEB_URL, {
+      RestClient.post(Network::SDWEB_UPLOAD_URL, {
         docdata: File.new('/home/dimitri/Desktop/5462033f74656c5b3f160000.pdf'),
         cmd: Network::SDWEB_CMD,
         resulturl: network_new_customer_sign_url(id: @application.id),
-        docid: @application.id.to_s
+        docid: @application.id.to_s,
+        dmsid: 'de.softpro.sdweb.plugins.impl.FileDms'
+      }, {
+        'Content-Type' => 'multipart/form-data'
       }) do |response, request, result, &block|
         redirect_to response.headers[:location]
       end
