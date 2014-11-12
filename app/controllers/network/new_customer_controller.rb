@@ -233,16 +233,24 @@ class Network::NewCustomerController < ApplicationController
       end
       redirect_to network_new_customer_url  , notice: "ხელმოწერის შედეგი: #{params[:sdweb_result]}"
     else
-      RestClient.post(Network::SDWEB_UPLOAD_URL, {
-        docdata: File.new('/home/dimitri/Desktop/5462033f74656c5b3f160000.pdf'),
-        cmd: Network::SDWEB_CMD,
-        resulturl: network_new_customer_sign_url(id: @application.id),
-        docid: @application.id.to_s,
-        dmsid: 'de.softpro.sdweb.plugins.impl.FileDms'
-      }, {
-        'Content-Type' => 'multipart/form-data'
-      }) do |response, request, result, &block|
-        redirect_to response.headers[:location]
+      begin
+        text = render_to_string 'print', formats: ['pdf']
+        file = Tempfile.new(@application.id.to_s, encoding: 'ascii-8bit')
+        file.write text
+        file.close
+        RestClient.post(Network::SDWEB_UPLOAD_URL, {
+          docdata: File.new(file.path),
+          cmd: Network::SDWEB_CMD,
+          resulturl: network_new_customer_sign_url(id: @application.id),
+          docid: @application.id.to_s,
+          dmsid: 'de.softpro.sdweb.plugins.impl.FileDms'
+        }, {
+          'Content-Type' => 'multipart/form-data'
+        }) do |response, request, result, &block|
+          redirect_to response.headers[:location]
+        end
+      ensure
+        file.unlink if file
       end
     end
   end
