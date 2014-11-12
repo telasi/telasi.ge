@@ -70,18 +70,15 @@ class Network::ChangePowerController < ApplicationController
         file.close
         RestClient.post(Network::SDWEB_UPLOAD_URL, {
           docdata: File.new(file.path),
-          cmd: Network::SDWEB_CMD,
-          resulturl: network_new_customer_sign_url(id: @application.id),
+          cmd: Network::SDWEB_CMD_CHNGPOWAPP,
+          resulturl: network_change_power_sign_url(id: @application.id),
           docid: @application.id.to_s,
           dmsid: Network::SDWEB_DMSID
         }, {
           'Content-Type' => 'multipart/form-data'
         }) do |response, request, result, &block|
-
-raise "resp: #{response}"
-
           redirect_to response.headers[:location]
-        end
+       end
       ensure
         file.unlink if file
       end

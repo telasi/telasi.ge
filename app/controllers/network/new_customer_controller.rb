@@ -240,7 +240,7 @@ class Network::NewCustomerController < ApplicationController
         file.close
         RestClient.post(Network::SDWEB_UPLOAD_URL, {
           docdata: File.new(file.path),
-          cmd: Network::SDWEB_CMD,
+          cmd: Network::SDWEB_CMD_NEWCUSTAPP,
           resulturl: network_new_customer_sign_url(id: @application.id),
           docid: @application.id.to_s,
           dmsid: Network::SDWEB_DMSID
