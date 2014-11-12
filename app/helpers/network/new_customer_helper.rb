@@ -124,10 +124,6 @@ module Network::NewCustomerHelper
 
   public
 
-  def new_customer_signed_document(application)
-    "#{Network::SDWEB_DOWNLOAD_URL}/#{application.id.to_s}"
-  end
-
   def new_customer_view(application, opts = {})
     show_actions = (not opts[:without_actions])
     view_for application, title: "#{opts[:title]} &mdash; №#{application.number}".html_safe, collapsible: true, icon: '/icons/user.png', selected_tab: selected_new_customer_tab do |f|
@@ -135,9 +131,7 @@ module Network::NewCustomerHelper
       # 1. general
       f.tab title: 'ძირითადი', icon: '/icons/user.png' do |t|
         t.action network_new_customer_print_url(id: application.id, format: 'pdf'), label: 'განაცხადი', icon: '/icons/printer.png' if show_actions
-        if application.signed
-          t.action new_customer_signed_document(application), label: 'განაცხადი (ხელმოწერილი)', icon: '/icons/printer.png'
-        else
+        unless application.signed
           t.action network_new_customer_sign_url(id: application.id), label: 'ხელმოწერა', icon: '/icons/edit-signiture.png'
         end
         t.action network_new_customer_paybill_url(id: application.id), label: 'საგ. დავალება', icon: '/icons/clipboard-task.png' if show_actions
