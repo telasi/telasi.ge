@@ -1,0 +1,13 @@
+<% if application.signed %>
+  <div style="padding-bottom: 8px;">
+    <form method="POST" action="<%= Network::SDWEB_LOAD_URL %>">
+      <input name="docid" type="hidden" value="<%= application.id %>" />
+      <input name="dmsid" type="hidden" value="<%= Network::SDWEB_DMSID %>" />
+      <input name="resulturl" type="hidden" value="<%= request.url %>" />
+      <button class="btn btn-default">
+        <img src="/icons/edit-signiture.png"></img>
+        ხელმოწერილი დოკუმენტი
+      </button>
+    </form>
+  </div>
+<% end %>
