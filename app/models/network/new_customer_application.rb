@@ -189,9 +189,9 @@ class Network::NewCustomerApplication
     d1 = self.send_date
     d2 = self.end_date || Date.today
     if self.use_business_days
-      d1.business_days_until(d2) + 1
+      d1.business_days_until(d2) + 1 if d1
     else
-      if d1 then d2 - d1 + 1 end
+      d2 - d1 + 1 if d1
     end
   end
 
