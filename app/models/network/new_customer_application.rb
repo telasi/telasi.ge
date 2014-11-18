@@ -400,7 +400,7 @@ class Network::NewCustomerApplication
         self.days = tariff_days
         if self.send_date
           if self.use_business_days
-            self.plan_end_date = self.days.business_days.after( self.send_date )
+            self.plan_end_date = self.days.business_days.after( self.send_date ) - 1
           else
             self.plan_end_date = self.send_date + self.days - 1
           end
