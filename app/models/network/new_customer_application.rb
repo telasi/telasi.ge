@@ -58,7 +58,6 @@ class Network::NewCustomerApplication
   # plan_end_date / end_date, არის თარიღი (გეგმიური / რეალური), როდესაც დასრულდება
   # ამ განცხადებით გათვალიწინებული ყველა სამუშაო
   field :plan_end_date, type: Date
-  #field :plan_end_date_changed_manually, type: Boolean
   field :end_date, type: Date
   # cancelation_date არის გაუქმების თარიღი
   field :cancelation_date, type: Date
@@ -81,6 +80,9 @@ class Network::NewCustomerApplication
   # digital signature
   field :signed, type: Mongoid::Boolean, default: false
 
+  # since Nov,2014: use business days!
+  field :use_business_days, type: Mongoid::Boolean, default: false
+
   embeds_many :items, class_name: 'Network::NewCustomerItem', inverse_of: :application
   has_many :files, class_name: 'Sys::File', as: 'mountable'
   has_many :messages, class_name: 'Sys::SmsMessage', as: 'messageable'
@@ -99,7 +101,7 @@ class Network::NewCustomerApplication
   validates :power, numericality: { message: I18n.t('models.network_new_customer_item.errors.illegal_power') }
   validate :validate_rs_name, :validate_number, :validate_mobile
   before_save :status_manager, :calculate_total_cost, :upcase_number, :prepare_mobile
-  before_create :init_payment_id
+  before_create :init_payment_id, :set_user_business_days
 
   # Checking correctess of 
   def self.correct_number?(number); not not (/^(CNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number) end
@@ -183,12 +185,21 @@ class Network::NewCustomerApplication
     end
   end
 
-  def real_days; (self.end_date || Date.today) - self.send_date + 1 end
+  def real_days
+    d1 = self.send_date
+    d2 = self.end_date || Date.today
+    if self.use_business_days
+      d1.business_days_until(d2) + 1
+    else
+      d2 - d1 + 1
+    end
+  end
 
   # პირველი ეტაპის ჯარიმა.
   def penalty_first_stage
     if self.status != STATUS_CANCELED and self.send_date and self.start_date
-      if real_days > days then self.amount / 2
+      if real_days > days
+        self.amount / 2
       else 0 end
     else 0 end
   end
@@ -196,7 +207,8 @@ class Network::NewCustomerApplication
   # მეორე ეტაპის ჯარიმა.
   def penalty_second_stage
     if self.status != STATUS_CANCELED and self.send_date and self.start_date
-      if real_days > 2 * days then self.amount / 2
+      if real_days > 2 * days
+        self.amount / 2
       else 0 end
     else 0 end
   end
@@ -205,8 +217,8 @@ class Network::NewCustomerApplication
   def penalty_third_stage
     if self.status != STATUS_CANCELED and self.send_date and self.start_date
       r_days = self.real_days
-      if r_days > 2*days and days>0 then
-        ((r_days-2*days-1).to_i/days)*self.amount/2
+      if r_days > 2*days and days > 0
+        ( (r_days - 2*days - 1).to_i/days )*self.amount/2
       else 0 end
     else 0 end
   end
@@ -358,7 +370,12 @@ class Network::NewCustomerApplication
   end
 
   def factura_sent?; not self.factura_seria.blank? end
-  def can_send_factura?; self.need_factura and [STATUS_COMPLETE, STATUS_IN_BS].include?(self.status) and not self.factura_sent? and self.effective_amount > 0 end
+  def can_send_factura?
+    self.need_factura and
+    [ STATUS_COMPLETE, STATUS_IN_BS ].include?(self.status) and
+    not self.factura_sent? and
+    self.effective_amount > 0
+  end
 
   def update_last_request
     req = self.requests.last
@@ -381,8 +398,12 @@ class Network::NewCustomerApplication
         tariff_days = self.need_resolution ? tariff.days_to_complete : tariff.days_to_complete_without_resolution
         self.amount = tariff.price_gel
         self.days = tariff_days
-        if self.send_date #and not self.plan_end_date_changed_manually
-          self.plan_end_date = self.send_date + self.days - 1
+        if self.send_date
+          if self.use_business_days
+            self.plan_end_date = self.days.business_days.after( self.send_date )
+          else
+            self.plan_end_date = self.send_date + self.days - 1
+          end
         end
         self.amount = (self.amount / 1.18 * 100).round / 100.0 unless self.pays_non_zero_vat?
         self.penalty1 = self.penalty_first_stage
@@ -417,7 +438,13 @@ class Network::NewCustomerApplication
       case self.status
       when STATUS_DEFAULT   then self.send_date = nil
       when STATUS_SENT      then self.send_date  = Date.today
-      when STATUS_CONFIRMED then self.start_date = Date.today and self.plan_end_date = self.send_date + self.days
+      when STATUS_CONFIRMED then
+        self.start_date = Date.today
+        if self.use_business_days
+          self.plan_end_date = self.days.business_days.after( self.send_date )
+        else
+          self.plan_end_date = self.send_date + self.days
+        end
       when STATUS_COMPLETE  then self.end_date   = Date.today
       when STATUS_CANCELED  then
         self.cancelation_date = Date.today
@@ -497,6 +524,10 @@ class Network::NewCustomerApplication
   def init_payment_id
     last = Network::NewCustomerApplication.last
     self.payment_id = last.present? ? last.payment_id + 1 : 1
+  end
+
+  def set_user_business_days
+    self.use_business_days = true
   end
 
   def upcase_number
