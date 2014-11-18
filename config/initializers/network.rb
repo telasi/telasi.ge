@@ -4,6 +4,8 @@ module Network
 
   # sdweb
 
+  ACTIVATE_SDWEB = false
+
   SDWEB_DMSID = 'de.softpro.sdweb.plugins.impl.FileDms'
   SDWEB_CMD_NEWCUSTAPP  = 'name=sig1|page=3|type=formfield|subtype=signature|bottom=450|left=200|width=250|height=50'
   SDWEB_CMD_CHNGPOWAPP  = 'name=sig1|page=1|type=formfield|subtype=signature|bottom=85|left=250|width=300|height=50'

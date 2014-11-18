@@ -1,4 +1,4 @@
-<% if application.signed %>
+<% if Network::ACTIVATE_SDWEB and application.signed %>
   <div style="padding-bottom: 8px;">
     <form method="POST" action="<%= Network::SDWEB_LOAD_URL %>">
       <input name="docid" type="hidden" value="<%= application.id %>" />

@@ -131,7 +131,7 @@ module Network::NewCustomerHelper
       # 1. general
       f.tab title: 'ძირითადი', icon: '/icons/user.png' do |t|
         t.action network_new_customer_print_url(id: application.id, format: 'pdf'), label: 'განაცხადი', icon: '/icons/printer.png' if show_actions
-        unless application.signed
+        if Network::ACTIVATE_SDWEB and not application.signed
           t.action network_new_customer_sign_url(id: application.id), label: 'ხელმოწერა', icon: '/icons/edit-signiture.png'
         end
         t.action network_new_customer_paybill_url(id: application.id), label: 'საგ. დავალება', icon: '/icons/clipboard-task.png' if show_actions
