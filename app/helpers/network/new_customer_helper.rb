@@ -186,7 +186,11 @@ module Network::NewCustomerHelper
             c.text_field 'customer.commercial', empty: false, before: '&mdash;'.html_safe
           end
           c.number_field :amount, after: 'GEL'
-          c.number_field :days, max_digits: 0, after: 'დღე'
+
+          unitname = application.use_business_days ? 'სამუშაო დღე' : 'დღე'
+          c.number_field('days', label: 'გეგმიური ვადა', max_digits: 0, after: unitname)
+          c.number_field('real_days', label: 'რეალური ვადა', max_digits: 0, after: unitname)
+
           c.number_field :paid, after: 'GEL'
           c.number_field :remaining, after: 'GEL'
           c.number_field :penalty_first_stage, after: 'GEL'

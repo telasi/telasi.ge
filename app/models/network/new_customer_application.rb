@@ -191,7 +191,7 @@ class Network::NewCustomerApplication
     if self.use_business_days
       d1.business_days_until(d2) + 1
     else
-      d2 - d1 + 1
+      if d1 then d2 - d1 + 1 end
     end
   end
 
