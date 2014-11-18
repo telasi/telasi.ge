@@ -24,8 +24,8 @@ class Network::ChangePowerController < ApplicationController
       rel = rel.where(:power.lte => @search[:power2]) if @search[:power2].present?
       rel = rel.where(proeqti: @search[:proeqti].mongonize) if @search[:proeqti].present?
       rel = rel.where(oqmi: @search[:oqmi].mongonize) if @search[:oqmi].present?
-      rel = rel.where(factura_seria: search[:factura_seria]) if search[:factura_seria].present?
-      rel = rel.where(factura_number: search[:factura_number].to_i) if search[:factura_number].present?
+      rel = rel.where(factura_seria: @search[:factura_seria]) if @search[:factura_seria].present?
+      rel = rel.where(factura_number: @search[:factura_number].to_i) if @search[:factura_number].present?
       if @search[:accnumb].present?
         cust = Billing::Customer.where(accnumb: @search[:accnumb].strip.to_lat).first
         rel = rel.where(customer_id: cust.custkey) if cust.present?
