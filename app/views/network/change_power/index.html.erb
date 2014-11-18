@@ -26,6 +26,10 @@
       end
       f.text_field 'oqmi', label: t('models.network_change_power_application.oqmi')
       f.text_field 'proeqti', label: t('models.network_change_power_application.proeqti')
+      f.complex_field label: 'ა/ფ სერია და ნომერი' do |c|
+        c.text_field 'factura_seria', width: 30
+        c.text_field 'factura_number', width: 100
+      end
     end
   end
 end %>
