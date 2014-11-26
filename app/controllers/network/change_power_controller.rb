@@ -20,8 +20,8 @@ class Network::ChangePowerController < ApplicationController
       rel = rel.where(:end_date.gte => @search[:end_d1]) if @search[:end_d1].present?
       rel = rel.where(:end_date.lte => @search[:end_d2]) if @search[:end_d2].present?
       rel = rel.where(voltage: @search[:voltage]) if @search[:voltage].present?
-      rel = rel.where(:power.gte => @search[:power1]) if @search[:power1].present?
-      rel = rel.where(:power.lte => @search[:power2]) if @search[:power2].present?
+      rel = rel.where(:power.gte => @search[:power1]) if @search[:power1].present? and @search[:power1].to_f >= 0
+      rel = rel.where(:power.lte => @search[:power2]) if @search[:power2].present? and @search[:power2].to_f >= 0
       rel = rel.where(proeqti: @search[:proeqti].mongonize) if @search[:proeqti].present?
       rel = rel.where(oqmi: @search[:oqmi].mongonize) if @search[:oqmi].present?
       rel = rel.where(factura_seria: @search[:factura_seria]) if @search[:factura_seria].present?
