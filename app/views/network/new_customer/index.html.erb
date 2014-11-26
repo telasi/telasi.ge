@@ -9,6 +9,7 @@
     f.text_field 'work_address', label: t('models.network_new_customer_application.work_address')
     f.combo_field 'stage', label: t('models.network_request_item.stage'), collection: Hash[*(Network::Stage.asc(:numb).map{|x| [x.name, x.id]}.flatten)], empty: '--ყველა ეტაპი--'
     f.combo_field 'online', label: 'ონლაინი?', collection: { 'კი' => 'yes', 'არა' => 'no' }, empty: '--'
+    f.combo_field 'personal_use', label: 'საყოფაცხოვრებო', collection: { 'კი' => 'yes', 'არა' => 'no' }, empty: '--'
     f.combo_field 'voltage', label: 'ძაბვა', collection: voltage_collection, empty: '--'
     f.complex_field label: 'სიმძლავრე' do |c|
       c.number_field 'power1', width: 100
