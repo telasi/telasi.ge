@@ -43,7 +43,7 @@ class Pay::Payment
 
   validates :merchant, presence: { message: 'ჩაწერეთ მერჩანტი' }
   validates :ordercode, presence: { message: 'ჩაწერეთ შეკვეთის კოდი' }
-  validates :amount, numericality: { greater_than: 0, message: 'მნიშვნელობა უნდა იყოს 0-ზე მეტი' }
+  validates :amount, numericality: { greater_than: 0.5, message: 'მნიშვნელობა უნდა იყოს 0.5-ზე მეტი' }
   validate  :accnumb_validation
 
   validates :currency, presence: { message: 'currency not defined' }
