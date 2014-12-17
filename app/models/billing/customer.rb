@@ -80,6 +80,10 @@ class Billing::Customer < ActiveRecord::Base
     txt.to_ka
   end
 
+  def self.sms_candicates
+    Billng::Customer.where('fax IS NOT NULL and accnumb = ?', '1982705')
+  end
+
   def to_s
     if self.commercial.present?
       a = "#{self.custname.to_ka} (#{self.commercial.to_ka})"
