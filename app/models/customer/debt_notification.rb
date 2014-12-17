@@ -20,8 +20,6 @@ class Customer::DebtNotification
   end
 
   def self.send_notifications
-    # TODO: update existing Customer::DebtNotification to contain custkey
-
     # 1. first send registered customers
     Customer::Registration.sms_candidates.each do |reg|
       last_notification = Customer::DebtNotification.where(custkey:reg.custkey).desc(:_id).first

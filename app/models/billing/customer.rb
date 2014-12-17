@@ -80,8 +80,8 @@ class Billing::Customer < ActiveRecord::Base
     txt.to_ka
   end
 
-  def self.sms_candicates
-    Billng::Customer.where('fax IS NOT NULL and accnumb = ?', '1982705')
+  def self.sms_candidates
+    Billing::Customer.where('fax IS NOT NULL')
   end
 
   def to_s
