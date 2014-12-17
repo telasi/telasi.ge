@@ -20,11 +20,9 @@ class Customer::DebtNotification
   end
 
   def self.send_notifications
-
-    # TODO: update existing Customer::DebtNotification to contain custkey 
+    # TODO: update existing Customer::DebtNotification to contain custkey
 
     # 1. first send registered customers
-
     Customer::Registration.sms_candidates.each do |reg|
       last_notification = Customer::DebtNotification.where(custkey:reg.custkey).desc(:_id).first
       deadline = reg.customer.cut_deadline
@@ -32,8 +30,17 @@ class Customer::DebtNotification
     end
 
     # 2. send mainstream customers
-
-    # TODO:
-
+    Billing::Customer.sms_candidates.each do |cust|
+      mobile_number = cust.fax.strip
+      if mobile_number.length == 9
+        last_notification = Customer::DebtNotification.where(custkey: cust.custkey).desc(:_id).first
+        deadline = cust.cut_deadline
+        if Customer::DebtNotification.should_notify(deadline, last_notification)
+          notification = Customer::DebtNotification.create(for_deadline: deadline, custkey: cust.custkey)
+          msg = Sys::SmsMessage.create(message: cust.balance_sms, mobile: cust.fax, messageable: notification)
+          msg.send_sms!(lat: true)
+        end
+      end
+    end
   end
 end
