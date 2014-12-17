@@ -7,7 +7,8 @@ class Admin::DebtNotificationsController < ApplicationController
 
 
   def send_sms
-    Customer::Registration.send_sms_for_today
+    # Customer::Registration.send_sms_for_today
+    Customer::DebtNotification.send_notifications
     redirect_to admin_debt_notifications_url, notice: 'შეტყობინებები დაგზავნილია'
   end
 
