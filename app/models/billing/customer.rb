@@ -26,7 +26,11 @@ class Billing::Customer < ActiveRecord::Base
   def trash_balance; self.trash_customer.balance rescue 0 end
   def last_bill_date; self.item_bills.last.billdate end
   def last_bill_number; self.item_bills.last.billnumber end
-  def cut_deadline; self.item_bills.last.lastday end
+
+  def cut_deadline
+    last = self.item_bills.last
+    last.lastday if last
+  end
 
   def pre_payment
     Billing::Payment.where('paydate>? AND custkey=? AND status=1',Date.today-7,self.custkey).inject(0) do |sum,payment|
