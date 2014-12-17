@@ -36,6 +36,8 @@ class Customer::Registration
   before_create :on_before_create
   before_save :on_save
 
+  index({custkey: 1})
+
   def self.status_name(stat)
     case stat
     when STATUS_START then I18n.t('models.customer_registration.status_names.start')
@@ -63,6 +65,10 @@ class Customer::Registration
     else '?' end
   end
 
+  def self.sms_candidates
+    Customer::Registration.where(status: STATUS_COMPLETE, receive_sms: true)
+  end
+
   def transitions
     case self.status
     when STATUS_START then [STATUS_DOCS_REQUIRED,STATUS_COMPLETE,STATUS_CANCELED]
@@ -82,7 +88,7 @@ class Customer::Registration
   def allow_edit?; not [STATUS_COMPLETE,STATUS_CANCELED].include?(self.status) end
   def personal?; self.category==CAT_PERSONAL end
   def not_personal?; self.category==CAT_NOT_PERSONAL end
-  def suggested_name; self.rs_name.split(' ').reverse.join(' ') end
+  def suggested_name; self.rs_name.split(' ').reverse.join(' ') if self.rs_name end
 
   def generate_docs(only_required=false)
     doctypes = Customer::DocumentType.where(category: self.category, ownership: self.ownership)
@@ -112,21 +118,24 @@ class Customer::Registration
 
 ## DEBT SMS
 
-  def self.send_sms_for_today
-    Customer::Registration.where(status:STATUS_COMPLETE,receive_sms: true).each do |reg|
-      last_notification=Customer::DebtNotification.where(registration:reg).desc(:_id).first
-      deadline=reg.customer.cut_deadline
-      if deadline and deadline>Date.today and (last_notification.blank? or deadline!=last_notification.for_deadline)
-        reg.send_debt_sms
-      end
-    end
-  end
+  #
+  # MOVED: to Customer::DebtNotification
+  #
+  # def self.send_sms_for_today
+  #   Customer::Registration.where(status:STATUS_COMPLETE,receive_sms: true).each do |reg|
+  #     last_notification=Customer::DebtNotification.where(registration:reg).desc(:_id).first
+  #     deadline=reg.customer.cut_deadline
+  #     if deadline and deadline>Date.today and (last_notification.blank? or deadline!=last_notification.for_deadline)
+  #       reg.send_debt_sms
+  #     end
+  #   end
+  # end
 
   def send_debt_sms
-    cust=self.customer
-    notification=Customer::DebtNotification.create(registration:self,for_deadline:cust.cut_deadline)
-    msg=Sys::SmsMessage.create(message:cust.balance_sms, mobile:self.user.mobile, messageable:notification)
-    msg.send_sms!(lat:true)
+    cust = self.customer
+    notification = Customer::DebtNotification.create(registration: self, for_deadline: cust.cut_deadline, custkey: self.custkey)
+    msg = Sys::SmsMessage.create(message: cust.balance_sms, mobile: self.user.mobile, messageable: notification)
+    msg.send_sms!(lat: true)
   end
 
   private
@@ -141,9 +150,9 @@ class Customer::Registration
   def on_before_create; self.generate_docs(true) end
 
   def on_save
-    if self.category==CAT_PERSONAL
-      self.bank_code=self.bank_account=nil
-      self.need_factura=false
+    if self.category == CAT_PERSONAL
+      self.bank_code = self.bank_account = nil
+      self.need_factura = false
     end
     true
   end
