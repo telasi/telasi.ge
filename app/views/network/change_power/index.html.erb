@@ -5,6 +5,8 @@
     f.text_field 'accnumb', label: 'აბონენტის ნომერი'
     f.text_field 'rs_name', label: t('models.network_change_power_application.rs_name')
     f.text_field 'rs_tin', label: t('models.network_change_power_application.rs_tin')
+    f.text_field 'address', label: t('models.network_new_customer_application.address')
+    f.text_field 'work_address', label: t('models.network_new_customer_application.work_address')
     f.combo_field 'stage', label: t('models.network_request_item.stage'), collection: Hash[*(Network::Stage.asc(:numb).map{|x| [x.name, x.id]}.flatten)], empty: '--ყველა ეტაპი--'
     f.combo_field 'voltage', label: 'ძაბვა', collection: voltage_collection_change_power, empty: '--'
     f.complex_field label: 'სიმძლარვე' do |c|
