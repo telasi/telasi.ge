@@ -19,6 +19,10 @@
       Customer::Registration.status_name(Customer::Registration::STATUS_COMPLETE) => Customer::Registration::STATUS_COMPLETE,
       Customer::Registration.status_name(Customer::Registration::STATUS_CANCELED) => Customer::Registration::STATUS_CANCELED,
     }
+    f.complex_field label: 'თარიღები' do |c|
+      c.date_field 'd1'
+      c.date_field 'd2'
+    end
   end
 end %>
 <%= table_for @registrations, title: t('models.billing_customer_registration.title.pluaral'), icon: '/icons/user.png', collapsible: true do |t|
