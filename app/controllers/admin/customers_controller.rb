@@ -12,6 +12,8 @@ class Admin::CustomersController < ApplicationController
       rel = rel.where(rs_tin: @search[:rs_tin].mongonize) if @search[:rs_tin].present?
       rel = rel.where(rs_name: @search[:rs_name].mongonize) if @search[:rs_name].present?
       rel = rel.where(status: @search[:status].to_i) if @search[:status].present?
+      rel = rel.where(:created_at.gte => search[:d1]) if search[:d1].present?
+      rel = rel.where(:created_at.lte => search[:d2]) if search[:d2].present?
     end
     @registrations = rel.desc(:_id).paginate(page: params[:page], per_page: 20)
   end
