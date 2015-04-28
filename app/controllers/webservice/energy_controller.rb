@@ -8,6 +8,8 @@ class Webservice::EnergyController < ApplicationController
  end
 
  def index
+  user = Sys::User.authenticate(params[:username].downcase, params[:password])
+  Webservice::EnergyLog.new(user: user, parameters: params).save
   @energy = Webservice::Energy.all
   @energy = @energy.where(accnumb: params[:accnumb]) if params[:accnumb].present?
   @energy = @energy.where("itemdate >= ?", params[:start_year]+params[:start_month].to_s.rjust(2, "0")) if params[:start_month].present?
