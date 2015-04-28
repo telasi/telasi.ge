@@ -1,0 +1,66 @@
+<div class="row">
+  <div class="col-sm-8">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 style="margin: 0;"><%= t('models.sys_user.actions.register') %></h4>
+      </div>
+      <div class="panel-body">
+        <%= form_tag(webservice_path, method: 'post') do %>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+               <%= label_tag 'Username' %>
+               <%= text_field_tag 'username' %>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+               <%= label_tag 'Password' %>
+               <%= password_field_tag 'password' %>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <%= label_tag 'Account number' %>
+                <%= text_field_tag 'accnumb' %>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+               <%= label_tag 'Start month' %>
+               <%= text_field_tag 'start_month' %>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+               <%= label_tag 'Year' %>
+               <%= text_field_tag 'start_year' %>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+               <%= label_tag 'End month' %>
+               <%= text_field_tag 'end_month' %>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <%= label_tag 'Year' %>
+                <%= text_field_tag 'end_year' %>
+              </div>
+            </div>
+          </div>
+          <div>
+            <%= submit_tag "Request", class: ['btn', 'btn-primary'] %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

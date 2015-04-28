@@ -48,3 +48,6 @@ Sap::Material.establish_connection :sap
 Sap::MaterialStock.establish_connection :sap
 Sap::MaterialStockSPP.establish_connection :sap
 Sap::MaterialText.establish_connection :sap
+
+# WebService
+Webservice::Energy.establish_connection  	   :telescope

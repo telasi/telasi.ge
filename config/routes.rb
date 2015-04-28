@@ -278,5 +278,12 @@ TelasiGe::Application.routes.draw do
     end
   end
 
+  namespace 'webservice' do
+    scope '/energy', controller: :energy do
+        match '/',              action: :index, via: [:post]
+        get  '/testform',       action: :testform
+    end
+  end
+
   root 'dashboard#index'
 end
