@@ -20,7 +20,7 @@ class Webservice::EnergyController < ApplicationController
 
   def validate_webservice_login
   	user = Sys::User.authenticate(params[:username].downcase, params[:password]) if params[:username]
-  	if !user || !user.roles.where(name: 'EnergyWebServiceCustomer').first
+  	if ( !user || !user.roles.where(name: 'EnergyWebServiceCustomer').first )
   	 render text: 'No authenticated'
   	end
   end
