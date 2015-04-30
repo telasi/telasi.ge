@@ -8,6 +8,7 @@ class Webservice::EnergyController < ApplicationController
  end
 
  def index
+  render text: 'Please provide account number' if !params[:accnumb].present?
   user = Sys::User.authenticate(params[:username].downcase, params[:password])
   Webservice::EnergyLog.new(user: user, parameters: params).save
   @energy = Webservice::Energy.all
