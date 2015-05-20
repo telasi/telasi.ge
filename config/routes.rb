@@ -64,6 +64,10 @@ TelasiGe::Application.routes.draw do
     post '/send/:id', action: 'send_to_telasi', as: 'new_customer_send'
   end
 
+  scope '/signature', controller: 'signature' do
+    match '/callback', action: 'callback', as: 'callback', via: ['post', 'patch']
+  end
+
   namespace 'admin' do
     scope '/users', controller: 'users' do
       get '/', action: 'index', as: 'users'

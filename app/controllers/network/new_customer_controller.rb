@@ -227,6 +227,7 @@ class Network::NewCustomerController < ApplicationController
 
   def print; @application = Network::NewCustomerApplication.find(params[:id]) end
 
+=begin
   def sign
     @application = Network::NewCustomerApplication.find(params[:id])
     if params[:sdweb_result].present?
@@ -256,6 +257,23 @@ class Network::NewCustomerController < ApplicationController
         file.unlink if file
       end
     end
+  end
+=end
+
+  def sign
+    @application = Network::NewCustomerApplication.find(params[:id])
+
+    if request.post? 
+      @application.signed = true
+      @application.save
+    else
+      binary = render_to_string 'print', formats: ['pdf']
+      name = "NewCustomer_#{params[:id]}.pdf"
+      workstepId = Sys::Signature.send(name, binary, params[:id])
+      url = Sys::Signature::WORKSTEP_SIGN
+      redirect_to "#{url}#{workstepId}"
+    end
+
   end
 
   def send_factura
