@@ -1,9 +1,9 @@
 # -*- encoding : utf-8 -*-
 class Sys::Signature
-  WORKSTEP_URL = 'http://1.1.2.6:57003/WorkstepController.Process.asmx?WSDL'
-  WORKSTEP_SIGN = 'http://1.1.2.6:50100/Sign.aspx?WorkstepID='
+  WORKSTEP_URL = 'http://10.235.170.25:57003/WorkstepController.Process.asmx?WSDL'
+  WORKSTEP_SIGN = 'http://10.235.170.25:50100/Sign.aspx?WorkstepID='
   WORKSTEP_CONF = '/config/signature/CreateAdhocWorkstep.xml'
-  WORKSTEP_CALLBACK = 'http://1.1.2.6/telasi/dms/index.aspx?WorkstepID=##WorkstepId##&amp;'
+  WORKSTEP_CALLBACK = 'http://10.235.170.25/telasi/dms/index.aspx?WorkstepID=##WorkstepId##&amp;sysid=newcustomer&amp;'
 
   def self.send(name, data, id)
     client = Savon.client(wsdl: WORKSTEP_URL)
