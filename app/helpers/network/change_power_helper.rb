@@ -45,6 +45,7 @@ module Network::ChangePowerHelper
         t.combo_field :vat_options, collection: vat_collection, empty: false, i18n: 'vat_name', required: true
         t.boolean_field :need_factura, required: true
         t.boolean_field :work_by_telasi, required: true
+        t.boolean_field :zero_charge, label: 'ნულოვანი დარიცხვა?'
         t.text_field  :mobile, required: true
         t.email_field :email
         t.combo_field :region, collection: regions_collection, empty: '--'
@@ -121,6 +122,7 @@ module Network::ChangePowerHelper
           f.action network_change_power_toggle_need_factura_url(id: application.id), label: 'შეცვლა', icon: '/icons/arrow-repeat.png', method: 'post', confirm: ' ნამდვილად გინდათ ფაქტურის საჭიროების შეცვლა?'
         end
         t.boolean_field 'work_by_telasi', required: true
+        t.boolean_field :zero_charge, label: 'ნულოვანი დარიცხვა?'
         t.email_field :email
         t.text_field :mobile, required: true
         t.text_field :region

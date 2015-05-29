@@ -64,7 +64,7 @@ class Network::ChangePowerApplication
   # sign field
   field :signed, type: Mongoid::Boolean, default: false
   # field :show_tin_on_print, type: Mongoid::Boolean, default: true
-  field :zero_change, type: Mongoid::Boolean, default: false
+  field :zero_charge, type: Mongoid::Boolean, default: false
   # relations
   has_many :messages, class_name: 'Sys::SmsMessage', as: 'messageable'
   has_many :files, class_name: 'Sys::File', inverse_of: 'mountable'
@@ -200,7 +200,7 @@ class Network::ChangePowerApplication
 
   def calculate_total_cost
     unless self.can_change_amount?
-      if self.zero_change
+      if self.zero_charge
         self.amount = 0
       else
         tariff_old = Network::NewCustomerTariff.tariff_for(self.old_voltage, self.old_power)
