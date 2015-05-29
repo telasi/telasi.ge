@@ -64,6 +64,7 @@ class Network::ChangePowerApplication
   # sign field
   field :signed, type: Mongoid::Boolean, default: false
   # field :show_tin_on_print, type: Mongoid::Boolean, default: true
+  field :zero_change, type: Mongoid::Boolean, default: false
   # relations
   has_many :messages, class_name: 'Sys::SmsMessage', as: 'messageable'
   has_many :files, class_name: 'Sys::File', inverse_of: 'mountable'
@@ -199,19 +200,23 @@ class Network::ChangePowerApplication
 
   def calculate_total_cost
     unless self.can_change_amount?
-      tariff_old = Network::NewCustomerTariff.tariff_for(self.old_voltage, self.old_power)
-      tariff = Network::NewCustomerTariff.tariff_for(self.voltage, self.power)
-      if tariff_old.price_gel > tariff.price_gel
+      if self.zero_change
         self.amount = 0
-      elsif tariff_old == tariff
-        if self.old_power == self.power
-          self.amount = 0
-        else
-          per_kwh = tariff.price_gel * 1.0 / tariff.power_to
-          self.amount = (per_kwh * (self.power - self.old_power)).round(2)
-        end
       else
-        self.amount = tariff.price_gel - tariff_old.price_gel
+        tariff_old = Network::NewCustomerTariff.tariff_for(self.old_voltage, self.old_power)
+        tariff = Network::NewCustomerTariff.tariff_for(self.voltage, self.power)
+        if tariff_old.price_gel > tariff.price_gel
+          self.amount = 0
+        elsif tariff_old == tariff
+          if self.old_power == self.power
+            self.amount = 0
+          else
+            per_kwh = tariff.price_gel * 1.0 / tariff.power_to
+            self.amount = (per_kwh * (self.power - self.old_power)).round(2)
+          end
+        else
+          self.amount = tariff.price_gel - tariff_old.price_gel
+        end
       end
     end
   end
