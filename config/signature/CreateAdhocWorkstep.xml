@@ -95,7 +95,7 @@
     <!--Is the client allowed to finish the workstep-->
     <AllowFinishWorkstep>1</AllowFinishWorkstep>
     <!--Is the client allowed to reject the workstep-->
-    <AllowRejectWorkstep>0</AllowRejectWorkstep>
+    <AllowRejectWorkstep>1</AllowRejectWorkstep>
     <!--Is the client allowed to undo actions-->
     <AllowUndoLastAction>1</AllowUndoLastAction>
     <!--Is the client allowed to add signatures which are not defined in the tasks-->
