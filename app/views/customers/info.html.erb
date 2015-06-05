@@ -1,4 +1,9 @@
-<%show_register_form=current_user && Customer::Registration.where(user:current_user,custkey:@customer.custkey).empty?%>
+<%
+ show_register_form = current_user.present? &&
+                      Customer::Registration.where(user:current_user, custkey:@customer.custkey)
+                                            .ne(status: Customer::Registration::STATUS_CANCELED)
+                                            .empty?
+%>
 
 <div class="page-header">
   <h2><code>#<%= @customer.accnumb.to_ka %></code> <%= @customer.custname.to_ka %></h2>
@@ -9,10 +14,10 @@
     <div style="margin-bottom: 16px;">
       <a href="<%= customers_url %>" class="btn btn-default">&larr; <%= t('menu.customers') %></a>
     </div>
-    <%if show_register_form%><div><%=t('pages.customers.register.save_customer_info_descr_large_html')%></div><%end%>
+    <% if show_register_form %><div><%=t('pages.customers.register.save_customer_info_descr_large_html')%></div><% end %>
   </div>
   <div class="col-sm-6">
-    <%if show_register_form%>
+    <% if show_register_form %>
       <!-- save customer form -->
       <div class="panel panel-primary">
         <div class="panel-heading">
@@ -31,7 +36,7 @@
           <%= t('pages.customers.register.save_customer_info_descr_html') %>
         </div>
       </div>
-    <%elsif not current_user%>
+    <% elsif not current_user %>
       <div style="background:whitesmoke; padding:30px;">
         <p class="text-muted">
           ამ აბონენტის თქვენს სახელზე დასარეგისტირებლად საჭიროა ავტორიზაცია.
@@ -41,6 +46,6 @@
           <a href="<%= register_url %>" class="btn btn-primary"><%= t('menu.register') %></a>
         </div>
       </div>
-    <%end%>
+    <% end %>
   </div>
 </div>
