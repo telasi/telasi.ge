@@ -99,9 +99,10 @@ module Network::ChangePowerHelper
       # 1. general
       f.tab title: 'ძირითადი', icon: '/icons/user.png' do |t|
         t.action network_change_power_url(id: application.id, format: 'pdf'), label: 'განცხადების ბეჭდვა', icon: '/icons/printer.png'
-        if Network::ACTIVATE_SDWEB and not application.signed
-          t.action network_change_power_sign_url(id: application.id), label: 'ხელმოწერა', icon: '/icons/edit-signiture.png'
-        end
+        t.action network_change_power_sign_url(id: application.id), label: 'ხელმოწერა', icon: '/icons/edit-signiture.png'
+        #if Network::ACTIVATE_SDWEB and not application.signed
+        #  t.action network_change_power_sign_url(id: application.id), label: 'ხელმოწერა', icon: '/icons/edit-signiture.png'
+        #end
         # t.action network_new_customer_paybill_url(id: application.id, format: 'pdf'), label: 'საგ/დავ ბეჭდვა', icon: '/icons/printer.png'
         t.action network_edit_change_power_url(id: application.id), label: 'შეცვლა', icon: '/icons/pencil.png' if change_power_app_editable?(application)
         application.transitions.each do |status|

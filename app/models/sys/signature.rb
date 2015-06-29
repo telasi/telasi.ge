@@ -4,9 +4,9 @@ class Sys::Signature
   WORKSTEP_URL = "http://#{BASE_IP}:57003/WorkstepController.Process.asmx?WSDL"
   WORKSTEP_SIGN = "http://#{BASE_IP}:50100/Sign.aspx?WorkstepID="
   WORKSTEP_CONF = "/config/signature/CreateAdhocWorkstep.xml"
-  WORKSTEP_CALLBACK = "http://#{BASE_IP}/telasi/dms/index.aspx?WorkstepID=##WorkstepId##&amp;sysid=newcustomer&amp;"
+  WORKSTEP_CALLBACK = "http://#{BASE_IP}/telasi/dms/index.aspx?WorkstepID=##WorkstepId##&amp;sysid="
 
-  def self.send(name, data, id)
+  def self.send(sysid, name, data, id)
     client = Savon.client(wsdl: WORKSTEP_URL)
 
     doc_response = client.call(:upload_document_v1, :message => { :document => Base64.encode64(data), :fileName => name, :timeToLive => 900 })
@@ -16,7 +16,7 @@ class Sys::Signature
     doc_id = xml.css("DocumentId").children.text
 
     workstep_adhoc = File.read(Dir.pwd + WORKSTEP_CONF)
-    workstep_adhoc = workstep_adhoc.gsub(/###callback###/, WORKSTEP_CALLBACK + %q{id=} + id)
+    workstep_adhoc = workstep_adhoc.gsub(/###callback###/, WORKSTEP_CALLBACK + sysid + "&amp;" + %q{id=} + id)
 
     workstep_response = client.call(:create_adhoc_workstep_v2, :message => { :documentId => doc_id, 
                                     :createAdhocWorkstepConfiguration => workstep_adhoc, 

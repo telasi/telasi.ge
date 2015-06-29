@@ -269,7 +269,7 @@ class Network::NewCustomerController < ApplicationController
     else
       binary = render_to_string 'print', formats: ['pdf']
       name = "NewCustomer_#{params[:id]}.pdf"
-      workstepId = Sys::Signature.send(name, binary, params[:id])
+      workstepId = Sys::Signature.send("newcustomer", name, binary, params[:id])
       url = Sys::Signature::WORKSTEP_SIGN
       redirect_to "#{url}#{workstepId}"
     end

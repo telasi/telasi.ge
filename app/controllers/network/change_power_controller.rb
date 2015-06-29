@@ -58,34 +58,49 @@ class Network::ChangePowerController < ApplicationController
     @title = I18n.t('models.network_new_customer_application.actions.edit.title')
   end
 
+#  def sign
+#    @application = Network::ChangePowerApplication.find(params[:id])
+#    if params[:sdweb_result].present?
+#      if params[:sdweb_result] == 'success'
+#        @application.signed = true
+#        @application.save
+#      end
+#      redirect_to network_change_power_url  , notice: "ხელმოწერის შედეგი: #{params[:sdweb_result]}"
+#    else
+#      begin
+#        text = render_to_string 'show', formats: ['pdf']
+#        file = Tempfile.new(@application.id.to_s, encoding: 'ascii-8bit')
+#        file.write text
+#        file.close
+#        RestClient.post(Network::SDWEB_UPLOAD_URL, {
+#          docdata: File.new(file.path),
+#          cmd: Network::SDWEB_CMD_CHNGPOWAPP,
+#          resulturl: network_change_power_sign_url(id: @application.id),
+#          docid: @application.id.to_s,
+#          dmsid: Network::SDWEB_DMSID
+#        }, {
+#          'Content-Type' => 'multipart/form-data'
+#        }) do |response, request, result, &block|
+#          redirect_to response.headers[:location]
+#       end
+#      ensure
+#        file.unlink if file
+#      end
+#    end
+#  end
+
   def sign
     @application = Network::ChangePowerApplication.find(params[:id])
-    if params[:sdweb_result].present?
-      if params[:sdweb_result] == 'success'
-        @application.signed = true
-        @application.save
-      end
-      redirect_to network_change_power_url  , notice: "ხელმოწერის შედეგი: #{params[:sdweb_result]}"
+
+    if request.post? 
+      @application.signed = true
+      @application.save
     else
-      begin
-        text = render_to_string 'show', formats: ['pdf']
-        file = Tempfile.new(@application.id.to_s, encoding: 'ascii-8bit')
-        file.write text
-        file.close
-        RestClient.post(Network::SDWEB_UPLOAD_URL, {
-          docdata: File.new(file.path),
-          cmd: Network::SDWEB_CMD_CHNGPOWAPP,
-          resulturl: network_change_power_sign_url(id: @application.id),
-          docid: @application.id.to_s,
-          dmsid: Network::SDWEB_DMSID
-        }, {
-          'Content-Type' => 'multipart/form-data'
-        }) do |response, request, result, &block|
-          redirect_to response.headers[:location]
-       end
-      ensure
-        file.unlink if file
-      end
+      binary = render_to_string 'show', formats: ['pdf']
+      name = "ChangePower_#{params[:id]}.pdf"
+      workstepId = Sys::Signature.send("changepower", name, binary, params[:id])
+      url = Sys::Signature::WORKSTEP_SIGN
+      redirect_to "#{url}#{workstepId}"
     end
   end
 

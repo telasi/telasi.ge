@@ -65,7 +65,8 @@ TelasiGe::Application.routes.draw do
   end
 
   scope '/signature', controller: 'signature' do
-    match '/callback', action: 'callback', as: 'callback', via: ['post', 'patch']
+    match '/nc_callback', action: 'new_customer_callback', as: 'new_customer_callback', via: ['post', 'patch']
+    match '/cc_callback', action: 'change_power_callback', as: 'change_power_callback', via: ['post', 'patch']
   end
 
   namespace 'admin' do
