@@ -11,15 +11,14 @@ module Payge
   	                 :Merchant => '',
                      :Password => '',
                      :field => 'accnumb',
-                     :icon => 'fa-trash-o'}
-                  ]
-                #   , { :ServiceID => 'NETWORK',
-  	             #     :ServiceName => 'ქსელში ჩართვა', 
-  	             #     :Merchant => '',
-                #      :Password => '',
-                #      :field => 'rs_tin',
-                #      :icon => 'fa-sign-in'}
-  	             # ]
+                     :icon => 'fa-trash-o'}, 
+  	               { :ServiceID => 'NETWORK',
+  	                 :ServiceName => 'ქსელში ჩართვა', 
+  	                 :Merchant => '',
+                     :Password => '',
+                     :field => 'rs_tin',
+                     :icon => 'fa-sign-in'}
+  	             ]
 
   URLS = { :success  => 'http://my.telasi.ge/pay/payment/success?',
            :cancel   => 'http://my.telasi.ge/pay/payment/cancel?',
