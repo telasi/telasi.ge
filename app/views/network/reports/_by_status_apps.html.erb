@@ -3,7 +3,7 @@
     <tr>
       <th width="200">სტატუსი</th>
       <th>რაოდ.</th>
-      <th>თანხა</th>
+      <th>თანხა/სიმძლ.</th>
     </tr>
   </thead>
   <% clazz::STATUSES_REPORT_BY_STATUS.each do |stat| %>
@@ -28,7 +28,13 @@
           <%= number_with_precision(
                 apps.where(status: stat).sum(:amount) || 0,
                 precision: 2, delimiter: ',') %>
-        </code> GEL
+        </code> GEL &nbsp;/&nbsp;
+        <code>
+          <%= number_with_precision(
+              apps.where(status: stat).sum(:power) || 0,
+              precision: 2, delimiter: ',') %>
+        </code> &nbsp;
+        kWh
       </td>
     </tr>
   <% end %>
@@ -46,6 +52,8 @@
       <th style="text-align: right;"><code><%= apps.count %></code></th>
       <th style="text-align: right;">
         <code><%= number_with_precision(apps.sum(:amount) || 0, precision: 2, delimiter: ',') %></code> GEL
+        &nbsp;/&nbsp;
+        <code><%= number_with_precision(apps.sum(:power) || 0, precision: 2, delimiter: ',') %></code> kWh
       </th>
     </tr>
   </tfoot>

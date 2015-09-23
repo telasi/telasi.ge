@@ -19,6 +19,7 @@
       <th width="200">ძაბვა</th>
       <th width="200">რაოდენობა</th>
       <th width="200">თანხა</th>
+      <th width="200">სიმძლავრე</th>
     </tr>
   </thead>
   <tbody>
@@ -33,6 +34,9 @@
         </td>
         <td style="text-align: right;">
           <code><%= apps.sum(:amount) || 0 %></code> GEL
+        </td>
+        <td style="text-align: right;">
+          <code><%= apps.sum(:power) || 0 %></code> kWh
         </td>
       </tr>
     <% end %>
