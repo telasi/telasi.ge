@@ -33,10 +33,10 @@
         <code><%= link_to apps.count, network_change_power_applications_url(search: { voltage: v, send_d1: @d1, send_d2: @d2 }) %></code>
         </td>
         <td style="text-align: right;">
-          <code><%= apps.sum(:amount) || 0 %></code> GEL
+          <code><%= number_with_precision(apps.sum(:amount) || 0, precision: 2, delimiter: ',') %></code> GEL
         </td>
         <td style="text-align: right;">
-          <code><%= apps.sum(:power) || 0 %></code> kWh
+          <code><%= number_with_precision(apps.sum(:power) || 0, precision: 2, delimiter: ',') %></code> kWh
         </td>
       </tr>
     <% end %>
