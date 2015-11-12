@@ -2,7 +2,6 @@ source 'https://rubygems.org'
 
 # core
 gem 'rails', '4.0.0'
-# gem 'composite_primary_keys', github: 'drnic/composite_primary_keys', branch: 'ar_4.0.x'
 gem 'composite_primary_keys'
 gem 'turbolinks', '2.2.0'
 gem 'jquery-turbolinks'
@@ -19,8 +18,6 @@ gem 'savon', '2.3.2'
 
 # db
 gem 'sqlite3'
-# gem 'mongoid', github: 'mongoid/mongoid', ref: '3d1b8aa48340b79b8481ab96b56e0681433b0bcb'
-# gem 'mongoid-grid_fs'
 gem 'mongoid', '~> 4.0'
 gem 'ruby-oci8', '2.1.5'
 gem 'activerecord-oracle_enhanced-adapter', '1.5.4'
@@ -34,7 +31,6 @@ gem 'rest-client'
 gem 'jbuilder', '~> 1.0.1'
 
 # forms
-#gem 'forma', path: '../forma'
 gem 'forma', '~> 0.1'
 gem 'bootstrap-will_paginate'
 gem 'will_paginate_mongoid'
@@ -57,5 +53,5 @@ group :test do
   gem 'test-unit'
 end
 
-gem 'debugger', group: [:development, :test]
+# gem 'debugger', group: [:development, :test]
 gem 'business_time'
