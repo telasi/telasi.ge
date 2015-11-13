@@ -369,7 +369,10 @@ class Network::NewCustomerApplication
     self.save
   end
 
-  def factura_sent?; not self.factura_seria.blank? end
+  def factura_sent?
+    not self.factura_seria.blank?
+  end
+
   def can_send_factura?
     self.need_factura and
     [ STATUS_COMPLETE, STATUS_IN_BS ].include?(self.status) and
