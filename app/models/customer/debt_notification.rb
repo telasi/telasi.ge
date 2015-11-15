@@ -3,41 +3,55 @@ class Customer::DebtNotification
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  belongs_to :registration, class_name: 'Customer::Registration'
-  has_one :message, class_name: 'Sys::SmsMessage', as: 'messageable'
-  field :for_deadline, type: Date
-  field :custkey, type: Integer
+  ON_NEW_CHARGE      = 'on-new-charge'
+  ON_BEFORE_DEADLINE = 'on-before-deadline'
 
-  index({custkey: 1})
-  index({registration_id: 1})
+  belongs_to :registration, class_name: 'Customer::Registration'
+  has_one    :message, class_name: 'Sys::SmsMessage', as: 'messageable'
+  field      :for_deadline, type: Date
+  field      :custkey, type: Integer
+  field      :event, type: String, default: ON_NEW_CHARGE
+
+  index({ custkey: 1 })
+  index({ registration_id: 1 })
 
   def self.should_notify(deadline, last_notification)
-    return (
-      deadline and
-      deadline > Date.today and
-      (last_notification.blank? or deadline != last_notification.for_deadline)
-    )
+    deadline && deadline > Date.today && ( last_notification.blank? || deadline != last_notification.for_deadline )
   end
 
   def self.send_notifications
-    # 1. first send registered customers
-    Customer::Registration.sms_candidates.each do |reg|
-      last_notification = Customer::DebtNotification.where(custkey:reg.custkey).desc(:_id).first
-      deadline = reg.customer.cut_deadline
-      reg.send_debt_sms if Customer::DebtNotification.should_notify(deadline, last_notification)
-    end
+    on_new_charge_for_registered_customers
+    on_new_charge_for_mainstream_customers
+    # TODO: ON_BEFORE_DEADLINE
+  end
 
-    # 2. send mainstream customers
+  def self.on_new_charge_for_registered_customers
+    Customer::Registration.sms_candidates.each do |reg|
+      send_balance_sms(reg.customer, reg)
+    end
+  end
+
+  def self.on_new_charge_for_mainstream_customers
     Billing::Customer.sms_candidates.each do |cust|
-      mobile_number = cust.fax.strip
+      send_balance_sms(cust)
+    end
+  end
+
+  def self.send_balance_sms(customer, registration = nil)
+    event = ON_NEW_CHARGE
+    last_notification = self.where(custkey: customer.custkey, event: event).desc(:_id).first
+    deadline = customer.cut_deadline
+    if should_notify(deadline, last_notification)
+      mobile_number = registration ? registration.user.mobile : customer.fax.strip
       if mobile_number.length == 9
-        last_notification = Customer::DebtNotification.where(custkey: cust.custkey).desc(:_id).first
-        deadline = cust.cut_deadline
-        if Customer::DebtNotification.should_notify(deadline, last_notification)
-          notification = Customer::DebtNotification.create(for_deadline: deadline, custkey: cust.custkey)
-          msg = Sys::SmsMessage.create(message: cust.balance_sms, mobile: cust.fax, messageable: notification)
-          msg.send_sms!(lat: true)
-        end
+        notification = Customer::DebtNotification.create({
+          registration: registration,
+          for_deadline: deadline,
+          custkey: customer.custkey,
+          event: event
+        })
+        msg = Sys::SmsMessage.create(message: customer.balance_sms, mobile: mobile_number, messageable: notification)
+        msg.send_sms!(lat: true)
       end
     end
   end

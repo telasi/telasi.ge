@@ -116,28 +116,6 @@ class Customer::Registration
     customer.save if customer.changed?
   end
 
-## DEBT SMS
-
-  #
-  # MOVED: to Customer::DebtNotification
-  #
-  # def self.send_sms_for_today
-  #   Customer::Registration.where(status:STATUS_COMPLETE,receive_sms: true).each do |reg|
-  #     last_notification=Customer::DebtNotification.where(registration:reg).desc(:_id).first
-  #     deadline=reg.customer.cut_deadline
-  #     if deadline and deadline>Date.today and (last_notification.blank? or deadline!=last_notification.for_deadline)
-  #       reg.send_debt_sms
-  #     end
-  #   end
-  # end
-
-  def send_debt_sms
-    cust = self.customer
-    notification = Customer::DebtNotification.create(registration: self, for_deadline: cust.cut_deadline, custkey: self.custkey)
-    msg = Sys::SmsMessage.create(message: cust.balance_sms, mobile: self.user.mobile, messageable: notification)
-    msg.send_sms!(lat: true)
-  end
-
   private
 
   def validate_rs_name
