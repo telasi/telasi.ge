@@ -29,5 +29,8 @@ module TelasiGe
 
     # js calculation
     config.assets.precompile += [ 'calculator.js']
+
+    # auto load lib directory
+    config.autoload_paths << Rails.root.join('lib')
   end
 end

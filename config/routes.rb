@@ -2,7 +2,7 @@
 require 'sidekiq/web'
 
 TelasiGe::Application.routes.draw do
-  mount Sidekiq::Web => '/sidekiq'
+  mount Sidekiq::Web => '/sidekiq', constraints: AdminConstraint.new
 
   scope controller: 'dashboard' do
     match '/login', action: 'login', as: 'login', via: ['get', 'post']
