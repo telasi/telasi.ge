@@ -1,5 +1,6 @@
 # -*- encoding : utf-8 -*-
 require 'sidekiq/web'
+require 'sidekiq/cron/web'
 
 TelasiGe::Application.routes.draw do
   mount Sidekiq::Web => '/sidekiq', constraints: AdminConstraint.new
