@@ -47,6 +47,7 @@ gem 'prawn_rails'
 gem 'axlsx_rails'
 gem 'sidekiq'
 gem 'sinatra', '>= 1.3.0', :require => nil
+gem 'sidekiq-cron'
 
 group :test do
   gem 'ruby-prof'
