@@ -28,60 +28,102 @@ class Billing::Customer < ActiveRecord::Base
   def last_bill_number; self.item_bills.last.billnumber end
 
   def cut_deadline
-    last = self.item_bills.last
-    last.lastday if last
+    unless @cut_deadline
+      last = self.item_bills.last
+      @cut_deadline = last.lastday if last
+    end
+    @cut_deadline
   end
 
   def pre_payment
-    Billing::Payment.where('paydate>? AND custkey=? AND status=1',Date.today-7,self.custkey).inject(0) do |sum,payment|
-      sum+=payment.amount
+    Billing::Payment.where('paydate>? AND custkey=? AND status=1', Date.today - 7, self.custkey).inject(0) do |sum,payment|
+      sum += payment.amount
     end
   end
 
   def pre_payment_date
-    p=Billing::Payment.where('paydate>? AND custkey=? AND status=1',Date.today-7,self.custkey).order('paykey desc').first
+    p = Billing::Payment.where('paydate>? AND custkey=? AND status=1', Date.today - 7, self.custkey).order('paykey desc').first
     p.paydate if p
   end
 
   def pre_trash_payment
-    Billing::TrashPayment.where('paydate>? AND custkey=? AND status=1',Date.today-7,self.custkey).inject(0) do |sum,payment|
-      sum+=payment.amount
+    Billing::TrashPayment.where('paydate>? AND custkey=? AND status=1', Date.today - 7, self.custkey).inject(0) do |sum,payment|
+      sum += payment.amount
     end
   end
 
   def pre_trash_payment_date
-    p=Billing::TrashPayment.where('paydate>? AND custkey=? AND status=1',Date.today-7,self.custkey).order('paykey desc').first
+    p = Billing::TrashPayment.where('paydate>? AND custkey=? AND status=1', Date.today - 7, self.custkey).order('paykey desc').first
     p.paydate if p
   end
 
   def pre_water_payment
-    Billing::WaterPayment.where('paydate>? AND custkey=? AND status=1',Date.today-7,self.custkey).inject(0) do |sum,payment|
-      sum+=payment.amount
+    Billing::WaterPayment.where('paydate>? AND custkey=? AND status=1', Date.today - 7, self.custkey).inject(0) do |sum,payment|
+      sum += payment.amount
     end
   end
 
   def pre_water_payment_date
-    p=Billing::WaterPayment.where('paydate>? AND custkey=? AND status=1', Date.today-7, self.custkey).order('paykey desc').first
+    p = Billing::WaterPayment.where('paydate>? AND custkey=? AND status=1', Date.today - 7, self.custkey).order('paykey desc').first
     p.paydate if p
   end
 
   def status_name
     case self.statuskey
-    when ACTIVE then I18n.t('models.bs.customer.statuses.active')
+    when ACTIVE   then I18n.t('models.bs.customer.statuses.active')
     when INACTIVE then I18n.t('models.bs.customer.statuses.inactive')
-    when CLOSED then I18n.t('models.bs.customer.statuses.closed')
+    when CLOSED   then I18n.t('models.bs.customer.statuses.closed')
     else '?'
     end
   end
 
   def balance_sms
-    txt=%Q{აბ.##{self.accnumb} #{self.custname}. დღეისთვის თქვენი დავალიანება შეადგენს:
-      \nსს "თელასი" (#{number_with_precision self.balance, precision: 2})GEL;
-      \nდასუფთავება (#{number_with_precision self.trash_balance, precision: 2})GEL;
-      \nწყალმომარაგება (#{number_with_precision (self.current_water_balance || 0), precision: 2})GEL.}
-    deadline=self.cut_deadline
-    txt+=%Q{\n\nდავალიანების დაფარვის ბოლო თარიღია #{deadline.strftime('%d-%b-%Y')}!} if deadline
+    telasi_debt = "სს \"თელასი\" #{number_with_precision self.payable_balance, precision: 2} L"
+    trash_debt = "დასუფთავება #{number_with_precision self.payable_trash_balance, precision: 2} L"
+    water_debt = "წყალმომარაგება #{number_with_precision (self.payable_water_balance || 0), precision: 2} L"
+    debts = [ telasi_debt, trash_debt, water_debt ].compact.join("\n")
+    txt = "აბ.##{self.accnumb}. თქვენი დავალიანება შეადგენს:\n#{debts}.\nდავალიანების დაფარვის ბოლო თარიღია #{deadline.strftime('%d-%b-%Y')}!"
     txt.to_ka
+  end
+
+  def deadline_sms
+    if cut_candidate?
+      deadline = self.cut_deadline
+      telasi_debt = "სს \"თელასი\" #{number_with_precision self.payable_balance, precision: 2} L" if cut_candidate_telasi?
+      trash_debt = "დასუფთავება #{number_with_precision self.payable_trash_balance, precision: 2} L" if cut_candidate_trash?
+      water_debt = "წყალმომარაგება #{number_with_precision (self.payable_water_balance || 0), precision: 2} L" if cut_candidate_water?
+      debts = [ telasi_debt, trash_debt, water_debt ].compact.join("\n")
+      txt = "აბ.##{self.accnumb}. თქვენი დავალიანება შეადგენს:\n#{debts}.\nდავალიანების დაფარვის ბოლო თარიღია #{deadline.strftime('%d-%b-%Y')}!"
+      txt.to_ka
+    end
+  end
+
+  def payable_balance
+    @payable_balance ||= self.balance - self.pre_payment
+  end
+
+  def payable_water_balance
+    @payable_water_balance ||= (self.current_water_balance || 0) - self.pre_water_payment
+  end
+
+  def payable_trash_balance
+    @payable_trash_balance ||= self.trash_customer.balance - self.pre_trash_payment
+  end
+
+  def cut_candidate_water?
+    payable_water_balance > 0.99
+  end
+
+  def cut_candidate_trash?
+    payable_trash_balance > 0.99
+  end
+
+  def cut_candidate_telasi?
+    payable_balance > 0.99
+  end
+
+  def cut_candidate?
+    cut_candidate_telasi? || cut_candidate_trash? || cut_candidate_water?
   end
 
   def self.sms_candidates
