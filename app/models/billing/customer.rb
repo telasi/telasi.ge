@@ -108,7 +108,8 @@ class Billing::Customer < ActiveRecord::Base
   end
 
   def payable_trash_balance
-    @payable_trash_balance ||= self.trash_customer.balance - self.pre_trash_payment
+    trash_balance = self.trash_customer && self.trash_customer.balance
+    @payable_trash_balance ||= (trash_balance || 0) - self.pre_trash_payment
   end
 
   def cut_candidate_water?
