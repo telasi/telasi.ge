@@ -78,6 +78,7 @@ class Billing::Customer < ActiveRecord::Base
   end
 
   def balance_sms
+    deadline = self.cut_deadline
     telasi_debt = "სს \"თელასი\" #{number_with_precision self.payable_balance, precision: 2} L"
     trash_debt = "დასუფთავება #{number_with_precision self.payable_trash_balance, precision: 2} L"
     water_debt = "წყალმომარაგება #{number_with_precision (self.payable_water_balance || 0), precision: 2} L"
