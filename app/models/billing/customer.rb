@@ -78,23 +78,21 @@ class Billing::Customer < ActiveRecord::Base
   end
 
   def balance_sms
-    deadline = self.cut_deadline
-    telasi_debt = "სს \"თელასი\" #{number_with_precision self.payable_balance, precision: 2} L"
-    trash_debt = "დასუფთავება #{number_with_precision self.payable_trash_balance, precision: 2} L"
-    water_debt = "წყალმომარაგება #{number_with_precision (self.payable_water_balance || 0), precision: 2} L"
-    debts = [ telasi_debt, trash_debt, water_debt ].compact.join("\n")
-    txt = "აბ.##{self.accnumb}. თქვენი დავალიანება შეადგენს:\n#{debts}.\nდავალიანების დაფარვის ბოლო თარიღია #{deadline.strftime('%d-%b-%Y')}!"
-    txt.to_ka
+    sms_text( true )
   end
 
   def deadline_sms
-    if cut_candidate?
+    sms_text( false )
+  end
+
+  def sms_text(include_credits)
+    if include_credits || cut_candidate?
       deadline = self.cut_deadline
-      telasi_debt = "სს \"თელასი\" #{number_with_precision self.payable_balance, precision: 2} L" if cut_candidate_telasi?
-      trash_debt = "დასუფთავება #{number_with_precision self.payable_trash_balance, precision: 2} L" if cut_candidate_trash?
-      water_debt = "წყალმომარაგება #{number_with_precision (self.payable_water_balance || 0), precision: 2} L" if cut_candidate_water?
+      telasi_debt = "თელასი #{number_with_precision self.payable_balance, precision: 2} L" if ( include_credits || cut_candidate_telasi? )
+      trash_debt = "დასუფთავება #{number_with_precision self.payable_trash_balance, precision: 2} L" if ( include_credits || cut_candidate_trash? )
+      water_debt = "წყალმომარაგება #{number_with_precision (self.payable_water_balance || 0), precision: 2} L" if ( include_credits || cut_candidate_water? )
       debts = [ telasi_debt, trash_debt, water_debt ].compact.join("\n")
-      txt = "აბ.##{self.accnumb}. თქვენი დავალიანება შეადგენს:\n#{debts}.\nდავალიანების დაფარვის ბოლო თარიღია #{deadline.strftime('%d-%b-%Y')}!"
+      txt = "აბ.##{self.accnumb} დავალიანება:\n#{debts}.\nგადახდის ბოლო თარიღია #{deadline.strftime('%d.%m.%Y')}\nSMS off 90033"
       txt.to_ka
     end
   end
