@@ -394,13 +394,13 @@ class Network::NewCustomerApplication
   private
 
   def calculate_total_cost
-    tariff = Network::NewCustomerTariff.tariff_for(self.voltage, self.power)
+    tariff = Network::NewCustomerTariff.tariff_for(self.voltage, self.power, self.send_date)
     if tariff
       if power > 0
         self.tariff = tariff
         tariff_days = self.need_resolution ? tariff.days_to_complete : tariff.days_to_complete_without_resolution
         self.amount = tariff.price_gel
-        self.days = tariff_days
+        self.days   = tariff_days
         if self.send_date
           if self.use_business_days
             self.plan_end_date = (self.days - 1).business_days.after( self.send_date )

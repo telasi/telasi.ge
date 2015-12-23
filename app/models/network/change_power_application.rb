@@ -203,8 +203,8 @@ class Network::ChangePowerApplication
       if self.zero_charge
         self.amount = 0
       else
-        tariff_old = Network::NewCustomerTariff.tariff_for(self.old_voltage, self.old_power)
-        tariff = Network::NewCustomerTariff.tariff_for(self.voltage, self.power)
+        tariff_old = Network::NewCustomerTariff.tariff_for(self.old_voltage, self.old_power, self.send_date)
+        tariff = Network::NewCustomerTariff.tariff_for(self.voltage, self.power, self.send_date)
         if tariff_old.price_gel > tariff.price_gel
           self.amount = 0
         elsif tariff_old == tariff
