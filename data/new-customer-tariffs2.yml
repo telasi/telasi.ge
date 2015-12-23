@@ -1,0 +1,126 @@
+tariff_01:
+  voltage: '220'
+  power_kwt: 1-10
+  days_to_complete: 40
+  days_to_complete_without_resolution: 20
+  days_to_complete_x2: 80
+  price_gel: 400
+tariff_02:
+  voltage: '380'
+  power_kwt: 1-10
+  days_to_complete: 40
+  days_to_complete_without_resolution: 20
+  days_to_complete_x2: 80
+  price_gel: 1200
+tariff_03:
+  voltage: '380'
+  power_kwt: 10-30
+  days_to_complete: 40
+  days_to_complete_without_resolution: 20
+  days_to_complete_x2: 80
+  price_gel: 4700
+tariff_04:
+  voltage: '380'
+  power_kwt: 30-50
+  days_to_complete: 40
+  days_to_complete_without_resolution: 20
+  days_to_complete_x2: 80
+  price_gel: 7000
+tariff_05:
+  voltage: '380'
+  power_kwt: 50-80
+  days_to_complete: 45
+  days_to_complete_without_resolution: 20
+  days_to_complete_x2: 90
+  price_gel: 10500
+tariff_06:
+  voltage: '380'
+  power_kwt: 80-100
+  days_to_complete: 45
+  days_to_complete_without_resolution: 20
+  days_to_complete_x2: 90
+  price_gel: 12000
+tariff_07:
+  voltage: '380'
+  power_kwt: 100-120
+  days_to_complete: 45
+  days_to_complete_without_resolution: 20
+  days_to_complete_x2: 90
+  price_gel: 14000
+tariff_08:
+  voltage: '380'
+  power_kwt: 120-200
+  days_to_complete: 45
+  days_to_complete_without_resolution: 20
+  days_to_complete_x2: 90
+  price_gel: 21500
+tariff_09:
+  voltage: '380'
+  power_kwt: 200-320
+  days_to_complete: 60
+  days_to_complete_without_resolution: 30
+  days_to_complete_x2: 120
+  price_gel: 33000
+tariff_10:
+  voltage: '380'
+  power_kwt: 320-500
+  days_to_complete: 60
+  days_to_complete_without_resolution: 30
+  days_to_complete_x2: 120
+  price_gel: 50500
+tariff_11:
+  voltage: '380'
+  power_kwt: 500-800
+  days_to_complete: 90
+  days_to_complete_without_resolution: 45
+  days_to_complete_x2: 180
+  price_gel: 80000
+tariff_12:
+  voltage: '380'
+  power_kwt: 800-1000
+  days_to_complete: 90
+  days_to_complete_without_resolution: 45
+  days_to_complete_x2: 180
+  price_gel: 100000
+tariff_13:
+  voltage: '6/10'
+  power_kwt: 1-500
+  days_to_complete: 60
+  days_to_complete_without_resolution: 30
+  days_to_complete_x2: 120
+  price_gel: 48500
+tariff_14:
+  voltage: '6/10'
+  power_kwt: 500-1000
+  days_to_complete: 90
+  days_to_complete_without_resolution: 45
+  days_to_complete_x2: 180
+  price_gel: 94000
+tariff_15:
+  voltage: '6/10'
+  power_kwt: 1000-1500
+  days_to_complete: 90
+  days_to_complete_without_resolution: 45
+  days_to_complete_x2: 180
+  price_gel: 137000
+tariff_16:
+  voltage: '6/10'
+  power_kwt: 1500-2000
+  days_to_complete: 90
+  days_to_complete_without_resolution: 45
+  days_to_complete_x2: 180
+  price_gel: 177000
+tariff_17:
+  voltage: '6/10'
+  power_kwt: 2000-3000
+  days_to_complete: 90
+  days_to_complete_without_resolution: 45
+  days_to_complete_x2: 180
+  price_gel: 257500
+tariff_18:
+  voltage: '6/10'
+  power_kwt: 3000-5000
+  days_to_complete: 90
+  days_to_complete_without_resolution: 45
+  days_to_complete_x2: 180
+  price_gel: 416000
