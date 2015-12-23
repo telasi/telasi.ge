@@ -18,7 +18,7 @@ namespace :tariff do
 
     YAML.load_file(file).values.each do |t|
       from, to = t['power_kwt'].split('-').map{ |p| p.to_i }
-      voltage  = t['voltage'].to_i
+      voltage  = t['voltage']
       hash = { power_from: from, power_to: to, voltage: voltage, starts: d1 }
       tariff = Network::NewCustomerTariff.where(hash).first || Network::NewCustomerTariff.new(hash)
       tariff.days_to_complete = t['days_to_complete'].to_i
