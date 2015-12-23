@@ -1,10 +1,16 @@
 <%= table_for @tariffs, title: t('models.network.tariffs.tariff'), icon: '/icons/network.png', collapsible: true do |t|
   t.title_action network_generate_network_tariffs_url, label: t('models.network.tariffs.generation'), icon: '/icons/wand.png', confirm: t('models.network.tariffs.sure') if @tariffs.empty?
+  t.date_field :starts, label: 'დაწყება', empty: false
+  t.date_field :ends, label: 'დასრულება', empty: false
   t.text_field :voltage
   t.complex_field i18n: 'power' do |c|
     c.text_field :power_from, tag: 'code', after: '-'
     c.text_field :power_to, tag: 'code', after: 'kW'
   end
-  t.text_field :days_to_complete, tag: 'code', after: t('models.network_new_customer_item.unit_days')
+  t.complex_field i18n: 'days_to_complete' do |c|
+    c.text_field :days_to_complete_without_resolution, tag: 'code', after: '-'
+    c.text_field :days_to_complete_x2, tag: 'code', after: '-', empty: false
+    c.text_field :days_to_complete, tag: 'code', after: t('models.network_new_customer_item.unit_days')
+  end
   t.number_field :price_gel, after: 'GEL'
 end %>
