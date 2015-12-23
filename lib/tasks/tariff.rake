@@ -1,5 +1,8 @@
 namespace :tariff do
 
+  START_DATE = Date.new(2014, 1, 1)
+  END_DATE = Date.new(9999,1,1)
+
   TARIFFS = [{
     file: 'data/new-customer-tariffs.yml',
     starts: nil,
@@ -13,8 +16,8 @@ namespace :tariff do
 
   def sync_tariff(tariff)
     file = tariff[:file]
-    d1 = tariff[:starts] || Date.new(1900, 1, 1)
-    d2 = tariff[:ends] || Date.new(9999, 1, 1)
+    d1 = tariff[:starts] || START_DATE
+    d2 = tariff[:ends] || END_DATE
 
     YAML.load_file(file).values.each do |t|
       from, to = t['power_kwt'].split('-').map{ |p| p.to_i }
@@ -33,8 +36,8 @@ namespace :tariff do
 
   def fix_dates
     Network::NewCustomerTariff.each do |tariff|
-      tariff.starts ||= Date.new(1900,1,1)
-      tariff.ends ||= Date.new(9999,1,1)
+      tariff.starts ||= START_DATE
+      tariff.ends ||= END_DATE
       tariff.save
     end
   end
