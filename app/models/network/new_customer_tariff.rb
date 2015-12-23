@@ -4,8 +4,10 @@ class Network::NewCustomerTariff
   VOLTAGE_380 = '380'
   VOLTAGE_610 = '6/10'
 
+
   include Mongoid::Document
   include Mongoid::Timestamps
+
 
   field :voltage,    type: String
   field :power_from, type: Integer
@@ -17,10 +19,12 @@ class Network::NewCustomerTariff
   field :starts, type: Date
   field :ends,   type: Date
 
+
   def self.tariff_for(voltage, power, date=nil)
-    Network::NewCustomerTariff.each do |t|
-      return t if t.voltage == voltage and power >= t.power_from and power <= t.power_to
-    end
-    nil
+    date ||= Date.today
+    tariffs = Network::NewCustomerTariff.where(voltage: voltage, :power_from.lt => power, :power_to.gte => power)
+    tariffs = tariffs.where(:starts.lte => date, :ends.gte => date)
+    tariffs.first
   end
+
 end
