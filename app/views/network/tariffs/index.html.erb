@@ -1,5 +1,4 @@
 <%= table_for @tariffs, title: t('models.network.tariffs.tariff'), icon: '/icons/network.png', collapsible: true do |t|
-  t.title_action network_generate_network_tariffs_url, label: t('models.network.tariffs.generation'), icon: '/icons/wand.png', confirm: t('models.network.tariffs.sure') if @tariffs.empty?
   t.date_field :starts, label: 'დაწყება', empty: false
   t.date_field :ends, label: 'დასრულება', empty: false
   t.text_field :voltage

@@ -5,11 +5,6 @@ class Network::TariffsController < ApplicationController
     @tariffs = Network::NewCustomerTariff.asc(:_id)
   end
 
-  def generate_tariffs
-    Network::NewCustomerTariff.generate!
-    redirect_to network_tariffs_url, notice: I18n.t('models.network.tariffs.generated')
-  end
-
   def nav
     @nav = { 'ქსელი' => network_home_url, 'ტარიფები' => nil }
   end

@@ -144,7 +144,6 @@ TelasiGe::Application.routes.draw do
     end
     scope '/tariffs', controller: 'tariffs' do
       get '/', action: 'index', as: 'tariffs'
-      get '/generate_tariffs', action: 'generate_tariffs', as: 'generate_network_tariffs'
     end
     scope '/aviso', controller: 'aviso' do
       get '/', action: 'index', as: 'avisos'
