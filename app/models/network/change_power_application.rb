@@ -48,6 +48,7 @@ class Network::ChangePowerApplication
   field :voltage,     type: String
   field :power,       type: Float
   field :amount,      type: Float, default: 0
+  field :minus_amount,type: Float, default: 0
   field :customer_id, type: Integer
   # dates
   field :send_date, type: Date
@@ -212,12 +213,15 @@ class Network::ChangePowerApplication
             self.amount = 0
           else
             per_kwh = tariff.price_gel * 1.0 / tariff.power_to
-            self.amount = (per_kwh * (self.power - self.old_power)).round(2)
+            self.amount = (per_kwh * (self.power - self.old_power)).round(2) - minus_amount
           end
         else
-          self.amount = tariff.price_gel - tariff_old.price_gel
+          self.amount = tariff.price_gel - tariff_old.price_gel - minus_amount
         end
       end
+
+      # fixing amount
+      self.amount = 0 if self.amount < 0
     end
   end
 
