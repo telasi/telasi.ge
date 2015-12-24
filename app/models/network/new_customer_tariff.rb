@@ -22,7 +22,7 @@ class Network::NewCustomerTariff
 
   def self.tariff_for(voltage, power, date=nil)
     date ||= Date.today
-    tariffs = Network::NewCustomerTariff.where(voltage: voltage, :power_from.lt => power, :power_to.gte => power)
+    tariffs = Network::NewCustomerTariff.where(voltage: voltage, :power_from.lte => power, :power_to.gte => power)
     tariffs = tariffs.where(:starts.lte => date, :ends.gte => date)
     tariffs.first
   end
