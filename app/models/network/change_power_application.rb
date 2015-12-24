@@ -213,10 +213,10 @@ class Network::ChangePowerApplication
             self.amount = 0
           else
             per_kwh = tariff.price_gel * 1.0 / tariff.power_to
-            self.amount = (per_kwh * (self.power - self.old_power)).round(2) - minus_amount
+            self.amount = (per_kwh * (self.power - self.old_power)).round(2) - minus_amount.abs
           end
         else
-          self.amount = tariff.price_gel - tariff_old.price_gel - minus_amount
+          self.amount = tariff.price_gel - tariff_old.price_gel - minus_amount.abs
         end
       end
 
