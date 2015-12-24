@@ -206,6 +206,7 @@ TelasiGe::Application.routes.draw do
       delete '/delete_control_item/:id', action: 'delete_control_item', as: 'change_power_delete_control_item'
       # change amount manually
       match '/edit_amount/:id', action: 'edit_amount', as: 'change_power_edit_amount', via: ['get', 'post']
+      match '/edit_minus_amount/:id', action: 'edit_minus_amount', as: 'change_power_edit_minus_amount', via: ['get', 'post']
       # send factura
       post '/send_factura/:id', action: 'send_factura', as: 'change_power_send_factura'
       # --> billing system

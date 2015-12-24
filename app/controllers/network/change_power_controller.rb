@@ -222,6 +222,16 @@ class Network::ChangePowerController < ApplicationController
     end
   end
 
+  def edit_minus_amount
+    @title = 'კორექციის შეცვლა'
+    @application = Network::ChangePowerApplication.find(params[:id])
+    if request.post?
+      if @application.update_attributes(params.require(:network_change_power_application).permit(:minus_amount))
+        redirect_to network_change_power_url(id: @application.id), notice: 'თანხა შეცვლილია'
+      end
+    end
+  end
+
   def send_factura
     application = Network::ChangePowerApplication.find(params[:id])
     raise 'ფაქტურის გაგზავნა დაუშვებელია' unless application.can_send_factura?

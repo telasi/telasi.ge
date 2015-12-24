@@ -159,7 +159,7 @@ module Network::ChangePowerHelper
             amnt.action(network_change_power_edit_amount_url(id: application.id), label: 'შეცვლა', icon: '/icons/pencil.png') if application.can_change_amount?
           end
           c.number_field :minus_amount, after: 'GEL' do |amnt|
-            amnt.action(network_change_power_edit_amount_url(id: application.id), label: 'შეცვლა', icon: '/icons/pencil.png')
+            amnt.action(network_change_power_edit_minus_amount_url(id: application.id), label: 'შეცვლა', icon: '/icons/pencil.png')
           end  unless application.can_change_amount?
           # c.number_field :paid, after: 'GEL'
           # c.number_field :remaining, after: 'GEL'
