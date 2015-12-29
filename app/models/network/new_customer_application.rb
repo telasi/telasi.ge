@@ -108,7 +108,20 @@ class Network::NewCustomerApplication
   before_save :status_manager, :calculate_total_cost, :upcase_number, :prepare_mobile
   before_create :init_payment_id, :set_user_business_days
 
-  # Checking correctess of 
+
+  def self.duration_collection
+    {
+      'სტანდარტული'   => Network::NewCustomerApplication::DURATION_STANDARD,
+      'განახევრებული' => Network::NewCustomerApplication::DURATION_HALF,
+      'გაორმაგებული'  => Network::NewCustomerApplication::DURATION_DOUBLE
+    }
+  end
+
+  def duration_name
+    self.class.duration_collection.invert[duration]
+  end
+
+  # Checking correctess of
   def self.correct_number?(number); not not (/^(CNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number) end
 
   def customer; Billing::Customer.find(self.customer_id) if self.customer_id.present? end

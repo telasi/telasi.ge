@@ -21,4 +21,9 @@ module NewCustomerHelper
       I18n.t('models.network_new_customer_item.use_shared') => Network::NewCustomerItem::USE_SHARED
     }
   end
+
+  def duration_collection
+    Network::NewCustomerApplication.duration_collection
+  end
+
 end

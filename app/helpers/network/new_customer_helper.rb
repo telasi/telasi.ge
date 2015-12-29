@@ -69,7 +69,8 @@ module Network::NewCustomerHelper
         t.text_field  :bank_account, width: 300 #, required: true
         t.combo_field :voltage, collection: voltage_collection, empty: false, required: true
         t.number_field :power, after: 'kWh', width: 100, required: true
-        t.boolean_field :need_resolution, required: true
+        # t.boolean_field :need_resolution, required: true
+        t.combo_field :duration, collection: duration_collection, empty: false, required: true, label: 'შესრულების ხანგრძლიობა'
         t.text_field :notes, width: 500
         t.text_field :oqmi
         t.text_field :proeqti
@@ -175,7 +176,7 @@ module Network::NewCustomerHelper
           c.text_field :unit, after: '/'
           c.number_field :power, after: 'კვტ'
         end
-        t.boolean_field :need_resolution, required: true
+        t.text_field :duration_name, label: 'შესრულების ხანგრძლიობა', required: true
         t.text_field :notes
         t.text_field :oqmi
         t.text_field :proeqti
