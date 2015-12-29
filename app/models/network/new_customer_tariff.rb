@@ -20,6 +20,18 @@ class Network::NewCustomerTariff
   field :ends,   type: Date
 
 
+  def days(app)
+    case app.duration
+    when NewCustomerApplication::DURATION_HALF
+      days_to_complete_without_resolution
+    when NewCustomerApplication::DURATION_DOUBLE
+      days_to_complete_x2
+    else
+      days_to_complete
+    end
+  end
+
+
   def self.tariff_for(voltage, power, date=nil)
     date ||= Date.today
     tariffs = Network::NewCustomerTariff.where(voltage: voltage, :power_from.lte => power, :power_to.gte => power)
