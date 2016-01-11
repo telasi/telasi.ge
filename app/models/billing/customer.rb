@@ -27,6 +27,7 @@ class Billing::Customer < ActiveRecord::Base
   def last_bill_date; self.item_bills.last.billdate end
   def last_bill_number; self.item_bills.last.billnumber end
 
+
   def cut_deadline
     unless @cut_deadline
       last = self.item_bills.last
@@ -35,38 +36,42 @@ class Billing::Customer < ActiveRecord::Base
     @cut_deadline
   end
 
+
   def pre_payment
-    Billing::Payment.where('paydate>? AND custkey=? AND status=1', Date.today - 7, self.custkey).inject(0) do |sum,payment|
+    pre_payments.inject(0) do |sum, payment|
       sum += payment.amount
     end
   end
+
 
   def pre_payment_date
-    p = Billing::Payment.where('paydate>? AND custkey=? AND status=1', Date.today - 7, self.custkey).order('paykey desc').first
-    p.paydate if p
+    pre_payments.order('paykey desc').first.try(:paydate)
   end
+
 
   def pre_trash_payment
-    Billing::TrashPayment.where('paydate>? AND custkey=? AND status=1', Date.today - 7, self.custkey).inject(0) do |sum,payment|
+    pre_trash_payments.inject(0) do |sum, payment|
       sum += payment.amount
     end
   end
+
 
   def pre_trash_payment_date
-    p = Billing::TrashPayment.where('paydate>? AND custkey=? AND status=1', Date.today - 7, self.custkey).order('paykey desc').first
-    p.paydate if p
+    pre_trash_payments.order('paykey desc').first.try(:paydate)
   end
 
+
   def pre_water_payment
-    Billing::WaterPayment.where('paydate>? AND custkey=? AND status=1', Date.today - 7, self.custkey).inject(0) do |sum,payment|
+    pre_water_payments.inject(0) do |sum, payment|
       sum += payment.amount
     end
   end
 
+
   def pre_water_payment_date
-    p = Billing::WaterPayment.where('paydate>? AND custkey=? AND status=1', Date.today - 7, self.custkey).order('paykey desc').first
-    p.paydate if p
+    pre_water_payments.order('paykey desc').first.try(:paydate)
   end
+
 
   def status_name
     case self.statuskey
@@ -77,13 +82,16 @@ class Billing::Customer < ActiveRecord::Base
     end
   end
 
+
   def balance_sms
     sms_text( true )
   end
 
+
   def deadline_sms
     sms_text( false )
   end
+
 
   def sms_text(include_credits)
     if include_credits || cut_candidate?
@@ -97,38 +105,47 @@ class Billing::Customer < ActiveRecord::Base
     end
   end
 
+
   def payable_balance
     @payable_balance ||= self.balance - self.pre_payment
   end
 
+
   def payable_water_balance
     @payable_water_balance ||= (self.current_water_balance || 0) - self.pre_water_payment
   end
+
 
   def payable_trash_balance
     trash_balance = self.trash_customer && self.trash_customer.balance
     @payable_trash_balance ||= (trash_balance || 0) - self.pre_trash_payment
   end
 
+
   def cut_candidate_water?
     payable_water_balance > 0.99
   end
+
 
   def cut_candidate_trash?
     payable_trash_balance > 0.99
   end
 
+
   def cut_candidate_telasi?
     payable_balance > 0.99
   end
+
 
   def cut_candidate?
     cut_candidate_telasi? || cut_candidate_trash? || cut_candidate_water?
   end
 
+
   def self.sms_candidates
     Billing::Customer.where('fax IS NOT NULL')
   end
+
 
   def to_s
     if self.commercial.present?
@@ -138,4 +155,21 @@ class Billing::Customer < ActiveRecord::Base
     end
     "#{self.accnumb.to_ka} -- #{a}"
   end
+
+private
+
+  def pre_payments
+    Billing::Payment.where('paydate > ? AND custkey = ? AND status IN (0, 1)', 7.days.ago, self.custkey)
+  end
+
+
+  def pre_trash_payments
+    Billing::TrashPayment.where('paydate>? AND custkey=? AND status IN (0, 1)', 7.days.ago, self.custkey)
+  end
+
+
+  def pre_water_payments
+    Billing::WaterPayment.where('paydate>? AND custkey=? AND status IN (0, 1)', 7.days.ago, self.custkey)
+  end
+
 end
