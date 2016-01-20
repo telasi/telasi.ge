@@ -413,17 +413,17 @@ class Network::NewCustomerApplication
 
 
   def calculate_total_cost
-    tariff = Network::NewCustomerTariff.tariff_for(self.voltage, self.power, self.send_date)
+    tariff = Network::NewCustomerTariff.tariff_for(self.voltage, self.power, self.start_date)
     if tariff
       if power > 0
         self.tariff = tariff
         self.amount = tariff.price_gel
         self.days   = tariff.days(self)
-        if self.send_date
+        if self.start_date
           if self.use_business_days
-            self.plan_end_date = (self.days - 1).business_days.after( self.send_date )
+            self.plan_end_date = (self.days - 1).business_days.after( self.start_date )
           else
-            self.plan_end_date = self.send_date + self.days - 1
+            self.plan_end_date = self.start_date + self.days - 1
           end
         end
         self.amount = (self.amount / 1.18 * 100).round / 100.0 unless self.pays_non_zero_vat?
