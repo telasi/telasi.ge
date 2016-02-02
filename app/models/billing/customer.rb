@@ -27,6 +27,17 @@ class Billing::Customer < ActiveRecord::Base
   def last_bill_date; self.item_bills.last.billdate end
   def last_bill_number; self.item_bills.last.billnumber end
 
+  def deposit_customer
+    Billing::DepositCustomer.where(custkey: self.custkey, status: 0).first
+  end
+
+  def deposit_amount
+    if self.deposit_customer and self.deposit_customer.active?
+      return self.deposit_customer.start_depozit_amount
+    else
+      return 0
+    end
+  end
 
   def cut_deadline
     unless @cut_deadline
@@ -107,7 +118,7 @@ class Billing::Customer < ActiveRecord::Base
 
 
   def payable_balance
-    @payable_balance ||= self.balance - self.pre_payment
+    @payable_balance ||= self.balance + self.deposit_amount - self.pre_payment
   end
 
 
