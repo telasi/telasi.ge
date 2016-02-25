@@ -250,8 +250,8 @@ class Network::NewCustomerApplication
 
   def send_main_operations!(customer, deposit_customer, amount, item_date)
     # set customer exception status
-    customer.except = true
-    customer.save!
+    #customer.except = true
+    #customer.save!
     account = customer.accounts.first
     # adding exception to 
     deposit_customer.exception_end_date = item_date + (self.personal_use ? 20 : 10)
