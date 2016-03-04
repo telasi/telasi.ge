@@ -90,7 +90,7 @@ class Network::NewCustomerApplication
 
   embeds_many :items, class_name: 'Network::NewCustomerItem', inverse_of: :application
   has_many :files, class_name: 'Sys::File', as: 'mountable'
-  has_many :messages, class_name: 'Sys::SmsMessage', as: 'messageable'
+  has_many :messages, class_name: 'Sys::SmsMessage', as: 'messageable', :order => 'created_at ASC'
   has_many :requests, class_name: 'Network::RequestItem', as: 'source'
   belongs_to :stage, class_name: 'Network::Stage'
 
