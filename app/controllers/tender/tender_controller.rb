@@ -65,8 +65,9 @@ class Tender::TenderController < ApplicationController
 
     if @search
       ten = ten.where(nid: @search[:nid]) if @search[:nid].present?
-      ten = ten.where(title: @search[:title]) if @search[:title].present?
-      ten = ten.where(created_dt: @search[:created_dt]) if @search[:created_dt].present?
+      ten = ten.where(title: @search[:title].mongonize) if @search[:title].present?
+      ten = ten.where("created >= ?", (DateTime.strptime(@search[:created_dt],'%Y-%m-%d') - 4.hours).to_i) if @search[:created_dt].present?
+      ten = ten.where("created <= ?", (DateTime.strptime(@search[:created_dt],'%Y-%m-%d') - 4.hours + 1.day).to_i) if @search[:created_dt].present?
     end
 
   	@tenders = ten.paginate(page: params[:page], per_page: 20)
@@ -78,8 +79,8 @@ class Tender::TenderController < ApplicationController
 
     if @search
       ten = ten.where(nid: @search[:nid]) if @search[:nid].present?
-      ten = ten.where(title: @search[:title]) if @search[:title].present?
-      ten = ten.where(created_dt: @search[:created_dt]) if @search[:created_dt].present?
+      ten = ten.where(title: @search[:title].mongonize) if @search[:title].present?
+      ten = ten.where(created: @search[:created_dt]) if @search[:created_dt].present?
     end
 
     @tenders = ten.paginate(page: params[:page], per_page: 20)

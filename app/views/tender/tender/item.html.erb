@@ -7,8 +7,10 @@
   end 
  end 
 %>
-<%= forma_for @file, title: "ფაილის დამატება", icon: '/icons/document.png', collapsible: false, multipart: true do |f|
-  f.file_field 'file', label: t('models.general.chose_file'), required: true
-  f.submit t('models.general.actions.save')
-  f.bottom_action tender_delete_file_url(nid: @tender.nid), { label: t('models.general.actions.delete') }
-end %>
+<% if current_user and Sys::Permission.has_permission_for_path?(current_user, tender_delete_file_url) %>
+	<%= forma_for @file, title: "ფაილის დამატება", icon: '/icons/document.png', collapsible: false, multipart: true do |f|
+	  f.file_field 'file', label: t('models.general.chose_file'), required: true
+	  f.submit t('models.general.actions.save')
+	  f.bottom_action tender_delete_file_url(nid: @tender.nid), { label: t('models.general.actions.delete') }
+	end %>
+<% end %>
