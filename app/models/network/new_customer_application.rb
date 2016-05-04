@@ -111,7 +111,7 @@ class Network::NewCustomerApplication
 
   def self.duration_collection
     {
-      'სტანდარტული'   => Network::NewCustomerApplication::DURATION_STANDARD,
+      'სტანდარტული'  => Network::NewCustomerApplication::DURATION_STANDARD,
       'განახევრებული' => Network::NewCustomerApplication::DURATION_HALF,
       'გაორმაგებული'  => Network::NewCustomerApplication::DURATION_DOUBLE
     }
@@ -126,7 +126,7 @@ class Network::NewCustomerApplication
 
   def customer; Billing::Customer.find(self.customer_id) if self.customer_id.present? end
   def payments; self.billing_items.select { |x| [116,1005,1012].include?(x.billoperkey) } end
-  def paid; self.payments.map{ |x| x.operation.opertpkey == 3 ? x.amount : -x.amount }.inject{ |sum, x| sum + x } || 0  end
+  def paid; self.payments.select{ |x| x.itemdate >= ( Time.now.to_date - 1.years )}.map{ |x| x.operation.opertpkey == 3 ? x.amount : -x.amount }.inject{ |sum, x| sum + x } || 0  end
   def remaining
     if self.amount.present?
       if self.effective_amount < 0
