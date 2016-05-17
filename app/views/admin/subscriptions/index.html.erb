@@ -56,7 +56,3 @@
     <%= will_paginate @not_sent %>
   <% end %>
 </div>
-<div style="margin-top: 16px">
-  <% cnt = Sys::SubscriptionMessage.where(sent: true).count %>
-  დღემდე სულ <code><%= number_with_delimiter cnt %></code> წერილია დაგზავნილი
-</div>
