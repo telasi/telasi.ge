@@ -126,6 +126,58 @@ class CustomersController < ApplicationController
     @nav
   end
 
+  #bacho 15/08/2016
+  def billpdf
+    custkey_v= params[:custkey_p]
+    payable_balance_v= params[:payable_balance_p]
+    trash_balance_v= params[:trash_balance_p]
+    current_water_balance_v= params[:current_water_balance_p]
+    last_bill_date_v= params[:last_bill_date_p]
+    last_bill_number_v= params[:last_bill_number_p]
+    cut_deadline_v=params[:cut_deadline_p]
+    accnumb_v= params[:accnumb_p]
+    custname_v=params[:custname_p]
+    t_balance_text_v=params[:t_balance_text_p]
+    t_wbalance_text_v=params[:t_wbalance_text_p]
+    t_tbalance_text_v=params[:t_tbalance_text_p]
+    t_cut_deadline_v=params[:t_cut_deadline_p]
+    t_bill_header_v=params[:t_bill_header_p]
+    t_print_time_v=params[:t_print_time_p]
+    t_accnumb_v=params[:t_accnumb_p]
+    deposit_v=Billing::DepositCustomer.where(:custkey => custkey_v).where(:status => 0).last
+    
+    if !deposit_v.nil? 
+      balance_v=balance_v.to_f+deposit_v.depozit_amount
+    end
+
+    respond_to do |format|
+      format.html
+      
+      format.pdf do
+        pdf = BillPdf.new( custkey_v , 
+                           payable_balance_v ,
+                           trash_balance_v , 
+                           current_water_balance_v ,
+                           last_bill_date_v, 
+                           last_bill_number_v  ,
+                           cut_deadline_v   ,
+                           accnumb_v  ,
+                           custname_v ,
+                           t_balance_text_v ,
+                           t_wbalance_text_v ,
+                           t_tbalance_text_v ,
+                           t_cut_deadline_v,
+                           t_bill_header_v,
+                           t_print_time_v,
+                           t_accnumb_v
+                          )
+
+        send_data pdf.render , filename: 'Bill' , type: 'application/pdf' , disposition: 'inline'
+      end  
+
+    end  
+  end
+
   private
   def customer_params; params.require(:customer_registration).permit(:category, :ownership, :rs_tin, :address, :address_code, :need_factura, :change_data, :bank_code, :bank_account) end
 end

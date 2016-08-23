@@ -36,6 +36,9 @@ TelasiGe::Application.routes.draw do
     # histories
     get '/history/:custkey', action: 'history', as: 'customer_history'
     get '/trash_history/:custkey', action: 'trash_history', as: 'customer_trash_history'
+    
+    #bacho 15/08/2016
+    get '/billpdf', action: 'billpdf'
   end
 
   scope '/calculator', controller: 'calculator' do

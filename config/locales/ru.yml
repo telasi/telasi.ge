@@ -167,6 +167,9 @@ ru:
       prev_balance: Прев.Баланс
       cut_deadline: Крайний срок оплаты
       last_bill: Последняя квитанция
+      pdf_bill:
+        bill_header:  Задолженность абонента 
+        print_time:   Время печати      
       actions:
         empty_customer_list: Вы не сохранили ни одного абонента.
         resolve_empty_customer_list: Для просмотра задолжености нажмите на кнопку <strong>Поиск абонента</strong>.

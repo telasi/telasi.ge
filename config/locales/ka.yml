@@ -183,6 +183,9 @@ ka:
         back_to_customers: '&larr; უკან აბონენტებში'
         history: დარიცხვის ისტორია
         trash_history: დასუფთავების ისტორია
+      pdf_bill:
+        bill_header:  ცნობა დავალიანების შესახებ 
+        print_time:   ბეჭდვის თარიღი
       errors:
         cut_warning: "ელ.ენერგიის შეზღუდვის აცილების მიზნით, გთხოვთ დროულად დაფაროთ დავალიანება! გადახდის ბოლო თარიღია:"
     billing_customer_registration:

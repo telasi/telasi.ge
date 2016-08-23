@@ -4,12 +4,12 @@
   <li class="list-group-item">
     <div class="pull-right">
       <i class="fa fa-bolt"></i>
-      <code><%= number_with_precision customer.balance, precision: 2 %></code> GEL
+      <code><%= number_with_precision customer.payable_balance, precision: 2 %></code> GEL
       &nbsp;
       <% if with_actions %>
         <%= link_to t('models.general.history'), customer_history_url(custkey: customer.custkey), class: ['btn', 'btn-xs', 'btn-info'] %>
       <% end %>
-      <%= link_to t('pay'), pay_show_form_url(serviceid: 'ENERGY', amount: (customer.balance>0 ? customer.balance : 0), accnumb: customer.accnumb.to_ka), class: ['btn', 'btn-success', 'btn-xs'] %>
+      <%= link_to t('pay'), pay_show_form_url(serviceid: 'ENERGY', amount: (customer.payable_balance>0 ? customer.payable_balance : 0), accnumb: customer.accnumb.to_ka), class: ['btn', 'btn-success', 'btn-xs'] %>
     </div>
     <%= t('models.billing_customer.balance') %>
     <%pre_payment=customer.pre_payment ; pre_payment_date=customer.pre_payment_date%>
@@ -74,13 +74,39 @@
     <div class="pull-right">
       <i class="fa fa-time"></i>
       <% if customer.cut_deadline %>
-        <%= customer.cut_deadline.strftime('%d/%m/%Y') %>
+        <%= customer.cut_deadline.strftime('%d/%m/%Y') %>        
       <% else %>
         <span class="text-muted"><%= t('models.general.undefined') %></span>
       <% end %>
+
     </div>
     <%= t('models.billing_customer.cut_deadline') %>
   </li>
+
+  <li class="list-group-item">
+        <%= link_to  image_tag("/images/print.png" ,size: "20x20")+ " "+ t('models.general.actions.print'), 
+          {:controller => "customers", :action => "billpdf", 
+            :custkey_p => @customer.custkey , 
+            :payable_balance_p => customer.payable_balance,
+            :trash_balance_p => customer.trash_balance,
+            :current_water_balance_p => customer.current_water_balance,
+            :last_bill_number_p => customer.last_bill_number,
+            :last_bill_date_p => customer.last_bill_date.strftime('%d/%m/%Y'),
+            :cut_deadline_p => customer.cut_deadline.strftime('%d/%m/%Y'),
+            :accnumb_p => customer.accnumb.to_ka,
+            :custname_p => customer.custname.to_ka,
+            :t_balance_text_p => t('models.billing_customer.balance'),
+            :t_wbalance_text_p => t('models.billing_customer.current_water_balance'),
+            :t_tbalance_text_p => t('models.billing_customer.trash_balance'),  
+            :t_cut_deadline_p =>  t('models.billing_customer.cut_deadline'),  
+            :t_bill_header_p =>  t('models.billing_customer.pdf_bill.bill_header'),  
+            :t_print_time_p =>  t('models.billing_customer.pdf_bill.print_time'), 
+            :t_accnumb_p =>  t('models.billing_customer.accnumb') ,            
+         
+            format: 'pdf'  }%>
+   
+  </li>
+
   <%if with_sms%>
     <li class="list-group-item">
       <div class="pull-right">
