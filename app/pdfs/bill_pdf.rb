@@ -36,7 +36,7 @@ class BillPdf < Prawn::Document
 
 
      font("#{Rails.root}/app/assets/fonts/DejaVuSans.ttf") do
-       move_down 12    
+       move_down 20    
        text   t_bill_header_v , size: 20
        move_down 25 
        stroke_horizontal_rule
