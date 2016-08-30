@@ -86,7 +86,7 @@
   <li class="list-group-item">
         <%= link_to  image_tag("/images/print.png" ,size: "20x20")+ " "+ t('models.general.actions.print'), 
           {:controller => "customers", :action => "billpdf", 
-            :custkey_p => @customer.custkey , 
+            :custkey_p => customer.custkey , 
             :payable_balance_p => customer.payable_balance,
             :trash_balance_p => customer.trash_balance,
             :current_water_balance_p => customer.current_water_balance,
