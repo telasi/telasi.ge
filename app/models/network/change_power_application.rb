@@ -72,6 +72,9 @@ class Network::ChangePowerApplication
   has_many :requests, class_name: 'Network::RequestItem', as: 'source'
   belongs_to :stage, class_name: 'Network::Stage'
 
+  embeds_many :voltages, class_name: 'Network::Voltage', inverse_of: :application
+  accepts_nested_attributes_for :voltages, reject_if: :all_blank, allow_destroy: true
+
   # validates :number, presence: { message: I18n.t('models.network_change_power_application.errors.number_required') }
   validates :user, presence: { message: 'user required' }
   validates :rs_tin, presence: { message: I18n.t('models.network_change_power_application.errors.tin_required') }
@@ -82,12 +85,28 @@ class Network::ChangePowerApplication
   # validates :bank_account, presence: { message: I18n.t('models.network_change_power_application.errors.bank_account_required') }
   # validates :old_voltage, presence: { message: 'required!' }
   # validates :old_power, numericality: { message: I18n.t('models.network_change_power_application.errors.illegal_power') }
-  validates :voltage, presence: { message: 'required!' }
-  validates :power, numericality: { message: I18n.t('models.network_change_power_application.errors.illegal_power') }
+  #validates :voltage, presence: { message: 'required!' }
+  #validates :power, numericality: { message: I18n.t('models.network_change_power_application.errors.illegal_power') }
   #validates :customer, presence: { message: 'აარჩიეთ აბონენტი' }
 
   validate :validate_rs_name, :validate_number
   before_save :status_manager, :calculate_total_cost
+
+  def voltage
+    if self.voltages.empty?
+      read_attribute(:voltage)
+    else
+      self.voltages.first.voltage
+    end
+  end
+
+  def power
+    if self.voltages.empty?
+      read_attribute(:power)
+    else
+      self.voltages.first.power
+    end
+  end
 
   def self.correct_number?(type, number)
     if type == TYPE_CHANGE_POWER
@@ -204,19 +223,28 @@ class Network::ChangePowerApplication
       if self.zero_charge
         self.amount = 0
       else
+        total_price_gel = 0
         tariff_old = Network::NewCustomerTariff.tariff_for(self.old_voltage, self.old_power, self.start_date)
-        tariff = Network::NewCustomerTariff.tariff_for(self.voltage, self.power, self.start_date)
-        if tariff_old.price_gel > tariff.price_gel
-          self.amount = 0
-        elsif tariff_old == tariff
-          if self.old_power == self.power
-            self.amount = 0
-          else
-            per_kwh = tariff.price_gel * 1.0 / tariff.power_to
-            self.amount = (per_kwh * (self.power - self.old_power)).round(2) - minus_amount.abs
+        if self.voltages.length > 0
+          self.voltages.all.each do |volt|
+            volt.tariff = Network::NewCustomerTariff.tariff_for(volt.voltage, volt.power, self.start_date)
+            total_price_gel = total_price_gel + volt.tariff.price_gel
           end
         else
-          self.amount = tariff.price_gel - tariff_old.price_gel - minus_amount.abs
+          tariff = Network::NewCustomerTariff.tariff_for(self.voltage, self.power, self.start_date)
+          total_price_gel = tariff.price_gel
+        end
+        if tariff_old.price_gel > total_price_gel
+          self.amount = 0
+        elsif ( self.voltages.length == 1 && tariff_old == self.voltages.first.tariff )
+          if self.old_power == self.voltages.first.power
+            self.amount = 0
+          else
+            per_kwh = total_price_gel * 1.0 / self.voltages.first.tariff.power_to
+            self.amount = (per_kwh * (self.voltages.first.power - self.old_power)).round(2) - minus_amount.abs
+          end
+        else
+          self.amount = total_price_gel - tariff_old.price_gel - minus_amount.abs
         end
       end
 

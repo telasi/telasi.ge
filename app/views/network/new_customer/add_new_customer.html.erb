@@ -1,2 +1,81 @@
-<%= new_customer_form(@application, title: @title, submit: t('models.network_new_customer_application.actions.new'), cancel_url: network_new_customers_url, icon: '/icons/plus.png') %>
 <%= render partial: 'network/new_customer/edit_js' %>
+
+<%= simple_form_for @application, url: request.url do |f| %>
+	<div class="ff-form">
+		<div class="ff-tabs">
+			<div class="ff-cols">
+				<div class="ff-col-inner">
+					<div class="ff-field"><div class="ff-label">ნომერი</div><div class="ff-value">
+						<%= f.input_field :number, autofocus: true %>
+					</div></div>
+					<div class="ff-field"><div class="ff-label ff-required">საიდ.კოდი/უცხოელია?/დასახელება</div><div class="ff-value">
+						<%= f.input_field :rs_tin %>
+						<%= f.input_field :rs_foreigner, as: :boolean, boolean_style: :inline %>
+						<%= f.input_field :rs_name, width: 400 %>
+					</div></div>
+					<div class="ff-field"><div class="ff-label ff-required">დღგ-ს გადამხდელი?</div><div class="ff-value">
+						<%= f.input_field :vat_options, collection: vat_collection, empty: false, i18n: 'vat_name', required: true %>
+					</div></div>
+					<div class="ff-field"><div class="ff-label ff-required">ჭირდება ფაქტურა?</div><div class="ff-value">
+						<%= f.input_field :need_factura, as: :boolean %>
+					</div></div>
+					<div class="ff-field"><div class="ff-label ff-required">ვაჩვენო საიდ. კოდი</div><div class="ff-value">
+						<%= f.input_field :show_tin_on_print, as: :boolean %>
+					</div></div>
+					<div class="ff-field"><div class="ff-label ff-required">საყოფაცხოვრებო?</div><div class="ff-value">
+						<%= f.input_field :personal_use, as: :boolean %>
+					</div></div>
+					<div class="ff-field"><div class="ff-label ff-required">მობილური</div><div class="ff-value">
+						<%= f.input_field :mobile, required: true %>
+					</div></div>
+					<div class="ff-field"><div class="ff-label">ელ.ფოსტა</div><div class="ff-value">
+						<%= f.input_field :email %>
+					</div></div>
+					<div class="ff-field"><div class="ff-label">რაიონი</div><div class="ff-value">
+						<%= f.input_field :region, collection: regions_collection, empty: '--' %>
+					</div></div>
+					<div class="ff-field"><div class="ff-label ff-required">იურიდიული მისამართი</div><div class="ff-value">
+						<%= f.input_field :address, required: true, width: 500 %>
+					</div></div>
+					<div class="ff-field"><div class="ff-label">გამრიცხველიანების მისამართი</div><div class="ff-value">
+						<%= f.input_field :work_address, width: 500 %>
+					</div></div>
+					<div class="ff-field"><div class="ff-label">საკადასტრო კოდი</div><div class="ff-value">
+						<%= f.input_field :address_code %>
+					</div></div>
+					<div class="ff-field"><div class="ff-label">ბანკის SWIFT კოდი</div><div class="ff-value">
+						<%= f.input_field :bank_code, collection: banks, empty: '-- აარჩიეთ ბანკი --' %>
+					</div></div>
+					<div class="ff-field"><div class="ff-label">საბანკო ანგარიშის ნომერი IBAN ფორმატში</div><div class="ff-value">
+						<%= f.input_field :bank_account, width: 300 %>
+					</div></div>
+					<div>
+						<table>
+							<tr>
+								<td>
+									<%= f.simple_fields_for :voltages do |vitem| %>
+									<%=  render 'voltage_fields', f: vitem %>
+									<% end %>
+								</td>
+							</tr>
+						</table>
+						<%= link_to_add_association '<i class="fa fa-plus-circle fa-2x"></i>'.html_safe, f, :voltages %>
+				    </div>
+					<div class="ff-field"><div class="ff-label">შესრულების ხანგრძლიობა</div><div class="ff-value">
+						<%= f.input_field :duration, collection: duration_collection, empty: false, required: true, label: 'შესრულების ხანგრძლიობა' %>
+					</div></div>
+					<div class="ff-field"><div class="ff-label">შენიშვნები</div><div class="ff-value">
+						<%= f.input_field :notes, width: 500 %>
+					</div></div>
+					<div class="ff-field"><div class="ff-label">ოქმის #</div><div class="ff-value">
+						<%= f.input_field :oqmi %>
+					</div></div>
+					<div class="ff-field"><div class="ff-label">პროექტის #</div><div class="ff-value">
+						<%= f.input_field :proeqti %>
+					</div></div>
+			</div>
+		</div>
+	</div>
+	<%= f.submit @title, class: 'btn btn-primary' %>
+    <input class="btn btn-default" type="submit" name="commit" value="გაუქმება" />
+<% end %>

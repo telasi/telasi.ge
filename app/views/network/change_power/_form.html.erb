@@ -1,0 +1,63 @@
+<%= simple_form_for @application, url: request.url do |f| %>
+	<div class="ff-form">
+		<div class="ff-tabs">
+			<div class="ff-cols">
+				<div class="ff-col-inner">
+					<%= change_power_field(f, "სახეობა", :type, true, collection: change_power_type_collection, empty: false) %>
+					<%= change_power_field(f, "ნომერი", :number, true, autofocus: true, required: true) %>
+					<div class="ff-field"><div class="ff-label ff-required">საიდ.კოდი/უცხოელია?/დასახელება</div><div class="ff-value">
+						<%= f.input_field :rs_tin %>
+						<%= f.input_field :rs_foreigner, as: :boolean, boolean_style: :inline %>
+						<%= f.input_field :rs_name, width: 400 %>
+					</div></div>
+					<%= change_power_field(f, "დღგ-ს გადამხდელი?", :vat_options, true, collection: vat_collection, empty: false, i18n: 'vat_name', required: true) %>
+					<%= change_power_field(f, "ჭირდება ფაქტურა?", :need_factura, true, as: :boolean) %>
+					<%= change_power_field(f, "თელასი აკეთებს?", :work_by_telasi, true, as: :boolean) %>
+					<%= change_power_field(f, "ნულოვანი დარიცხვა?", :zero_charge, false, as: :boolean) %>
+				    <%= change_power_field(f, "მობილური", :mobile, true) %>
+					<%= change_power_field(f, "ელ.ფოსტა", :email, false) %>
+					<%= change_power_field(f, "რაიონი", :region, false, collection: regions_collection, empty: '--') %>
+					<%= change_power_field(f, "იურიდიული მისამართი", :address, true, required: true, width: 500) %>
+					<%= change_power_field(f, "გამრიცხველიანების მისამართი", :work_address, false, width: 500) %>
+					<%= change_power_field(f, "საკადასტრო კოდი", :address_code, false) %>
+					<%= change_power_field(f, "ბანკის SWIFT კოდი", :bank_code, false, collection: banks, empty: '-- აარჩიეთ ბანკი --') %>
+					<%= change_power_field(f, "საბანკო ანგარიშის ნომერი IBAN ფორმატში", :bank_account, false, width: 300) %>
+
+					<div class="ff-field"><div class="ff-label">ბილინგის აბონენტი</div><div class="ff-value">
+					<div>
+						<div id="network_change_power_application_customer" class="ff-select-field">
+							<input id="network_change_power_application_customer_id_value" value="" name="network_change_power_application[customer_id]" type="hidden">
+							<span id="network_change_power_application_customer_text" class="ff-select-label ff-empty">(empty)</span>
+							<div class="btn-group">
+								<a class="ff-select-link btn btn-mini btn-default btn-xs" data-id="network_change_power_application_customer" data-url="http://localhost:3000/select/customer" data-width="900" data-height="600"><i class="icon icon-search fa fa-search"></i>
+								</a><a class="ff-clear-selection-action btn btn-mini btn-default btn-xs" data-id="network_change_power_application_customer"><i class="icon icon-trash fa fa-trash-o"></i></a>
+							</div>
+						</div>
+					</div>
+					</div></div>
+
+					<%= change_power_field(f, "არსებული ძაბვა", :old_voltage, false, collection: voltage_collection_change_power) %>
+					<%= change_power_field(f, "არსებული სიმძლავრე", :old_power, false, after: 'kWh') %>
+
+					<div>
+						<table>
+							<tr>
+								<td>
+									<%= f.simple_fields_for :voltages do |vitem| %>
+									<%=  render 'voltage_fields', f: vitem %>
+									<% end %>
+								</td>
+							</tr>
+						</table>
+						<%= link_to_add_association '<i class="fa fa-plus-circle fa-2x"></i>'.html_safe, f, :voltages %>
+				    </div>
+
+				    <%= change_power_field(f, "შენიშვნები", :note, false, width: 500) %>
+				    <%= change_power_field(f, "ოქმის #", :oqmi, false) %>
+				    <%= change_power_field(f, "პროექტის #", :proeqti, false) %>
+			</div>
+		</div>
+	</div>
+	<%= f.submit @title, class: 'btn btn-primary' %>
+    <input class="btn btn-default" type="submit" name="commit" value="გაუქმება" />
+<% end %>

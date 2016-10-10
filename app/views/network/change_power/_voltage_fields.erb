@@ -1,0 +1,17 @@
+<div class='nested-fields'>
+<table>
+	<tr>
+		<td>
+			<div class="ff-field"><div class="ff-label ff-required">ძაბვა</div><div class="ff-value">
+				<%= f.input_field :voltage, collection: voltage_collection, empty: false, required: true %>
+			</div></div>
+			<div class="ff-field"><div class="ff-label ff-required">სიმძლავრე</div><div class="ff-value">
+			    <%= f.input_field :power, after: 'kWh', width: 100, required: true %>
+			</div></div>
+		</td>
+		<td>
+			<%= link_to_remove_association '<i class="fa fa-minus-circle fa-2x"></i>'.html_safe, f %>
+		</td>
+	</tr>
+</table>
+</div>

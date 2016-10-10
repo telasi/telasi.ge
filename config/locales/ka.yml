@@ -597,6 +597,9 @@ ka:
     network_stage:
       name: დასახელება
       numb: "#"
+    network_voltage:
+      voltage: ძაბვა
+      power: სიმძლავრე
     sys_sms_message:
       message: შეტყობინება
       mobile: მობილური

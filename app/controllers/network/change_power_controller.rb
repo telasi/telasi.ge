@@ -50,6 +50,7 @@ class Network::ChangePowerController < ApplicationController
       end
     else
       @application = Network::ChangePowerApplication.new
+      @application.voltages << Network::Voltage.new
     end
   end
 
@@ -107,7 +108,7 @@ class Network::ChangePowerController < ApplicationController
   def edit
     @title = I18n.t('models.network_new_customer_application.actions.edit.title')
     @application = Network::ChangePowerApplication.find(params[:id])
-    if request.post?
+    if request.post? || request.patch?
       if @application.update_attributes(change_power_params)
         redirect_to network_change_power_url(id: @application.id), notice: I18n.t('models.network_new_customer_application.actions.edit.changed')
       end
@@ -282,5 +283,5 @@ class Network::ChangePowerController < ApplicationController
 
   private
 
-  def change_power_params; params.require(:network_change_power_application).permit(:base_type, :base_number, :need_factura, :work_by_telasi, :type, :number, :note, :rs_tin, :rs_foreigner, :rs_name, :vat_options, :mobile, :email, :region, :address, :work_address, :address_code, :bank_code, :bank_account, :voltage, :power, :old_voltage, :old_power, :customer_id, :proeqti, :oqmi, :zero_charge) end
+  def change_power_params; params.require(:network_change_power_application).permit(:base_type, :base_number, :need_factura, :work_by_telasi, :type, :number, :note, :rs_tin, :rs_foreigner, :rs_name, :vat_options, :mobile, :email, :region, :address, :work_address, :address_code, :bank_code, :bank_account, :voltage, :power, :old_voltage, :old_power, :customer_id, :proeqti, :oqmi, :zero_charge, voltages_attributes: [:id, :voltage, :power, :_destroy]) end
 end

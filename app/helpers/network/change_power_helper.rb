@@ -68,6 +68,29 @@ module Network::ChangePowerHelper
     end
   end
 
+  def change_power_field(f, name, field, required, opts = {})
+    field_error = nil
+    if f.object.respond_to?(:errors) && f.object.errors.messages[field.to_sym].present?
+      has_errors = true
+      field_error = content_tag :div, :class => "ff-field-errors" do
+        content_tag :div, f.object.errors.messages[field.to_sym]
+      end  
+    end
+    
+    field_class = "ff-label"
+    field_class.concat(" ff-required") if required
+    label = content_tag :div, name, :class => field_class
+    input = f.input_field field, opts 
+    value = content_tag :div, input.concat(field_error), :class => "ff-value"
+
+    field_class = "ff-field"
+    if has_errors 
+      field_class.concat(" ff-error")
+    end
+
+    content_tag :div, label.concat(value), :class => field_class
+  end
+
   private
 
   def selected_change_power_tab
@@ -141,11 +164,26 @@ module Network::ChangePowerHelper
           c.text_field :old_unit, after: '/'
           c.number_field :old_power, after: 'კვტ'
         end
-        t.complex_field label: 'ახალი ძაბვა / სიმძლავრე', required: true do |c|
-          c.text_field :voltage, tag: 'code'
-          c.text_field :unit, after: '/'
-          c.number_field :power, after: 'კვტ'
+        if application.voltages.count > 1
+          # application.voltages.each do | volt |
+          #   t.complex_field label: 'ძაბვა / სიმძლავრე', required: true do |c|
+          #     c.text_field volt[:voltage], tag: 'code'
+          #     c.text_field :unit, after: '/'
+          #     c.number_field :power, after: 'კვტ'.html_safe
+          #   end
+          # end
+        else
+          t.complex_field label: 'ძაბვა / სიმძლავრე', required: true do |c|
+            c.text_field :voltage, tag: 'code'
+            c.text_field :unit, after: '/'
+            c.number_field :power, after: 'კვტ'
+          end
         end
+        # t.complex_field label: 'ახალი ძაბვა / სიმძლავრე', required: true do |c|
+        #   c.text_field :voltage, tag: 'code'
+        #   c.text_field :unit, after: '/'
+        #   c.number_field :power, after: 'კვტ'
+        # end
         t.text_field :note
         t.text_field :oqmi
         t.text_field :proeqti
@@ -171,6 +209,19 @@ module Network::ChangePowerHelper
           # c.date_field :plan_end_date do |plan|
           #   plan.action network_change_plan_date_url(id: application.id), icon: '/icons/pencil.png' if application.plan_end_date.present?
           # end
+        end
+      end
+      # voltages
+      if application.voltages.count > 1
+        f.tab title: 'ახალი ძაბვა / სიმძლავრე', icon: '/icons/lightning.png' do |t|
+          t.table_field :voltages, table: { title: 'ძაბვა', icon: '/icons/users.png' } do |volts|
+            volts.table do |t|
+              t.text_field :voltage, tag: 'code', after: "#{application.unit}"
+              # t.text_field :unit, after: '/'
+              t.number_field :power, after: 'კვტ'
+              t.number_field 'tariff.price_gel', label: 'ღირებულება', after: 'GEL'
+            end
+          end
         end
       end
       # 2. billing operations
@@ -241,15 +292,15 @@ module Network::ChangePowerHelper
         end
       end
       # 7. sys
-      f.tab title: 'სისტემური', icon: '/icons/traffic-cone.png' do |t|
-        t.complex_field label: 'მომხმარებელი', hint: 'მომხმარებელი, რომელმაც შექმნა ეს განცხადება', required: true do |c|
-          c.email_field 'user.email', after: '&mdash;'.html_safe
-          c.text_field 'user.full_name'
-          c.text_field 'user.mobile'
-        end
-        t.timestamps
-        # t.number_field 'payment_id', required: true, max_digits: 0
-      end
+      # f.tab title: 'სისტემური', icon: '/icons/traffic-cone.png' do |t|
+      #   t.complex_field label: 'მომხმარებელი', hint: 'მომხმარებელი, რომელმაც შექმნა ეს განცხადება', required: true do |c|
+      #     c.email_field 'user.email', after: '&mdash;'.html_safe
+      #     c.text_field 'user.full_name'
+      #     c.text_field 'user.mobile'
+      #   end
+      #   t.timestamps
+      #   # t.number_field 'payment_id', required: true, max_digits: 0
+      # end
     end
   end
 end

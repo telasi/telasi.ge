@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 
 # core
 gem 'rails', '4.0.0'
@@ -7,8 +7,9 @@ gem 'turbolinks', '2.2.0'
 gem 'jquery-turbolinks'
 
 # resources
-gem 'therubyracer', platforms: :ruby
-gem 'less', '~> 2'
+#gem 'therubyracer', platforms: :ruby
+#gem 'less', '~> 2'
+gem 'sass-rails', '~> 4.0.3'
 gem 'uglifier', '>= 1.3.0'
 gem 'jquery-rails', '~> 3'
 gem 'jquery-ui-rails', '~> 4'

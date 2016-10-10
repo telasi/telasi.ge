@@ -12,6 +12,7 @@
     end
   end
 end %>
+
 <div class="ff-table">
   <div class="ff-table-body ff-collapsible-body">
     <table class="ff-common-table">
@@ -28,39 +29,57 @@ end %>
         <% 
         #raise @down.inspect
         @result.each do |item| %>
+        <%
+         tender = Tender::Tender.where(nid: item['_id']['nid']).first
+         user = Tender::Tenderuser.where(_id: item['_id']['tenderuser']).first
+        %>
         <tr>
           <td>
             <div>
               <span id="organization_name">
-                <%= item[:organization_name] %>
+                <%= #item[:organization_name] 
+                 user.organization_name
+                %>
               </span>
             </div>
           </td>
           <td>
             <div>
               <span id="organization_type">
-                <%= I18n.t("tender.organization_types.#{item[:organization_type]}") %>
+                <%= 
+                #I18n.t("tender.organization_types.#{item[:organization_type]}") 
+                 I18n.t("tender.organization_types.#{user.organization_type}") 
+                %>
               </span>
             </div>
           </td>
           <td>
             <div>
               <span id="director_name">
-                <%= item[:director_name] %>
+                <%= 
+                 #item[:director_name] 
+                 user.director_name
+                %>
               </span>
             </div>
           </td>
           <td>
             <div>
               <span id="tender">
-                <a href="http://telasi.ge/ge/tenders/<%=item[:nid]%>"><%= item[:tenderno] %></a>
+                <a href="http://telasi.ge/ge/tenders/<%=item[:nid]%>"><%= 
+                  #item[:tenderno] 
+                   tender.tenderno
+                  %></a>
               </span>
             </div>
           </td>
           <td>
             <div>
               <span id="download_count">
-                <%= number_with_precision(item[:count], precision: 0) %>
+                <%= 
+                #number_with_precision(item[:count], precision: 0) 
+                 number_with_precision(item[:count], precision: 0) 
+                %>
               </span>
             </div>
           </td>
@@ -68,5 +87,7 @@ end %>
         <% end %>
       </tbody>
     </table>
+
+    <%= will_paginate @result %>
   </div>
 </div>

@@ -193,7 +193,7 @@ TelasiGe::Application.routes.draw do
     scope '/change_power', controller: 'change_power' do
       get '/', action: 'index', as: 'change_power_applications'
       match '/new', action: 'new', as: 'add_change_power', via: ['get', 'post']
-      match '/edit/:id', action: 'edit', as: 'edit_change_power', via: ['get', 'post']
+      match '/edit/:id', action: 'edit', as: 'edit_change_power', via: ['get', 'post', 'patch']
       get   '/:id', action: 'show', as: 'change_power'
       get '/sign/:id', action: 'sign', as: 'change_power_sign'
       delete '/delete/:id', action: 'delete', as: 'delete_change_power'
