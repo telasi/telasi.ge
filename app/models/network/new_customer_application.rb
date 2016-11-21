@@ -18,6 +18,9 @@ class Network::NewCustomerApplication
   GNERC_SIGNATURE_FILE = 'NewCustomer_'
   GNERC_ACT_FILE = 'act'
   GNERC_DEF_FILE = 'def'
+  GNERC_VOLTAGE_220 = '0.220'
+  GNERC_VOLTAGE_380 = '0.380'
+  GNERC_VOLTAGE_610 = '6-10'
 
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -578,10 +581,19 @@ class Network::NewCustomerApplication
         content = File.read(file.file.file.file)
         content = Base64.encode64(content)
 
+        case self.voltage
+          when VOLTAGE_220 then
+            gnerc_voltage = GNERC_VOLTAGE_220
+          when VOLTAGE_380 then
+            gnerc_voltage = GNERC_VOLTAGE_380
+          when VOLTAGE_610 then
+            gnerc_voltage = GNERC_VOLTAGE_610
+        end
+
         parameters = { letter_number:     self.number,
                        applicant:         self.rs_name,
                        applicant_address: self.address,
-                       voltage:           self.voltage,
+                       voltage:           gnerc_voltage,
                        power:             self.power,
                        appeal_date:       self.start_date,
                        attach_7_1:        content
