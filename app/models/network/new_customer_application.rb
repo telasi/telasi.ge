@@ -574,19 +574,21 @@ class Network::NewCustomerApplication
   def send_to_gnerc(stage)
     if stage == 1
       file = self.files.select{ |x| x.file.filename[0..11] == GNERC_SIGNATURE_FILE }.first
-      content = File.read(file.file.file.file)
-      content = Base64.encode64(content)
+      if file.present?
+        content = File.read(file.file.file.file)
+        content = Base64.encode64(content)
 
-      parameters = { letter_number:     self.number,
-                     applicant:         self.rs_name,
-                     applicant_address: self.address,
-                     voltage:           self.voltage,
-                     power:             self.power,
-                     appeal_date:       self.start_date,
-                     attach_7_1:        content
-                   }
+        parameters = { letter_number:     self.number,
+                       applicant:         self.rs_name,
+                       applicant_address: self.address,
+                       voltage:           self.voltage,
+                       power:             self.power,
+                       appeal_date:       self.start_date,
+                       attach_7_1:        content
+                     }
 
-      GnercWorker.perform_async("appeal", 7, parameters)
+        GnercWorker.perform_async("appeal", 7, parameters)
+      end
     else 
       file = self.files.select{ |x| x.file.filename[0..2] == GNERC_ACT_FILE }.first
       if file.present?
