@@ -15,6 +15,10 @@ class Network::NewCustomerApplication
   DURATION_HALF     = 1
   DURATION_DOUBLE   = 3
 
+  GNERC_SIGNATURE_FILE = 'NewCustomer_'
+  GNERC_ACT_FILE = 'act'
+  GNERC_DEF_FILE = 'def'
+
   include Mongoid::Document
   include Mongoid::Timestamps
   include Network::RsName
@@ -107,7 +111,6 @@ class Network::NewCustomerApplication
   validate :validate_rs_name, :validate_number, :validate_mobile
   before_save :status_manager, :calculate_total_cost, :upcase_number, :prepare_mobile
   before_create :init_payment_id, :set_user_business_days
-
 
   def self.duration_collection
     {
@@ -315,6 +318,8 @@ class Network::NewCustomerApplication
     # don't resend an application the second time
     return if self.status==STATUS_IN_BS
 
+    raise "ატვირთეთ act ფაილი" unless check_file_uploaded
+
     # sync customers
     self.sync_customers!
 
@@ -385,6 +390,8 @@ class Network::NewCustomerApplication
     # update application status
     self.status = STATUS_IN_BS
     self.save
+
+    send_to_gnerc(2)
   end
 
   def factura_sent?
@@ -458,7 +465,8 @@ class Network::NewCustomerApplication
     if self.status_changed?
       case self.status
       when STATUS_DEFAULT   then self.send_date = nil
-      when STATUS_SENT      then self.send_date  = Date.today
+      when STATUS_SENT      then 
+        self.send_date  = Date.today
       when STATUS_CONFIRMED then
         self.start_date = Date.today
         if self.use_business_days
@@ -467,6 +475,7 @@ class Network::NewCustomerApplication
         else
           self.plan_end_date = self.send_date + self.days
         end
+        send_to_gnerc(1)
       when STATUS_COMPLETE  then self.end_date   = Date.today
       when STATUS_CANCELED  then
         self.cancelation_date = Date.today
@@ -561,4 +570,52 @@ class Network::NewCustomerApplication
     self.mobile = KA::compact_mobile(self.mobile) if self.mobile.present?
     true
   end
+
+  def send_to_gnerc(stage)
+    if stage == 1
+      file = self.files.select{ |x| x.file.filename[0..11] == GNERC_SIGNATURE_FILE }.first
+      content = File.read(file.file.file.file)
+      content = Base64.encode64(content)
+
+      parameters = { letter_number:     self.number,
+                     applicant:         self.rs_name,
+                     applicant_address: self.address,
+                     voltage:           self.voltage,
+                     power:             self.power,
+                     appeal_date:       self.start_date,
+                     attach_7_1:        content
+                   }
+
+      GnercWorker.perform_async("appeal", 7, parameters)
+    else 
+      file = self.files.select{ |x| x.file.filename[0..2] == GNERC_ACT_FILE }.first
+      if file.present?
+        content = File.read(file.file.file.file)
+        content = Base64.encode64(content)
+        parameters = { letter_number:     self.number,
+                       attach_7_2:        content
+                     }
+      else
+        file = self.files.select{ |x| x.file.filename[0..2] == GNERC_DEF_FILE }.first
+        content = File.read(file.file.file.file)
+        content = Base64.encode64(content)
+        parameters = { letter_number:     self.number,
+                       attach_7_4:        content
+                     }
+      end
+      GnercWorker.perform_async("answer", 7, parameters)
+    end
+  end
+
+  def check_file_uploaded
+    actfile = self.files.select{ |x| x.file.filename[0..2] == GNERC_ACT_FILE }.first
+    if actfile.blank?
+      deffile = self.files.select{ |x| x.file.filename[0..2] == GNERC_DEF_FILE }.first
+      if deffile.blank?
+        return false
+      end
+    end
+    return true
+  end
+
 end
