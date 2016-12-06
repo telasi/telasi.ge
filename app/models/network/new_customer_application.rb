@@ -593,8 +593,8 @@ class Network::NewCustomerApplication
               when 31..50 then gnerc_power = '31-50'
               when 51..80 then gnerc_power = '51-80'
               when 81..100 then gnerc_power = '81-100'
-              when 101..125 then gnerc_power = '101-125'
-              when 126..200 then gnerc_power = '126-200'
+              when 101..120 then gnerc_power = '101-120'
+              when 121..200 then gnerc_power = '121-200'
               when 201..320 then gnerc_power = '201-320'
               when 321..500 then gnerc_power = '321-500'
               when 501..800 then gnerc_power = '501-800'
@@ -604,7 +604,7 @@ class Network::NewCustomerApplication
             gnerc_voltage = GNERC_VOLTAGE_610
             case self.power
               when 1..500 then gnerc_power = '1-500'
-              when 500..1000 then gnerc_power = '500-1000'
+              when 501..1000 then gnerc_power = '501-1000'
               when 1001..1500 then gnerc_power = '1001-1500'
               when 1501..2000 then gnerc_power = '1501-2000'
               when 2001..3000 then gnerc_power = '2000-3000'
