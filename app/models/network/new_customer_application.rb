@@ -619,7 +619,7 @@ class Network::NewCustomerApplication
                        power:               gnerc_power,
                        appeal_date:         self.start_date,
                        attach_7_1:          content,
-                       attach_7_1_filename: file.filename 
+                       attach_7_1_filename: file.file.filename 
                      }
 
         GnercWorker.perform_async("appeal", 7, parameters)
@@ -631,7 +631,7 @@ class Network::NewCustomerApplication
         content = Base64.encode64(content)
         parameters = { letter_number:       self.number,
                        attach_7_2:          content,
-                       attach_7_2_filename: file.filename
+                       attach_7_2_filename: file.file.filename
                      }
       else
         file = self.files.select{ |x| x.file.filename[0..2] == GNERC_DEF_FILE }.first
@@ -639,7 +639,7 @@ class Network::NewCustomerApplication
         content = Base64.encode64(content)
         parameters = { letter_number:       self.number,
                        attach_7_4:          content,
-                       attach_7_4_filename: file.filename
+                       attach_7_4_filename: file.file.filename
                      }
       end
       GnercWorker.perform_async("answer", 7, parameters)
