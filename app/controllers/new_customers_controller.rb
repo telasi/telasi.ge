@@ -38,8 +38,8 @@ class NewCustomersController < ApplicationController
           amount = @app.amount / 2.0
           @data = { date: Date.today,
             payer: @app.rs_name, payer_account: @app.bank_account, payer_bank: @app.bank_name, payer_bank_code: @app.bank_code,
-            receiver: 'სს თელასი', receiver_account: 'GE53TB1147136030100001  ', receiver_bank: 'სს თიბისი ბანკი',
-            receiver_bank_code: 'TBCBGE22',
+            receiver: 'სს თელასი', receiver_account: 'GE72VT6600000002603603  ', receiver_bank: 'სს ვითიბი ბანკი',
+            receiver_bank_code: 'UGEBGE22',
             reason: "სს თელასის განამაწილებელ ქსელში ჩართვის ღირებულების 50%-ის დაფარვა. განცხადება №#{@app.effective_number}; TAXID: #{@app.rs_tin}.",
             amount: amount
           }
