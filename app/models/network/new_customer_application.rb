@@ -482,6 +482,7 @@ class Network::NewCustomerApplication
       when STATUS_COMPLETE  then self.end_date   = Date.today
       when STATUS_CANCELED  then
         self.cancelation_date = Date.today
+        send_to_gnerc(2)
         revert_bs_operations_on_cancel
       end
     end
