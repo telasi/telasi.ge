@@ -481,6 +481,8 @@ class Network::NewCustomerApplication
         send_to_gnerc(1)
       when STATUS_COMPLETE  then self.end_date   = Date.today
       when STATUS_CANCELED  then
+        raise "ატვირთეთ def ფაილი" unless check_file_uploaded
+
         self.cancelation_date = Date.today
         send_to_gnerc(2)
         revert_bs_operations_on_cancel
