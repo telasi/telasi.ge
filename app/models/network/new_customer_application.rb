@@ -641,8 +641,8 @@ class Network::NewCustomerApplication
         content = File.read(file.file.file.file)
         content = Base64.encode64(content)
         parameters = { letter_number:       self.number,
-                       attach_7_4:          content,
-                       attach_7_4_filename: file.file.filename
+                       attach_7_2:          content,
+                       attach_7_2_filename: file.file.filename
                      }
       end
       GnercWorker.perform_async("answer", 7, parameters)
