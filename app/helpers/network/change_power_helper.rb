@@ -18,6 +18,20 @@ module Network::ChangePowerHelper
         c.number_field :voltage, before: '/'
       end
       t.number_field :amount, after: 'GEL'
+
+      t.complex_field label: 'რეალური დასრულება', required: true do |c|
+       c.date_field :real_end_date  #do |real|
+        # real.action network_change_power_edit_real_date_url(id: id), label: 'შეცვლა', icon: '/icons/pencil.png'
+      #end
+       # c.image_field '/icons/pencil.png', label: 'შეცვლა', icon: '/icons/pencil.png', url: ->(x) { network_change_power_edit_real_date_url(id: x.id) }
+      end 
+      if params[:page_change].present?
+        page = params[:page_change]
+      else
+        page = 0
+      end
+      t.item_action ->(x) { network_change_power_edit_real_date_url(id: x.id, page: page) }, icon: '/icons/pencil.png'
+
       t.paginate param_name: 'page_change', records: 'ჩანაწერი'
     end
   end
@@ -165,7 +179,12 @@ module Network::ChangePowerHelper
           # c.number_field :remaining, after: 'GEL'
           c.date_field :send_date
           c.date_field :start_date
-          c.date_field :end_date # do |real|
+          c.date_field :end_date 
+          c.date_field :real_end_date, label: 'რეალური დასრულება' do |real|
+            real.action network_change_power_edit_real_date_url(id: application.id), label: 'შეცვლა', icon: '/icons/pencil.png'
+          end
+
+          # do |real|
           #   real.action network_change_real_date_url(id: application.id), icon: '/icons/pencil.png' if application.end_date.present?
           # end
           # c.date_field :plan_end_date do |plan|
@@ -191,6 +210,25 @@ module Network::ChangePowerHelper
             t.number_field 'balance', after: 'GEL', label: 'ბალანსი'
           end
         end
+
+        # t.action network_new_customer_send_factura_url(id: application.id), icon: '/icons/money--arrow.png', label: 'ოპერაციის დამატება', method: 'post' if show_actions
+
+        # t.table_field :billing_items_raw, table: { title: 'ბილინგის ოპერაციები აბონენტის გარეშე', icon: '/icons/edit-list.png' } do |operations|
+        #   operations.table do |t|
+        #     t.text_field 'customer.accnumb', tag: 'code', label: 'აბონენტი'
+        #     t.date_field 'itemdate', label: 'თარიღი'
+        #     t.complex_field label: 'ოპერაცია' do |c|
+        #       c.text_field 'operation.billopername', after: '&mdash;'.html_safe
+        #       c.text_field 'operation.billoperkey', class: 'muted'
+        #     end
+        #     t.number_field 'kwt', after: 'kWh', label: 'დარიცხვა'
+        #     t.number_field 'amount', after: 'GEL', label: 'თანხა'
+        #     t.number_field 'balance', after: 'GEL', label: 'ბალანსი'
+
+        #     t.text_field 'factura.appl.factura_seria', tag: 'code', label: 'ფაქტურის სერია'
+        #     t.text_field 'factura.appl.factura_number', tag: 'code', label: 'ფაქტურის #'
+        #   end
+        # end
       end
       # 3. sms messages
       f.tab title: "SMS &mdash; <strong>#{application.messages.count}</strong>".html_safe, icon: '/icons/mobile-phone.png' do |t|
@@ -247,7 +285,7 @@ module Network::ChangePowerHelper
           c.text_field 'user.full_name'
           c.text_field 'user.mobile'
         end
-        t.timestamps
+        # t.timestamps
         # t.number_field 'payment_id', required: true, max_digits: 0
       end
     end

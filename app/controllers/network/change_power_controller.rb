@@ -131,7 +131,11 @@ class Network::ChangePowerController < ApplicationController
         @message.send_sms!(lat: true)
         @application.status = params[:status].to_i
         if @application.save
-          redirect_to network_change_power_url(id: @application.id), notice: I18n.t('models.network_new_customer_application.actions.status.changed')
+          if @application.status==Network::ChangePowerApplication::STATUS_COMPLETE
+            redirect_to network_change_power_edit_real_date_url(id: @application.id), alert: 'შეიტანეთ რეალური დასრულების თარიღი'
+          else
+            redirect_to network_change_power_url(id: @application.id), notice: I18n.t('models.network_new_customer_application.actions.status.changed')
+          end
         else
           @error = @application.errors.full_messages
         end
@@ -228,6 +232,16 @@ class Network::ChangePowerController < ApplicationController
     if request.post?
       if @application.update_attributes(params.require(:network_change_power_application).permit(:minus_amount))
         redirect_to network_change_power_url(id: @application.id), notice: 'თანხა შეცვლილია'
+      end
+    end
+  end
+
+  def edit_real_date
+    @title = 'რეალური თარიღის შეცვლა'
+    @application = Network::ChangePowerApplication.find(params[:id])
+    if request.post?
+      if @application.update_attributes(params.require(:network_change_power_application).permit(:real_end_date))
+        redirect_to network_change_power_url(id: @application.id), notice: 'რეალური თარიღი შეცვლილია'
       end
     end
   end

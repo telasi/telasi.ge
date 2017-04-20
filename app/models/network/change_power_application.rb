@@ -53,6 +53,7 @@ class Network::ChangePowerApplication
   # dates
   field :send_date, type: Date
   field :start_date, type: Date
+  field :real_end_date, type: Date
   field :end_date, type: Date
   field :note, type: String
   field :oqmi, type: String

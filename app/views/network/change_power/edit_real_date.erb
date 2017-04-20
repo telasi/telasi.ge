@@ -1,0 +1,5 @@
+<%= forma_for @application, title: @title, collapsible: true, icon: '/icons/user--pencil.png' do |f|
+  f.date_field :real_end_date, label: 'რეალური დასრულება', autofocus: true
+  f.submit t('models.general.actions.save')
+  f.cancel_button network_change_power_url(id: @application.id)
+end %>
