@@ -161,6 +161,7 @@ TelasiGe::Application.routes.draw do
       get '/', action: 'index', as: 'new_customers'
       get '/printing/:jobid', action: 'printing', as: 'printing_new_customer'
       # application actions
+      #match '/prepayment_report', action: 'prepayment_report', as: 'prepayment_report', via: ['get','post']
       match '/new', action: 'add_new_customer', as: 'add_new_customer', via: ['get', 'post']
       get   '/:id', action: 'new_customer', as: 'new_customer'
       match '/edit/:id', action: 'edit_new_customer', as: 'edit_new_customer', via: ['get', 'post']
@@ -183,6 +184,7 @@ TelasiGe::Application.routes.draw do
       get '/paybill/:id', action: 'paybill', as: 'new_customer_paybill'
       get '/print/:id', action: 'print', as: 'new_customer_print'
       get '/sign/:id', action: 'sign', as: 'new_customer_sign'
+      #post '/send_prepayment_factura/:id', action: 'send_prepayment_factura', as: 'new_customer_send_prepayment_factura'
       post '/send_factura/:id', action: 'send_factura', as: 'new_customer_send_factura'
       # control items
       match '/new_control_item/:id', action: 'new_control_item', as: 'new_customer_new_control_item', via: ['get','post']
@@ -215,6 +217,8 @@ TelasiGe::Application.routes.draw do
       # --> billing system
       post '/send_to_bs/:id', action: 'send_to_bs', as: 'change_power_send_to_bs'
       post '/toggle_need_factura/:id', action: 'toggle_need_factura', as: 'change_power_toggle_need_factura'
+      # change real date
+      match '/edit_real_date/:id', action: 'edit_real_date', as: 'change_power_edit_real_date', via: ['get', 'post']
     end
     scope '/stages', controller: 'stages' do
       get '/', action: 'index', as: 'stages'
