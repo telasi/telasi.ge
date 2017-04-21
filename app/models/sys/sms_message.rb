@@ -23,7 +23,7 @@ class Sys::SmsMessage
       smsg.text = msg
       smsg.status='S'
       smsg.sent_at=Date.today
-      smsg.sender_user='ServiceTelasiGe'
+      smsg.sender_user='MyTelasiGe'
       smsg.save
       #
     end
