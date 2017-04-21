@@ -1,6 +1,7 @@
 # -*- encoding : utf-8 -*-
 require 'rs'
 require 'rest_client'
+#require 'will_paginate/array'
 
 class Network::NewCustomerController < ApplicationController
   include Sys::BackgroundJobConstants
@@ -47,6 +48,39 @@ class Network::NewCustomerController < ApplicationController
       end
     end
     rel
+  end
+
+  def prepayment_report
+    rel = Network::NewCustomerApplication.where(:status.in => [ Network::NewCustomerApplication::STATUS_DEFAULT, 
+                                                                Network::NewCustomerApplication::STATUS_SENT, 
+                                                                Network::NewCustomerApplication::STATUS_CONFIRMED ])
+    rel = rel.where(factura_id: nil)
+
+    @search = params[:search] == 'clear' ? nil : params[:search]
+    
+    if @search
+      if @search[:type].present?
+        case @search[:type]
+         when '1'
+          rel = rel.where(:customer_id.ne => nil)
+         when '2'
+          rel = rel.where(customer_id: nil)        
+        end
+      end
+
+      if @search[:deadline].present?
+        case @search[:deadline]
+         when '1'
+          rel = rel.where(:send_date.lte => Time.now - 5.days)
+         when '2'
+          rel = rel.where(:send_date.gt => Time.now - 5.days).or(send_date: nil)
+        end
+      end
+
+    end
+
+    rel = rel.select{ |x| x.billing_prepayment_to_factured.present? }
+    @applications = rel.paginate(per_page: 3000)
   end
 
   def index
@@ -109,15 +143,17 @@ class Network::NewCustomerController < ApplicationController
     @title = 'აბონენტის დაკავშირება'
     @application = Network::NewCustomerApplication.find(params[:id])
     if request.post?
-      @application.update_attributes(params.require(:network_new_customer_application).permit(:customer_id))
+      @application.link_bs_customer!(params.require(:network_new_customer_application).permit(:customer_id))
+      #@application.update_attributes(params.require(:network_new_customer_application).permit(:customer_id))
       redirect_to network_new_customer_url(id: @application.id, tab: 'accounts')
     end
   end
 
   def remove_bs_customer
     application = Network::NewCustomerApplication.find(params[:id])
-    application.customer_id = nil
-    application.save
+    application.remove_bs_customer!
+    # application.customer_id = nil
+    # application.save
     redirect_to network_new_customer_url(id: application.id, tab: 'accounts')
   end
 
@@ -275,6 +311,36 @@ class Network::NewCustomerController < ApplicationController
     end
 
   end
+
+  # def send_prepayment_factura
+  #   application = Network::NewCustomerApplication.find(params[:id])
+  #   raise 'არა საკმარისი თანხა' unless application.prepayment_enough?
+
+  #   factura = RS::Factura.new(date: application.end_date, seller_id: RS::TELASI_PAYER_ID)
+  #   good_name = "ქსელზე მიერთების პაკეტის ღირებულების ავანსი #{application.number}"
+  #   amount = application.billing_prepayment_to_factured_sum
+  #   raise 'თანხა უნდა იყოს > 0' unless amount > 0
+  #   debugger
+  #   #raise 'ფაქტურის გაგზავნა ვერ ხერხდება!' unless RS.save_factura(factura, RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, buyer_tin: application.rs_tin))
+  #   vat = application.pays_non_zero_vat? ? amount * (1 - 1.0 / 1.18) : 0
+  #   factura_item = RS::FacturaItem.new(factura: factura,
+  #     good: good_name, unit: 'მომსახურეობა', amount: amount, vat: vat,
+  #     quantity: 0)
+  #   #RS.save_factura_item(factura_item, RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID))
+  #   #if RS.send_factura(RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, id: factura.id))
+
+  #     #factura = RS.get_factura_by_id(RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, id: factura.id))
+  #     factura.id = '1234'
+  #     factura.seria = 'aa'
+  #     factura.number = '3455661 '
+
+  #     application.send_prepayment_factura!(factura, amount)      
+
+  #   #end
+  #   #application.factura_id = factura.id
+  #   application.save
+  #   redirect_to network_new_customer_url(id: application.id, tab: 'factura'), notice: 'ფაქტურა გაგზავნილია :)'
+  # end
 
   def send_factura
     application = Network::NewCustomerApplication.find(params[:id])

@@ -29,6 +29,7 @@ class Network::NewCustomerApplication
   include Network::CalculationUtils
   include Network::ApplicationBase
   include Network::BsBase
+  #include Network::Factura
 
   belongs_to :user, class_name: 'Sys::User'
   belongs_to :tariff, class_name: 'Network::NewCustomerTariff'
@@ -172,6 +173,14 @@ class Network::NewCustomerApplication
   def docs_are_ok?; self.doc_payment and self.doc_ownership and self.doc_id end
   def can_send?; self.status == STATUS_DEFAULT and self.docs_are_ok? and self.confirm_correctness end
 
+  # def facturas
+  #   array = registered_facturas.dup
+  #   if self.factura_id.present?
+  #     array << Billing::NewCustomerFactura.new(factura_id: self.factura_id, factura_seria: self.factura_seria, factura_number: self.factura_number)
+  #   end
+  #   array
+  # end
+
   # შესაძლო სტატუსების ჩამონათვალი მიმდინარე სტატუსიდან.
   def transitions
     case self.status
@@ -268,7 +277,7 @@ class Network::NewCustomerApplication
       enterdate: Time.now, itemcatkey: 0)
     bs_item.save!
     network_item = Billing::NetworkItem.new(zdepozit_cust_id: deposit_customer.zdepozit_cust_id, amount: amount,
-      operkey: 1000, enterdate: Time.now, operdate: item_date, perskey: 1)
+      operkey: 1000, enterdate: Time.now, operdate: item_date, perskey: 1, cns: self.number, montage_date: end_date)
     network_item.save!
     # I. bs.item - first stage penalty
     first_stage = -self.penalty_first_stage
@@ -278,7 +287,7 @@ class Network::NewCustomerApplication
         enterdate: Time.now, itemcatkey: 0)
       bs_item1.save!
       network_item1 = Billing::NetworkItem.new(zdepozit_cust_id: deposit_customer.zdepozit_cust_id, amount: first_stage,
-        operkey: 1006, enterdate: Time.now, operdate: item_date, perskey: 1)
+        operkey: 1006, enterdate: Time.now, operdate: item_date, perskey: 1, cns: self.number, montage_date: end_date)
       network_item1.save!
     end
     # II. bs.item - second stage penalty
@@ -289,7 +298,7 @@ class Network::NewCustomerApplication
         enterdate: Time.now, itemcatkey: 0)
       bs_item2.save!
       network_item2 = Billing::NetworkItem.new(zdepozit_cust_id: deposit_customer.zdepozit_cust_id, amount: second_stage,
-        operkey: 1007, enterdate: Time.now, operdate: item_date, perskey: 1)
+        operkey: 1007, enterdate: Time.now, operdate: item_date, perskey: 1, cns: self.number, montage_date: end_date)
       network_item2.save!
     end
     # III. bs.item - third stage penalty
@@ -315,6 +324,24 @@ class Network::NewCustomerApplication
   end
 
   public
+
+  def link_bs_customer!(param)
+    self.customer_id = param[:customer_id]
+    self.save!
+
+    cust=Billing::Customer.find(param[:customer_id])
+    cust.custsert = self.number
+    cust.save!
+  end
+
+  def remove_bs_customer!
+    cust=Billing::Customer.find(self.customer_id)
+    cust.custsert = nil
+    cust.save!
+
+    self.customer_id = nil
+    self.save!
+  end
 
   # ბილინგში გაგზავნა.
   def send_to_bs!
@@ -354,7 +381,7 @@ class Network::NewCustomerApplication
             enterdate: Time.now, itemcatkey: 0)
           bs_item.save!
           network_item = Billing::NetworkItem.new(zdepozit_cust_id: deposit_customer.zdepozit_cust_id, amount: -remaining,
-            operkey: 1008, enterdate: Time.now, operdate: item_date, perskey: 1)
+            operkey: 1008, enterdate: Time.now, operdate: item_date, perskey: 1, cns: self.number, montage_date: end_date)
           network_item.save!
         end
         # remove compensation from main account (if any) => XXX: which operation???
@@ -364,7 +391,7 @@ class Network::NewCustomerApplication
             enterdate: Time.now, itemcatkey: 0)
           bs_item.save!
           network_item = Billing::NetworkItem.new(zdepozit_cust_id: deposit_customer.zdepozit_cust_id, amount: compensation,
-            operkey: 1120, enterdate: Time.now, operdate: item_date, perskey: 1)
+            operkey: 1120, enterdate: Time.now, operdate: item_date, perskey: 1, cns: self.number, montage_date: end_date)
           network_item.save!
         end
         # distribute remaining amount on subcustomers => 1000
@@ -396,6 +423,45 @@ class Network::NewCustomerApplication
 
     send_to_gnerc(2)
   end
+
+  # def send_prepayment_factura!(factura, amount)
+  #   Billing::NewCustomerFactura.transaction do 
+  #     billing_factura = Billing::NewCustomerFactura.new(application: 'NC',
+  #                                                       cns: self.number, 
+  #                                                       factura_id: factura.id, 
+  #                                                       factura_seria: factura.seria, 
+  #                                                       factura_number: factura.number,
+  #                                                       category: Billing::NewCustomerFactura::ADVANCE,
+  #                                                       amount: amount, period: '//')
+  #     billing_factura.save
+
+  #     self.billing_prepayment_to_factured.each do |p|
+  #       billing_factura_appl = Billing::NewCustomerFacturaAppl.new(itemkey: p.itemkey, custkey: self.customer.custkey, 
+  #                                                                  application: 'NC',
+  #                                                                  cns: self.number, factura_id: billing_factura.id)
+  #       billing_factura_appl.save
+  #     end
+  #   end
+  # end
+
+  # def prepayment_factura_sent?
+  #   prepayment_facturas.present?
+  # end
+
+  # def prepayment_enough?
+  #   billing_prepayment_to_factured_sum > 0 && ( billing_prepayment_to_factured_sum >= self.amount / 2 )
+  # end
+
+  # def can_send_prepayment_factura?
+  #   return false if has_new_cust_charge?
+  #   if billing_prepayment_factura.present?
+  #     return true if billing_prepayment_to_factured.present?
+  #   else
+  #     return true if prepayment_enough?
+  #   end 
+
+  #   return false
+  # end
 
   def factura_sent?
     not self.factura_seria.blank?
