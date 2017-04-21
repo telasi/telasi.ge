@@ -24,4 +24,4 @@ sqlnet.log
 public/uploads/*
 
 config/initializers/payge.rb
-/config/database.yml
+config/database.yml
