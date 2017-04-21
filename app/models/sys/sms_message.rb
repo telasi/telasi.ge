@@ -15,6 +15,17 @@ class Sys::SmsMessage
       msg = self.message
       msg = msg.to_lat if opts[:lat]
       Magti.send_sms(self.mobile, msg)
+
+      #bacho 
+      smsg = Sys::SentMessage.new
+      smsg.company='MAGTI'
+      smsg.receiver_mobile = self.mobile
+      smsg.text = msg
+      smsg.status='S'
+      smsg.sent_at=Date.today
+      smsg.sender_user='ServiceTelasiGe'
+      smsg.save
+      #
     end
   end
 end
