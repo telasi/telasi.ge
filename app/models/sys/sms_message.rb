@@ -20,9 +20,9 @@ class Sys::SmsMessage
       smsg = Sys::SentMessage.new
       smsg.company='MAGTI'
       smsg.receiver_mobile = self.mobile
-      smsg.text = msg
+      smsg.text = '995' + msg.to_s
       smsg.status='S'
-      smsg.sent_at=Date.today
+      smsg.sent_at=Time.now
       smsg.sender_user='MyTelasiGe'
       smsg.save
       #
