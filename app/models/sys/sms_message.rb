@@ -19,8 +19,8 @@ class Sys::SmsMessage
       #bacho 
       smsg = Sys::SentMessage.new
       smsg.company='MAGTI'
-      smsg.receiver_mobile = self.mobile
-      smsg.text = '995' + msg.to_s
+      smsg.receiver_mobile = '995' + self.mobile.to_s
+      smsg.text = msg
       smsg.status='S'
       smsg.sent_at=Time.now
       smsg.sender_user='MyTelasiGe'
