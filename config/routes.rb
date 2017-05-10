@@ -161,7 +161,8 @@ TelasiGe::Application.routes.draw do
       get '/', action: 'index', as: 'new_customers'
       get '/printing/:jobid', action: 'printing', as: 'printing_new_customer'
       # application actions
-      #match '/prepayment_report', action: 'prepayment_report', as: 'prepayment_report', via: ['get','post']
+      match '/prepayment_report', action: 'prepayment_report', as: 'prepayment_report', via: ['get','post']
+      match '/accounting_report', action: 'accounting_report', as: 'accounting_report', via: ['get','post']
       match '/new', action: 'add_new_customer', as: 'add_new_customer', via: ['get', 'post']
       get   '/:id', action: 'new_customer', as: 'new_customer'
       match '/edit/:id', action: 'edit_new_customer', as: 'edit_new_customer', via: ['get', 'post']
@@ -184,8 +185,10 @@ TelasiGe::Application.routes.draw do
       get '/paybill/:id', action: 'paybill', as: 'new_customer_paybill'
       get '/print/:id', action: 'print', as: 'new_customer_print'
       get '/sign/:id', action: 'sign', as: 'new_customer_sign'
-      #post '/send_prepayment_factura/:id', action: 'send_prepayment_factura', as: 'new_customer_send_prepayment_factura'
+      post '/send_prepayment_factura/:id', action: 'send_prepayment_factura', as: 'new_customer_send_prepayment_factura'
       post '/send_factura/:id', action: 'send_factura', as: 'new_customer_send_factura'
+      post '/send_correcting1_factura/:id', action: 'send_correcting1_factura', as: 'new_customer_send_correcting1_factura'
+      post '/send_correcting2_factura/:id', action: 'send_correcting2_factura', as: 'new_customer_send_correcting2_factura'
       # control items
       match '/new_control_item/:id', action: 'new_control_item', as: 'new_customer_new_control_item', via: ['get','post']
       match '/edit_control_item/:id', action: 'edit_control_item', as: 'new_customer_edit_control_item', via: ['get','post']
@@ -194,6 +197,7 @@ TelasiGe::Application.routes.draw do
     end
     scope '/change_power', controller: 'change_power' do
       get '/', action: 'index', as: 'change_power_applications'
+      match '/prepayment_report', action: 'prepayment_report', as: 'change_prepayment_report', via: ['get','post']
       match '/new', action: 'new', as: 'add_change_power', via: ['get', 'post']
       match '/edit/:id', action: 'edit', as: 'edit_change_power', via: ['get', 'post']
       get   '/:id', action: 'show', as: 'change_power'
@@ -213,6 +217,8 @@ TelasiGe::Application.routes.draw do
       match '/edit_amount/:id', action: 'edit_amount', as: 'change_power_edit_amount', via: ['get', 'post']
       match '/edit_minus_amount/:id', action: 'edit_minus_amount', as: 'change_power_edit_minus_amount', via: ['get', 'post']
       # send factura
+      post '/send_prepayment_factura/:id', action: 'send_prepayment_factura', as: 'change_power_send_prepayment_factura'
+      get '/send_prepayment_factura_prepare/:id', action: 'send_prepayment_factura_prepare', as: 'change_power_send_prepayment_factura_prepare'
       post '/send_factura/:id', action: 'send_factura', as: 'change_power_send_factura'
       # --> billing system
       post '/send_to_bs/:id', action: 'send_to_bs', as: 'change_power_send_to_bs'

@@ -1,0 +1,85 @@
+<div class="ff-form">
+	<div class="ff-title">
+		<span class="ff-active-title"><img src="/icons/edit-list.png">
+			<span>ოპერაციები</span>
+		</span>
+	</div>
+	<form class="ff-form-body ff-wait-on-submit ff-collapsible-body" action="<%= network_change_power_send_prepayment_factura_url(id: @application.id) %>" method="post">
+		<div style="padding:0;margin:0;height:0;width:0;display:inline">
+			<%= token_tag nil %>
+		</div>
+		<div class="ff-table">
+			<div class="ff-table-body">
+				<table class="ff-common-table">
+					<thead>
+						<tr>
+							<th class="ff-field"></th>
+							<th class="ff-field">აბონენტი</th>
+							<th class="ff-field">თარიღი</th>
+							<th class="ff-field">ოპერაცია</th>
+							<th class="ff-field">დარიცხვა</th>
+							<th class="ff-field">თანხა</th>
+							<th class="ff-field">ბალანსი</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% @items_to_factured.each do |item_to_factured| %>
+							<tr>
+								<td width='30'><div><input type="hidden" name="chosen[]" value="<%= item_to_factured.itemkey %>"><br></div></td>
+								<td><div><%= item_to_factured.customer.accnumb %></div></td>
+								<td><div><%= item_to_factured.itemdate.strftime("%d-%m-%Y") %></div></td>
+								<td><div><%= "#{item_to_factured.operation.billopername.to_ka} - #{item_to_factured.operation.billoperkey}" %></div></td>
+								<td><div><%= item_to_factured.kwt %></div></td>
+								<td><div><%= item_to_factured.amount %></div></td>
+								<td><div><%= item_to_factured.balance %></div></td>
+							</tr>
+						<% end %>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="ff-table">
+			<div class="ff-table-body">
+				<table class="ff-common-table">
+					<thead>
+						<tr>
+							<th class="ff-field"><div width='100'></div></th>
+							<th class="ff-field">აბონენტი</th>
+							<th class="ff-field">თარიღი</th>
+							<th class="ff-field">ოპერაცია</th>
+							<th class="ff-field">დარიცხვა</th>
+							<th class="ff-field">თანხა</th>
+							<th class="ff-field">ბალანსი</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% @items.each do |item| %>
+							<tr>
+								<td width='30'><div><input type="checkbox" name="chosen[]" value="<%= item.itemkey %>"><br></div></td>
+								<td><div><%= item.customer.accnumb %></div></td>
+								<td><div><%= item.itemdate.strftime("%d-%m-%Y") %></div></td>
+								<td><div><%= "#{item.operation.billopername.to_ka} - #{item.operation.billoperkey}" %></div></td>
+								<td><div><%= item.kwt %></div></td>
+								<td><div><%= item.amount %></div></td>
+								<td><div><%= item.balance %></div></td>
+							</tr>
+						<% end %>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="ff-bottom-actions">
+			<button type="submit" class="btn btn-primary">ფაქტურის შექმნა</button>
+			<a class="ff-action btn btn-default" href="<%= network_change_power_url(id: @application.id) %>" data-original-title="" title=""><img src="/icons/cross.png"><span>გაუქმება</span></a>
+		</div>
+	</form>
+
+</div>
+<%= #forma_for @application, title: 'ავანსი', collapsible: true do |f|
+	#f.table_field @items_to_factured, table: { title: 'ბილინგის ოპერაციები აბონენტის გარეშე', icon: '/icons/edit-list.png' } do |operations|
+	#	operations.table do |t|
+	#		t.boolean_field 'chose', required: true
+	#	end
+	#end
+#end 
+%>

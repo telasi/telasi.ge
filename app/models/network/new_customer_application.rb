@@ -29,7 +29,7 @@ class Network::NewCustomerApplication
   include Network::CalculationUtils
   include Network::ApplicationBase
   include Network::BsBase
-  #include Network::Factura
+  include Network::Factura
 
   belongs_to :user, class_name: 'Sys::User'
   belongs_to :tariff, class_name: 'Network::NewCustomerTariff'
@@ -173,13 +173,13 @@ class Network::NewCustomerApplication
   def docs_are_ok?; self.doc_payment and self.doc_ownership and self.doc_id end
   def can_send?; self.status == STATUS_DEFAULT and self.docs_are_ok? and self.confirm_correctness end
 
-  # def facturas
-  #   array = registered_facturas.dup
-  #   if self.factura_id.present?
-  #     array << Billing::NewCustomerFactura.new(factura_id: self.factura_id, factura_seria: self.factura_seria, factura_number: self.factura_number)
-  #   end
-  #   array
-  # end
+  def facturas
+    array = registered_facturas.dup
+    if self.factura_id.present?
+      array << Billing::NewCustomerFactura.new(factura_id: self.factura_id, factura_seria: self.factura_seria, factura_number: self.factura_number)
+    end
+    array
+  end
 
   # შესაძლო სტატუსების ჩამონათვალი მიმდინარე სტატუსიდან.
   def transitions
@@ -424,44 +424,52 @@ class Network::NewCustomerApplication
     send_to_gnerc(2)
   end
 
-  # def send_prepayment_factura!(factura, amount)
-  #   Billing::NewCustomerFactura.transaction do 
-  #     billing_factura = Billing::NewCustomerFactura.new(application: 'NC',
-  #                                                       cns: self.number, 
-  #                                                       factura_id: factura.id, 
-  #                                                       factura_seria: factura.seria, 
-  #                                                       factura_number: factura.number,
-  #                                                       category: Billing::NewCustomerFactura::ADVANCE,
-  #                                                       amount: amount, period: '//')
-  #     billing_factura.save
+  def send_prepayment_factura!(factura, amount)
+    Billing::NewCustomerFactura.transaction do 
+      billing_factura = Billing::NewCustomerFactura.new(application: 'NC',
+                                                        cns: self.number, 
+                                                        factura_id: factura.id, 
+                                                        factura_seria: factura.seria, 
+                                                        factura_number: factura.number,
+                                                        category: Billing::NewCustomerFactura::ADVANCE,
+                                                        amount: amount, period: '//')
+      billing_factura.save
 
-  #     self.billing_prepayment_to_factured.each do |p|
-  #       billing_factura_appl = Billing::NewCustomerFacturaAppl.new(itemkey: p.itemkey, custkey: self.customer.custkey, 
-  #                                                                  application: 'NC',
-  #                                                                  cns: self.number, factura_id: billing_factura.id)
-  #       billing_factura_appl.save
-  #     end
-  #   end
-  # end
+      self.billing_prepayment_to_factured.each do |p|
+        billing_factura_appl = Billing::NewCustomerFacturaAppl.new(itemkey: p.itemkey, custkey: self.customer.custkey, 
+                                                                   application: 'NC',
+                                                                   cns: self.number, 
+                                                                   start_date: self.start_date,
+                                                                   factura_id: billing_factura.id,
+                                                                   factura_date: Time.now)
+        billing_factura_appl.save
+      end
+    end
+  end
 
-  # def prepayment_factura_sent?
-  #   prepayment_facturas.present?
-  # end
+  def prepayment_factura_sent?
+    prepayment_facturas.present?
+  end
 
-  # def prepayment_enough?
-  #   billing_prepayment_to_factured_sum > 0 && ( billing_prepayment_to_factured_sum >= self.amount / 2 )
-  # end
+  def prepayment_enough?
+    billing_prepayment_to_factured_sum > 0 && ( billing_prepayment_to_factured_sum >= self.effective_amount / 2 )
+  end
 
-  # def can_send_prepayment_factura?
-  #   return false if has_new_cust_charge?
-  #   if billing_prepayment_factura.present?
-  #     return true if billing_prepayment_to_factured.present?
-  #   else
-  #     return true if prepayment_enough?
-  #   end 
+  def can_send_prepayment_factura?
+    return false if ( self.send_date < Network::PREPAYMENT_START_DATE )
+    return false unless self.status == STATUS_CONFIRMED
+    return false unless self.need_factura
+    return false if self.factura_sent?
+    # return false if has_new_cust_charge?
 
-  #   return false
-  # end
+    if billing_prepayment_factura.present?
+      return true if billing_prepayment_to_factured.present?
+    else
+      return true if prepayment_enough?
+    end 
+
+    return false
+  end
 
   def factura_sent?
     not self.factura_seria.blank?
@@ -472,6 +480,19 @@ class Network::NewCustomerApplication
     [ STATUS_COMPLETE, STATUS_IN_BS ].include?(self.status) and
     not self.factura_sent? and
     self.effective_amount > 0
+  end
+
+  def can_send_correcting1_factura?
+    self.penalty_first_stage > 0 and
+    not self.can_send_correcting2_factura? and 
+    self.registered_facturas.where(category: Billing::NewCustomerFactura::ADVANCE).present? and
+    not self.registered_facturas.where(category: Billing::NewCustomerFactura::CORRECTING1).present?
+  end
+
+  def can_send_correcting2_factura?
+    self.penalty_second_stage > 0 and
+    self.registered_facturas.where(category: Billing::NewCustomerFactura::ADVANCE).present? and
+    not self.registered_facturas.where(category: Billing::NewCustomerFactura::CORRECTING2).present?
   end
 
   def update_last_request
@@ -545,7 +566,9 @@ class Network::NewCustomerApplication
           self.plan_end_date = self.send_date + self.days
         end
         send_to_gnerc(1)
-      when STATUS_COMPLETE  then self.end_date   = Date.today
+      when STATUS_COMPLETE  then 
+        raise 'გამოიწერეთ საავანსო ფაქტურა' if check_advance_factura_needed
+        self.end_date   = Date.today
       when STATUS_CANCELED  then
         raise "ატვირთეთ def ფაილი" unless check_file_uploaded
 
@@ -713,6 +736,13 @@ class Network::NewCustomerApplication
       end
       GnercWorker.perform_async("answer", 7, parameters)
     end
+  end
+
+  def check_advance_factura_needed
+    return false if ( self.send_date < Network::PREPAYMENT_START_DATE )
+    return false unless self.need_factura
+
+    self.billing_prepayment_to_factured.present? or ( self.billing_prepayment_factura_sum < ( self.effective_amount / 2 ))
   end
 
   def check_file_uploaded

@@ -211,24 +211,22 @@ module Network::ChangePowerHelper
           end
         end
 
-        # t.action network_new_customer_send_factura_url(id: application.id), icon: '/icons/money--arrow.png', label: 'ოპერაციის დამატება', method: 'post' if show_actions
+        t.table_field :billing_items_raw, table: { title: 'ბილინგის ოპერაციები აბონენტის გარეშე', icon: '/icons/edit-list.png' } do |operations|
+          operations.table do |t|
+            t.text_field 'customer.accnumb', tag: 'code', label: 'აბონენტი'
+            t.date_field 'itemdate', label: 'თარიღი'
+            t.complex_field label: 'ოპერაცია' do |c|
+              c.text_field 'operation.billopername', after: '&mdash;'.html_safe
+              c.text_field 'operation.billoperkey', class: 'muted'
+            end
+            t.number_field 'kwt', after: 'kWh', label: 'დარიცხვა'
+            t.number_field 'amount', after: 'GEL', label: 'თანხა'
+            t.number_field 'balance', after: 'GEL', label: 'ბალანსი'
 
-        # t.table_field :billing_items_raw, table: { title: 'ბილინგის ოპერაციები აბონენტის გარეშე', icon: '/icons/edit-list.png' } do |operations|
-        #   operations.table do |t|
-        #     t.text_field 'customer.accnumb', tag: 'code', label: 'აბონენტი'
-        #     t.date_field 'itemdate', label: 'თარიღი'
-        #     t.complex_field label: 'ოპერაცია' do |c|
-        #       c.text_field 'operation.billopername', after: '&mdash;'.html_safe
-        #       c.text_field 'operation.billoperkey', class: 'muted'
-        #     end
-        #     t.number_field 'kwt', after: 'kWh', label: 'დარიცხვა'
-        #     t.number_field 'amount', after: 'GEL', label: 'თანხა'
-        #     t.number_field 'balance', after: 'GEL', label: 'ბალანსი'
-
-        #     t.text_field 'factura.appl.factura_seria', tag: 'code', label: 'ფაქტურის სერია'
-        #     t.text_field 'factura.appl.factura_number', tag: 'code', label: 'ფაქტურის #'
-        #   end
-        # end
+            t.text_field 'factura.appl.factura_seria', tag: 'code', label: 'ფაქტურის სერია'
+            t.text_field 'factura.appl.factura_number', tag: 'code', label: 'ფაქტურის #'
+          end
+        end
       end
       # 3. sms messages
       f.tab title: "SMS &mdash; <strong>#{application.messages.count}</strong>".html_safe, icon: '/icons/mobile-phone.png' do |t|
@@ -267,16 +265,29 @@ module Network::ChangePowerHelper
       end
       # 6. factura
       f.tab title: 'ფაქტურა', icon: '/icons/money.png' do |t|
+        if application.can_send_prepayment_factura?
+          t.action network_change_power_send_prepayment_factura_prepare_url(id: application.id), icon: '/icons/money--arrow.png', label: 'საავანსო ფაქტურის გაგზავნა', method: 'get'
+        end
+
+        t.table_field :facturas, table: { title: 'გამოწერილი ფაქტურები', icon: '/icons/book-open-text-image.png' } do |facturas|
+          facturas.table do |factura|
+            factura.text_field 'factura_id', tag: 'code', label: '#'
+            factura.text_field 'factura_seria', tag: 'code', label: 'ფაქტურის სერია'
+            factura.text_field 'factura_number', empty: false, label: 'ფაქტურის #'
+            factura.number_field 'amount', after: 'GEL', label: 'თანხა'
+          end
+        end
+
         if application.can_send_factura?
           t.action network_change_power_send_factura_url(id: application.id), icon: '/icons/money--arrow.png', label: 'ფაქტურის გაგზავნა', method: 'post', confirm: 'ნამდვილად გინდათ ფაქტურის გაგზავნა?'
         end
-        t.number_field 'amount', after: 'GEL'
-        t.boolean_field 'factura_sent?'
-        t.text_field 'factura_id', tag: 'code'
-        t.complex_field i18n: 'factura_number' do |c|
-          c.text_field 'factura_seria', tag: 'code', after: '&mdash;'.html_safe
-          c.text_field 'factura_number', empty: false
-        end
+        # t.number_field 'amount', after: 'GEL'
+        # t.boolean_field 'factura_sent?'
+        # t.text_field 'factura_id', tag: 'code'
+        # t.complex_field i18n: 'factura_number' do |c|
+        #   c.text_field 'factura_seria', tag: 'code', after: '&mdash;'.html_safe
+        #   c.text_field 'factura_number', empty: false
+        # end
       end
       # 7. sys
       f.tab title: 'სისტემური', icon: '/icons/traffic-cone.png' do |t|

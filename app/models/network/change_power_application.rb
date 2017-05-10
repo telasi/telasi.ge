@@ -26,6 +26,7 @@ class Network::ChangePowerApplication
   include Sys::VatPayer
   include Network::ApplicationBase
   include Network::BsBase
+  include Network::Factura
 
   belongs_to :user, class_name: 'Sys::User'
   field :number,    type: String
@@ -130,6 +131,14 @@ class Network::ChangePowerApplication
   def status_icon; Network::NewCustomerApplication.status_icon(self.status) end
   def type_name; Network::ChangePowerApplication.type_name(self.type) end
 
+  def facturas
+    array = registered_facturas.dup
+    if self.factura_id.present?
+      array << Billing::NewCustomerFactura.new(factura_id: self.factura_id, factura_seria: self.factura_seria, factura_number: self.factura_number)
+    end
+    array
+  end
+
   def transitions
     case self.status
     when STATUS_DEFAULT   then [ STATUS_SENT, STATUS_CANCELED ]
@@ -149,47 +158,50 @@ class Network::ChangePowerApplication
 
   def can_change_amount?; self.type != TYPE_CHANGE_POWER end
 
-  # def send_prepayment_factura!(factura, amount)
-  #   Billing::NewCustomerFactura.transaction do 
-  #     billing_factura = Billing::NewCustomerFactura.new(application: 'CP',
-  #                                                       cns: self.number, 
-  #                                                       factura_id: factura.id, 
-  #                                                       factura_seria: factura.seria, 
-  #                                                       factura_number: factura.number,
-  #                                                       category: Billing::NewCustomerFactura::ADVANCE,
-  #                                                       amount: amount, period: '//')
-  #     billing_factura.save
+  def send_prepayment_factura!(factura, billing_items)
+    Billing::NewCustomerFactura.transaction do 
+      billing_factura = Billing::NewCustomerFactura.new(application: 'CP',
+                                                        cns: self.number, 
+                                                        factura_id: factura.id, 
+                                                        factura_seria: factura.seria, 
+                                                        factura_number: factura.number,
+                                                        category: Billing::NewCustomerFactura::ADVANCE,
+                                                        amount: billing_items.sum(:amount), period: '//')
+      billing_factura.save
 
-  #     self.billing_prepayment_to_factured.each do |p|
-  #       billing_factura_appl = Billing::NewCustomerFacturaAppl.new(itemkey: p.itemkey, custkey: self.customer.custkey, 
-  #                                                                  application: 'CP',
-  #                                                                  cns: self.number, factura_id: billing_factura.id)
-  #       billing_factura_appl.save
-  #     end
-  #   end
-  # end
+      self.billing_items.each do |p|
+        billing_factura_appl = Billing::NewCustomerFacturaAppl.new(itemkey: p.itemkey, custkey: self.customer.custkey, 
+                                                                   application: 'CP',
+                                                                   cns: self.number, factura_id: billing_factura.id)
+        billing_factura_appl.save
+      end
+    end
+  end
 
-  # def prepayment_factura_sent?
-  #   prepayment_facturas.present?
-  # end
+  def prepayment_factura_sent?
+    prepayment_facturas.present?
+  end
 
-  # def prepayment_enough?
-  #   billing_prepayment_to_factured_sum > 0 && ( billing_prepayment_to_factured_sum >= self.amount / 2 )
-  # end
+  def prepayment_enough?
+    billing_prepayment_to_factured_sum > 0 && ( billing_prepayment_to_factured_sum >= self.amount / 2 )
+  end
 
-  # def can_send_prepayment_factura?
-  #   return false if has_new_cust_charge?
-  #   if billing_prepayment_factura.present?
-  #     return true if billing_prepayment_to_factured.present?
-  #   else
-  #     return true if prepayment_enough?
-  #   end 
+  def can_send_prepayment_factura?
+    return false unless self.need_factura
+    return false unless self.status == STATUS_CONFIRMED
+    # return false if has_new_cust_charge?
+    return false if self.factura_sent?
+    if billing_prepayment_factura.present? or billing_items_raw_to_factured.present?
+      return true if ( billing_prepayment_to_factured.present? or billing_items_raw_to_factured.present? )
+    else
+      return true if prepayment_enough?
+    end 
 
-  #   return false
-  # end
+    return false
+  end
 
   def factura_sent?; not self.factura_seria.blank? end
-  def can_send_factura?; self.need_factura and [STATUS_SENT, STATUS_CONFIRMED, STATUS_COMPLETE, STATUS_IN_BS].include?(self.status) and not self.factura_sent? and (self.amount || 0) > 0 end
+  def can_send_factura?; self.need_factura and [STATUS_SENT, STATUS_COMPLETE, STATUS_IN_BS].include?(self.status) and not self.factura_sent? and (self.amount || 0) > 0 end
   def can_send_to_bs?; self.status == STATUS_COMPLETE and (self.amount||0) > 0 end
 
   def send_to_bs!

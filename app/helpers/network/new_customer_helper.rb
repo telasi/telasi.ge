@@ -23,6 +23,49 @@ module Network::NewCustomerHelper
     end
   end
 
+  def prepayment_table(applications, opts = {})
+    table_for applications, title: 'განაცხადები ღია საავანსო განცხადებით', icon: '/icons/user--plus.png', collapsible: true do |t|
+      t.title_action opts[:xlsx], label: 'ექსელში გადმოწერა', icon: '/icons/document-excel.png' if opts[:xlsx].present?
+      t.text_field 'effective_number', i18n: 'number', tag: 'code'
+      t.date_field 'start_date', i18n: 'start_date'
+      t.complex_field i18n: 'status_name', required: true do |c|
+        c.image_field :status_icon
+        c.text_field :status_name, url: ->(x) { network_new_customer_url(id: x.id) }
+      end
+      t.complex_field i18n: 'rs_name' do |c|
+        c.text_field :rs_tin, tag: 'code'
+        c.text_field :rs_name, url: ->(x) { network_new_customer_url(id: x.id) }
+      end
+      t.complex_field label: 'სიმძლავრე/ძაბვა' do |c|
+        c.number_field :power, after: 'kWh'
+        c.number_field :voltage, before: '/'
+      end
+      t.number_field :amount, after: 'GEL'
+      t.number_field :days, max_digits: 0, after: 'დღე'
+      t.paginate param_name: 'page_new', records: 'ჩანაწერი'
+    end
+  end
+
+  def accounting_table(applications, opts = {})
+    table_for applications, title: 'ახალი აბონენტის განცხადებები', icon: '/icons/user--plus.png', collapsible: true do |t|
+      t.title_action opts[:xlsx], label: 'ექსელში გადმოწერა', icon: '/icons/document-excel.png' if opts[:xlsx].present?
+      t.text_field 'effective_number', i18n: 'number', tag: 'code'
+      t.text_field 'customer.accnumb', label: 'აბონენტის N', tag: 'code'
+      t.complex_field i18n: 'status_name', required: true do |c|
+        c.image_field :status_icon
+        c.text_field :status_name, url: ->(x) { network_new_customer_url(id: x.id) }
+      end
+      t.number_field :amount, after: 'GEL'
+      t.date_field :plan_end_date
+      t.date_field :end_date
+      t.number_field :billing_prepayment_sum, label: 'მობმული ავანსების თანხა'
+      t.number_field :penalty_first_stage, label: 'I ეტაპი'
+      t.number_field :penalty_second_stage, label: 'II ეტაპი'
+      
+      t.paginate param_name: 'page_new', records: 'ჩანაწერი'
+    end
+  end
+
   def vat_collection
     h = {}
     [Sys::VatPayer::NOT_PAYER, Sys::VatPayer::PAYER, Sys::VatPayer::PAYER_ZERO].each do |x|
@@ -255,8 +298,12 @@ module Network::NewCustomerHelper
             t.number_field 'kwt', after: 'kWh', label: 'დარიცხვა'
             t.number_field 'amount', after: 'GEL', label: 'თანხა'
             t.number_field 'balance', after: 'GEL', label: 'ბალანსი'
+
+            t.text_field 'factura.appl.factura_seria', tag: 'code', label: 'ფაქტურის სერია'
+            t.text_field 'factura.appl.factura_number', tag: 'code', label: 'ფაქტურის #'
           end
         end
+
       end
       # 5. files
       f.tab title: "ფაილები &mdash; <strong>#{application.files.count}</strong>".html_safe, icon: '/icons/book-open-text-image.png' do |t|
@@ -270,16 +317,37 @@ module Network::NewCustomerHelper
       end
       # 6. factura
       f.tab title: 'ფაქტურა', icon: '/icons/money.png' do |t|
+        if application.can_send_prepayment_factura?
+          t.action network_new_customer_send_prepayment_factura_url(id: application.id), icon: '/icons/money--arrow.png', label: 'საავანსო ფაქტურის გაგზავნა', method: 'post', confirm: 'ნამდვილად გინდათ საავანსო ფაქტურის გაგზავნა?' if show_actions
+        end
+
+        if application.can_send_correcting1_factura?
+          t.action network_new_customer_send_correcting1_factura_url(id: application.id), icon: '/icons/money--arrow.png', label: 'კორექტირებული I ეტაპის ფაქტურის გაგზავნა', method: 'post', confirm: 'ნამდვილად გინდათ საავანსო ფაქტურის გაგზავნა?' if show_actions
+        end
+
+        if application.can_send_correcting2_factura?
+          t.action network_new_customer_send_correcting2_factura_url(id: application.id), icon: '/icons/money--arrow.png', label: 'კორექტირებული II ეტაპის ფაქტურის გაგზავნა', method: 'post', confirm: 'ნამდვილად გინდათ საავანსო ფაქტურის გაგზავნა?' if show_actions
+        end
+
+        t.table_field :facturas, table: { title: 'გამოწერილი ფაქტურები', icon: '/icons/book-open-text-image.png' } do |facturas|
+          facturas.table do |factura|
+            factura.text_field 'factura_id', tag: 'code', label: '#'
+            factura.text_field 'factura_seria', tag: 'code', label: 'ფაქტურის სერია'
+            factura.text_field 'factura_number', empty: false, label: 'ფაქტურის #'
+            factura.number_field 'amount', after: 'GEL', label: 'თანხა'
+          end
+        end
+
         if application.can_send_factura?
           t.action network_new_customer_send_factura_url(id: application.id), icon: '/icons/money--arrow.png', label: 'ფაქტურის გაგზავნა', method: 'post', confirm: 'ნამდვილად გინდათ ფაქტურის გაგზავნა?' if show_actions
         end
-        t.number_field 'effective_amount', after: 'GEL'
-        t.boolean_field 'factura_sent?'
-        t.text_field 'factura_id', tag: 'code'
-        t.complex_field i18n: 'factura_number' do |c|
-          c.text_field 'factura_seria', tag: 'code', after: '&mdash;'.html_safe
-          c.text_field 'factura_number', empty: false
-        end
+        # t.number_field 'effective_amount', after: 'GEL'
+        # t.boolean_field 'factura_sent?'
+        # t.text_field 'factura_id', tag: 'code'
+        # t.complex_field i18n: 'factura_number' do |c|
+        #   c.text_field 'factura_seria', tag: 'code', after: '&mdash;'.html_safe
+        #   c.text_field 'factura_number', empty: false
+        # end
       end
       # 7. stages
       f.tab title: "კონტროლი &mdash; <strong>#{application.requests.count}</strong>".html_safe, icon: '/icons/eye.png' do |t|
@@ -302,7 +370,7 @@ module Network::NewCustomerHelper
           c.text_field 'user.full_name'
           c.text_field 'user.formatted_mobile', tag: 'code'
         end
-        t.timestamps
+        #t.timestamps
         t.number_field 'payment_id', required: true, max_digits: 0
         t.boolean_field 'online', required: true
       end

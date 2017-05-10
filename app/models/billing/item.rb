@@ -10,6 +10,7 @@ class Billing::Item < ActiveRecord::Base
   belongs_to :person,    class_name: 'Billing::Person', foreign_key: :perskey
   belongs_to :signee,    class_name: 'Billing::Person', foreign_key: :signkey
   has_one    :note,      class_name: 'Billing::Note',   foreign_key: :notekey
+  has_one    :factura,   class_name: 'Billing::NewCustomerFacturaAppl',   foreign_key: :itemkey
 
   def cycle?; !self.schedkey.nil? end
 end

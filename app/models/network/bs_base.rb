@@ -15,6 +15,14 @@ module Network::BsBase
     1005,
   ]
 
+  PREPAYMENT_OPERATIONS = [
+    116
+  ]
+
+  NEW_CUST_OPERATIONS = [
+    1000
+  ]
+
   def billing_items
     if @__billing_items
       @__billing_items
@@ -23,5 +31,50 @@ module Network::BsBase
     else
       @__billing_items = []
     end
+  end
+
+  def billing_items_united
+    billing_items
+  end
+
+  def billing_items_raw
+    Billing::Item.joins('join bs.customer a on item.custkey = a.custkey')
+                 .joins('join bs.customer b on itemnumber = b.accnumb')
+                 .where('a.accnumb = ? and b.custkey = ?', Billing::Customer::XXX, self.customer_id).where(billoperkey: NETWORK_OPERATIONS).order('itemkey DESC')
+  end
+
+  def billing_items_raw_to_factured
+    Billing::Item.joins('join bs.customer a on item.custkey = a.custkey')
+                 .joins('join bs.customer b on itemnumber = b.accnumb')
+                 .where('a.accnumb = ? and b.custkey = ?', Billing::Customer::XXX, self.customer_id).where(billoperkey: NETWORK_OPERATIONS)
+                 .eager_load(:factura).where('new_customer_factura_appl.id is null')
+  end
+
+  def billing_prepayment
+    Billing::Item.eager_load(:factura).where(custkey: self.customer_id, billoperkey: PREPAYMENT_OPERATIONS).order('item.itemkey DESC')
+  end
+
+  def billing_prepayment_sum
+    Billing::Item.eager_load(:factura).where(custkey: self.customer_id, billoperkey: PREPAYMENT_OPERATIONS).sum(:amount)
+  end
+
+  def billing_prepayment_factura
+    self.billing_prepayment.where('new_customer_factura_appl.id is not null')
+  end
+
+  def billing_prepayment_factura_sum
+    self.billing_prepayment.where('new_customer_factura_appl.id is not null').sum(:amount)
+  end
+
+  def billing_prepayment_to_factured
+    self.billing_prepayment.where('new_customer_factura_appl.id is null')
+  end
+
+  def billing_prepayment_to_factured_sum
+    self.billing_prepayment.where('new_customer_factura_appl.id is null').sum(:amount)
+  end
+
+  def has_new_cust_charge?
+    Billing::Item.where(custkey: self.customer_id, billoperkey: NEW_CUST_OPERATIONS).present?
   end
 end

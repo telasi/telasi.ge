@@ -5,6 +5,8 @@ class Billing::Customer < ActiveRecord::Base
   INACTIVE = 1
   CLOSED = 2
 
+  XXX = 'xxx-qs'
+
   self.table_name  = 'bs.customer'
   self.primary_key = :custkey
 

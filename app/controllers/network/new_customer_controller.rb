@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 require 'rs'
 require 'rest_client'
-#require 'will_paginate/array'
+require 'will_paginate/array'
 
 class Network::NewCustomerController < ApplicationController
   include Sys::BackgroundJobConstants
@@ -73,7 +73,7 @@ class Network::NewCustomerController < ApplicationController
          when '1'
           rel = rel.where(:send_date.lte => Time.now - 5.days)
          when '2'
-          rel = rel.where(:send_date.gt => Time.now - 5.days).or(send_date: nil)
+          rel = rel.or({ :send_date.gt => Time.now - 5.days}, { send_date: nil })
         end
       end
 
@@ -81,6 +81,17 @@ class Network::NewCustomerController < ApplicationController
 
     rel = rel.select{ |x| x.billing_prepayment_to_factured.present? }
     @applications = rel.paginate(per_page: 3000)
+  end
+
+  def accounting_report
+    @title = 'უწყისი'
+    rel = Network::NewCustomerController.filter_applications(@search)
+    respond_to do |format|
+      format.html { @applications = rel.desc(:_id).paginate(page: params[:page_new], per_page: 10) }
+      format.xlsx do
+        @applications = rel.desc(:_id).paginate(per_page: 3000)
+      end
+    end
   end
 
   def index
@@ -312,35 +323,34 @@ class Network::NewCustomerController < ApplicationController
 
   end
 
-  # def send_prepayment_factura
-  #   application = Network::NewCustomerApplication.find(params[:id])
-  #   raise 'არა საკმარისი თანხა' unless application.prepayment_enough?
+  def send_prepayment_factura
+    application = Network::NewCustomerApplication.find(params[:id])
+    raise 'არა საკმარისი თანხა' unless application.prepayment_enough?
 
-  #   factura = RS::Factura.new(date: application.end_date, seller_id: RS::TELASI_PAYER_ID)
-  #   good_name = "ქსელზე მიერთების პაკეტის ღირებულების ავანსი #{application.number}"
-  #   amount = application.billing_prepayment_to_factured_sum
-  #   raise 'თანხა უნდა იყოს > 0' unless amount > 0
-  #   debugger
-  #   #raise 'ფაქტურის გაგზავნა ვერ ხერხდება!' unless RS.save_factura(factura, RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, buyer_tin: application.rs_tin))
-  #   vat = application.pays_non_zero_vat? ? amount * (1 - 1.0 / 1.18) : 0
-  #   factura_item = RS::FacturaItem.new(factura: factura,
-  #     good: good_name, unit: 'მომსახურეობა', amount: amount, vat: vat,
-  #     quantity: 0)
-  #   #RS.save_factura_item(factura_item, RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID))
-  #   #if RS.send_factura(RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, id: factura.id))
+    factura = RS::Factura.new(date: 5.business_days.after(application.start_date), seller_id: RS::TELASI_PAYER_ID)
+    good_name = "ქსელზე მიერთების პაკეტის ღირებულების ავანსი #{application.number}"
+    amount = application.billing_prepayment_to_factured_sum
+    raise 'თანხა უნდა იყოს > 0' unless amount > 0
+    raise 'ფაქტურის გაგზავნა ვერ ხერხდება!' unless RS.save_factura_advance(factura, RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, buyer_tin: application.rs_tin))
+    vat = application.pays_non_zero_vat? ? amount * (1 - 1.0 / 1.18) : 0
+    factura_item = RS::FacturaItem.new(factura: factura,
+      good: good_name, unit: 'მომსახურეობა', amount: amount, vat: vat,
+      quantity: 0)
+    RS.save_factura_item(factura_item, RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID))
+    if RS.send_factura(RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, id: factura.id))
 
-  #     #factura = RS.get_factura_by_id(RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, id: factura.id))
-  #     factura.id = '1234'
-  #     factura.seria = 'aa'
-  #     factura.number = '3455661 '
+      factura = RS.get_factura_by_id(RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, id: factura.id))
+      #factura.id = '1234'
+      #factura.seria = 'aa'
+      #factura.number = '3455661 '
 
-  #     application.send_prepayment_factura!(factura, amount)      
+      application.send_prepayment_factura!(factura, amount)
 
-  #   #end
-  #   #application.factura_id = factura.id
-  #   application.save
-  #   redirect_to network_new_customer_url(id: application.id, tab: 'factura'), notice: 'ფაქტურა გაგზავნილია :)'
-  # end
+    end
+    application.factura_id = factura.id
+    application.save
+    redirect_to network_new_customer_url(id: application.id, tab: 'factura'), notice: 'ფაქტურა გაგზავნილია :)'
+  end
 
   def send_factura
     application = Network::NewCustomerApplication.find(params[:id])
@@ -364,6 +374,16 @@ class Network::NewCustomerController < ApplicationController
     application.factura_id = factura.id
     application.save
     redirect_to network_new_customer_url(id: application.id, tab: 'factura'), notice: 'ფაქტურა გაგზავნილია :)'
+  end
+
+  def send_correcting1_factura
+    application = Network::NewCustomerApplication.find(params[:id])
+    raise 'ფაქტურის გაგზავნა დაუშვებელია' unless application.can_send_correcting1_factura?
+  end
+
+  def send_correcting2_factura
+    application = Network::NewCustomerApplication.find(params[:id])
+    raise 'ფაქტურის გაგზავნა დაუშვებელია' unless application.can_send_correcting2_factura?
   end
 
   def new_control_item

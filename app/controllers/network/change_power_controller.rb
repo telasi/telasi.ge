@@ -1,4 +1,5 @@
 # -*- encoding : utf-8 -*-
+require 'rs'
 require 'rest_client'
 
 class Network::ChangePowerController < ApplicationController
@@ -244,6 +245,45 @@ class Network::ChangePowerController < ApplicationController
         redirect_to network_change_power_url(id: @application.id), notice: 'რეალური თარიღი შეცვლილია'
       end
     end
+  end
+
+  def send_prepayment_factura_prepare
+    @application = Network::ChangePowerApplication.find(params[:id])
+    @items_to_factured = @application.billing_prepayment_to_factured
+    @items = @application.billing_items_raw_to_factured
+  end
+
+  def send_prepayment_factura
+    application = Network::ChangePowerApplication.find(params[:id])
+    
+    raise 'არა საკმარისი თანხა' unless application.prepayment_enough?
+
+    billing_items = Billing::Item.where(itemkey: params[:chosen])
+
+    factura = RS::Factura.new(date: application.start_date, seller_id: RS::TELASI_PAYER_ID)
+    good_name = "ქსელზე მიერთების პაკეტის ღირებულების ავანსი #{application.number}"
+    amount = billing_items.sum(:amount)
+    raise 'თანხა უნდა იყოს > 0' unless amount > 0
+    debugger
+    raise 'ფაქტურის გაგზავნა ვერ ხერხდება!' unless RS.save_factura_advance(factura, RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, buyer_tin: application.rs_tin))
+    vat = application.pays_non_zero_vat? ? amount * (1 - 1.0 / 1.18) : 0
+    factura_item = RS::FacturaItem.new(factura: factura,
+      good: good_name, unit: 'მომსახურეობა', amount: amount, vat: vat,
+      quantity: 0)
+    RS.save_factura_item(factura_item, RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID))
+    if RS.send_factura(RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, id: factura.id))
+
+      # factura = RS.get_factura_by_id(RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, id: factura.id))
+      # factura.id = '1234'
+      # factura.seria = 'aa'
+      # factura.number = '3455661 '
+
+      application.send_prepayment_factura!(factura, billing_items)      
+
+    end
+    application.factura_id = factura.id
+    application.save
+    redirect_to network_change_power_url(id: application.id, tab: 'factura'), notice: 'ფაქტურა გაგზავნილია :)'
   end
 
   def send_factura
