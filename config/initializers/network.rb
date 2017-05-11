@@ -2,7 +2,7 @@
 module Network
   PAYPOINTS = [ 693, 717, 718, 719, 720, 873 ]
 
-  PREPAYMENT_START_DATE = Date.new(2017,5,10)
+  PREPAYMENT_START_DATE = Date.new(2017,1,1)
 
   # sdweb
 
