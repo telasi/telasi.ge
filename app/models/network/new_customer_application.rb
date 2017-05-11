@@ -176,7 +176,7 @@ class Network::NewCustomerApplication
   def facturas
     array = registered_facturas.dup
     if self.factura_id.present?
-      array << Billing::NewCustomerFactura.new(factura_id: self.factura_id, factura_seria: self.factura_seria, factura_number: self.factura_number)
+      array << Billing::NewCustomerFactura.new(factura_id: self.factura_id, factura_seria: self.factura_seria, factura_number: self.factura_number, amount: effective_amount)
     end
     array
   end
@@ -432,8 +432,7 @@ class Network::NewCustomerApplication
                                                         factura_seria: factura.seria.to_geo, 
                                                         factura_number: factura.number,
                                                         category: Billing::NewCustomerFactura::ADVANCE,
-                                                        amount: amount, period: 5.business_days.after(self.start_date),
-                                                        plan_end_date: self.plan_end_date)
+                                                        amount: amount, period: 5.business_days.after(self.start_date))
       billing_factura.save
 
       self.billing_prepayment_to_factured.each do |p|
@@ -441,6 +440,31 @@ class Network::NewCustomerApplication
                                                                    application: 'NC',
                                                                    cns: self.number, 
                                                                    start_date: self.start_date,
+                                                                   plan_end_date: self.plan_end_date,
+                                                                   factura_id: billing_factura.id,
+                                                                   factura_date: Time.now)
+        billing_factura_appl.save
+      end
+    end
+  end
+
+  def send_factura!
+    Billing::NewCustomerFactura.transaction do 
+      billing_factura = Billing::NewCustomerFactura.new(application: 'NC',
+                                                        cns: self.number, 
+                                                        factura_id: factura.id, 
+                                                        factura_seria: factura.seria.to_geo, 
+                                                        factura_number: factura.number,
+                                                        category: Billing::NewCustomerFactura::CONFIRMED,
+                                                        amount: amount, period: self.start_date)
+      billing_factura.save
+
+      self.billing_prepayment_to_factured.each do |p|
+        billing_factura_appl = Billing::NewCustomerFacturaAppl.new(itemkey: p.itemkey, custkey: self.customer.custkey, 
+                                                                   application: 'NC',
+                                                                   cns: self.number, 
+                                                                   start_date: self.start_date,
+                                                                   plan_end_date: self.plan_end_date,
                                                                    factura_id: billing_factura.id,
                                                                    factura_date: Time.now)
         billing_factura_appl.save
