@@ -369,6 +369,8 @@ class Network::NewCustomerController < ApplicationController
       factura = RS.get_factura_by_id(RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, id: factura.id))
       application.factura_seria = factura.seria
       application.factura_number = factura.number
+
+      application.send_factura!(factura, amount)
     end
     application.factura_id = factura.id
     application.save

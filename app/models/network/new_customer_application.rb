@@ -448,7 +448,7 @@ class Network::NewCustomerApplication
     end
   end
 
-  def send_factura!
+  def send_factura!(factura, amount)
     Billing::NewCustomerFactura.transaction do 
       billing_factura = Billing::NewCustomerFactura.new(application: 'NC',
                                                         cns: self.number, 
