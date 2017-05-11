@@ -187,6 +187,7 @@ class Network::ChangePowerApplication
   end
 
   def can_send_prepayment_factura?
+    return false
     return false unless self.need_factura
     return false unless self.status == STATUS_CONFIRMED
     # return false if has_new_cust_charge?
