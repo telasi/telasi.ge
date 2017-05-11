@@ -347,7 +347,6 @@ class Network::NewCustomerController < ApplicationController
       application.send_prepayment_factura!(factura, amount)
 
     end
-    application.factura_id = factura.id
     application.save
     redirect_to network_new_customer_url(id: application.id, tab: 'factura'), notice: 'ფაქტურა გაგზავნილია :)'
   end
