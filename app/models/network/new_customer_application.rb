@@ -456,8 +456,8 @@ class Network::NewCustomerApplication
   end
 
   def can_send_prepayment_factura?
-    return false if ( self.send_date < Network::PREPAYMENT_START_DATE )
     return false unless self.status == STATUS_CONFIRMED
+    return false if ( self.send_date < Network::PREPAYMENT_START_DATE )
     return false unless self.need_factura
     return false if self.factura_sent?
     # return false if has_new_cust_charge?
@@ -739,6 +739,7 @@ class Network::NewCustomerApplication
   end
 
   def check_advance_factura_needed
+    return false unless self.status == STATUS_CONFIRMED
     return false if ( self.send_date < Network::PREPAYMENT_START_DATE )
     return false unless self.need_factura
 
