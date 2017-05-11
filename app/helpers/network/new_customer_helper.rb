@@ -332,7 +332,7 @@ module Network::NewCustomerHelper
         t.table_field :facturas, table: { title: 'გამოწერილი ფაქტურები', icon: '/icons/book-open-text-image.png' } do |facturas|
           facturas.table do |factura|
             factura.text_field 'factura_id', tag: 'code', label: '#'
-            factura.text_field 'factura_seria', tag: 'code', label: 'ფაქტურის სერია'
+            factura.text_field 'factura_seria.to_ka', tag: 'code', label: 'ფაქტურის სერია'
             factura.text_field 'factura_number', empty: false, label: 'ფაქტურის #'
             factura.number_field 'amount', after: 'GEL', label: 'თანხა'
           end

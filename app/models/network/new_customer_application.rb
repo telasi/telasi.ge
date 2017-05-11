@@ -429,10 +429,11 @@ class Network::NewCustomerApplication
       billing_factura = Billing::NewCustomerFactura.new(application: 'NC',
                                                         cns: self.number, 
                                                         factura_id: factura.id, 
-                                                        factura_seria: factura.seria, 
+                                                        factura_seria: factura.seria.to_geo, 
                                                         factura_number: factura.number,
                                                         category: Billing::NewCustomerFactura::ADVANCE,
-                                                        amount: amount, period: '//')
+                                                        amount: amount, period: 5.business_days.after(self.start_date),
+                                                        plan_end_date: self.plan_end_date)
       billing_factura.save
 
       self.billing_prepayment_to_factured.each do |p|
