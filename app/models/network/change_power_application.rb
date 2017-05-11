@@ -134,7 +134,7 @@ class Network::ChangePowerApplication
   def facturas
     array = registered_facturas.dup
     if self.factura_id.present?
-      array << Billing::NewCustomerFactura.new(factura_id: self.factura_id, factura_seria: self.factura_seria, factura_number: self.factura_number)
+      array << Billing::NewCustomerFactura.new(factura_id: self.factura_id, factura_seria: self.factura_seria, factura_number: self.factura_number, amount: self.amount)
     end
     array
   end
