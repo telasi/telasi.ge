@@ -5,12 +5,12 @@ wb.add_worksheet(name: "new-customers") do |sheet|
   sheet.add_row [
     'ელექტრონული განაცხადის N', 'აბონენტის N', 'განაცხადის სტატუსი', 'პაკეტის ღირ-ბა',
     "გეგმიური შესრულების თარიღი", "დასრულების თარიღი",
-    "მობმული ავანსების თანხა", "1-ეტაპი", "2-ეტაპი"
+    "მობმული ავანსების თანხა", "მიღებული ავანსის %", "1-ეტაპი", "2-ეტაპი"
   ], :style=>style_header
   @applications.each do |app|
     accnumb = app.customer.accnumb if app.customer
     sheet.add_row [app.effective_number, accnumb, app.status_name, app.amount, 
-      app.plan_end_date, app.end_date, app.billing_prepayment_sum,
+      app.plan_end_date, app.end_date, app.billing_prepayment_sum, app.prepayment_percent,
       app.penalty_first_stage, app.penalty_second_stage
     ]
   end
