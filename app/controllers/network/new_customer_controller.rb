@@ -85,6 +85,7 @@ class Network::NewCustomerController < ApplicationController
 
   def accounting_report
     @title = 'უწყისი'
+    @search = params[:search] == 'clear' ? nil : params[:search]
     rel = Network::NewCustomerController.filter_applications(@search)
     respond_to do |format|
       format.html { @applications = rel.desc(:_id).paginate(page: params[:page_new], per_page: 10) }
