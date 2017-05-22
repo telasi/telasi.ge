@@ -12,7 +12,8 @@ class Sys::Subscription
 
   validates :email,
     uniqueness: { message: I18n.t('models.sys_subscription.errors.duplicated_email') },
-    presence: { message: I18n.t('models.sys_subscription.errors.empty_email') }
+    presence: { message: I18n.t('models.sys_subscription.errors.empty_email') },
+    email: { message: I18n.t('models.sys_user.errors.illegal_email') }
   index({ email: 1 }, { unique: true })
 
   def user; Sys::User.where(email: self.email).first end
