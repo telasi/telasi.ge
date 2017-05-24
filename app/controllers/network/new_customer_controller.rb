@@ -53,7 +53,8 @@ class Network::NewCustomerController < ApplicationController
   def prepayment_report
     rel = Network::NewCustomerApplication.where(:status.in => [ Network::NewCustomerApplication::STATUS_DEFAULT, 
                                                                 Network::NewCustomerApplication::STATUS_SENT, 
-                                                                Network::NewCustomerApplication::STATUS_CONFIRMED ])
+                                                                Network::NewCustomerApplication::STATUS_CONFIRMED ],
+                                                need_factura: true)
     rel = rel.where(factura_id: nil)
 
     @search = params[:search] == 'clear' ? nil : params[:search]
