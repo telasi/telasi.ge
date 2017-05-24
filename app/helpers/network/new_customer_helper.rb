@@ -60,8 +60,8 @@ module Network::NewCustomerHelper
       t.date_field :end_date
       t.number_field :billing_prepayment_sum, label: 'მობმული ავანსების თანხა'
       t.number_field :prepayment_percent, label: 'მობმული ავანსის %'
-      t.number_field :penalty_first_stage, label: 'I ეტაპი'
-      t.number_field :penalty_second_stage, label: 'II ეტაპი'
+      t.number_field :penalty_first_corrected, label: 'I ეტაპი'
+      t.number_field :penalty_second_corrected, label: 'II ეტაპი'
       
       t.paginate param_name: 'page_new', records: 'ჩანაწერი'
     end
@@ -336,7 +336,7 @@ module Network::NewCustomerHelper
       # 6. factura
       f.tab title: 'ფაქტურა', icon: '/icons/money.png' do |t|
         if application.can_send_prepayment_factura?
-          t.action network_new_customer_send_prepayment_factura_url(id: application.id), icon: '/icons/money--arrow.png', label: 'საავანსო ფაქტურის გაგზავნა', method: 'post', confirm: 'ნამდვილად გინდათ საავანსო ფაქტურის გაგზავნა?' if show_actions
+          t.action network_new_customer_send_prepayment_factura_prepare_url(id: application.id), icon: '/icons/money--arrow.png', label: 'საავანსო ფაქტურის გაგზავნა', method: 'get', confirm: 'ნამდვილად გინდათ საავანსო ფაქტურის გაგზავნა?' if show_actions
         end
 
         if application.can_send_correcting1_factura?

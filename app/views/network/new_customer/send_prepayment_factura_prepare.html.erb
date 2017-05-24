@@ -4,7 +4,7 @@
 			<span>ოპერაციები</span>
 		</span>
 	</div>
-	<form class="ff-form-body ff-wait-on-submit ff-collapsible-body" action="<%= network_change_power_send_prepayment_factura_url(id: @application.id) %>" method="post">
+	<form class="ff-form-body ff-wait-on-submit ff-collapsible-body" action="<%= network_new_customer_send_prepayment_factura_url(id: @application.id) %>" method="post">
 		<div style="padding:0;margin:0;height:0;width:0;display:inline">
 			<%= token_tag nil %>
 		</div>
@@ -74,7 +74,7 @@
 		<% end %>
 		<div class="ff-bottom-actions">
 			<button type="submit" class="btn btn-primary">ფაქტურის შექმნა</button>
-			<a class="ff-action btn btn-default" href="<%= network_change_power_url(id: @application.id) %>" data-original-title="" title=""><img src="/icons/cross.png"><span>გაუქმება</span></a>
+			<a class="ff-action btn btn-default" href="<%= network_new_customer_url(id: @application.id) %>" data-original-title="" title=""><img src="/icons/cross.png"><span>გაუქმება</span></a>
 		</div>
 	</form>
 

@@ -186,6 +186,7 @@ TelasiGe::Application.routes.draw do
       get '/print/:id', action: 'print', as: 'new_customer_print'
       get '/sign/:id', action: 'sign', as: 'new_customer_sign'
       post '/send_prepayment_factura/:id', action: 'send_prepayment_factura', as: 'new_customer_send_prepayment_factura'
+      get '/send_prepayment_factura_prepare/:id', action: 'send_prepayment_factura_prepare', as: 'new_customer_send_prepayment_factura_prepare'
       post '/send_factura/:id', action: 'send_factura', as: 'new_customer_send_factura'
       post '/send_correcting1_factura/:id', action: 'send_correcting1_factura', as: 'new_customer_send_correcting1_factura'
       post '/send_correcting2_factura/:id', action: 'send_correcting2_factura', as: 'new_customer_send_correcting2_factura'

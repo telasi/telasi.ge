@@ -324,37 +324,22 @@ class Network::NewCustomerController < ApplicationController
 
   end
 
+  def send_prepayment_factura_prepare
+    @application = Network::NewCustomerApplication.find(params[:id])
+    @items_to_factured = @application.billing_prepayment_to_factured
+    @items = @application.billing_items_raw_to_factured
+  end
+
   def send_prepayment_factura
     application = Network::NewCustomerApplication.find(params[:id])
-    raise 'არა საკმარისი თანხა' unless application.prepayment_enough?
-
-    factura = RS::Factura.new(date: 5.business_days.after(application.start_date), seller_id: RS::TELASI_PAYER_ID)
-    good_name = "ქსელზე მიერთების პაკეტის ღირებულების ავანსი #{application.number}"
-    amount = application.billing_prepayment_to_factured_sum
-    raise 'თანხა უნდა იყოს > 0' unless amount > 0
-    raise 'ფაქტურის გაგზავნა ვერ ხერხდება!' unless RS.save_factura_advance(factura, RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, buyer_tin: application.rs_tin))
-    vat = application.pays_non_zero_vat? ? amount * (1 - 1.0 / 1.18) : 0
-    factura_item = RS::FacturaItem.new(factura: factura,
-      good: good_name, unit: 'მომსახურეობა', amount: amount, vat: vat,
-      quantity: 0)
-    RS.save_factura_item(factura_item, RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID))
-    if RS.send_factura(RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, id: factura.id))
-
-      factura = RS.get_factura_by_id(RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, id: factura.id))
-      #factura.id = '1234'
-      #factura.seria = 'aa'
-      #factura.number = '3455661 '
-
-      application.send_prepayment_factura!(factura, amount)
-
-    end
-    application.save
+    application.send_prepayment_facturas!(params[:chosen])
     redirect_to network_new_customer_url(id: application.id, tab: 'factura'), notice: 'ფაქტურა გაგზავნილია :)'
   end
 
   def send_factura
     application = Network::NewCustomerApplication.find(params[:id])
     raise 'ფაქტურის გაგზავნა დაუშვებელია' unless application.can_send_factura?
+    raise 'არსებობს ავანსი ფაქტურის გარეშე' if application.billing_prepayment_to_factured.present?
     # factura = RS::Factura.new(date: Time.now, seller_id: RS::TELASI_PAYER_ID)
     factura = RS::Factura.new(date: application.end_date, seller_id: RS::TELASI_PAYER_ID)
     good_name = "ქსელზე მიერთების პაკეტის ღირებულება #{application.number}"
@@ -371,10 +356,11 @@ class Network::NewCustomerController < ApplicationController
       application.factura_seria = factura.seria
       application.factura_number = factura.number
 
+      application.factura_id = factura.id
+      application.save
       application.send_factura!(factura, amount)
     end
-    application.factura_id = factura.id
-    application.save
+
     redirect_to network_new_customer_url(id: application.id, tab: 'factura'), notice: 'ფაქტურა გაგზავნილია :)'
   end
 
