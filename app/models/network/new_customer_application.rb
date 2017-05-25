@@ -176,7 +176,7 @@ class Network::NewCustomerApplication
   def facturas
     array = registered_facturas.where('factura_id <> ?',self.factura_id.to_i).dup
     if self.factura_id.present?
-      array << Billing::NewCustomerFactura.new(factura_id: self.factura_id, factura_seria: self.factura_seria, factura_number: self.factura_number, amount: effective_amount)
+      array << Billing::NewCustomerFactura.new(factura_id: self.factura_id, factura_seria: self.factura_seria, factura_number: self.factura_number, amount: effective_amount, category: Billing::NewCustomerFactura::CONFIRMED)
     end
     array
   end

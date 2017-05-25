@@ -305,22 +305,22 @@ module Network::NewCustomerHelper
           end
         end
 
-        # t.table_field :billing_items_raw, table: { title: 'ბილინგის ოპერაციები აბონენტის გარეშე', icon: '/icons/edit-list.png' } do |operations|
-        #   operations.table do |t|
-        #     t.text_field 'customer.accnumb', tag: 'code', label: 'აბონენტი'
-        #     t.date_field 'itemdate', label: 'თარიღი'
-        #     t.complex_field label: 'ოპერაცია' do |c|
-        #       c.text_field 'operation.billopername', after: '&mdash;'.html_safe
-        #       c.text_field 'operation.billoperkey', class: 'muted'
-        #     end
-        #     t.number_field 'kwt', after: 'kWh', label: 'დარიცხვა'
-        #     t.number_field 'amount', after: 'GEL', label: 'თანხა'
-        #     t.number_field 'balance', after: 'GEL', label: 'ბალანსი'
+        t.table_field :billing_items_raw, table: { title: 'ბილინგის ოპერაციები აბონენტის გარეშე', icon: '/icons/edit-list.png' } do |operations|
+          operations.table do |t|
+            t.text_field 'customer.accnumb', tag: 'code', label: 'აბონენტი'
+            t.date_field 'itemdate', label: 'თარიღი'
+            t.complex_field label: 'ოპერაცია' do |c|
+              c.text_field 'operation.billopername', after: '&mdash;'.html_safe
+              c.text_field 'operation.billoperkey', class: 'muted'
+            end
+            t.number_field 'kwt', after: 'kWh', label: 'დარიცხვა'
+            t.number_field 'amount', after: 'GEL', label: 'თანხა'
+            t.number_field 'balance', after: 'GEL', label: 'ბალანსი'
 
-        #     t.text_field 'factura.appl.factura_seria', tag: 'code', label: 'ფაქტურის სერია'
-        #     t.text_field 'factura.appl.factura_number', tag: 'code', label: 'ფაქტურის #'
-        #   end
-        # end
+            t.text_field 'factura.appl.factura_seria', tag: 'code', label: 'ფაქტურის სერია'
+            t.text_field 'factura.appl.factura_number', tag: 'code', label: 'ფაქტურის #'
+          end
+        end
 
       end
       # 5. files
@@ -352,6 +352,7 @@ module Network::NewCustomerHelper
             factura.text_field 'factura_id', tag: 'code', label: '#'
             factura.text_field 'factura_seria.to_ka', tag: 'code', label: 'ფაქტურის სერია'
             factura.text_field 'factura_number', empty: false, label: 'ფაქტურის #'
+            factura.text_field 'category_name', label: 'ტიპი'
             factura.number_field 'amount', after: 'GEL', label: 'თანხა'
           end
         end
