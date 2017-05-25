@@ -448,49 +448,52 @@ class Network::NewCustomerApplication
 
   def send_prepayment_facturas!(items)
     billing_items = Billing::Item.where(itemkey: items)
-    
-    if ( self.billing_prepayment_factura_sum + billing_items.to_a.sum(&:amount) ) < self.amount / 2
+
+    if billing_items.to_a.sum(&:amount) < ( self.amount / 2 )
       raise 'არა საკმარისი თანხა' 
     end
 
-    good_name = "ქსელზე მიერთების პაკეტის ღირებულების ავანსი #{self.number}"
-
-    self.billing_prepayment_to_factured.each do |item|
-      aviso_date = Billing::Payment.where(itemkey: item.itemkey).first.enterdate
-
-      factura = RS::Factura.new(date: aviso_date, seller_id: RS::TELASI_PAYER_ID)
-      amount = item.amount
-      raise 'თანხა უნდა იყოს > 0' unless amount > 0
-      raise 'ფაქტურის გაგზავნა ვერ ხერხდება!' unless RS.save_factura_advance(factura, RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, buyer_tin: self.rs_tin))
-      vat = self.pays_non_zero_vat? ? amount * (1 - 1.0 / 1.18) : 0
-      factura_item = RS::FacturaItem.new(factura: factura, good: good_name, unit: 'მომსახურეობა', amount: amount, vat: vat, quantity: 0)
-      RS.save_factura_item(factura_item, RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID))
-
-      if RS.send_factura(RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, id: factura.id))
-        factura = RS.get_factura_by_id(RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, id: factura.id))
-
-        Billing::NewCustomerFactura.transaction do 
-          billing_factura = Billing::NewCustomerFactura.new(application: 'NC',
-                                                            cns: self.number, 
-                                                            factura_id: factura.id, 
-                                                            factura_seria: factura.seria.to_geo, 
-                                                            factura_number: factura.number,
-                                                            category: Billing::NewCustomerFactura::ADVANCE,
-                                                            amount: amount, period: aviso_date)
-          billing_factura.save
-
-          billing_factura_appl = Billing::NewCustomerFacturaAppl.new(itemkey: item.itemkey, custkey: self.customer.custkey, 
-                                                                     application: 'NC',
-                                                                     cns: self.number, 
-                                                                     start_date: self.start_date,
-                                                                     plan_end_date: self.plan_end_date,
-                                                                     factura_id: billing_factura.id,
-                                                                     factura_date: Time.now)
-          billing_factura_appl.save  
-        end
-      end
+    billing_items.each do |item|
+      send_one_factura(item)
     end
 
+  end
+
+  def send_one_factura(item)
+    aviso_date = Billing::Payment.where(itemkey: item.itemkey).first.enterdate
+    good_name = "ქსელზე მიერთების პაკეტის ღირებულების ავანსი #{self.number}"
+
+    factura = RS::Factura.new(date: aviso_date, seller_id: RS::TELASI_PAYER_ID)
+    amount = item.amount
+    raise 'თანხა უნდა იყოს > 0' unless amount > 0
+    raise 'ფაქტურის გაგზავნა ვერ ხერხდება!' unless RS.save_factura_advance(factura, RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, buyer_tin: self.rs_tin))
+    vat = self.pays_non_zero_vat? ? amount * (1 - 1.0 / 1.18) : 0
+    factura_item = RS::FacturaItem.new(factura: factura, good: good_name, unit: 'მომსახურეობა', amount: amount, vat: vat, quantity: 0)
+    RS.save_factura_item(factura_item, RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID))
+
+    if RS.send_factura(RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, id: factura.id))
+      factura = RS.get_factura_by_id(RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, id: factura.id))
+
+      Billing::NewCustomerFactura.transaction do 
+        billing_factura = Billing::NewCustomerFactura.new(application: 'NC',
+                                                          cns: self.number, 
+                                                          factura_id: factura.id, 
+                                                          factura_seria: factura.seria.to_geo, 
+                                                          factura_number: factura.number,
+                                                          category: Billing::NewCustomerFactura::ADVANCE,
+                                                          amount: amount, period: aviso_date)
+        billing_factura.save
+
+        billing_factura_appl = Billing::NewCustomerFacturaAppl.new(itemkey: item.itemkey, custkey: self.customer.custkey, 
+                                                                   application: 'NC',
+                                                                   cns: self.number, 
+                                                                   start_date: self.start_date,
+                                                                   plan_end_date: self.plan_end_date,
+                                                                   factura_id: billing_factura.id,
+                                                                   factura_date: Time.now)
+        billing_factura_appl.save  
+      end
+    end
   end
 
   def send_factura!(factura, amount)

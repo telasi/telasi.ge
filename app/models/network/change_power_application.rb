@@ -158,26 +158,6 @@ class Network::ChangePowerApplication
 
   def can_change_amount?; self.type != TYPE_CHANGE_POWER end
 
-  def send_prepayment_factura!(factura, billing_items)
-    Billing::NewCustomerFactura.transaction do 
-      billing_factura = Billing::NewCustomerFactura.new(application: 'CP',
-                                                        cns: self.number, 
-                                                        factura_id: factura.id, 
-                                                        factura_seria: factura.seria, 
-                                                        factura_number: factura.number,
-                                                        category: Billing::NewCustomerFactura::ADVANCE,
-                                                        amount: billing_items.sum(:amount), period: '//')
-      billing_factura.save
-
-      self.billing_items.each do |p|
-        billing_factura_appl = Billing::NewCustomerFacturaAppl.new(itemkey: p.itemkey, custkey: self.customer.custkey, 
-                                                                   application: 'CP',
-                                                                   cns: self.number, factura_id: billing_factura.id)
-        billing_factura_appl.save
-      end
-    end
-  end
-
   def prepayment_factura_sent?
     prepayment_facturas.present?
   end
@@ -187,7 +167,7 @@ class Network::ChangePowerApplication
   end
 
   def can_send_prepayment_factura?
-    return false
+    # return false
     return false unless self.need_factura
     return false unless self.status == STATUS_CONFIRMED
     # return false if has_new_cust_charge?
@@ -236,6 +216,57 @@ class Network::ChangePowerApplication
       # update application status
       self.status = STATUS_IN_BS
       self.save
+    end
+  end
+
+  def send_prepayment_facturas!(items)
+    billing_items = Billing::Item.where(itemkey: items)
+
+    if billing_items.to_a.sum(&:amount) < ( self.amount / 2 )
+      raise 'არა საკმარისი თანხა' 
+    end
+
+    billing_items.each do |item|
+      send_one_factura(item)
+    end
+  end
+
+  def send_one_factura(item)
+    aviso_date = Billing::Payment.where(itemkey: item.itemkey).first.enterdate
+    factura = RS::Factura.new(date: aviso_date, seller_id: RS::TELASI_PAYER_ID)
+    good_name = "ქსელზე მიერთების პაკეტის ღირებულების ავანსი #{application.number}"
+    amount = billing_items.sum(:amount)
+    raise 'თანხა უნდა იყოს > 0' unless amount > 0
+    raise 'ფაქტურის გაგზავნა ვერ ხერხდება!' unless RS.save_factura_advance(factura, RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, buyer_tin: application.rs_tin))
+    vat = application.pays_non_zero_vat? ? amount * (1 - 1.0 / 1.18) : 0
+    factura_item = RS::FacturaItem.new(factura: factura,
+      good: good_name, unit: 'მომსახურეობა', amount: amount, vat: vat,
+      quantity: 0)
+    RS.save_factura_item(factura_item, RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID))
+    if RS.send_factura(RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, id: factura.id))
+      factura = RS.get_factura_by_id(RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, id: factura.id))
+
+       Billing::NewCustomerFactura.transaction do 
+          billing_factura = Billing::NewCustomerFactura.new(application: 'CP',
+                                                            cns: self.number, 
+                                                            factura_id: factura.id, 
+                                                            factura_seria: factura.seria.to_geo, 
+                                                            factura_number: factura.number,
+                                                            category: Billing::NewCustomerFactura::ADVANCE,
+                                                            amount: amount, period: aviso_date)
+          billing_factura.save
+
+          self.billing_items.each do |p|
+            billing_factura_appl = Billing::NewCustomerFacturaAppl.new(itemkey: item.itemkey, 
+                                                                       custkey: self.customer.custkey, 
+                                                                       application: 'CP',
+                                                                       cns: self.number, 
+                                                                       factura_id: billing_factura.id,
+                                                                       factura_date: Time.now)
+            billing_factura_appl.save
+          end
+        end
+
     end
   end
 
