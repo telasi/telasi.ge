@@ -340,7 +340,7 @@ class Network::NewCustomerController < ApplicationController
   def send_factura
     application = Network::NewCustomerApplication.find(params[:id])
     raise 'ფაქტურის გაგზავნა დაუშვებელია' unless application.can_send_factura?
-    raise 'არსებობს ავანსი ფაქტურის გარეშე' if application.billing_prepayment_to_factured.present?
+    # raise 'არსებობს ავანსი ფაქტურის გარეშე' if application.billing_prepayment_to_factured.present?
     # factura = RS::Factura.new(date: Time.now, seller_id: RS::TELASI_PAYER_ID)
     factura = RS::Factura.new(date: application.end_date, seller_id: RS::TELASI_PAYER_ID)
     good_name = "ქსელზე მიერთების პაკეტის ღირებულება #{application.number}"
