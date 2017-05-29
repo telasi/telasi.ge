@@ -56,6 +56,7 @@ class Network::NewCustomerController < ApplicationController
                                                                 Network::NewCustomerApplication::STATUS_CONFIRMED ],
                                                 need_factura: true)
     rel = rel.where(factura_id: nil)
+    rel = rel.where(:send_date.gte => Network::PREPAYMENT_START_DATE)
 
     @search = params[:search] == 'clear' ? nil : params[:search]
     
@@ -80,7 +81,7 @@ class Network::NewCustomerController < ApplicationController
 
     end
 
-    rel = rel.select{ |x| x.billing_prepayment_to_factured.present? }
+    rel = rel.select{ |x| x.billing_prepayment_to_factured.where('itemdate >= ?', Network::PREPAYMENT_START_DATE).present? }
     @applications = rel.paginate(per_page: 3000)
   end
 
