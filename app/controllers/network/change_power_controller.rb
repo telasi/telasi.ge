@@ -266,7 +266,7 @@ class Network::ChangePowerController < ApplicationController
     good_name = "ქსელში ცვლილებების საფასური #{application.number}"
     date = application.real_end_date || application.end_date
     factura = RS::Factura.new(date: date, seller_id: RS::TELASI_PAYER_ID)
-    amount = item.amount
+    amount = application.amount
     raise 'თანხა უნდა იყოს > 0' unless amount > 0
     raise 'ფაქტურის გაგზავნა ვერ ხერხდება!' unless RS.save_factura(factura, RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, buyer_tin: application.rs_tin))
     vat = application.pays_non_zero_vat? ? amount * (1 - 1.0 / 1.18) : 0
