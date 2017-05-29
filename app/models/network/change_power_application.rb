@@ -132,7 +132,7 @@ class Network::ChangePowerApplication
   def type_name; Network::ChangePowerApplication.type_name(self.type) end
 
   def facturas
-    array = registered_facturas.dup
+    array = registered_facturas.where('factura_id <> ?',self.factura_id.to_i).dup
     if self.factura_id.present?
       array << Billing::NewCustomerFactura.new(factura_id: self.factura_id, factura_seria: self.factura_seria, factura_number: self.factura_number, amount: self.amount)
     end
