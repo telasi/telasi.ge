@@ -234,11 +234,11 @@ class Network::ChangePowerApplication
   def send_one_factura(item)
     aviso_date = Billing::Payment.where(itemkey: item.itemkey).first.enterdate
     factura = RS::Factura.new(date: aviso_date, seller_id: RS::TELASI_PAYER_ID)
-    good_name = "ქსელზე მიერთების პაკეტის ღირებულების ავანსი #{application.number}"
+    good_name = "ქსელზე მიერთების პაკეტის ღირებულების ავანსი #{self.number}"
     amount = billing_items.sum(:amount)
     raise 'თანხა უნდა იყოს > 0' unless amount > 0
-    raise 'ფაქტურის გაგზავნა ვერ ხერხდება!' unless RS.save_factura_advance(factura, RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, buyer_tin: application.rs_tin))
-    vat = application.pays_non_zero_vat? ? amount * (1 - 1.0 / 1.18) : 0
+    raise 'ფაქტურის გაგზავნა ვერ ხერხდება!' unless RS.save_factura_advance(factura, RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, buyer_tin: self.rs_tin))
+    vat = self.pays_non_zero_vat? ? amount * (1 - 1.0 / 1.18) : 0
     factura_item = RS::FacturaItem.new(factura: factura,
       good: good_name, unit: 'მომსახურეობა', amount: amount, vat: vat,
       quantity: 0)
