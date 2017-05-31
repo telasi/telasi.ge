@@ -525,7 +525,8 @@ class Network::NewCustomerApplication
   end
 
   def prepayment_enough?
-    billing_prepayment_to_factured_sum > 0 && ( billing_prepayment_to_factured_sum >= self.effective_amount / 2 )
+    ( billing_prepayment_to_factured_sum + billing_items_raw_to_factured_sum ) > 0 and
+    ( billing_prepayment_to_factured_sum + billing_items_raw_to_factured_sum >= self.effective_amount / 2 )
   end
 
   def can_send_prepayment_factura?
@@ -535,8 +536,8 @@ class Network::NewCustomerApplication
     return false if self.factura_sent?
     # return false if has_new_cust_charge?
 
-    if billing_prepayment_factura.present?
-      return true if billing_prepayment_to_factured.present?
+    if billing_prepayment_factura.present? or billing_items_raw_to_factured.present?
+      return true if ( billing_prepayment_to_factured.present? or billing_items_raw_to_factured.present? )
     else
       return true if prepayment_enough?
     end 

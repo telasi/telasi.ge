@@ -37,25 +37,33 @@ module Network::BsBase
     billing_items
   end
 
+  def billing_items_effective
+    Billing::Item.where('itemdate >= ?', Network::PREPAYMENT_START_DATE)
+  end
+
   def billing_items_raw
-    Billing::Item.joins('join bs.customer a on item.custkey = a.custkey')
-                 .joins('join bs.customer b on itemnumber = b.accnumb')
-                 .where('a.accnumb = ? and b.custkey = ?', Billing::Customer::XXX, self.customer_id).where(billoperkey: NETWORK_OPERATIONS).order('itemkey DESC')
+    self.billing_items_effective.joins('join bs.customer a on item.custkey = a.custkey')
+                                .joins('join bs.customer b on itemnumber = b.accnumb')
+                                .where('a.accnumb = ? and b.custkey = ?', Billing::Customer::XXX, self.customer_id).where(billoperkey: NETWORK_OPERATIONS).order('itemkey DESC')
   end
 
   def billing_items_raw_to_factured
-    Billing::Item.joins('join bs.customer a on item.custkey = a.custkey')
-                 .joins('join bs.customer b on itemnumber = b.accnumb')
-                 .where('a.accnumb = ? and b.custkey = ?', Billing::Customer::XXX, self.customer_id).where(billoperkey: NETWORK_OPERATIONS)
-                 .eager_load(:factura).where('new_customer_factura_appl.id is null')
+    self.billing_items_effective.joins('join bs.customer a on item.custkey = a.custkey')
+                                .joins('join bs.customer b on itemnumber = b.accnumb')
+                                .where('a.accnumb = ? and b.custkey = ?', Billing::Customer::XXX, self.customer_id).where(billoperkey: NETWORK_OPERATIONS)
+                                .eager_load(:factura).where('new_customer_factura_appl.id is null')
+  end
+
+  def billing_items_raw_to_factured_sum
+    self.billing_items_raw_to_factured.sum(:amount)
   end
 
   def billing_prepayment
-    Billing::Item.eager_load(:factura).where(custkey: self.customer_id, billoperkey: PREPAYMENT_OPERATIONS).order('item.itemkey DESC')
+    self.billing_items_effective.eager_load(:factura).where(custkey: self.customer_id, billoperkey: PREPAYMENT_OPERATIONS).order('item.itemkey DESC')
   end
 
   def billing_prepayment_sum
-    Billing::Item.eager_load(:factura).where(custkey: self.customer_id, billoperkey: PREPAYMENT_OPERATIONS).sum(:amount)
+    self.billing_items_effective.eager_load(:factura).where(custkey: self.customer_id, billoperkey: PREPAYMENT_OPERATIONS).sum(:amount)
   end
 
   def billing_prepayment_factura
