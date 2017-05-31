@@ -27,6 +27,7 @@ class Network::ChangePowerApplication
   include Network::ApplicationBase
   include Network::BsBase
   include Network::Factura
+  include Network::CalculationUtils
 
   belongs_to :user, class_name: 'Sys::User'
   field :number,    type: String
@@ -232,8 +233,8 @@ class Network::ChangePowerApplication
   end
 
   def send_one_factura(item)
-    aviso_date = Billing::Payment.where(itemkey: item.itemkey).first.enterdate
-    factura = RS::Factura.new(date: aviso_date, seller_id: RS::TELASI_PAYER_ID)
+    factura_date = self.factura_date(item)
+    factura = RS::Factura.new(date: factura_date, seller_id: RS::TELASI_PAYER_ID)
     good_name = "ქსელზე მიერთების პაკეტის ღირებულების ავანსი #{self.number}"
     amount = item.amount
     raise 'თანხა უნდა იყოს > 0' unless amount > 0
@@ -253,7 +254,7 @@ class Network::ChangePowerApplication
                                                             factura_seria: factura.seria.to_geo, 
                                                             factura_number: factura.number,
                                                             category: Billing::NewCustomerFactura::ADVANCE,
-                                                            amount: amount, period: aviso_date)
+                                                            amount: amount, period: factura_date)
           billing_factura.save
 
           self.billing_items.each do |p|

@@ -460,10 +460,10 @@ class Network::NewCustomerApplication
   end
 
   def send_one_factura(item)
-    aviso_date = Billing::Payment.where(itemkey: item.itemkey).first.enterdate
+    factura_date = self.factura_date(item)
     good_name = "ქსელზე მიერთების პაკეტის ღირებულების ავანსი #{self.number}"
 
-    factura = RS::Factura.new(date: aviso_date, seller_id: RS::TELASI_PAYER_ID)
+    factura = RS::Factura.new(date: factura_date, seller_id: RS::TELASI_PAYER_ID)
     amount = item.amount
     raise 'თანხა უნდა იყოს > 0' unless amount > 0
     raise 'ფაქტურის გაგზავნა ვერ ხერხდება!' unless RS.save_factura_advance(factura, RS::TELASI_SU.merge(user_id: RS::TELASI_USER_ID, buyer_tin: self.rs_tin))
@@ -481,7 +481,7 @@ class Network::NewCustomerApplication
                                                           factura_seria: factura.seria.to_geo, 
                                                           factura_number: factura.number,
                                                           category: Billing::NewCustomerFactura::ADVANCE,
-                                                          amount: amount, period: aviso_date)
+                                                          amount: amount, period: factura_date)
         billing_factura.save
 
         billing_factura_appl = Billing::NewCustomerFacturaAppl.new(itemkey: item.itemkey, custkey: self.customer.custkey, 
