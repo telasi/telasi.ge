@@ -22,8 +22,8 @@ module Network::CalculationUtils
     if self.billing_prepayment_factura.present?
       Billing::Payment.where(itemkey: item.itemkey).first.enterdate
     else
-      if 4.business_days.after(self.send_date) > self.start_date 
-        4.business_days.after(self.send_date)
+      if self.start_date > 5.business_days.after(self.send_date)
+        5.business_days.after(self.send_date)
       else
         self.start_date
       end
