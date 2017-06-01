@@ -515,7 +515,6 @@ class Network::NewCustomerApplication
                                                                  factura_id: billing_factura.id,
                                                                  factura_date: Time.now)
       billing_factura_appl.save
-      end
     end
   end
 
