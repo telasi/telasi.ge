@@ -165,7 +165,7 @@ class Network::ChangePowerApplication
 
   def prepayment_enough?
     ( billing_prepayment_to_factured_sum + billing_items_raw_to_factured_sum ) > 0 and 
-    ( billing_prepayment_to_factured_sum + billing_items_raw_to_factured_sum >= self.effective_amount / 2 )
+    ( billing_prepayment_to_factured_sum + billing_items_raw_to_factured_sum >= self.amount / 2 )
   end
 
   def can_send_prepayment_factura?
