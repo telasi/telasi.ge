@@ -258,15 +258,13 @@ class Network::ChangePowerApplication
                                                             amount: amount, period: factura_date)
           billing_factura.save
 
-          self.billing_items.each do |p|
-            billing_factura_appl = Billing::NewCustomerFacturaAppl.new(itemkey: item.itemkey, 
+          billing_factura_appl = Billing::NewCustomerFacturaAppl.new(itemkey: item.itemkey, 
                                                                        custkey: self.customer.custkey, 
                                                                        application: 'CP',
                                                                        cns: self.number, 
                                                                        factura_id: billing_factura.id,
                                                                        factura_date: Time.now)
-            billing_factura_appl.save
-          end
+          billing_factura_appl.save
         end
 
     end
