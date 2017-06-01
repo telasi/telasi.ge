@@ -279,6 +279,8 @@ class Network::ChangePowerController < ApplicationController
     end
     application.factura_id = factura.id
     application.save
+    application.send_factura!(factura, amount)
+    
     redirect_to network_change_power_url(id: application.id, tab: 'factura'), notice: 'ფაქტურა გაგზავნილია :)'
   end
 

@@ -507,15 +507,14 @@ class Network::NewCustomerApplication
                                                         amount: amount, period: self.start_date)
       billing_factura.save
 
-      self.billing_prepayment_to_factured.each do |p|
-        billing_factura_appl = Billing::NewCustomerFacturaAppl.new(itemkey: p.itemkey, custkey: self.customer.custkey, 
-                                                                   application: 'NC',
-                                                                   cns: self.number, 
-                                                                   start_date: self.start_date,
-                                                                   plan_end_date: self.plan_end_date,
-                                                                   factura_id: billing_factura.id,
-                                                                   factura_date: Time.now)
-        billing_factura_appl.save
+      billing_factura_appl = Billing::NewCustomerFacturaAppl.new(custkey: self.customer.custkey, 
+                                                                 application: 'NC',
+                                                                 cns: self.number, 
+                                                                 start_date: self.start_date,
+                                                                 plan_end_date: self.plan_end_date,
+                                                                 factura_id: billing_factura.id,
+                                                                 factura_date: Time.now)
+      billing_factura_appl.save
       end
     end
   end

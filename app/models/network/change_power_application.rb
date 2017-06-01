@@ -270,6 +270,29 @@ class Network::ChangePowerApplication
     end
   end
 
+  def send_factura!(factura, amount)
+    Billing::NewCustomerFactura.transaction do 
+      billing_factura = Billing::NewCustomerFactura.new(application: 'CP',
+                                                        cns: self.number, 
+                                                        factura_id: factura.id, 
+                                                        factura_seria: factura.seria.to_geo, 
+                                                        factura_number: factura.number,
+                                                        category: Billing::NewCustomerFactura::CONFIRMED,
+                                                        amount: amount, period: self.start_date)
+      billing_factura.save
+
+      billing_factura_appl = Billing::NewCustomerFacturaAppl.new(custkey: self.customer.custkey, 
+                                                                 application: 'CP',
+                                                                 cns: self.number, 
+                                                                 start_date: self.start_date,
+                                                                 plan_end_date: self.plan_end_date,
+                                                                 factura_id: billing_factura.id,
+                                                                 factura_date: Time.now)
+      billing_factura_appl.save
+      end
+    end
+  end
+
   private
 
   def status_manager
