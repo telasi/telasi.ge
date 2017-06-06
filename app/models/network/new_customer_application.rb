@@ -264,6 +264,7 @@ class Network::NewCustomerApplication
   def effective_amount; self.amount - self.total_penalty rescue 0 end
 
   def penalty_first_corrected
+    return 0 unless self.penalty1 > 0
     amount = self.amount || 0
     sum = ( self.billing_prepayment_factura_sum - ( amount / 2 ) ) 
     if sum < 0
@@ -273,6 +274,7 @@ class Network::NewCustomerApplication
   end
 
   def penalty_second_corrected
+    return 0 unless self.penalty2 > 0
     amount = self.amount || 0
     factura_sum = self.billing_prepayment_factura_sum
     if factura_sum > ( amount / 2 )
@@ -555,14 +557,14 @@ class Network::NewCustomerApplication
   end
 
   def can_send_correcting1_factura?
-    self.penalty_first_stage > 0 and
+    self.penalty1 > 0 and
     not self.can_send_correcting2_factura? and 
     self.registered_facturas.where(category: Billing::NewCustomerFactura::ADVANCE).present? and
     not self.registered_facturas.where(category: Billing::NewCustomerFactura::CORRECTING1).present?
   end
 
   def can_send_correcting2_factura?
-    self.penalty_second_stage > 0 and
+    self.penalty2 > 0 and
     self.registered_facturas.where(category: Billing::NewCustomerFactura::ADVANCE).present? and
     not self.registered_facturas.where(category: Billing::NewCustomerFactura::CORRECTING2).present?
   end

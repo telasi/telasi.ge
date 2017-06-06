@@ -60,8 +60,10 @@ module Network::NewCustomerHelper
       t.date_field :end_date
       t.number_field :billing_prepayment_sum, label: 'მობმული ავანსების თანხა'
       t.number_field :prepayment_percent, label: 'მობმული ავანსის %'
-      t.number_field :penalty_first_corrected, label: 'I ეტაპი'
-      t.number_field :penalty_second_corrected, label: 'II ეტაპი'
+      t.number_field :penalty1, label: 'I ეტაპი'
+      t.number_field :penalty2, label: 'II ეტაპი'
+      t.number_field :penalty_first_corrected, label: 'დასაბრუნებელი თანხა I ეტაპის დარღვევა'
+      t.number_field :penalty_second_corrected, label: 'დასაბრუნებელი თანხა II ეტაპის დარღვევა'
       
       t.paginate param_name: 'page_new', records: 'ჩანაწერი'
     end
