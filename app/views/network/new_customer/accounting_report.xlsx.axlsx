@@ -11,7 +11,7 @@ wb.add_worksheet(name: "new-customers") do |sheet|
     accnumb = app.customer.accnumb if app.customer
     sheet.add_row [app.effective_number, accnumb, app.status_name, app.amount, 
       app.plan_end_date, app.end_date, app.billing_prepayment_sum, app.prepayment_percent,
-      app.penalty1, app.penalty2, app.penalty_first_corrected, app,penalty_second_corrected
+      app.penalty1, app.penalty2, app.penalty_first_corrected, app.penalty_second_corrected
     ]
   end
 end
