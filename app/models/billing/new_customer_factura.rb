@@ -16,7 +16,7 @@ class Billing::NewCustomerFactura< ActiveRecord::Base
   }
 
   belongs_to :customer, class_name: 'Billing::Customer', foreign_key: :custkey
-  belongs_to :item, class_name: 'Billing::Item', foreign_key: :itemkey
+  has_one :appl, class_name: 'Billing::NewCustomerFacturaAppl', foreign_key: :factura_id
 
   def category_name; FACTURA_NAMES[self.category] end
 end

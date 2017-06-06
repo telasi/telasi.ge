@@ -369,11 +369,17 @@ class Network::NewCustomerController < ApplicationController
   def send_correcting1_factura
     application = Network::NewCustomerApplication.find(params[:id])
     raise 'ფაქტურის გაგზავნა დაუშვებელია' unless application.can_send_correcting1_factura?
+
+    application.correct_factures
+    redirect_to network_new_customer_url(id: application.id, tab: 'factura'), notice: 'კორექტირების ფაქტურა გაგზავნილია'
   end
 
   def send_correcting2_factura
     application = Network::NewCustomerApplication.find(params[:id])
     raise 'ფაქტურის გაგზავნა დაუშვებელია' unless application.can_send_correcting2_factura?
+
+    application.correct_factures
+    redirect_to network_new_customer_url(id: application.id, tab: 'factura'), notice: 'კორექტირების ფაქტურა გაგზავნილია'
   end
 
   def new_control_item
