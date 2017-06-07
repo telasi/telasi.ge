@@ -750,13 +750,12 @@ class Network::NewCustomerApplication
         tariff = Network::NewCustomerTariff.tariff_for(self.voltage, self.power, self.start_date)
         gnerc_power = "#{tariff.power_from+1}-#{tariff.power_to}"
 
-        # case self.voltage
-        #   when VOLTAGE_220 then
-        #     gnerc_voltage = GNERC_VOLTAGE_220
+        case self.voltage
+          when VOLTAGE_220 then
+            gnerc_voltage = GNERC_VOLTAGE_220
         #     gnerc_power = '1-10'
-        #   when VOLTAGE_380 then
-        #     gnerc_voltage = GNERC_VOLTAGE_380
-            
+          when VOLTAGE_380 then
+            gnerc_voltage = GNERC_VOLTAGE_380
         #     case self.power
         #       when 1..10 then gnerc_power = '1-10'
         #       when 11..30 then gnerc_power = '11-30'
@@ -770,8 +769,8 @@ class Network::NewCustomerApplication
         #       when 501..800 then gnerc_power = '501-800'
         #       when 801..1000 then gnerc_power = '801-1000'
         #     end
-        #   when VOLTAGE_610 then
-        #     gnerc_voltage = GNERC_VOLTAGE_610
+           when VOLTAGE_610 then
+             gnerc_voltage = GNERC_VOLTAGE_610
         #     case self.power
         #       when 1..500 then gnerc_power = '1-500'
         #       when 501..1000 then gnerc_power = '501-1000'
@@ -780,7 +779,7 @@ class Network::NewCustomerApplication
         #       when 2001..3000 then gnerc_power = '2000-3000'
         #       when 3001..5000 then gnerc_power = '3001-5000'
         #     end
-        # end
+        end
 
         parameters = { letter_number:       self.number,
                        applicant:           self.rs_name,
