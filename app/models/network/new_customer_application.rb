@@ -747,36 +747,40 @@ class Network::NewCustomerApplication
         content = File.read(file.file.file.file)
         content = Base64.encode64(content)
 
-        case self.voltage
-          when VOLTAGE_220 then
-            gnerc_voltage = GNERC_VOLTAGE_220
-            gnerc_power = '1-10'
-          when VOLTAGE_380 then
-            gnerc_voltage = GNERC_VOLTAGE_380
-            case self.power
-              when 1..10 then gnerc_power = '1-10'
-              when 11..30 then gnerc_power = '11-30'
-              when 31..50 then gnerc_power = '31-50'
-              when 51..80 then gnerc_power = '51-80'
-              when 81..100 then gnerc_power = '81-100'
-              when 101..120 then gnerc_power = '101-120'
-              when 121..200 then gnerc_power = '121-200'
-              when 201..320 then gnerc_power = '201-320'
-              when 321..500 then gnerc_power = '321-500'
-              when 501..800 then gnerc_power = '501-800'
-              when 801..1000 then gnerc_power = '801-1000'
-            end
-          when VOLTAGE_610 then
-            gnerc_voltage = GNERC_VOLTAGE_610
-            case self.power
-              when 1..500 then gnerc_power = '1-500'
-              when 501..1000 then gnerc_power = '501-1000'
-              when 1001..1500 then gnerc_power = '1001-1500'
-              when 1501..2000 then gnerc_power = '1501-2000'
-              when 2001..3000 then gnerc_power = '2000-3000'
-              when 3001..5000 then gnerc_power = '3001-5000'
-            end
-        end
+        tariff = Network::NewCustomerTariff.tariff_for(self.voltage, self.power, self.start_date)
+        gnerc_power = "#{tariff.power_from+1}-#{tariff.power_to}"
+
+        # case self.voltage
+        #   when VOLTAGE_220 then
+        #     gnerc_voltage = GNERC_VOLTAGE_220
+        #     gnerc_power = '1-10'
+        #   when VOLTAGE_380 then
+        #     gnerc_voltage = GNERC_VOLTAGE_380
+            
+        #     case self.power
+        #       when 1..10 then gnerc_power = '1-10'
+        #       when 11..30 then gnerc_power = '11-30'
+        #       when 31..50 then gnerc_power = '31-50'
+        #       when 51..80 then gnerc_power = '51-80'
+        #       when 81..100 then gnerc_power = '81-100'
+        #       when 101..120 then gnerc_power = '101-120'
+        #       when 121..200 then gnerc_power = '121-200'
+        #       when 201..320 then gnerc_power = '201-320'
+        #       when 321..500 then gnerc_power = '321-500'
+        #       when 501..800 then gnerc_power = '501-800'
+        #       when 801..1000 then gnerc_power = '801-1000'
+        #     end
+        #   when VOLTAGE_610 then
+        #     gnerc_voltage = GNERC_VOLTAGE_610
+        #     case self.power
+        #       when 1..500 then gnerc_power = '1-500'
+        #       when 501..1000 then gnerc_power = '501-1000'
+        #       when 1001..1500 then gnerc_power = '1001-1500'
+        #       when 1501..2000 then gnerc_power = '1501-2000'
+        #       when 2001..3000 then gnerc_power = '2000-3000'
+        #       when 3001..5000 then gnerc_power = '3001-5000'
+        #     end
+        # end
 
         parameters = { letter_number:       self.number,
                        applicant:           self.rs_name,
