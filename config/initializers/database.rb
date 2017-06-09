@@ -32,6 +32,7 @@ Billing::CustomerCust.establish_connection     :bs
 Billing::DepositCustomer.establish_connection  :bs
 Billing::NewCustomerFactura.establish_connection  :bs
 Billing::NewCustomerFacturaAppl.establish_connection  :bs
+Billing::CustomerCns.establish_connection  :bs
 Sys::SentMessage.establish_connection  :bs
 # REPORT server
 Billing::WaterPayment.establish_connection  :report_bs
