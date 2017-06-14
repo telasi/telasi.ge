@@ -55,6 +55,10 @@ class Network::ChangePowerApplication
   # dates
   field :send_date, type: Date
   field :start_date, type: Date
+  # წარმოებაში მიღების თარიღი
+  field :production_date, type: Date
+  # წარმოებაში მიღების თარიღი რეალური
+  field :production_enter_date, type: Date
   field :real_end_date, type: Date
   field :end_date, type: Date
   field :note, type: String
@@ -131,6 +135,8 @@ class Network::ChangePowerApplication
   def status_name; Network::NewCustomerApplication.status_name(self.status) end
   def status_icon; Network::NewCustomerApplication.status_icon(self.status) end
   def type_name; Network::ChangePowerApplication.type_name(self.type) end
+
+  def prepayment_percent; self.billing_prepayment_sum / self.amount * 100 rescue 0 end
 
   def facturas
     array = registered_facturas.where('factura_id <> ?',self.factura_id.to_i).dup
@@ -298,8 +304,10 @@ class Network::ChangePowerApplication
     if self.status_changed?
       case self.status
       when STATUS_DEFAULT   then self.send_date = nil
-      when STATUS_SENT      then self.send_date  = Date.today
-      when STATUS_CONFIRMED then self.start_date = Date.today
+      when STATUS_SENT      then self.send_date  = self.start_date = Date.today
+      when STATUS_CONFIRMED then 
+        self.production_date = get_fifth_day
+        self.production_enter_date = Date.today
       when STATUS_COMPLETE  then self.end_date   = Date.today
       end
     end

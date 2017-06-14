@@ -199,6 +199,7 @@ TelasiGe::Application.routes.draw do
     scope '/change_power', controller: 'change_power' do
       get '/', action: 'index', as: 'change_power_applications'
       match '/prepayment_report', action: 'prepayment_report', as: 'change_prepayment_report', via: ['get','post']
+      match '/accounting_report', action: 'accounting_report', as: 'change_accounting_report', via: ['get','post']
       match '/new', action: 'new', as: 'add_change_power', via: ['get', 'post']
       match '/edit/:id', action: 'edit', as: 'edit_change_power', via: ['get', 'post']
       get   '/:id', action: 'show', as: 'change_power'

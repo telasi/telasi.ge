@@ -1,6 +1,7 @@
 # -*- encoding : utf-8 -*-
 require 'rs'
 require 'rest_client'
+require 'will_paginate/array'
 
 class Network::ChangePowerController < ApplicationController
   def index
@@ -18,6 +19,8 @@ class Network::ChangePowerController < ApplicationController
       rel = rel.where(:send_date.lte => @search[:send_d2]) if @search[:send_d2].present?
       rel = rel.where(:start_date.gte => @search[:start_d1]) if @search[:start_d1].present?
       rel = rel.where(:start_date.lte => @search[:start_d2]) if @search[:start_d2].present?
+      rel = rel.where(:production_date.gte => @search[:production_d1]) if @search[:production_d1].present?
+      rel = rel.where(:production_date.lte => @search[:production_d2]) if @search[:production_d2].present?
       rel = rel.where(:end_date.gte => @search[:end_d1]) if @search[:end_d1].present?
       rel = rel.where(:end_date.lte => @search[:end_d2]) if @search[:end_d2].present?
       rel = rel.where(voltage: @search[:voltage]) if @search[:voltage].present?
@@ -29,6 +32,10 @@ class Network::ChangePowerController < ApplicationController
       rel = rel.where(factura_number: @search[:factura_number].to_i) if @search[:factura_number].present?
       rel = rel.where(address: @search[:address].mongonize) if @search[:address].present?
       rel = rel.where(work_address: @search[:work_address].mongonize) if @search[:work_address].present?
+      if @search[:customer_id].present?
+        rel = rel.where(customer_id: nil) if @search[:customer_id] == 'no'
+        rel = rel.where(:customer_id.ne => nil) if @search[:customer_id] == 'yes'
+      end
       if @search[:accnumb].present?
         cust = Billing::Customer.where(accnumb: @search[:accnumb].strip.to_lat).first
         rel = rel.where(customer_id: cust.custkey) if cust.present?
@@ -37,6 +44,86 @@ class Network::ChangePowerController < ApplicationController
     respond_to do |format|
       format.html { @applications = rel.desc(:_id).paginate(page: params[:page_change], per_page: 10) }
       format.xlsx { @applications = rel.desc(:_id).paginate(per_page: 3000) }
+    end
+  end
+
+  def prepayment_report
+    rel = Network::ChangePowerApplication.where(:status.in => [ Network::ChangePowerApplication::STATUS_DEFAULT, 
+                                                                Network::ChangePowerApplication::STATUS_SENT, 
+                                                                Network::ChangePowerApplication::STATUS_CONFIRMED ],
+                                                need_factura: true)
+    rel = rel.where(factura_id: nil)
+    rel = rel.where(:send_date.gte => Network::PREPAYMENT_START_DATE)
+
+    @search = params[:search] == 'clear' ? nil : params[:search]
+    
+    if @search
+      if @search[:type].present?
+        case @search[:type]
+         when '1'
+          rel = rel.where(:customer_id.ne => nil)
+         when '2'
+          rel = rel.where(customer_id: nil)        
+        end
+      end
+
+      if @search[:deadline].present?
+        case @search[:deadline]
+         when '1'
+          rel = rel.where(:send_date.lte => Time.now - 5.days)
+         when '2'
+          rel = rel.or({ :send_date.gt => Time.now - 5.days}, { send_date: nil })
+        end
+      end
+
+    end
+
+    rel = rel.select{ |x| x.billing_prepayment_to_factured.where('itemdate >= ?', Network::PREPAYMENT_START_DATE).present? }
+    @applications = rel.paginate(per_page: 3000)
+  end
+
+  def accounting_report
+    @title = 'უწყისი'
+    @search = params[:search] == 'clear' ? nil : params[:search]
+    rel = Network::ChangePowerApplication
+    if @search
+      rel = rel.where(number: @search[:number].mongonize) if @search[:number].present?
+      rel = rel.where(type: @search[:type].to_i) if @search[:type].present?
+      rel = rel.where(rs_name: @search[:rs_name].mongonize) if @search[:rs_name].present?
+      rel = rel.where(rs_tin: @search[:rs_tin].mongonize) if @search[:rs_tin].present?
+      rel = rel.where(status: @search[:status].to_i) if @search[:status].present?
+      rel = rel.where(stage: Network::Stage.find(@search[:stage])) if @search[:stage].present?
+      rel = rel.where(:send_date.gte => @search[:send_d1]) if @search[:send_d1].present?
+      rel = rel.where(:send_date.lte => @search[:send_d2]) if @search[:send_d2].present?
+      rel = rel.where(:start_date.gte => @search[:start_d1]) if @search[:start_d1].present?
+      rel = rel.where(:start_date.lte => @search[:start_d2]) if @search[:start_d2].present?
+      rel = rel.where(:production_date.gte => @search[:production_d1]) if @search[:production_d1].present?
+      rel = rel.where(:production_date.lte => @search[:production_d2]) if @search[:production_d2].present?
+      rel = rel.where(:real_end_date.gte => @search[:real_d1]) if @search[:real_d1].present?
+      rel = rel.where(:real_end_date.lte => @search[:real_d2]) if @search[:real_d2].present?
+      rel = rel.where(voltage: @search[:voltage]) if @search[:voltage].present?
+      rel = rel.where(:power.gte => @search[:power1]) if @search[:power1].present? and @search[:power1].to_f >= 0
+      rel = rel.where(:power.lte => @search[:power2]) if @search[:power2].present? and @search[:power2].to_f >= 0
+      rel = rel.where(proeqti: @search[:proeqti].mongonize) if @search[:proeqti].present?
+      rel = rel.where(oqmi: @search[:oqmi].mongonize) if @search[:oqmi].present?
+      rel = rel.where(factura_seria: @search[:factura_seria]) if @search[:factura_seria].present?
+      rel = rel.where(factura_number: @search[:factura_number].to_i) if @search[:factura_number].present?
+      rel = rel.where(address: @search[:address].mongonize) if @search[:address].present?
+      rel = rel.where(work_address: @search[:work_address].mongonize) if @search[:work_address].present?
+      if @search[:customer_id].present?
+        rel = rel.where(customer_id: nil) if @search[:customer_id] == 'no'
+        rel = rel.where(:customer_id.ne => nil) if @search[:customer_id] == 'yes'
+      end
+      if @search[:accnumb].present?
+        cust = Billing::Customer.where(accnumb: @search[:accnumb].strip.to_lat).first
+        rel = rel.where(customer_id: cust.custkey) if cust.present?
+      end
+    end
+    respond_to do |format|
+      format.html { @applications = rel.desc(:_id).paginate(page: params[:page_new], per_page: 10) }
+      format.xlsx do
+        @applications = rel.desc(:_id).paginate(per_page: 3000)
+      end
     end
   end
 

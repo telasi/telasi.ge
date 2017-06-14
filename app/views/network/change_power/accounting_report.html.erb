@@ -1,16 +1,20 @@
 <%= search_form @search do |f|
   f.tab do |f|
+     # f.combo_field 'type', label: 'სტატუსი', collection: { 'აბონენტი მიბმულია' => '1', 'აბონენტი არ არის მიბმული' => '2'}, empty: '--ყველა--'
+     # f.combo_field 'deadline', label: 'ვადა', collection: { 'ვადაგასული' => '1', 'ვადა არ არის გასული' => '2'}, empty: '--ყველა--'
     f.number_field 'number', label: t('models.network_change_power_application.number')
+    f.combo_field 'type', label: t('models.network_change_power_application.type'), collection: change_power_type_collection, empty: '--ყველა ტიპი--'
     f.combo_field 'status', label: t('models.network_change_power_application.status'), collection: Hash[ * (Network::NewCustomerApplication::STATUSES.map { |x| [Network::NewCustomerApplication.status_name(x), x] }).flatten ], empty: '--ყველა სტატუსი--'
     f.combo_field 'customer_id', label: 'აბონენტი მიბმულია?', collection: { 'კი' => 'yes', 'არა' => 'no' }, empty: '--'
     f.text_field 'accnumb', label: 'აბონენტის ნომერი'
     f.text_field 'rs_name', label: t('models.network_change_power_application.rs_name')
     f.text_field 'rs_tin', label: t('models.network_change_power_application.rs_tin')
-    f.text_field 'address', label: t('models.network_new_customer_application.address')
-    f.text_field 'work_address', label: t('models.network_new_customer_application.work_address')
+    f.text_field 'address_code', label: t('models.network_change_power_application.address_code')
+    f.text_field 'address', label: t('models.network_change_power_application.address')
+    f.text_field 'work_address', label: t('models.network_change_power_application.work_address')
     f.combo_field 'stage', label: t('models.network_request_item.stage'), collection: Hash[*(Network::Stage.asc(:numb).map{|x| [x.name, x.id]}.flatten)], empty: '--ყველა ეტაპი--'
-    f.combo_field 'voltage', label: 'ძაბვა', collection: voltage_collection_change_power, empty: '--'
-    f.complex_field label: 'სიმძლარვე' do |c|
+    f.combo_field 'voltage', label: 'ძაბვა', collection: voltage_collection, empty: '--'
+    f.complex_field label: 'სიმძლავრე' do |c|
       c.number_field 'power1', width: 100
       c.number_field 'power2', width: 100
     end
@@ -27,9 +31,9 @@
         c.date_field 'production_d1'
         c.date_field 'production_d2'
       end
-      f.complex_field label: t('models.network_change_power_application.end_date') do |c|
-        c.date_field 'end_d1'
-        c.date_field 'end_d2'
+      f.complex_field label: 'რეალური დასრულება' do |c|
+        c.date_field 'real_d1'
+        c.date_field 'real_d2'
       end
       f.text_field 'oqmi', label: t('models.network_change_power_application.oqmi')
       f.text_field 'proeqti', label: t('models.network_change_power_application.proeqti')
@@ -40,7 +44,6 @@
     end
   end
 end %>
-
 <%
   idx = request.url.index('?')
   if idx
@@ -49,9 +52,7 @@ end %>
     xlsx_url = "#{request.url}.xlsx"
   end
 %>
-
-<%= change_power_table @applications, xlsx: xlsx_url %>
-
+<%= change_accounting_table @applications, xlsx: xlsx_url %>
 <script type="text/javascript">
 $(function() {
   var wait_text = 'გთხოვთ დაელოდოთ...';

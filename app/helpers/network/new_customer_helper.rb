@@ -56,14 +56,16 @@ module Network::NewCustomerHelper
         c.text_field :status_name, url: ->(x) { network_new_customer_url(id: x.id) }
       end
       t.number_field :amount, after: 'GEL'
+      t.date_field :send_date
+      t.date_field :production_date
       t.date_field :plan_end_date
       t.date_field :end_date
       t.number_field :billing_prepayment_sum, label: 'მობმული ავანსების თანხა'
       t.number_field :prepayment_percent, label: 'მობმული ავანსის %'
       t.number_field :penalty1, label: 'I ეტაპი'
       t.number_field :penalty2, label: 'II ეტაპი'
-      t.number_field :penalty_first_corrected, label: 'დასაბრუნებელი თანხა I ეტაპის დარღვევა'
-      t.number_field :penalty_second_corrected, label: 'დასაბრუნებელი თანხა II ეტაპის დარღვევა'
+      t.number_field :penalty_first_corrected, label: 'დასაბ. თანხა I ეტაპის დარღვევა'
+      t.number_field :penalty_second_corrected, label: 'დასაბ. თანხა II ეტაპის დარღვევა'
       
       t.paginate param_name: 'page_new', records: 'ჩანაწერი'
     end
@@ -246,6 +248,7 @@ module Network::NewCustomerHelper
           c.number_field :penalty_third_stage, after: 'GEL'
           c.date_field :send_date
           c.date_field :start_date
+          c.date_field :production_date
           c.date_field :end_date
           c.date_field :plan_end_date
         end

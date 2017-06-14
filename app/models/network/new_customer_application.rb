@@ -68,6 +68,10 @@ class Network::NewCustomerApplication
   field :send_date, type: Date
   # start_date, არის თარიღი, როდესაც თელასმა განხცადება წამოებაში მიიღო
   field :start_date, type: Date
+  # წარმოებაში მიღების თარიღი
+  field :production_date, type: Date
+  # წარმოებაში მიღების თარიღი რეალური
+  field :production_enter_date, type: Date
   # plan_end_date / end_date, არის თარიღი (გეგმიური / რეალური), როდესაც დასრულდება
   # ამ განცხადებით გათვალიწინებული ყველა სამუშაო
   field :plan_end_date, type: Date
@@ -582,7 +586,6 @@ class Network::NewCustomerApplication
 
   private
 
-
   def calculate_total_cost
     tariff = Network::NewCustomerTariff.tariff_for(self.voltage, self.power, self.start_date)
     if tariff
@@ -630,9 +633,10 @@ class Network::NewCustomerApplication
       case self.status
       when STATUS_DEFAULT   then self.send_date = nil
       when STATUS_SENT      then 
-        self.send_date  = Date.today
+        self.send_date  = self.start_date = Date.today
       when STATUS_CONFIRMED then
-        self.start_date = Date.today
+        self.production_date = get_fifth_day
+        self.production_enter_date = Date.today
         if self.use_business_days
           # self.plan_end_date = self.days.business_days.after( self.send_date )
           self.plan_end_date = (self.days - 1).business_days.after( self.send_date )

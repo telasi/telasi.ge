@@ -12,6 +12,7 @@ class Network::NewCustomerController < ApplicationController
       rel = rel.where(number: search[:number].mongonize) if search[:number].present?
       rel = rel.where(rs_name: search[:rs_name].mongonize) if search[:rs_name].present?
       rel = rel.where(rs_tin: search[:rs_tin].mongonize) if search[:rs_tin].present?
+      rel = rel.where(address_code: search[:address_code].mongonize) if search[:address_code].present?
       rel = rel.where(address: search[:address].mongonize) if search[:address].present?
       rel = rel.where(work_address: search[:work_address].mongonize) if search[:work_address].present?
       rel = rel.where(status: search[:status].to_i) if search[:status].present?
@@ -21,6 +22,8 @@ class Network::NewCustomerController < ApplicationController
       rel = rel.where(:send_date.lte => search[:send_d2]) if search[:send_d2].present?
       rel = rel.where(:start_date.gte => search[:start_d1]) if search[:start_d1].present?
       rel = rel.where(:start_date.lte => search[:start_d2]) if search[:start_d2].present?
+      rel = rel.where(:production_date.gte => search[:production_d1]) if search[:production_d1].present?
+      rel = rel.where(:production_date.lte => search[:production_d2]) if search[:production_d2].present?
       rel = rel.where(:plan_end_date.gte => search[:plan_d1]) if search[:plan_d1].present?
       rel = rel.where(:plan_end_date.lte => search[:plan_d2]) if search[:plan_d2].present?
       rel = rel.where(:end_date.gte => search[:real_d1]) if search[:real_d1].present?
@@ -33,6 +36,10 @@ class Network::NewCustomerController < ApplicationController
       rel = rel.where(factura_seria: search[:factura_seria]) if search[:factura_seria].present?
       rel = rel.where(factura_number: search[:factura_number].to_i) if search[:factura_number].present?
       rel = rel.where(personal_use: search[:personal_use]) if search[:personal_use].present?
+      if search[:customer_id].present?
+        rel = rel.where(customer_id: nil) if search[:customer_id] == 'no'
+        rel = rel.where(:customer_id.ne => nil) if search[:customer_id] == 'yes'
+      end
       if search[:accnumb].present?
         cust = Billing::Customer.where(accnumb: search[:accnumb].strip.to_lat).first
         rel = rel.where(customer_id: cust.custkey) if cust.present?
@@ -243,7 +250,7 @@ class Network::NewCustomerController < ApplicationController
     @title = 'თარიღების შეცვლა'
     @application = Network::NewCustomerApplication.find(params[:id])
     if request.post?
-      if @application.update_attributes(params.require(:network_new_customer_application).permit(:send_date, :end_date, :start_date))
+      if @application.update_attributes(params.require(:network_new_customer_application).permit(:send_date, :end_date ))#, :start_date))
         redirect_to network_new_customer_url(id: @application.id), notice: 'თარიღები შეცვლილია'
       end
     end

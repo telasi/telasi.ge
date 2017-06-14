@@ -36,6 +36,51 @@ module Network::ChangePowerHelper
     end
   end
 
+  def change_prepayment_table(applications, opts = {})
+    table_for applications, title: 'განაცხადები ღია საავანსო განცხადებით', icon: '/icons/user--plus.png', collapsible: true do |t|
+      t.title_action opts[:xlsx], label: 'ექსელში გადმოწერა', icon: '/icons/document-excel.png' if opts[:xlsx].present?
+      t.text_field 'effective_number', i18n: 'number', tag: 'code'
+      t.date_field 'start_date', i18n: 'start_date'
+      t.complex_field i18n: 'status_name', required: true do |c|
+        c.image_field :status_icon
+        c.text_field :status_name, url: ->(x) { network_change_power_url(id: x.id) }
+      end
+      t.complex_field i18n: 'rs_name' do |c|
+        c.text_field :rs_tin, tag: 'code'
+        c.text_field :rs_name, url: ->(x) { network_change_power_url(id: x.id) }
+      end
+      t.complex_field label: 'სიმძლავრე/ძაბვა' do |c|
+        c.number_field :power, after: 'kWh'
+        c.number_field :voltage, before: '/'
+      end
+      t.number_field :amount, after: 'GEL'
+      t.number_field :days, max_digits: 0, after: 'დღე'
+      t.paginate param_name: 'page_new', records: 'ჩანაწერი'
+    end
+  end
+
+  def change_accounting_table(applications, opts = {})
+    table_for applications, title: 'ახალი აბონენტის განცხადებები', icon: '/icons/user--plus.png', collapsible: true do |t|
+      t.title_action opts[:xlsx], label: 'ექსელში გადმოწერა', icon: '/icons/document-excel.png' if opts[:xlsx].present?
+      t.text_field 'number', i18n: 'number', tag: 'code'
+      t.text_field 'type_name', i18n: 'type', tag: 'code'
+      t.text_field 'customer.accnumb', label: 'აბონენტის N', tag: 'code'
+      t.complex_field i18n: 'status_name', required: true do |c|
+        c.image_field :status_icon
+        c.text_field :status_name, url: ->(x) { network_change_power_url(id: x.id) }
+      end
+      t.number_field :amount, after: 'GEL'
+      t.date_field :send_date
+      t.date_field :production_date
+      t.date_field :real_end_date, label: 'რეალური დასრულება'
+      t.date_field :end_date
+      t.number_field :billing_prepayment_sum, label: 'მობმული ავანსების თანხა'
+      t.number_field :prepayment_percent, label: 'მობმული ავანსის %'
+      
+      t.paginate param_name: 'page_new', records: 'ჩანაწერი'
+    end
+  end
+
   def change_power_type_collection
     h = {}
     Network::ChangePowerApplication::TYPES.each do |x|
@@ -179,6 +224,7 @@ module Network::ChangePowerHelper
           # c.number_field :remaining, after: 'GEL'
           c.date_field :send_date
           c.date_field :start_date
+          c.date_field :production_date
           c.date_field :end_date 
           c.date_field :real_end_date, label: 'რეალური დასრულება' do |real|
             real.action network_change_power_edit_real_date_url(id: application.id), label: 'შეცვლა', icon: '/icons/pencil.png'

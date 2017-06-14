@@ -4,13 +4,14 @@ style_row = wb.styles.add_style border: Axlsx::STYLE_THIN_BORDER
 wb.add_worksheet(name: "new-customers") do |sheet|
   sheet.add_row [
     'ელექტრონული განაცხადის N', 'აბონენტის N', 'განაცხადის სტატუსი', 'პაკეტის ღირ-ბა',
-    "გეგმიური შესრულების თარიღი", "დასრულების თარიღი",
+    "ათვლის თარიღი", "წარმოებაში მიღების თარიღი", "გეგმიური შესრულების თარიღი", "დასრულების თარიღი",
     "მობმული ავანსების თანხა", "მიღებული ავანსის %", "I ეტაპი", "II ეტაპი", "დასაბრუნებელი თანხა I ეტაპის დარღვევა", "დასაბრუნებელი თანხა II ეტაპის დარღვევა"
   ], :style=>style_header
   @applications.each do |app|
     accnumb = app.customer.accnumb if app.customer
     sheet.add_row [app.effective_number, accnumb, app.status_name, app.amount, 
-      app.plan_end_date, app.end_date, app.billing_prepayment_sum, app.prepayment_percent,
+      app.send_date, app.production_date, app.plan_end_date, app.end_date, 
+      app.billing_prepayment_sum, app.prepayment_percent,
       app.penalty1, app.penalty2, app.penalty_first_corrected, app.penalty_second_corrected
     ]
   end

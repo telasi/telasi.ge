@@ -4,9 +4,11 @@
      # f.combo_field 'deadline', label: 'ვადა', collection: { 'ვადაგასული' => '1', 'ვადა არ არის გასული' => '2'}, empty: '--ყველა--'
     f.number_field 'number', label: t('models.network_new_customer_application.number')
     f.combo_field 'status', label: t('models.network_new_customer_application.status'), collection: Hash[ * (Network::NewCustomerApplication::STATUSES.map { |x| [Network::NewCustomerApplication.status_name(x), x] }).flatten ], empty: '--ყველა სტატუსი--'
+    f.combo_field 'customer_id', label: 'აბონენტი მიბმულია?', collection: { 'კი' => 'yes', 'არა' => 'no' }, empty: '--'
     f.text_field 'accnumb', label: 'აბონენტის ნომერი'
     f.text_field 'rs_name', label: t('models.network_new_customer_application.rs_name')
     f.text_field 'rs_tin', label: t('models.network_new_customer_application.rs_id')
+    f.text_field 'address_code', label: t('models.network_new_customer_application.address_code')
     f.text_field 'address', label: t('models.network_new_customer_application.address')
     f.text_field 'work_address', label: t('models.network_new_customer_application.work_address')
     f.combo_field 'stage', label: t('models.network_request_item.stage'), collection: Hash[*(Network::Stage.asc(:numb).map{|x| [x.name, x.id]}.flatten)], empty: '--ყველა ეტაპი--'
@@ -25,6 +27,10 @@
       f.complex_field label: t('models.network_new_customer_application.start_date') do |c|
         c.date_field 'start_d1'
         c.date_field 'start_d2'
+      end
+      f.complex_field label: t('models.network_new_customer_application.production_date') do |c|
+        c.date_field 'production_d1'
+        c.date_field 'production_d2'
       end
       f.complex_field label: t('models.network_new_customer_application.real_date') do |c|
         c.date_field 'real_d1'

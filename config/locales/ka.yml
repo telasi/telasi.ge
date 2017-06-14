@@ -324,6 +324,7 @@ ka:
       days: ვადა
       send_date: ათვლის თარიღი
       start_date: რეგისტრაციის თარიღი
+      production_date: წარმოებაში მიღების თარიღი
       end_date: დასრულების თარიღი
       status_name: სტატუსი
       old_voltage: არსებული ძაბვა
@@ -406,6 +407,7 @@ ka:
       send_date_hint: განცხადების თელასში გამოგზავნის თარიღი
       start_date: რეგისტრაციის თარიღი
       start_date_hint: განცხადების რეგისტრაციის თარიღი
+      production_date: წარმოებაში მიღების თარიღი
       real_date: რეალური თარიღი
       plan_end_date: გეგმიური დასრულების თარიღი
       plan_end_date_hint: სამუშაოების დასრულების გეგმიური თარიღი

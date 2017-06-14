@@ -22,11 +22,14 @@ module Network::CalculationUtils
     if self.billing_prepayment_factura.present?
       Billing::Payment.where(itemkey: item.itemkey).first.enterdate
     else
-      if self.start_date > 5.business_days.after(self.send_date)
-        5.business_days.after(self.send_date)
-      else
-        self.start_date
-      end
+      self.production_date
     end
+  end
+
+  def get_fifth_day
+    today = Date.today
+    five_days_after = 5.business_days.after(self.start_date)
+
+    today > five_days_after ? five_days_after : today
   end
 end

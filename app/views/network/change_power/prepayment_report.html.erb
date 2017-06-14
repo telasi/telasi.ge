@@ -1,0 +1,72 @@
+<%= search_form @search do |f|
+  f.tab do |f|
+     f.combo_field 'type', label: 'სტატუსი', collection: { 'აბონენტი მიბმულია' => '1', 'აბონენტი არ არის მიბმული' => '2'}, empty: '--ყველა--'
+     f.combo_field 'deadline', label: 'ვადა', collection: { 'ვადაგასული' => '1', 'ვადა არ არის გასული' => '2'}, empty: '--ყველა--'
+    # f.number_field 'number', label: t('models.network_new_customer_application.number')
+    # f.combo_field 'status', label: t('models.network_new_customer_application.status'), collection: Hash[ * (Network::NewCustomerApplication::STATUSES.map { |x| [Network::NewCustomerApplication.status_name(x), x] }).flatten ], empty: '--ყველა სტატუსი--'
+    # f.text_field 'accnumb', label: 'აბონენტის ნომერი'
+    # f.text_field 'rs_name', label: t('models.network_new_customer_application.rs_name')
+    # f.text_field 'rs_tin', label: t('models.network_new_customer_application.rs_id')
+    # f.text_field 'address', label: t('models.network_new_customer_application.address')
+    # f.text_field 'work_address', label: t('models.network_new_customer_application.work_address')
+    # f.combo_field 'stage', label: t('models.network_request_item.stage'), collection: Hash[*(Network::Stage.asc(:numb).map{|x| [x.name, x.id]}.flatten)], empty: '--ყველა ეტაპი--'
+    # f.combo_field 'online', label: 'ონლაინი?', collection: { 'კი' => 'yes', 'არა' => 'no' }, empty: '--'
+    # f.combo_field 'personal_use', label: 'საყოფაცხოვრებო', collection: { 'კი' => 'yes', 'არა' => 'no' }, empty: '--'
+    # f.combo_field 'voltage', label: 'ძაბვა', collection: voltage_collection, empty: '--'
+    # f.complex_field label: 'სიმძლავრე' do |c|
+    #   c.number_field 'power1', width: 100
+    #   c.number_field 'power2', width: 100
+    # end
+    # f.col2 do |f|
+    #   f.complex_field label: t('models.network_new_customer_application.send_date') do |c|
+    #     c.date_field 'send_d1'
+    #     c.date_field 'send_d2'
+    #   end
+    #   f.complex_field label: t('models.network_new_customer_application.start_date') do |c|
+    #     c.date_field 'start_d1'
+    #     c.date_field 'start_d2'
+    #   end
+    #   f.complex_field label: t('models.network_new_customer_application.real_date') do |c|
+    #     c.date_field 'real_d1'
+    #     c.date_field 'real_d2'
+    #   end
+    #   f.complex_field label: t('models.network_new_customer_application.plan_end_date') do |c|
+    #     c.date_field 'plan_d1'
+    #     c.date_field 'plan_d2'
+    #   end
+    #   f.combo_field 'penalty', label: 'ჯარიმა', collection: {
+    #     'დროულად' => '0', 'ეტაპი I' => '1', 'ეტაპი II' => '2', 'ეტაპი III' => '3'
+    #     }, empty: '--'
+    #   f.text_field 'oqmi', label: t('models.network_new_customer_application.oqmi')
+    #   f.text_field 'proeqti', label: t('models.network_new_customer_application.proeqti')
+    #   f.complex_field label: 'ა/ფ სერია და ნომერი' do |c|
+    #     c.text_field 'factura_seria', width: 30
+    #     c.text_field 'factura_number', width: 100
+    #   end
+    # end
+  end
+end %>
+<%
+  idx = request.url.index('?')
+  if idx
+    xlsx_url = "#{request.url[0..idx-1]}.xlsx?#{request.url[idx+1..-1]}"
+  else
+    xlsx_url = "#{request.url}.xlsx"
+  end
+%>
+<%= change_prepayment_table @applications %>
+<!-- <%= prepayment_table @applications, xlsx: xlsx_url %> -->
+<script type="text/javascript">
+$(function() {
+  var wait_text = 'გთხოვთ დაელოდოთ...';
+  $('a[href*=".xlsx"]').click(function(event) {
+    var $link = $(this);
+    var $span = $($link.children('span')[0]);
+    if ($span.html() === wait_text) {
+      event.preventDefault();
+    } else {
+      $span.html(wait_text);
+    }
+  });
+});
+</script>
