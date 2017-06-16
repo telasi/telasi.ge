@@ -136,7 +136,7 @@ class Network::ChangePowerApplication
   def status_icon; Network::NewCustomerApplication.status_icon(self.status) end
   def type_name; Network::ChangePowerApplication.type_name(self.type) end
 
-  def prepayment_percent; self.billing_prepayment_sum / self.amount * 100 rescue 0 end
+  def prepayment_percent; self.billing_prepayment_total / self.amount * 100 rescue 0 end
 
   def facturas
     array = registered_facturas.where('factura_id <> ?',self.factura_id.to_i).dup

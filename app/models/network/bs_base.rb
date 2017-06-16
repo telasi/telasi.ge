@@ -13,10 +13,12 @@ module Network::BsBase
     1012,
     1004,
     1005,
+    1025
   ]
 
   PREPAYMENT_OPERATIONS = [
-    116
+    116,
+    # 1012
   ]
 
   NEW_CUST_OPERATIONS = [
@@ -45,6 +47,10 @@ module Network::BsBase
     self.billing_items_effective.joins('join bs.customer a on item.custkey = a.custkey')
                                 .joins('join bs.customer b on itemnumber = b.accnumb')
                                 .where('a.accnumb = ? and b.custkey = ?', Billing::Customer::XXX, self.customer_id).where(billoperkey: NETWORK_OPERATIONS).order('itemkey DESC')
+  end
+
+  def billing_items_raw_sum
+    self.billing_items_raw.sum(:amount)
   end
 
   def billing_items_raw_to_factured
@@ -80,6 +86,10 @@ module Network::BsBase
 
   def billing_prepayment_to_factured_sum
     self.billing_prepayment.where('new_customer_factura_appl.id is null').sum(:amount)
+  end
+
+  def billing_prepayment_total
+    self.billing_prepayment_factura_sum + self.billing_items_raw_sum
   end
 
   def has_new_cust_charge?

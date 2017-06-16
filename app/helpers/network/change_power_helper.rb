@@ -74,7 +74,7 @@ module Network::ChangePowerHelper
       t.date_field :production_date
       t.date_field :real_end_date, label: 'რეალური დასრულება'
       t.date_field :end_date
-      t.number_field :billing_prepayment_sum, label: 'მობმული ავანსების თანხა'
+      t.number_field :billing_prepayment_total, label: 'მობმული ავანსების თანხა'
       t.number_field :prepayment_percent, label: 'მობმული ავანსის %'
       
       t.paginate param_name: 'page_new', records: 'ჩანაწერი'

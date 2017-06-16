@@ -185,7 +185,7 @@ class Network::NewCustomerApplication
     array
   end
 
-  def prepayment_percent; self.billing_prepayment_sum / self.amount * 100 rescue 0 end
+  def prepayment_percent; self.billing_prepayment_total / self.amount * 100 rescue 0 end
 
   # შესაძლო სტატუსების ჩამონათვალი მიმდინარე სტატუსიდან.
   def transitions

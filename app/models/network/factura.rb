@@ -67,8 +67,7 @@ module Network::Factura
                                                           amount: amount, period: Time.now)
         billing_factura.save
 
-        billing_factura_appl = Billing::NewCustomerFacturaAppl.new(itemkey: factura.appl.itemkey, 
-        														   custkey: self.customer.custkey, 
+        billing_factura_appl = Billing::NewCustomerFacturaAppl.new(custkey: self.customer.custkey, 
                                                                    application: 'NC',
                                                                    cns: self.number, 
                                                                    start_date: self.start_date,
