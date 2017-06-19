@@ -18,7 +18,7 @@ module Network::BsBase
 
   PREPAYMENT_OPERATIONS = [
     116,
-    # 1012
+    1012
   ]
 
   NEW_CUST_OPERATIONS = [
