@@ -216,7 +216,7 @@ class Network::ChangePowerController < ApplicationController
       @message.messageable = @application
       @message.mobile = @application.mobile
       if @message.save
-        # @message.send_sms!(lat: true)
+        @message.send_sms!(lat: true)
         @application.status = params[:status].to_i
         if @application.save
           if @application.status==Network::ChangePowerApplication::STATUS_COMPLETE
