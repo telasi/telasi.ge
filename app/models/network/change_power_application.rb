@@ -217,7 +217,7 @@ class Network::ChangePowerApplication
           kwt: 0, amount: main_amount, enterdate: Time.now, itemcatkey: 0)
         bs_item.save!
         network_item = Billing::NetworkItem.new(zdepozit_cust_id: deposit_customer.zdepozit_cust_id,
-          amount: main_amount, operkey: 1001, enterdate: Time.now, operdate: item_date, perskey: 1)
+          amount: main_amount, operkey: 1001, enterdate: Time.now, operdate: item_date, perskey: 1, cns: self.number, montage_date: real_end_date)
         network_item.save!
       end
 
