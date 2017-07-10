@@ -18,6 +18,7 @@ class Network::NewCustomerApplication
   GNERC_SIGNATURE_FILE = 'NewCustomer_'
   GNERC_ACT_FILE = 'act'
   GNERC_DEF_FILE = 'def'
+  GNERC_REFAB_FILE = 'refab'
   GNERC_VOLTAGE_220 = '0.220'
   GNERC_VOLTAGE_380 = '0.380'
   GNERC_VOLTAGE_610 = '6-10'
@@ -808,12 +809,22 @@ class Network::NewCustomerApplication
                      }
       else
         file = self.files.select{ |x| x.file.filename[0..2] == GNERC_DEF_FILE }.first
-        content = File.read(file.file.file.file)
-        content = Base64.encode64(content)
-        parameters = { letter_number:       self.number,
-                       attach_7_2:          content,
-                       attach_7_2_filename: file.file.filename
-                     }
+        if file.present?
+          content = File.read(file.file.file.file)
+          content = Base64.encode64(content)
+          parameters = { letter_number:       self.number,
+                         attach_7_2:          content,
+                         attach_7_2_filename: file.file.filename
+                       }
+        else
+          file = self.files.select{ |x| x.file.filename[0..4] == GNERC_REFAB_FILE }.first
+          content = File.read(file.file.file.file)
+          content = Base64.encode64(content)
+          parameters = { letter_number:           self.number,
+                         refuse_abonent:          content,
+                         refuse_abonent_filename: file.file.filename
+                       }
+        end
       end
       GnercWorker.perform_async("answer", 7, parameters)
     end
