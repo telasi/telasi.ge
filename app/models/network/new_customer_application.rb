@@ -843,7 +843,10 @@ class Network::NewCustomerApplication
     if actfile.blank?
       deffile = self.files.select{ |x| x.file.filename[0..2] == GNERC_DEF_FILE }.first
       if deffile.blank?
-        return false
+        reffile = self.files.select{ |x| x.file.filename[0..4] == GNERC_REFAB_FILE }.first
+         if reffile.blank?
+          return false
+         end
       end
     end
     return true
