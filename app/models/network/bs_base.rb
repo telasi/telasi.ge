@@ -29,7 +29,7 @@ module Network::BsBase
     if @__billing_items
       @__billing_items
     elsif self.customer_id.present?
-      @__billing_items = Billing::Item.where(custkey: self.customer_id, billoperkey: NETWORK_OPERATIONS).order('itemkey DESC')
+      @__billing_items = Billing::Item.where(custkey: self.customer_id, billoperkey: NETWORK_OPERATIONS).order('item.itemkey DESC')
     else
       @__billing_items = []
     end
@@ -37,6 +37,14 @@ module Network::BsBase
 
   def billing_items_united
     billing_items
+  end
+
+  # def billing_items_united
+  #   billing_items.eager_load(:cns).where('network_operations.cns is null')
+  # end
+
+  def billing_items_chosen
+    billing_items.joins(:cns)
   end
 
   def billing_items_effective
@@ -89,10 +97,20 @@ module Network::BsBase
   end
 
   def billing_prepayment_total
-    self.billing_prepayment_factura_sum + self.billing_items_raw_sum
+    self.billing_prepayment_sum + self.billing_items_raw_sum
   end
 
   def has_new_cust_charge?
     Billing::Item.where(custkey: self.customer_id, billoperkey: NEW_CUST_OPERATIONS).present?
+  end
+
+  def add_operation!(itemkey)
+    app = self.class == Network::NewCustomerApplication ? 'NC' : 'CP'
+    Billing::NetworkOperation.new(application: app, cns: self.number, itemkey: itemkey).save
+  end
+
+  def remove_operation!(itemkey)
+    operation = Billing::NetworkOperation.where(itemkey: itemkey).first
+    operation.destroy if operation.present?
   end
 end
