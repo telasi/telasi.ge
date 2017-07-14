@@ -21,6 +21,10 @@ module Network::BsBase
     1012
   ]
 
+  OPERATIONS_MINUS = [
+    116
+  ]
+
   NEW_CUST_OPERATIONS = [
     1000
   ]
@@ -38,10 +42,6 @@ module Network::BsBase
   def billing_items_united
     billing_items
   end
-
-  # def billing_items_united
-  #   billing_items.eager_load(:cns).where('network_operations.cns is null')
-  # end
 
   def billing_items_chosen
     billing_items.joins(:cns)
@@ -97,11 +97,34 @@ module Network::BsBase
   end
 
   def billing_prepayment_total
-    self.billing_prepayment_sum + self.billing_items_raw_sum
+    ( self.billing_prepayment.where.not(billoperkey: OPERATIONS_MINUS).sum(:amount) + 
+      self.billing_prepayment.where(billoperkey: OPERATIONS_MINUS).sum(:amount) * (-1) + 
+      self.billing_items_raw.where.not(billoperkey: OPERATIONS_MINUS).sum(:amount) + 
+      self.billing_items_raw.where(billoperkey: OPERATIONS_MINUS).sum(:amount) * (-1) ).abs
   end
 
   def has_new_cust_charge?
     Billing::Item.where(custkey: self.customer_id, billoperkey: NEW_CUST_OPERATIONS).present?
+  end
+
+  def billing_prepayment_chosen
+    self.billing_prepayment.joins(:cns)
+  end
+
+  def billing_prepayment_chosen_to_factured
+    self.billing_prepayment.joins(:cns).where('new_customer_factura_appl.id is null')
+  end
+
+  def billing_prepayment_chosen_to_factured_sum
+    self.billing_prepayment.joins(:cns).where('new_customer_factura_appl.id is null').sum(:amount)
+  end
+
+  def billing_prepayment_not_chosen
+    self.billing_prepayment.eager_load(:cns).where('network_operations.itemkey is null')
+  end
+
+  def billing_prepayment_not_chosen_to_factured
+    self.billing_prepayment.eager_load(:cns).where('network_operations.itemkey is null').where('new_customer_factura_appl.id is null')
   end
 
   def add_operation!(itemkey)
