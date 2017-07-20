@@ -18,7 +18,11 @@ class Network::ChangePowerApplication
   TYPE_RESERVATION   = 3
   TYPE_TEMP_BUILD    = 4
   TYPE_ABONIREBA     = 5
-  TYPES = [ TYPE_CHANGE_POWER, TYPE_CHANGE_SOURCE, TYPE_SPLIT, TYPE_RESERVATION, TYPE_TEMP_BUILD, TYPE_ABONIREBA ]
+  TYPE_MICROPOWER    = 6
+  TYPE_SAME_PACK     = 7
+  TYPE_HIGH_VOLTAGE  = 8
+  TYPES = [ TYPE_CHANGE_POWER, TYPE_CHANGE_SOURCE, TYPE_SPLIT, TYPE_RESERVATION, TYPE_TEMP_BUILD, TYPE_ABONIREBA,
+            TYPE_MICROPOWER, TYPE_SAME_PACK, TYPE_HIGH_VOLTAGE ]
 
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -105,6 +109,12 @@ class Network::ChangePowerApplication
       not not (/^(1TCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number)
     elsif [TYPE_RESERVATION, TYPE_TEMP_BUILD, TYPE_ABONIREBA].include?(type)
       not not (/^(TCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number)
+    elsif type == TYPE_MICROPOWER
+      not not (/^(RCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number)
+    elsif type == TYPE_SAME_PACK
+      not not (/^(2CNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number)
+    elsif type == TYPE_HIGH_VOLTAGE
+      not not (/^(HCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number)
     else
       false
     end
