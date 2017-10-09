@@ -196,6 +196,7 @@ class Network::NewCustomerController < ApplicationController
         @application.status = params[:status].to_i
         if @application.save
           if @application.status==Network::NewCustomerApplication::STATUS_COMPLETE
+            @application.message_to_gnerc(@message)
             redirect_to network_change_dates_url(id: @application.id), alert: 'შეამოწმეთ განცხადების თარიღების სისწორე!'
           else
             redirect_to network_new_customer_url(id: @application.id), notice: I18n.t('models.network_new_customer_application.actions.status.changed')
@@ -336,6 +337,7 @@ class Network::NewCustomerController < ApplicationController
   def send_prepayment_factura_prepare
     @application = Network::NewCustomerApplication.find(params[:id])
     @items_to_factured = @application.billing_prepayment_to_factured
+    # @items_to_factured = @application.billing_prepayment_chosen_to_factured
     @items = @application.billing_items_raw_to_factured
   end
 
@@ -442,6 +444,18 @@ class Network::NewCustomerController < ApplicationController
     end
     @nav
   end
+
+  # def add_operation
+  #   application = Network::NewCustomerApplication.find(params[:id])
+  #   application.add_operation!(params[:itemkey])
+  #   redirect_to network_new_customer_url(id: application.id, tab: 'advance')
+  # end
+
+  # def remove_operation
+  #   application = Network::NewCustomerApplication.find(params[:id])
+  #   application.remove_operation!(params[:itemkey])
+  #   redirect_to network_new_customer_url(id: application.id, tab: 'advance')
+  # end
 
   private
 

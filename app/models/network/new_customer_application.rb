@@ -534,6 +534,11 @@ class Network::NewCustomerApplication
     ( billing_prepayment_to_factured_sum + billing_items_raw_to_factured_sum >= self.effective_amount / 2 )
   end
 
+  # def prepayment_enough?
+  #   billing_prepayment_chosen_to_factured_sum > 0 and
+  #   ( billing_prepayment_chosen_to_factured_sum >= self.effective_amount / 2 )
+  # end
+
   def can_send_prepayment_factura?
     return false unless self.status == STATUS_CONFIRMED
     return false if ( self.send_date < Network::PREPAYMENT_START_DATE )
@@ -546,6 +551,12 @@ class Network::NewCustomerApplication
     else
       return true if prepayment_enough?
     end 
+
+    # if billing_prepayment_factura.present? or billing_items_raw_to_factured.present?
+    #    return true if billing_prepayment_chosen_to_factured.present? 
+    #  else
+    #    return true if prepayment_enough?
+    #  end 
 
     return false
   end
@@ -583,6 +594,13 @@ class Network::NewCustomerApplication
   def number_required?
     if self.online then not [STATUS_DEFAULT, STATUS_SENT].include?(self.status)
     else not [STATUS_DEFAULT].include?(self.status) end
+  end
+
+  def message_to_gnerc(message)
+    newcust = Gnerc::Newcust.where(letter_number: self.number).first
+    return if newcust.blank?
+    
+    newcust.update_attributes!(company_answer: message.message, phone: message.mobile, confirmation: 1)
   end
 
   private
