@@ -193,10 +193,11 @@ class Network::NewCustomerController < ApplicationController
       @message.mobile = @application.mobile
       if @message.save
         @message.send_sms!(lat: true)
+        old_status = @application.status
         @application.status = params[:status].to_i
         if @application.save
           if @application.status==Network::NewCustomerApplication::STATUS_COMPLETE
-            @application.message_to_gnerc(@message)
+            @application.message_to_gnerc(@message) unless old_status == @application.status
             redirect_to network_change_dates_url(id: @application.id), alert: 'შეამოწმეთ განცხადების თარიღების სისწორე!'
           else
             redirect_to network_new_customer_url(id: @application.id), notice: I18n.t('models.network_new_customer_application.actions.status.changed')
