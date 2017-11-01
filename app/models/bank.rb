@@ -27,7 +27,8 @@ class Bank
       'IBAZGE22' => I18n.t('banks.IBAZGE22'),
       'ISBKGE22' => I18n.t('banks.ISBKGE22'),
       'FGEOGE22' => I18n.t('banks.FGEOGE22'),
-      'PAHAGE22' => I18n.t('banks.PAHAGE22')
+      'PAHAGE22' => I18n.t('banks.PAHAGE22'),
+      'JSCRGE22' => I18n.t('banks.JSCRGE22'),
     }
   end
 end
