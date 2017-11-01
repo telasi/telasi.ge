@@ -29,6 +29,11 @@ class Billing::Customer < ActiveRecord::Base
   def last_bill_date; self.item_bills.last.billdate end
   def last_bill_number; self.item_bills.last.billnumber end
 
+  def abonent_type
+    return 1 if [1, 7, 1111, 1112, 1113, 1120].include?(self.custcatkey)
+    return 2
+  end
+
   def deposit_customer
     Billing::DepositCustomer.where(custkey: self.custkey, status: 0).first
   end

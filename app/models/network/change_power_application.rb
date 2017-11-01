@@ -21,8 +21,14 @@ class Network::ChangePowerApplication
   TYPE_MICROPOWER    = 6
   TYPE_SAME_PACK     = 7
   TYPE_HIGH_VOLTAGE  = 8
+  TYPE_SUB_CUSTOMER  = 9
   TYPES = [ TYPE_CHANGE_POWER, TYPE_CHANGE_SOURCE, TYPE_SPLIT, TYPE_RESERVATION, TYPE_TEMP_BUILD, TYPE_ABONIREBA,
-            TYPE_MICROPOWER, TYPE_SAME_PACK, TYPE_HIGH_VOLTAGE ]
+            TYPE_MICROPOWER, TYPE_SAME_PACK, TYPE_HIGH_VOLTAGE, TYPE_SUB_CUSTOMER ]
+
+  GNERC_SIGNATURE_FILE = 'ChangePower_'
+  GNERC_ACT_FILE = 'act'
+  GNERC_DEF_FILE = 'def'
+  GNERC_REFAB_FILE = 'refab'
 
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -234,6 +240,8 @@ class Network::ChangePowerApplication
       # update application status
       self.status = STATUS_IN_BS
       self.save
+
+      send_to_gnerc(2)
     end
   end
 
@@ -308,6 +316,13 @@ class Network::ChangePowerApplication
     end
   end
 
+  def message_to_gnerc(message)
+    docflow = Gnerc::Docflow4.where(letter_number: self.number).first
+    return if docflow.blank?
+    
+    docflow.update_attributes!(company_answer: message.message, phone: message.mobile, confirm: 1)
+  end
+
   private
 
   def status_manager
@@ -316,8 +331,11 @@ class Network::ChangePowerApplication
       when STATUS_DEFAULT   then self.send_date = nil
       when STATUS_SENT      then self.send_date  = self.start_date = Date.today
       when STATUS_CONFIRMED then 
+        raise 'აარჩიეთ აბონენტი' if self.customer_id.blank?
         self.production_date = get_fifth_day
         self.production_enter_date = Date.today
+
+        send_to_gnerc(1)
       when STATUS_COMPLETE  then self.end_date   = Date.today
       end
     end
@@ -367,6 +385,79 @@ class Network::ChangePowerApplication
       self.errors.add(:number, 'ჩაწერეთ ნომერი')
     elsif self.number.present?
       self.errors.add(:number, 'არასწორი ფორმატი!') unless Network::ChangePowerApplication.correct_number?(self.type, self.number)
+    end
+  end
+
+  def send_to_gnerc(stage)
+    if stage == 1
+      file = self.files.select{ |x| x.file.filename[0..11] == GNERC_SIGNATURE_FILE }.first
+      if file.present?
+        content = File.read(file.file.file.file)
+        content = Base64.encode64(content)
+
+        letter_category = get_letter_category
+
+        parameters = { letter_number:       self.number,
+                       abonent:             self.rs_name,
+                       abonent_number:      self.customer.accnumb,
+                       abonent_type:        self.customer.abonent_type, 
+                       abonent_address:     self.address,
+                       appeal_date:         self.start_date,
+                       attach_4_1:          content,
+                       attach_4_1_filename: file.file.filename,
+                       letter_category:     letter_category
+                     }
+
+        GnercWorker.perform_async("appeal", 4, parameters)
+      end
+    else 
+      file = self.files.select{ |x| x.file.filename[0..2] == GNERC_ACT_FILE }.first
+      if file.present?
+        content = File.read(file.file.file.file)
+        content = Base64.encode64(content)
+        parameters = { letter_number:       self.number,
+                       attach_4_2:          content,
+                       attach_4_2_filename: file.file.filename,
+                       affirmative:         1
+                     }
+      else
+        file = self.files.select{ |x| x.file.filename[0..2] == GNERC_DEF_FILE }.first
+        if file.present?
+          content = File.read(file.file.file.file)
+          content = Base64.encode64(content)
+          parameters = { letter_number:       self.number,
+                         attach_4_2:          content,
+                         attach_4_2_filename: file.file.filename,
+                         affirmative:         0
+                       }
+        else
+          file = self.files.select{ |x| x.file.filename[0..4] == GNERC_REFAB_FILE }.first
+          content = File.read(file.file.file.file)
+          content = Base64.encode64(content)
+          parameters = { letter_number:       self.number,
+                         attach_4_2:          content,
+                         attach_4_2_filename: file.file.filename,
+                         affirmative:         0
+                       }
+        end
+      end
+      GnercWorker.perform_async("answer", 4, parameters)
+    end
+  end
+
+  def get_letter_category
+    case self.type
+    when TYPE_CHANGE_POWER then 25
+    when TYPE_CHANGE_SOURCE then 31
+    when TYPE_SPLIT then 27
+    when TYPE_RESERVATION then 5
+    when TYPE_TEMP_BUILD then 26
+    when TYPE_ABONIREBA then 23
+    when TYPE_MICROPOWER then 
+    when TYPE_SAME_PACK then 25
+    when TYPE_HIGH_VOLTAGE then 23
+    when TYPE_SUB_CUSTOMER then 28
+    else 31
     end
   end
 end

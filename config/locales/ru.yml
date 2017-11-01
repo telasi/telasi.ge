@@ -352,6 +352,7 @@ ru:
       bank_account_alt: Банковский счет
       bank_account_hint: Ваш личный банковский счет или принадлежащий организации.
       bank_account_separator: Банковский счет
+      abonent_amount: Количество абонентов
       status: Статус
       status_0: Не отправлено
       status_1: Отправлено

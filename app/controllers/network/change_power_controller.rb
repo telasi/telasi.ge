@@ -217,9 +217,11 @@ class Network::ChangePowerController < ApplicationController
       @message.mobile = @application.mobile
       if @message.save
         @message.send_sms!(lat: true)
+        old_status = @application.status
         @application.status = params[:status].to_i
         if @application.save
           if @application.status==Network::ChangePowerApplication::STATUS_COMPLETE
+            @application.message_to_gnerc(@message) unless old_status == @application.status
             redirect_to network_change_power_edit_real_date_url(id: @application.id), alert: 'შეიტანეთ რეალური დასრულების თარიღი'
           else
             redirect_to network_change_power_url(id: @application.id), notice: I18n.t('models.network_new_customer_application.actions.status.changed')

@@ -2,16 +2,23 @@ class GnercWorker
   include Sidekiq::Worker
 
   def perform(func, type, parameters)
-  	service = "Newcust"
+    case type 
+      when 7 then
+        service = "Newcust"
+      when 4 then
+        service = "Docflow4"
+    end
+  	
   	clazz = "Gnerc::#{service}".constantize
   	clazz.connection
 
+    newcust = clazz.where(letter_number: parameters["letter_number"]).first
+
   	if func == "appeal"
   		stage = 1
-  		newcust = clazz.new(parameters)
+  		newcust = clazz.new(parameters) if newcust.blank?
   	else
   		stage = 2
-  		newcust = clazz.where(letter_number: parameters["letter_number"]).first
   		newcust.update_attributes!(parameters.except("letter_number")) if newcust.present?
   	end
     if newcust.present?

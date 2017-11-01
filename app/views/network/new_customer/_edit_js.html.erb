@@ -1,7 +1,9 @@
 <script type="text/javascript">
   $(function() {
     resetForeignerField();
+    resetMicroField();
     $('#network_new_customer_application_rs_foreigner').click(resetForeignerField);
+    $('#network_new_customer_application_micro').click(resetMicroField);
     $('#network_new_customer_application_base_type').change(resetBaseApplicationType);
   });
 
@@ -12,6 +14,16 @@
     } else {
       $('#network_new_customer_application_rs_name').hide();
       $('#network_new_customer_application_rs_tin').focus();
+    }
+  };
+
+  var resetMicroField = function() {
+    if ($('#network_new_customer_application_micro').is(':checked')) {
+      $('#fld_network_new_customer_application_micro_voltage').show();
+      $('#fld_network_new_customer_application_micro_power').show();
+    } else {
+      $('#fld_network_new_customer_application_micro_voltage').hide();
+      $('#fld_network_new_customer_application_micro_power').hide();
     }
   };
 </script>

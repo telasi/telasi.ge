@@ -14,6 +14,7 @@ class Network::NewCustomerApplication
   DURATION_STANDARD = 2
   DURATION_HALF     = 1
   DURATION_DOUBLE   = 3
+  ABONENT_AMOUNT_DEFAULT = 1
 
   GNERC_SIGNATURE_FILE = 'NewCustomer_'
   GNERC_ACT_FILE = 'act'
@@ -55,6 +56,7 @@ class Network::NewCustomerApplication
   # გამოთვლის დეტალები და ბილინგთან კავშირი
   field :need_resolution,  type: Mongoid::Boolean, default: true
   field :duration, type: Integer, default: DURATION_STANDARD
+  field :abonent_amount, type: Integer, default: ABONENT_AMOUNT_DEFAULT
 
   field :voltage,     type: String
   field :power,       type: Float
@@ -100,6 +102,11 @@ class Network::NewCustomerApplication
 
   # since Nov,2014: use business days!
   field :use_business_days, type: Mongoid::Boolean, default: false
+
+  # micropower
+  field :micro, type: Mongoid::Boolean, default: false
+  field :micro_voltage,     type: String
+  field :micro_power,       type: Float
 
   embeds_many :items, class_name: 'Network::NewCustomerItem', inverse_of: :application
   has_many :files, class_name: 'Sys::File', as: 'mountable'
@@ -776,32 +783,10 @@ class Network::NewCustomerApplication
         case self.voltage
           when VOLTAGE_220 then
             gnerc_voltage = GNERC_VOLTAGE_220
-        #     gnerc_power = '1-10'
           when VOLTAGE_380 then
             gnerc_voltage = GNERC_VOLTAGE_380
-        #     case self.power
-        #       when 1..10 then gnerc_power = '1-10'
-        #       when 11..30 then gnerc_power = '11-30'
-        #       when 31..50 then gnerc_power = '31-50'
-        #       when 51..80 then gnerc_power = '51-80'
-        #       when 81..100 then gnerc_power = '81-100'
-        #       when 101..120 then gnerc_power = '101-120'
-        #       when 121..200 then gnerc_power = '121-200'
-        #       when 201..320 then gnerc_power = '201-320'
-        #       when 321..500 then gnerc_power = '321-500'
-        #       when 501..800 then gnerc_power = '501-800'
-        #       when 801..1000 then gnerc_power = '801-1000'
-        #     end
            when VOLTAGE_610 then
-             gnerc_voltage = GNERC_VOLTAGE_610
-        #     case self.power
-        #       when 1..500 then gnerc_power = '1-500'
-        #       when 501..1000 then gnerc_power = '501-1000'
-        #       when 1001..1500 then gnerc_power = '1001-1500'
-        #       when 1501..2000 then gnerc_power = '1501-2000'
-        #       when 2001..3000 then gnerc_power = '2000-3000'
-        #       when 3001..5000 then gnerc_power = '3001-5000'
-        #     end
+            gnerc_voltage = GNERC_VOLTAGE_610
         end
 
         parameters = { letter_number:       self.number,
@@ -813,6 +798,46 @@ class Network::NewCustomerApplication
                        attach_7_1:          content,
                        attach_7_1_filename: file.file.filename 
                      }
+
+        if self.abonent_amount > 2
+          parameters.merge!({ building:            1, 
+                              abonent_amount:      self.abonent_amount })
+        end
+
+        if self.micro
+          case self.micro_voltage
+            when VOLTAGE_220 then
+              gnerc_micro_voltage = GNERC_VOLTAGE_220
+              gnerc_micro_power   = '1..10'
+            when VOLTAGE_380 then
+              gnerc_micro_voltage = GNERC_VOLTAGE_380
+              gnerc_micro_power   = case self.micro_power
+                                      when 1..10 then '1..10'
+                                      when 11..30 then '11..30'
+                                      when 31..50 then '31..50'
+                                      when 51..80 then '51..80'
+                                      when 81..100 then '81..100'
+                                      when 101..120 then '101..120'
+                                      when 121..200 then '121..200'
+                                      when 201..320 then '201..320'
+                                      when 321..500 then '321..500'
+                                      when 501..800 then '501..800'
+                                      when 801..1000 then '801..1000'
+                                      when 1001..Float::INFINITY then '>1000'
+                                    end
+             when VOLTAGE_610 then
+              gnerc_micro_voltage = GNERC_VOLTAGE_610
+              gnerc_micro_power   = case self.micro_power
+                                      when 1..500 then '1..500'
+                                      when 501..1000 then '501..1000'
+                                      when 1001..Float::INFINITY then '>1000'
+                                    end
+          end
+
+          parameters.merge!({ voltage_2:    gnerc_micro_voltage, 
+                              power_2:      gnerc_micro_power })
+
+        end
 
         GnercWorker.perform_async("appeal", 7, parameters)
       end

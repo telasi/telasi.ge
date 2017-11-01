@@ -94,6 +94,15 @@ module Network::NewCustomerHelper
     }
   end
 
+  def micro_source_collection
+    {
+      'მზის' => Network::ApplicationBase::BASE_DOCUMENT,
+      'ქარის' => Network::ApplicationBase::BASE_DOCUMENT,
+      'ჰიდრო' => Network::ApplicationBase::BASE_DOCUMENT,
+      'სხვა' => Network::ApplicationBase::BASE_DOCUMENT
+    }
+  end
+
   def new_customer_form(application, opts = {})
     forma_for application, title: opts[:title], collapsible: true, icon: opts[:icon] do |f|
       f.tab do |t|
@@ -117,11 +126,19 @@ module Network::NewCustomerHelper
         t.text_field  :bank_account, width: 300 #, required: true
         t.combo_field :voltage, collection: voltage_collection, empty: false, required: true
         t.number_field :power, after: 'kWh', width: 100, required: true
+        t.number_field :abonent_amount, width: 50, required: true
         # t.boolean_field :need_resolution, required: true
         t.combo_field :duration, collection: duration_collection, empty: false, required: true, label: 'შესრულების ხანგრძლიობა'
         t.text_field :notes, width: 500
         t.text_field :oqmi
-        t.text_field :proeqti
+        t.text_field :proeqti, class: 'micro'
+        t.boolean_field :micro, label: 'მიკროსიმძლავრის ელექტროსადგურის გამანაწილებელ ქსელზე მიერთების მოთხოვნა'
+        # t.number_field :microstation_number, label: 'მიკრო სიმძლავრის ელექტროსადგურების რაოდენობა'
+        # t.combo_field :micro_source, label: 'მიკროსიმძლავრის ელექტროსადგურის პირველადი ენერგიის წყარო', collection: micro_source_collection, empty: '--'
+        t.combo_field :micro_voltage, collection: voltage_collection, empty: false, label: 'მიკროსიმძლავრის მოთხოვნილი ძაბვა' 
+        t.number_field :micro_power, after: 'kWh', width: 100, label: 'მიკროსიმძლავრის მოთხოვნილი სიმძლავრე'
+        # t.text_field :micro_model, label: 'მიკროსიმძლავრის ელექტროსადგურის მწარმოებელი და მოდელი (თუ ცნობილია)'
+        # t.text_field :micro_scheme, label: 'მიკროსიმძლავრის ელექტროსადგურის ქსელში ჩართვის სქემა:', collection: { 'სინქრონული' => 0, 'ინვერტორით' => 1}
       end
       f.submit (opts[:submit] || opts[:title])
       f.bottom_action opts[:cancel_url], label: 'გაუქმება', icon: '/icons/cross.png'
