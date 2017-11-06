@@ -62,6 +62,7 @@ class Network::ChangePowerApplication
   field :amount,      type: Float, default: 0
   field :minus_amount,type: Float, default: 0
   field :customer_id, type: Integer
+  field :real_customer_id, type: Integer
   # dates
   field :send_date, type: Date
   field :start_date, type: Date
@@ -136,6 +137,7 @@ class Network::ChangePowerApplication
   end
   def bank_name; Bank.bank_name(self.bank_code) if self.bank_code.present? end
   def customer; Billing::Customer.find(self.customer_id) if self.customer_id.present? end
+  def real_customer; Billing::Customer.find(self.real_customer_id) if self.real_customer_id.present? end
   def self.status_name(status); I18n.t("models.network_change_power_application.status_#{status}") end
   def self.status_icon(status)
     case status
@@ -331,7 +333,7 @@ class Network::ChangePowerApplication
       when STATUS_DEFAULT   then self.send_date = nil
       when STATUS_SENT      then self.send_date  = self.start_date = Date.today
       when STATUS_CONFIRMED then 
-        raise 'აარჩიეთ აბონენტი' if self.customer_id.blank?
+        raise 'აარჩიეთ რეალური აბონენტი' if self.real_customer_id.blank?
         self.production_date = get_fifth_day
         self.production_enter_date = Date.today
 
@@ -399,8 +401,8 @@ class Network::ChangePowerApplication
 
         parameters = { letter_number:       self.number,
                        abonent:             self.rs_name,
-                       abonent_number:      self.customer.accnumb,
-                       abonent_type:        self.customer.abonent_type, 
+                       abonent_number:      self.real_customer.accnumb,
+                       abonent_type:        self.real_customer.abonent_type, 
                        abonent_address:     self.address,
                        appeal_date:         self.start_date,
                        attach_4_1:          content,
