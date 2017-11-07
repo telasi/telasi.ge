@@ -122,6 +122,8 @@ class Network::ChangePowerApplication
       not not (/^(2CNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number)
     elsif type == TYPE_HIGH_VOLTAGE
       not not (/^(HCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number)
+    elsif type == TYPE_SUB_CUSTOMER
+      not not (/^(TCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number)
     else
       false
     end
