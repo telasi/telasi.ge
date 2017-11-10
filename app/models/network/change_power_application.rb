@@ -183,7 +183,7 @@ class Network::ChangePowerApplication
     self.save
   end
 
-  def can_change_amount?; self.type != TYPE_CHANGE_POWER end
+  def can_change_amount?; not [TYPE_CHANGE_POWER, TYPE_SAME_PACK].include?(self.type) end
 
   def prepayment_factura_sent?
     prepayment_facturas.present?
