@@ -195,6 +195,8 @@ TelasiGe::Application.routes.draw do
       match '/edit_control_item/:id', action: 'edit_control_item', as: 'new_customer_edit_control_item', via: ['get','post']
       delete '/delete_control_item/:id', action: 'delete_control_item', as: 'new_customer_delete_control_item'
       post '/toggle_need_factura/:id', action: 'toggle_need_factura', as: 'new_customer_toggle_need_factura'
+      post '/add_operation', action: 'add_operation', as: 'new_customer_add_operation'
+      post '/remove_operation', action: 'remove_operation', as: 'new_customer_remove_operation'
     end
     scope '/change_power', controller: 'change_power' do
       get '/', action: 'index', as: 'change_power_applications'
@@ -203,6 +205,7 @@ TelasiGe::Application.routes.draw do
       match '/new', action: 'new', as: 'add_change_power', via: ['get', 'post']
       match '/edit/:id', action: 'edit', as: 'edit_change_power', via: ['get', 'post']
       get   '/:id', action: 'show', as: 'change_power'
+      get   '/change_power_show/:id', action: 'change_power_show', as: 'change_power_change_power_show'
       get '/sign/:id', action: 'sign', as: 'change_power_sign'
       delete '/delete/:id', action: 'delete', as: 'delete_change_power'
       # status operations
