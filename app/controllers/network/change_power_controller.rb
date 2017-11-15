@@ -200,7 +200,11 @@ class Network::ChangePowerController < ApplicationController
       @application.signed = true
       @application.save
     else
-      binary = render_to_string 'show', formats: ['pdf']
+      if @application.type == Network::ChangePowerApplication::TYPE_CHANGE_POWER 
+        binary = render_to_string 'change_power_show', formats: ['pdf']
+      else
+        binary = render_to_string 'show', formats: ['pdf']
+      end
       name = "ChangePower_#{params[:id]}.pdf"
       workstepId = Sys::Signature.send("changepower", name, binary, params[:id])
       url = Sys::Signature::WORKSTEP_SIGN
