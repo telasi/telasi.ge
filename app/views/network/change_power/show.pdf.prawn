@@ -85,5 +85,4 @@ prawn_document(page_size: 'A4', margin: [40, 40]) do |pdf|
     column(0..1).style borders: []
     row(1).column(1).style borders: [:top], size: 6, padding: 0, align: :center
   end
-  pdf.text '9.1. ძაბვის საფეხური: □220ვ., □380ვ. ან □6/10კვ; სიმძლავრე ----კვტ;'
 end
