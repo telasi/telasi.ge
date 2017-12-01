@@ -457,7 +457,7 @@ class Network::ChangePowerApplication
     when TYPE_RESERVATION then 5
     when TYPE_TEMP_BUILD then 26
     when TYPE_ABONIREBA then 23
-    when TYPE_MICROPOWER then 
+    when TYPE_MICROPOWER then 31
     when TYPE_SAME_PACK then 25
     when TYPE_HIGH_VOLTAGE then 23
     when TYPE_SUB_CUSTOMER then 28
