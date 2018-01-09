@@ -856,8 +856,8 @@ class Network::NewCustomerApplication
           content = File.read(file.file.file.file)
           content = Base64.encode64(content)
           parameters = { letter_number:       self.number,
-                         attach_7_2:          content,
-                         attach_7_2_filename: file.file.filename
+                         attach_7_4:          content,
+                         attach_7_4_filename: file.file.filename
                        }
         else
           file = self.files.select{ |x| x.file.filename[0..4] == GNERC_REFAB_FILE }.first
