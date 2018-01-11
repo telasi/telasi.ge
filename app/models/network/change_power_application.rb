@@ -416,7 +416,7 @@ class Network::ChangePowerApplication
         GnercWorker.perform_async("appeal", 4, parameters)
       end
     else 
-      file = self.files.select{ |x| x.file.filename[0..2] == GNERC_RES_FILE }.first
+      file = self.files.select{ |x| x.file.filename[0..2] == GNERC_ACT_FILE }.first
       if file.present?
         content = File.read(file.file.file.file)
         content = Base64.encode64(content)
@@ -425,36 +425,25 @@ class Network::ChangePowerApplication
                        attach_4_2_filename: file.file.filename,
                        affirmative:         1
                      }
-      else 
-        file = self.files.select{ |x| x.file.filename[0..2] == GNERC_ACT_FILE }.first
+      else
+        file = self.files.select{ |x| x.file.filename[0..2] == GNERC_DEF_FILE }.first
         if file.present?
           content = File.read(file.file.file.file)
           content = Base64.encode64(content)
           parameters = { letter_number:       self.number,
                          attach_4_2:          content,
                          attach_4_2_filename: file.file.filename,
-                         affirmative:         1
+                         affirmative:         0
                        }
         else
-          file = self.files.select{ |x| x.file.filename[0..2] == GNERC_DEF_FILE }.first
-          if file.present?
-            content = File.read(file.file.file.file)
-            content = Base64.encode64(content)
-            parameters = { letter_number:       self.number,
-                           attach_4_2:          content,
-                           attach_4_2_filename: file.file.filename,
-                           affirmative:         0
-                         }
-          else
-            file = self.files.select{ |x| x.file.filename[0..4] == GNERC_REFAB_FILE }.first
-            content = File.read(file.file.file.file)
-            content = Base64.encode64(content)
-            parameters = { letter_number:       self.number,
-                           attach_4_2:          content,
-                           attach_4_2_filename: file.file.filename,
-                           affirmative:         0
-                         }
-          end
+          file = self.files.select{ |x| x.file.filename[0..4] == GNERC_REFAB_FILE }.first
+          content = File.read(file.file.file.file)
+          content = Base64.encode64(content)
+          parameters = { letter_number:       self.number,
+                         attach_4_2:          content,
+                         attach_4_2_filename: file.file.filename,
+                         affirmative:         0
+                       }
         end
       end
       GnercWorker.perform_async("answer", 4, parameters)

@@ -262,6 +262,8 @@ class Network::ChangePowerController < ApplicationController
       @file = Sys::File.new(params.require(:sys_file).permit(:file))
       if @file.save
         @application.files << @file
+        send_to_gnerc(@application, @file) if @file.file.filename[0..2] == Network::ChangePowerApplication::GNERC_RES_FILE
+
         redirect_to network_change_power_url(id: @application.id, tab: 'files'), notice: I18n.t('models.network_new_customer_application.actions.file.loaded')
       end
     else
@@ -422,4 +424,14 @@ class Network::ChangePowerController < ApplicationController
   private
 
   def change_power_params; params.require(:network_change_power_application).permit(:base_type, :base_number, :need_factura, :work_by_telasi, :type, :number, :note, :rs_tin, :rs_foreigner, :rs_name, :vat_options, :mobile, :email, :region, :address, :work_address, :address_code, :bank_code, :bank_account, :voltage, :power, :old_voltage, :old_power, :customer_id, :real_customer_id, :proeqti, :oqmi, :zero_charge) end
+
+  def send_to_gnerc(application, file)
+    content = File.read(file.file.file.file)
+    content = Base64.encode64(content)
+    parameters = { letter_number:       application.number,
+                   attach_4_2:          content,
+                   attach_4_2_filename: file.file.filename,
+                   affirmative:         1 }
+    GnercWorker.perform_async("answer", 4, parameters)
+  end
 end
