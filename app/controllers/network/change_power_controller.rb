@@ -32,6 +32,7 @@ class Network::ChangePowerController < ApplicationController
       rel = rel.where(factura_number: @search[:factura_number].to_i) if @search[:factura_number].present?
       rel = rel.where(address: @search[:address].mongonize) if @search[:address].present?
       rel = rel.where(work_address: @search[:work_address].mongonize) if @search[:work_address].present?
+      rel = rel.where(user: Sys::User.where(email: search[:user]).first) if search[:user].present?
       if @search[:customer_id].present?
         rel = rel.where(customer_id: nil) if @search[:customer_id] == 'no'
         rel = rel.where(:customer_id.ne => nil) if @search[:customer_id] == 'yes'
