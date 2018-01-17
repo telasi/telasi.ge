@@ -33,8 +33,8 @@ class Network::ChangePowerController < ApplicationController
       rel = rel.where(address: @search[:address].mongonize) if @search[:address].present?
       rel = rel.where(work_address: @search[:work_address].mongonize) if @search[:work_address].present?
       rel = rel.where(user: Sys::User.where(email: search[:user]).first) if search[:user].present?
-      rel = rel.where(:created_at.gte => search[:created_at]) if search[:created_at].present?
-      rel = rel.where(:created_at.lte => search[:created_at]) if search[:created_at].present?
+      rel = rel.where(:created_at.gte => search[:created_at_d1]) if search[:created_at_d1].present?
+      rel = rel.where(:created_at.lte => search[:created_at_d2]) if search[:created_at_d2].present?
       if @search[:customer_id].present?
         rel = rel.where(customer_id: nil) if @search[:customer_id] == 'no'
         rel = rel.where(:customer_id.ne => nil) if @search[:customer_id] == 'yes'
