@@ -48,7 +48,10 @@
         c.text_field 'factura_number', width: 100
       end
       f.text_field 'user', label: t('models.sys_user.title.single')
-      f.text_field 'created_at', label: 'created_at'
+      f.complex_field label: 'created_at' do |c|
+        c.date_field 'created_at_d1'
+        c.date_field 'created_at_d2'
+      end
     end
   end
 end %>
