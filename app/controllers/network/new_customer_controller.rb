@@ -37,6 +37,8 @@ class Network::NewCustomerController < ApplicationController
       rel = rel.where(factura_number: search[:factura_number].to_i) if search[:factura_number].present?
       rel = rel.where(personal_use: search[:personal_use]) if search[:personal_use].present?
       rel = rel.where(user: Sys::User.where(email: search[:user]).first) if search[:user].present?
+      rel = rel.where(:created_at.gte => search[:created_at]) if search[:created_at].present?
+      rel = rel.where(:created_at.lte => search[:created_at]) if search[:created_at].present?
       if search[:customer_id].present?
         rel = rel.where(customer_id: nil) if search[:customer_id] == 'no'
         rel = rel.where(:customer_id.ne => nil) if search[:customer_id] == 'yes'
