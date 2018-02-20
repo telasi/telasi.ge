@@ -9,7 +9,7 @@ wb.add_worksheet(name: "new-customers") do |sheet|
     'ბანკი', 'ანგარიშის #',
     "აბ.#", "აბონენტი",
     "თანხა", "ვადა (დღე)", "დარჩენილია", "ჯარიმა I", "ჯარიმა II", "ჯარიმა III",
-    "სიმძლავრე", "ძაბვა"
+    "სიმძლავრე", "ძაბვა", "პროექტის #"
   ]
   @applications.each do |app|
     sheet.add_row [app.number, app.status_name, app.rs_tin, app.rs_name, app.vat_name,
@@ -19,7 +19,7 @@ wb.add_worksheet(name: "new-customers") do |sheet|
       "#{app.bank_name} (#{app.bank_code})", app.bank_account,
       app.customer ? app.customer.accnumb.to_ka : "", app.customer ? app.customer.custname.to_ka : "",
       app.amount, app.days, app.remaining, app.penalty1, app.penalty2, app.penalty3,
-      app.power, app.voltage
+      app.power, app.voltage, app.proeqti
     ]
   end
 end
