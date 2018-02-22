@@ -1,5 +1,14 @@
 <% with_actions = false unless defined?(with_actions) %>
 <% with_sms = (not not defined?(registration)) %>
+<% deadline = ''
+   last_bill_date = ''
+   if customer.cut_deadline.present?
+     deadline = customer.cut_deadline.strftime('%d/%m/%Y')
+   end
+   if customer.last_bill_date.present?
+     last_bill_date = customer.last_bill_date.strftime('%d/%m/%Y')
+   end
+%>
 <ul class="list-group">
   <li class="list-group-item">
     <div class="pull-right">
@@ -91,8 +100,8 @@
             :trash_balance_p => customer.trash_balance,
             :current_water_balance_p => customer.current_water_balance,
             :last_bill_number_p => customer.last_bill_number,
-            :last_bill_date_p => customer.last_bill_date.strftime('%d/%m/%Y'),
-            :cut_deadline_p => customer.cut_deadline.strftime('%d/%m/%Y'),
+            :last_bill_date_p => last_bill_date,
+            :cut_deadline_p => deadline,
             :accnumb_p => customer.accnumb.to_ka,
             :custname_p => customer.custname.to_ka,
             :t_balance_text_p => t('models.billing_customer.balance'),
