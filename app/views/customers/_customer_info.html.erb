@@ -74,7 +74,7 @@
           <code>№<%= customer.last_bill_number %></code>
           <%= customer.last_bill_date.strftime('%d/%m/%Y') %>
         <% else %>
-          <span class="text-muted"><%= t('models.general.undefined') %></span>
+          <span class="text-muted">&nbsp;</span>
         <% end %>
     </div>
     <%= t('models.billing_customer.last_bill') %>
@@ -85,7 +85,7 @@
       <% if customer.cut_deadline %>
         <%= customer.cut_deadline.strftime('%d/%m/%Y') %>        
       <% else %>
-        <span class="text-muted"><%= t('models.general.undefined') %></span>
+        <span class="text-muted">&nbsp;</span>
       <% end %>
 
     </div>
