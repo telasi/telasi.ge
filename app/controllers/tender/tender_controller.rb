@@ -1,5 +1,8 @@
 # -*- encoding : utf-8 -*-
 class Tender::TenderController < ApplicationController
+
+  require 'will_paginate/array'
+
   before_action :validate_tender_login, only: [:show, :download_file] 
   #before_action :validate_tender_admin, only: [:report, :item, :delete_file]
 
@@ -42,20 +45,36 @@ class Tender::TenderController < ApplicationController
   		}
   	}
 
-     @down = downloads.map_reduce(map_down,reduce_down).out(inline: true)
-     @down.each do |d|
-       @tender = tenders.where(nid: d['_id']['nid']).first
-       @user = tenderusers.where(_id: d['_id']['tenderuser']).first
-       if @user && @tender
-        @result << { organization_name: @user.organization_name,
-                     organization_type: @user.organization_type,
-                     director_name: @user.director_name,
-                     tenderno: @tender.tenderno,
-                     count: d['value']['count'],
-                     nid: @tender.nid,
-                  }
-       end
-     end
+     #@down = downloads.map_reduce(map_down,reduce_down).out(inline: true)
+     @down = Tender::Download.collection.aggregate([
+
+                                                    {"$group" => { 
+                                                        "_id" => { 
+                                                          "tenderuser" => "$tenderuser_id", 
+                                                          "nid" => "$nid" 
+                                                        }, 
+                                                        "count" => { 
+                                                          "$sum" => 1 
+                                                         } 
+                                                        } 
+                                                    }])
+
+    # @down.each do |d|
+    #   @tender = tenders.where(nid: d['_id']['nid']).first
+    #   @user = tenderusers.where(_id: d['_id']['tenderuser']).first
+    #   if @user && @tender
+    #    @result << { organization_name: @user.organization_name,
+    #                  organization_type: @user.organization_type,
+    #                  director_name: @user.director_name,
+    #                  tenderno: @tender.tenderno,
+    #                  #count: d['value']['count'],
+    #                  count: d['count'],
+    #                  nid: @tender.nid,
+    #               }
+    #    end
+    #  end
+
+     @result = @down.paginate(page: params[:page], per_page: 20)
 
   end
 
@@ -129,7 +148,7 @@ class Tender::TenderController < ApplicationController
     if @tender.files
    	 @tender.files.destroy
     end
-    @tender.destroy
+    #@tender.destroy
    end
    redirect_to tender_tender_item_url(nid: params[:nid]) 
   end
