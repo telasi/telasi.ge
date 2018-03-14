@@ -21,7 +21,7 @@ class Customer::DebtNotification
 
   def self.send_notifications
     notify_registered_customers
-    #notify_mainstream_customers
+    notify_mainstream_customers
   end
 
   def self.notify_registered_customers
