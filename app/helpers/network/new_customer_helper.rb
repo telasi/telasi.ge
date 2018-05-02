@@ -236,6 +236,7 @@ module Network::NewCustomerHelper
           c.text_field :bank_code, tag: 'code'
           c.text_field :bank_account
         end
+        t.text_field :abonent_amount, required: true
         t.complex_field label: 'ძაბვა / სიმძლავრე', required: true do |c|
           c.text_field :voltage, tag: 'code'
           c.text_field :unit, after: '/'
