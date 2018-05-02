@@ -175,81 +175,6 @@ def page2(pdf)
   pdf.text '5. გამანაწილებელ ქსელზე მიერთების საფასური (შეთავაზებული პაკეტის მიხედვით): ______'
 end
 
-def page2_multi(pdf)
-  pdf.text 'ერთი ან ორი აბონენტის მიერთების მოთხოვნის შემთხვევაში □', size: 15, align: :center
-  pdf.text '(ივსება მხოლოდ მიერთების შედეგად  ერთი ან ერთდროულად ორი აბონენტის რეგისტრაციის მოთხოვნის შემთხვევაში)', size: 8, align: :center
-  pdf.move_down 5
-  pdf.text 'განაცხადით მოთხოვნილი აბონენტთა რაოდენობა: ☒ ერთი; □ ორი.'
-  #pdf.move_down 20
-  width = pdf.bounds.width / 2
-  pdf.table [['-1-', '-2-'],
-    ['1. დაზუსტებული მისამართი, სადაც უნდა მოხდეს ელექტრომომარაგება:'] * 2,
-    ['', ''],
-    ['2.აბონენტის (მოხმარებული ელ. ენერგიის საფასურის გადახდაზე პასუხისმგებელი პირის) სახელი, გვარი ან იურიდიული პირის სახელი:'] * 2,
-    ['', ''],
-    ['2.1. პირადი ნომერი ან საიდენტიფიკაციო კოდი:'] * 2,
-    ['', ''],
-    ['3. ელექტროენერგიის მოხმარების მიზანი:'] * 2,
-    ['□ საყოფაცხოვრებო, □ არასაყოფაცხოვრებო.', '□ საყოფაცხოვრებო, □ არასაყოფაცხოვრებო.'],
-    ['4. უძრავი ქონების საკადასტრო კოდი (სადაც უნდა მოხდეს ელექტრომომარაგება):'] * 2,
-    ['', ''],
-    ['5. მოთხოვნილი ძაბვის საფეხური:'] * 2,
-    ['□ 220ვ;  □ 380ვ;  □ 6/10კვ', '□ 220ვ;  □ 380ვ;  □ 6/10კვ'],
-    ['6. მოთხოვნილი სიმძლავრე:'] * 2,
-    ['', ''],
-    ['7. გამანაწილებელ ქსელზე მიერთების საფასური (შეთავაზებული პაკეტის მიხედვით):'] * 2,
-    ['', ''],
-    ['8. ივსება, მიკროსიმძლავრის ელექტროსადგურის მიერთების მოთხოვნის შემთხვევაში: □'] * 2,
-    ['8.1. მიკროსიმძლავრის ელექტროსადგურის დადგმული სიმძლავრე (კვტ): ___________'] * 2,
-    ['8.2. მიკროსიმძლავრის ელექტროსადგურის მიერთების საფასური: _________________.'] * 2,
-  ], column_widths: [ width, width ] do |t|
-    t.column(0).style borders: [:left, :right]
-    t.column(1).style borders: [:right]
-    t.row(0).style borders: [:left, :right, :top]
-    t.row(2).style borders: [:left, :right, :bottom], align: :center, size: 10
-    t.row(4).style borders: [:left, :right, :bottom], align: :center, size: 10
-    t.row(6).style borders: [:left, :right, :bottom], align: :center, size: 10
-    t.row(8).style borders: [:left, :right, :bottom], align: :center, size: 10
-    t.row(10).style borders: [:left, :right, :bottom], align: :center, size: 10
-    t.row(12).style borders: [:left, :right, :bottom], align: :center, size: 10
-    t.row(14).style borders: [:left, :right, :bottom], align: :center, size: 10
-    t.row(16).style borders: [:left, :right, :bottom], align: :center, size: 10
-    t.row(19).style borders: [:left, :right, :bottom], align: :justify, size: 10
-  end
-  pdf.move_down 3
-  pdf.text 'შენიშვნა: საყოფაცხოვრებო მომხმარებლის შემთხვევაში – უძრავი ქონების საკადასტრო კოდის ნაცვლად, შესაძლებელია, განაცხადზე თანდართულ იქნეს ნებისმიერი დოკუმენტი, რომელიც წარმოადგენს საკუთრების უფლების რეგისტრაციის საფუძველს.'
-  pdf.move_down 15
-  pdf.text 'II. ერთდროულად სამი ან სამზე მეტი აბონენტის მიერთების მოთხოვნის შემთხვევაში ☒', size: 15, align: :center
-  pdf.text '(ივსება მხოლოდ მიერთების შედეგად ერთდროულად სამი ან სამზე მეტი აბონენტთა რეგისტრაციის მოთხოვნის შემთხვევაში)', align: :center, size: 6
-  pdf.move_down 7
-  pdf.table [[{ content: '1. განაცხადით მოთხოვნილი აბონენტთა (ინდ.აღრიცხვა) საერთო რაოდენობა: ', height: @table_height }, { content: @application.abonent_amount.to_s, height: @table_height }]],
-    column_widths: [360, 140] do |t|
-    t.column(0).style borders: [], padding: 0
-    t.column(1).style borders: [], padding: 0
-  end
-  pdf.move_down 7
-  pdf.text '2. საყოფაცხოვრებო და არასაყოფაცხოვრებო აბონენტთა რაოდენობა: საყოფაცხოვრებო ____ არა საყოფაცხოვრებო ___ განცალკევებული აღრიცხვა ___ (განათება, ლიფტი და სხვა მიზნებისთვის)'
-  pdf.move_down 7
-  pdf.table [[{ content: '3. უძრავი ქონების საკადასტრო კოდი (სადაც უნდა მოხდეს ელექტრომომარაგება): ', height: @table_height }, { content: @application.address_code, height: @table_height }]],
-    column_widths: [380, 120] do |t|
-    t.column(0).style borders: [], padding: 0
-    t.column(1).style borders: [], padding: 0
-  end
-  pdf.move_down 7
-  pdf.text '4. საცხოვრებელი ბინის, საწარმოს ან სხვა სახის ობიექტის (ან ობიექტების) სამშენებლო-საპროექტო დოკუმენტაციით'
-  pdf.table [[{ content: 'განსაზღვრული (დადგენილი) მისაერთებელი სიმძლავრე: ', height: @table_height }, { content: @application.voltage, height: @table_height }]],
-    column_widths: [260, 240] do |t|
-    t.column(0).style borders: [], padding: 0
-    t.column(1).style borders: [], padding: 0
-  end
-  pdf.move_down 7
-  pdf.table [[{ content: '5. გამანაწილებელ ქსელზე მიერთების საფასური (შეთავაზებული პაკეტის მიხედვით): ', height: @table_height }, { content: "#{@application.amount} GEL", height: @table_height }]],
-    column_widths: [380, 120] do |t|
-    t.column(0).style borders: [], padding: 0
-    t.column(1).style borders: [], padding: 0
-  end
-end
-
 def page3(pdf)
   pdf.text 'III. თანდართული დოკუმენტაცია:', size: 15, align: :center
   pdf.move_down 20
@@ -333,11 +258,7 @@ end
 prawn_document(page_size: 'A4', margin: [30, 30]) do |pdf|
   page1(pdf)
   pdf.start_new_page
-  if @application.abonent_amount > 2
-    page2_multi(pdf)
-  else 
-    page2(pdf)
-  end
+  page2(pdf)
   pdf.start_new_page
   page3(pdf)
   pdf.start_new_page(layout: :landscape)
