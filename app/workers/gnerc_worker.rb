@@ -24,8 +24,9 @@ class GnercWorker
     if newcust.present?
   	  newcust.stage = stage
   	  newcust.save!
-      queue = Gnerc::SendQueue.new(service: service, service_id: newcust.id, stage: stage, created_at: Time.now)
-      queue.save!
+      if Gnerc::SendQueue.new(service: service, service_id: newcust.id, stage: stage).empty?
+       Gnerc::SendQueue.new(service: service, service_id: newcust.id, stage: stage, created_at: Time.now).save!
+      end
     end
   end
 
