@@ -26,34 +26,36 @@ end %>
       </thead>
       <tbody>
         <% 
-        #raise @down.inspect
-        @result.each do |item| %>
+          @result.each do |item| 
+          @user = Tender::Tenderuser.find(item[:_id][:tenderuser])
+          @tender = Tender::Tender.where(nid: item['_id']['nid']).first
+        %>
         <tr>
           <td>
             <div>
               <span id="organization_name">
-                <%= item[:organization_name] %>
+                <%= @user[:organization_name] %>
               </span>
             </div>
           </td>
           <td>
             <div>
               <span id="organization_type">
-                <%= I18n.t("tender.organization_types.#{item[:organization_type]}") %>
+                <%= I18n.t("tender.organization_types.#{@user[:organization_type]}") %>
               </span>
             </div>
           </td>
           <td>
             <div>
               <span id="director_name">
-                <%= item[:director_name] %>
+                <%= @user[:director_name] %>
               </span>
             </div>
           </td>
           <td>
             <div>
               <span id="tender">
-                <a href="http://telasi.ge/ge/tenders/<%=item[:nid]%>"><%= item[:tenderno] %></a>
+                <a href="http://telasi.ge/ge/tenders/<%=item[:nid]%>"><%= @tender.tenderno %></a>
               </span>
             </div>
           </td>
@@ -70,3 +72,5 @@ end %>
     </table>
   </div>
 </div>
+
+<%= will_paginate @result %>

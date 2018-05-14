@@ -20,34 +20,48 @@ class Tender::TenderController < ApplicationController
 
     @result = []
 
-  	if @search 
-        tenders = tenders.where(tenderno: @search[:tenderno].mongonize) if @search[:tenderno].present?
+  	# if @search 
+   #      tenders = tenders.where(tenderno: @search[:tenderno].mongonize) if @search[:tenderno].present?
+
+   #      tenderusers = tenderusers.where(organization_name: @search[:organization_name].mongonize) if @search[:organization_name].present?
+   #      tenderusers = tenderusers.where(organization_type: @search[:organization_type].mongonize) if @search[:organization_type].present?
+   #      tenderusers = tenderusers.where(director_name: @search[:director_name].mongonize) if @search[:director_name].present?
+   #      tenderusers = tenderusers.where(rs_tin: @search[:rs_tin]) if @search[:rs_tin].present?
+  	# end
+  	
+  	# map_down = %Q{
+  	# 	function() {
+	  # 			 emit({tenderuser: this.tenderuser_id, nid: this.nid}, {count: 1})
+			# 	}
+  	# }
+
+  	# reduce_down = %Q{
+  	# 	function(key, values) {
+   #      var result = {organization_name: 'd', count:0}
+  	# 		values.forEach(function(value) {
+   #          result.count += value.count;
+  	# 		});
+			# return result;
+  	# 	}
+  	# }
+
+    match_patern = {}
+    if @search 
+        match_patern = { "nid" => { "$in" => tenders.where(tenderno: @search[:tenderno].mongonize).map{ |x| x.nid }}} if @search[:tenderno].present?
 
         tenderusers = tenderusers.where(organization_name: @search[:organization_name].mongonize) if @search[:organization_name].present?
         tenderusers = tenderusers.where(organization_type: @search[:organization_type].mongonize) if @search[:organization_type].present?
         tenderusers = tenderusers.where(director_name: @search[:director_name].mongonize) if @search[:director_name].present?
         tenderusers = tenderusers.where(rs_tin: @search[:rs_tin]) if @search[:rs_tin].present?
-  	end
-  	
-  	map_down = %Q{
-  		function() {
-	  			 emit({tenderuser: this.tenderuser_id, nid: this.nid}, {count: 1})
-				}
-  	}
 
-  	reduce_down = %Q{
-  		function(key, values) {
-        var result = {organization_name: 'd', count:0}
-  			values.forEach(function(value) {
-            result.count += value.count;
-  			});
-			return result;
-  		}
-  	}
+        if tenderusers.count > 0 and ( @search[:organization_name].present? or @search[:organization_type].present? or @search[:director_name].present? or @search[:rs_tin].present?)
+          match_patern.merge!({ "tenderuser_id" => { "$in" => tenderusers.map{ |x| x._id }}})
+        end
+    end
 
      #@down = downloads.map_reduce(map_down,reduce_down).out(inline: true)
      @down = Tender::Download.collection.aggregate([
-
+                                                    { "$match" => match_patern },
                                                     {"$group" => { 
                                                         "_id" => { 
                                                           "tenderuser" => "$tenderuser_id", 
