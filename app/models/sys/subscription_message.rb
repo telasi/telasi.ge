@@ -13,7 +13,7 @@ class Sys::SubscriptionMessage
   field :locale, type: String
   field :date, type: Date
 
-  index(nid: 1)
+  # index(nid: 1, sent: 1)
 
   def subscirption; Sys::Subscription.where(email: self.email).first end
   def node; Site::Node.find(self.nid) end
