@@ -1,21 +1,5 @@
 # -*- encoding : utf-8 -*-
-class Network::NewCustomerApplication
-  STATUS_DEFAULT    = 0
-  STATUS_SENT       = 1
-  STATUS_CANCELED   = 2
-  STATUS_CONFIRMED  = 3
-  STATUS_COMPLETE   = 4
-  STATUS_IN_BS      = 5
-  STATUSES = [ STATUS_DEFAULT, STATUS_SENT, STATUS_CANCELED, STATUS_CONFIRMED, STATUS_COMPLETE, STATUS_IN_BS ]
-  STATUSES_REPORT_BY_STATUS = [ STATUS_SENT, STATUS_CANCELED, STATUS_CONFIRMED, STATUS_COMPLETE, STATUS_IN_BS ]
-  VOLTAGE_220 = '220'
-  VOLTAGE_380 = '380'
-  VOLTAGE_610 = '6/10'
-  DURATION_STANDARD = 2
-  DURATION_HALF     = 1
-  DURATION_DOUBLE   = 3
-  ABONENT_AMOUNT_DEFAULT = 1
-
+class Network::NewCustomerApplication < Network::BaseClass
   GNERC_SIGNATURE_FILE = 'NewCustomer_'
   GNERC_ACT_FILE = 'act'
   GNERC_DEF_FILE = 'def'
@@ -35,6 +19,7 @@ class Network::NewCustomerApplication
 
   belongs_to :user, class_name: 'Sys::User'
   belongs_to :tariff, class_name: 'Network::NewCustomerTariff'
+  belongs_to :micro_tariff, class_name: 'Network::MicroTariff'
   field :online, type: Mongoid::Boolean, default: false # ონლაინ არის შევსებული?
   field :number,    type: String
   field :payment_id, type: Integer
@@ -61,6 +46,8 @@ class Network::NewCustomerApplication
   field :voltage,     type: String
   field :power,       type: Float
   field :amount,      type: Float, default: 0
+  field :std_amount,      type: Float, default: 0
+  field :micro_amount,      type: Float, default: 0
   field :days,        type: Integer, default: 0
   field :customer_id, type: Integer
   field :penalty1,    type: Float, default: 0
@@ -128,55 +115,14 @@ class Network::NewCustomerApplication
   before_save :status_manager, :calculate_total_cost, :upcase_number, :prepare_mobile
   before_create :init_payment_id, :set_user_business_days
 
-  def self.duration_collection
-    {
-      'სტანდარტული'  => Network::NewCustomerApplication::DURATION_STANDARD,
-      'განახევრებული' => Network::NewCustomerApplication::DURATION_HALF,
-      'გაორმაგებული'  => Network::NewCustomerApplication::DURATION_DOUBLE
-    }
-  end
-
-  def duration_name
-    self.class.duration_collection.invert[duration]
-  end
-
   # Checking correctess of
   def self.correct_number?(number); not not (/^(CNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number) end
 
-  def customer; Billing::Customer.find(self.customer_id) if self.customer_id.present? end
-  def payments; self.billing_items.select { |x| [116,1005,1012].include?(x.billoperkey) } end
-  def paid; self.payments.select{ |x| x.itemdate >= ( Time.now.to_date - 1.years )}.map{ |x| x.operation.opertpkey == 3 ? x.amount : -x.amount }.inject{ |sum, x| sum + x } || 0  end
-  def remaining
-    if self.amount.present?
-      if self.effective_amount < 0
-        0
-      else
-        self.amount - self.paid
-      end
-    else
-      0
-    end
-  end
   def unit
     if self.voltage == '6/10' then I18n.t('models.network_new_customer_item.unit_kvolt')
     else I18n.t('models.network_new_customer_item.unit_volt') end
   end
-  def bank_name; Bank.bank_name(self.bank_code) if self.bank_code.present? end
   def effective_number; self.number.blank? ? self.payment_id : self.number end
-
-  def self.status_name(status); I18n.t("models.network_new_customer_application.status_#{status}") end
-  def self.status_icon(status)
-    case status
-    # when STATUS_DEFAULT    then '/icons/mail-open.png'
-    when STATUS_SENT       then '/icons/mail-send.png'
-    when STATUS_CANCELED   then '/icons/cross.png'
-    when STATUS_CONFIRMED  then '/icons/clock.png'
-    when STATUS_COMPLETE   then '/icons/tick.png'
-    when STATUS_IN_BS      then '/icons/lock.png'
-    else '/icons/mail-open.png' end
-  end
-  def status_name; Network::NewCustomerApplication.status_name(self.status) end
-  def status_icon; Network::NewCustomerApplication.status_icon(self.status) end
   def can_send_to_item?; self.status == STATUS_COMPLETE end #and self.items.any? end
   def formatted_mobile; KA::format_mobile(self.mobile) if self.mobile.present? end
 
@@ -232,25 +178,6 @@ class Network::NewCustomerApplication
     end
   end
 
-  def real_days
-    d1 = self.send_date
-    d2 = self.end_date || Date.today
-    if self.use_business_days
-      d1.business_days_until(d2) + 1 if d1
-    else
-      d2 - d1 + 1 if d1
-    end
-  end
-
-  # პირველი ეტაპის ჯარიმა.
-  def penalty_first_stage
-    if self.status != STATUS_CANCELED and self.send_date and self.start_date
-      if real_days > days
-        self.amount / 2
-      else 0 end
-    else 0 end
-  end
-
   # მეორე ეტაპის ჯარიმა.
   def penalty_second_stage
     if self.status != STATUS_CANCELED and self.send_date and self.start_date
@@ -272,8 +199,6 @@ class Network::NewCustomerApplication
 
   # ჯარიმის სრული ოდენობა.
   def total_penalty; self.penalty_first_stage + self.penalty_second_stage + self.penalty_third_stage end
-  # რეალურად გადასახდელი თანხა.
-  def effective_amount; self.amount - self.total_penalty rescue 0 end
 
   def penalty_first_corrected
     return 0 unless self.penalty1 > 0
@@ -617,7 +542,7 @@ class Network::NewCustomerApplication
     if tariff
       if power > 0
         self.tariff = tariff
-        self.amount = tariff.price_gel
+        self.amount = self.std_amount = tariff.price_gel
         self.days   = tariff.days(self)
         if self.send_date
           if self.use_business_days
@@ -626,18 +551,26 @@ class Network::NewCustomerApplication
             self.plan_end_date = self.send_date + self.days - 1
           end
         end
-        self.amount = (self.amount / 1.18 * 100).round / 100.0 unless self.pays_non_zero_vat?
+        self.amount = self.std_amount = (self.amount / 1.18 * 100).round / 100.0 unless self.pays_non_zero_vat?
         self.penalty1 = self.penalty_first_stage
         self.penalty2 = self.penalty_second_stage
         self.penalty3 = self.penalty_third_stage
       end
     else
       if power > 0
-        self.amount = nil
+        self.amount = self.std_amount = nil
         self.days = nil
         self.tariff = nil
       end
     end
+    if self.micro
+      micro_tariff = Network::MicroTariff.tariff_for(self.micro_voltage, self.micro_power, self.start_date)
+      if micro_tariff
+        self.micro_amount = micro_tariff.price_gel
+        self.micro_tariff = micro_tariff
+      end
+    end
+    self.amount = self.std_amount + self.micro_amount
   end
 
   def validate_number
