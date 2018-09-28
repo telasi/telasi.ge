@@ -280,6 +280,7 @@ ka:
         deleted: ეტაპი წაშლილია
       tariffs:
         tariff: ტარიფები
+        mtariff: მიკროსიმძლავრის ტარიფები
         generation: გენერაცია
         generated: ტარიფები გენერირებულია
         sure: ნამდვილად?
@@ -326,6 +327,9 @@ ka:
       amount: ღირებულება
       minus_amount: კორექცია
       days: ვადა
+      paid: გადახდილია
+      remaining: დარჩენილია
+      penalty_first_stage: ჯარიმა (I ეტაპი)
       send_date: ათვლის თარიღი
       start_date: რეგისტრაციის თარიღი
       production_date: წარმოებაში მიღების თარიღი
@@ -586,6 +590,11 @@ ka:
       power: სიმძლავრე
       days_to_complete: ვადა
       days_to_complete_without_resolution: ვადა
+      price_gel: ფასი
+    network_micro_tariff:
+      voltage: ძაბვა
+      power: სიმძლავრე
+      days_to_complete: ვადა
       price_gel: ფასი
     network_new_customer_calculation:
       power: სიმძლავრე
