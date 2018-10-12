@@ -237,7 +237,7 @@ def page2_multi(pdf)
   end
   pdf.move_down 7
   pdf.text '4. საცხოვრებელი ბინის, საწარმოს ან სხვა სახის ობიექტის (ან ობიექტების) სამშენებლო-საპროექტო დოკუმენტაციით'
-  pdf.table [[{ content: 'განსაზღვრული (დადგენილი) მისაერთებელი სიმძლავრე: ', height: @table_height }, { content: @application.voltage, height: @table_height }]],
+  pdf.table [[{ content: 'განსაზღვრული (დადგენილი) მისაერთებელი სიმძლავრე: ', height: @table_height }, { content: @application.power, height: @table_height }]],
     column_widths: [260, 240] do |t|
     t.column(0).style borders: [], padding: 0
     t.column(1).style borders: [], padding: 0
