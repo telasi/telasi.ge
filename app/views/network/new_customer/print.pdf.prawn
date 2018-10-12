@@ -136,7 +136,7 @@ def page2(pdf)
     ['4. უძრავი ქონების საკადასტრო კოდი (სადაც უნდა მოხდეს ელექტრომომარაგება):'] * 2,
     [@application.address_code, ''],
     ['5. მოთხოვნილი ძაბვის საფეხური:'] * 2,
-    ["#{(@application.voltage == '220' ? '☒' : '□')} 220ვ;  #{(@application.voltage == '380' ? '☒' : '□')} 380ვ;  #{(@application.voltage == '6/10' ? '☒' : '□')} 6/10კვ", '□ 220ვ;  □ 380ვ;  □ 6/10კვ'],
+    ["#{(@application.voltage == '220' ? '☒' : '□')} 220ვ;  #{(@application.voltage == '380' ? '☒' : '□')} 380ვ;  #{(@application.voltage == '6/10' ? '☒' : '□')} 6/10კვ", '  □ 220ვ;  □ 380ვ;  □ 6/10კვ'],
     ['6. მოთხოვნილი სიმძლავრე:'] * 2,
     ["#{@application.power} კვტ", ''],
     ['7. გამანაწილებელ ქსელზე მიერთების საფასური (შეთავაზებული პაკეტის მიხედვით):'] * 2,
@@ -237,7 +237,7 @@ def page2_multi(pdf)
   end
   pdf.move_down 7
   pdf.text '4. საცხოვრებელი ბინის, საწარმოს ან სხვა სახის ობიექტის (ან ობიექტების) სამშენებლო-საპროექტო დოკუმენტაციით'
-  pdf.table [[{ content: 'განსაზღვრული (დადგენილი) მისაერთებელი სიმძლავრე: ', height: @table_height }, { content: @application.power.to_s, height: @table_height }]],
+  pdf.table [[{ content: 'განსაზღვრული (დადგენილი) მისაერთებელი სიმძლავრე: ', height: @table_height }, { content: "#{(@application.voltage == '220' ? '☒' : '□')} 220ვ;  #{(@application.voltage == '380' ? '☒' : '□')} 380ვ;  #{(@application.voltage == '6/10' ? '☒' : '□')} 6/10კვ #{@application.power.to_s} კვტ", height: @table_height }]],
     column_widths: [260, 240] do |t|
     t.column(0).style borders: [], padding: 0
     t.column(1).style borders: [], padding: 0
