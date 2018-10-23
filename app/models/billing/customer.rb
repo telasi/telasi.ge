@@ -118,7 +118,7 @@ class Billing::Customer < ActiveRecord::Base
       trash_debt = "დასუფთავება #{number_with_precision self.payable_trash_balance, precision: 2} L" if ( include_credits || cut_candidate_trash? )
       water_debt = "წყალმომარაგება #{number_with_precision (self.payable_water_balance || 0), precision: 2} L" if ( include_credits || cut_candidate_water? )
       debts = [ telasi_debt, trash_debt, water_debt ].compact.join("\n")
-      txt = "აბ.##{self.accnumb} დავალიანება:\n#{debts}.\nგადახდის ბოლო თარიღია #{deadline.strftime('%d.%m.%Y')}\nSMS off 90033"
+      txt = "აბ.##{self.accnumb} დავალიანება:\n#{debts}.\nგადახდის ბოლო თარიღია #{deadline.strftime('%d.%m.%Y')} -mde\nSMS off 90033"
       txt.to_ka
     end
   end
