@@ -118,8 +118,8 @@ class Network::NewCustomerApplication < Network::BaseClass
   before_create :init_payment_id, :set_user_business_days
 
   # Checking correctess of
-  def self.correct_number?(number)
-    if self.micro
+  def self.correct_number?(micro, number)
+    if micro
       not not (/^(MCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number) 
     else
       not not (/^(CNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number) 
@@ -585,7 +585,7 @@ class Network::NewCustomerApplication < Network::BaseClass
     if self.number_required? and self.number.blank?
       self.errors.add(:number, I18n.t('models.network_new_customer_application.errors.number_required'))
     elsif self.number.present?
-      self.errors.add(:number, 'არასწორი ფორმატი!') unless Network::NewCustomerApplication.correct_number?(self.number)
+      self.errors.add(:number, 'არასწორი ფორმატი!') unless Network::NewCustomerApplication.correct_number?(self.micro, self.number)
     end
   end
 
