@@ -190,4 +190,8 @@ private
     Billing::WaterPayment.where('paydate>? AND custkey=? AND status IN (0, 1)', 7.days.ago, self.custkey)
   end
 
+  def self.tps
+    Billing::Customer.where('custcatkey = 4 and statuskey <> 2')
+  end
+
 end

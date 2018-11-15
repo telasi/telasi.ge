@@ -1,17 +1,5 @@
 # -*- encoding : utf-8 -*-
-class Network::ChangePowerApplication
-  STATUS_DEFAULT    = 0
-  STATUS_SENT       = 1
-  STATUS_CANCELED   = 2
-  STATUS_CONFIRMED  = 3
-  STATUS_COMPLETE   = 4
-  STATUS_IN_BS      = 5
-  STATUSES = [ STATUS_DEFAULT, STATUS_SENT, STATUS_CANCELED, STATUS_CONFIRMED, STATUS_COMPLETE, STATUS_IN_BS ]
-  STATUSES_REPORT_BY_STATUS = [ STATUS_SENT, STATUS_CANCELED, STATUS_CONFIRMED, STATUS_COMPLETE, STATUS_IN_BS ]
-  VOLTAGE_220 = '220'
-  VOLTAGE_380 = '380'
-  VOLTAGE_610 = '6/10'
-  VOLTAGE_35110 = '35/110'
+class Network::ChangePowerApplication < Network::BaseClass
   TYPE_CHANGE_POWER  = 0
   TYPE_CHANGE_SOURCE = 1
   TYPE_SPLIT         = 2
@@ -22,8 +10,10 @@ class Network::ChangePowerApplication
   TYPE_SAME_PACK     = 7
   TYPE_HIGH_VOLTAGE  = 8
   TYPE_SUB_CUSTOMER  = 9
+  TYPE_MICRO_OTHER_PACK = 10
+  TYPE_MICRO_SAME_PACK = 11
   TYPES = [ TYPE_CHANGE_POWER, TYPE_CHANGE_SOURCE, TYPE_SPLIT, TYPE_RESERVATION, TYPE_TEMP_BUILD, TYPE_ABONIREBA,
-            TYPE_MICROPOWER, TYPE_SAME_PACK, TYPE_HIGH_VOLTAGE, TYPE_SUB_CUSTOMER ]
+            TYPE_SAME_PACK, TYPE_HIGH_VOLTAGE, TYPE_SUB_CUSTOMER, TYPE_MICROPOWER, TYPE_MICRO_OTHER_PACK, TYPE_MICRO_SAME_PACK ]
 
   GNERC_SIGNATURE_FILE = 'ChangePower_'
   GNERC_RES_FILE = 'res'
@@ -62,6 +52,7 @@ class Network::ChangePowerApplication
   field :power,       type: Float
   field :amount,      type: Float, default: 0
   field :minus_amount,type: Float, default: 0
+  field :days,        type: Integer, default: 0
   field :customer_id, type: Integer
   field :real_customer_id, type: Integer
   # dates
@@ -72,6 +63,7 @@ class Network::ChangePowerApplication
   # წარმოებაში მიღების თარიღი რეალური
   field :production_enter_date, type: Date
   field :real_end_date, type: Date
+  field :plan_end_date, type: Date
   field :end_date, type: Date
   field :note, type: String
   field :oqmi, type: String
@@ -85,6 +77,15 @@ class Network::ChangePowerApplication
   field :signed, type: Mongoid::Boolean, default: false
   # field :show_tin_on_print, type: Mongoid::Boolean, default: true
   field :zero_charge, type: Mongoid::Boolean, default: false
+
+  field :duration, type: Integer, default: DURATION_STANDARD
+  field :abonent_amount, type: Integer, default: ABONENT_AMOUNT_DEFAULT
+
+  # since Nov,2014: use business days!
+  field :use_business_days, type: Mongoid::Boolean, default: false
+
+  field :substation, type: String
+
   # relations
   has_many :messages, class_name: 'Sys::SmsMessage', as: 'messageable'
   has_many :files, class_name: 'Sys::File', inverse_of: 'mountable'
@@ -125,6 +126,10 @@ class Network::ChangePowerApplication
       not not (/^(HCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number)
     elsif type == TYPE_SUB_CUSTOMER
       not not (/^(TCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number)
+    elsif type == TYPE_MICRO_OTHER_PACK
+      not not (/^(1RCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number)
+    elsif type == TYPE_MICRO_SAME_PACK
+      not not (/^(2RCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number)
     else
       false
     end
@@ -138,20 +143,7 @@ class Network::ChangePowerApplication
     if [VOLTAGE_610, VOLTAGE_35110].include?(self.voltage) then I18n.t('models.network_change_power_application.unit_kvolt')
     else I18n.t('models.network_change_power_application.unit_volt') end
   end
-  def bank_name; Bank.bank_name(self.bank_code) if self.bank_code.present? end
-  def customer; Billing::Customer.find(self.customer_id) if self.customer_id.present? end
   def real_customer; Billing::Customer.find(self.real_customer_id) if self.real_customer_id.present? end
-  def self.status_name(status); I18n.t("models.network_change_power_application.status_#{status}") end
-  def self.status_icon(status)
-    case status
-    # when STATUS_DEFAULT    then '/icons/mail-open.png'
-    when STATUS_SENT       then '/icons/mail-send.png'
-    when STATUS_CANCELED   then '/icons/cross.png'
-    when STATUS_CONFIRMED  then '/icons/clock.png'
-    when STATUS_COMPLETE   then '/icons/tick.png'
-    when STATUS_IN_BS      then '/icons/lock.png'
-    else '/icons/mail-open.png' end
-  end
   def self.type_name(type); I18n.t("models.network_change_power_application.type_#{type}") end
   def status_name; Network::NewCustomerApplication.status_name(self.status) end
   def status_icon; Network::NewCustomerApplication.status_icon(self.status) end

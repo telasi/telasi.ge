@@ -103,6 +103,12 @@ module Network::NewCustomerHelper
     }
   end
 
+  def tp_collection
+    h = []
+    Billing::Customer.tps.order(:accnumb).each{ |x| h << x.accnumb.to_ka }
+    h
+  end
+
   def new_customer_form(application, opts = {})
     forma_for application, title: opts[:title], collapsible: true, icon: opts[:icon] do |f|
       f.tab do |t|
@@ -131,7 +137,8 @@ module Network::NewCustomerHelper
         t.combo_field :duration, collection: duration_collection, empty: false, required: true, label: 'შესრულების ხანგრძლიობა'
         t.text_field :notes, width: 500
         t.text_field :oqmi
-        t.text_field :proeqti, class: 'micro'
+        t.text_field :proeqti
+        t.text_field :substation
         t.boolean_field :micro, label: 'მიკროსიმძლავრის ელექტროსადგურის გამანაწილებელ ქსელზე მიერთების მოთხოვნა'
         # t.number_field :microstation_number, label: 'მიკრო სიმძლავრის ელექტროსადგურების რაოდენობა'
         # t.combo_field :micro_source, label: 'მიკროსიმძლავრის ელექტროსადგურის პირველადი ენერგიის წყარო', collection: micro_source_collection, empty: '--'

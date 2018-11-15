@@ -5,6 +5,7 @@
 //= require turbolinks
 //= require lib/bootstrap.min
 //= require forma
+//= require autocomplete
 $(function() {
   $('.datepicker').datepicker({ dateFormat: 'dd-M-yy', changeMonth: true, changeYear: true, yearRange: "-100:+0" });
 });

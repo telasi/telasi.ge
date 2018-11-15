@@ -95,6 +95,8 @@ class Network::NewCustomerApplication < Network::BaseClass
   field :micro_voltage,     type: String
   field :micro_power,       type: Float
 
+  field :substation, type: String
+
   embeds_many :items, class_name: 'Network::NewCustomerItem', inverse_of: :application
   has_many :files, class_name: 'Sys::File', as: 'mountable'
   has_many :messages, class_name: 'Sys::SmsMessage', as: 'messageable', :order => 'created_at ASC'
@@ -116,7 +118,13 @@ class Network::NewCustomerApplication < Network::BaseClass
   before_create :init_payment_id, :set_user_business_days
 
   # Checking correctess of
-  def self.correct_number?(number); not not (/^(CNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number) end
+  def self.correct_number?(number)
+    if self.micro
+      not not (/^(MCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number) 
+    else
+      not not (/^(CNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number) 
+    end
+  end
 
   def unit
     if self.voltage == '6/10' then I18n.t('models.network_new_customer_item.unit_kvolt')

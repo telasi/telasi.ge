@@ -2,7 +2,15 @@
  *= require jquery.ui.datepicker
  *= require lib/bootstrap.min
  *= require lib/font-awesome.min
- *= require telasi
- *= require forma
+  *= require forma
  *= require cartridge
+ *= require autocomplete
  */
+
+#content { margin-top: 60px; }
+.footer { border-top: 2px solid #eee; margin: 16px 0 16px; padding: 8px 0 0; }
+.home-slide {
+  background: 50% 50% url(/images/home01.jpg?v=1);
+  color: white;
+  text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+}

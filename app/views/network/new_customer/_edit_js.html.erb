@@ -4,7 +4,7 @@
     resetMicroField();
     $('#network_new_customer_application_rs_foreigner').click(resetForeignerField);
     $('#network_new_customer_application_micro').click(resetMicroField);
-    $('#network_new_customer_application_base_type').change(resetBaseApplicationType);
+    autocomplete($('#network_new_customer_application_substation')[0], <%= raw tp_collection.to_json %>);
   });
 
   var resetForeignerField = function() {
