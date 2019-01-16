@@ -82,7 +82,7 @@ class Network::ChangePowerController < ApplicationController
     end
 
     rel = rel.select{ |x| x.billing_prepayment_to_factured.where('itemdate >= ?', Network::PREPAYMENT_START_DATE).present? }
-    @applications = rel.paginate(per_page: 10000)
+    @applications = rel.paginate(per_page: 50000)
   end
 
   def accounting_report
@@ -125,7 +125,7 @@ class Network::ChangePowerController < ApplicationController
     respond_to do |format|
       format.html { @applications = rel.desc(:_id).paginate(page: params[:page_new], per_page: 10) }
       format.xlsx do
-        @applications = rel.desc(:_id).paginate(per_page: 10000)
+        @applications = rel.desc(:_id).paginate(per_page: 50000)
       end
     end
   end
