@@ -150,18 +150,13 @@ class Network::ChangePowerController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        if @application.type == Network::ChangePowerApplication::TYPE_CHANGE_POWER 
-          redirect_to network_change_power_change_power_show_url(id: params[:id], format: :pdf)
+        case @application.type 
+          when Network::ChangePowerApplication::TYPE_CHANGE_POWER then
+            render 'change_power_1cns'
+          when Network::ChangePowerApplication::TYPE_MICROPOWER then
+            render 'change_power_rcns'
         end
       end
-    end
-  end
-
-  def change_power_show
-    @application = Network::ChangePowerApplication.find(params[:id])
-    @title = I18n.t('models.network_new_customer_application.actions.edit.title')
-    respond_to do |format|
-        format.pdf
     end
   end
 
