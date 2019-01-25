@@ -57,7 +57,10 @@ class Network::BaseClass
   end
 
   def payments; self.billing_items.select { |x| [116,1005,1012].include?(x.billoperkey) } end
-  def paid; self.payments.select{ |x| x.itemdate >= ( Time.now.to_date - 1.years )}.map{ |x| x.operation.opertpkey == 3 ? x.amount : -x.amount }.inject{ |sum, x| sum + x } || 0  end
+  def paid
+    calc_date = self.end_date || Time.now.to_date
+    self.payments.select{ |x| x.itemdate >= ( calc_date - 1.years )}.map{ |x| x.operation.opertpkey == 3 ? x.amount : -x.amount }.inject{ |sum, x| sum + x } || 0  
+  end
   def remaining
     if self.amount.present?
       if self.effective_amount < 0
