@@ -155,6 +155,8 @@ class Network::ChangePowerController < ApplicationController
             render 'change_power_1cns'
           when Network::ChangePowerApplication::TYPE_MICROPOWER then
             render 'change_power_rcns'
+          else 
+            render 'show'
         end
       end
     end
@@ -198,7 +200,15 @@ class Network::ChangePowerController < ApplicationController
       @application.signed = true
       @application.save
     else
-      binary = render_to_string 'show', formats: ['pdf']
+      case @application.type 
+        when Network::ChangePowerApplication::TYPE_CHANGE_POWER then
+          binary = render_to_string 'change_power_1cns', formats: ['pdf']
+        when Network::ChangePowerApplication::TYPE_MICROPOWER then
+          binary = render_to_string 'change_power_rcns', formats: ['pdf']
+        else 
+          binary = render_to_string 'show', formats: ['pdf']
+      end
+      
       name = "ChangePower_#{params[:id]}.pdf"
       workstepId = Sys::Signature.send("changepower", name, binary, params[:id])
       url = Sys::Signature::WORKSTEP_SIGN
