@@ -56,7 +56,7 @@ class Network::ChangePowerApplication < Network::BaseClass
   field :customer_id, type: Integer
   field :real_customer_id, type: Integer
 
-  field :penalty1,    type: Float, default: 0
+  #field :penalty1,    type: Float, default: 0
 
   # dates
   field :send_date, type: Date
@@ -354,20 +354,25 @@ class Network::ChangePowerApplication < Network::BaseClass
   end
 
   def calculate_total_cost
+    unless self.
     unless self.can_change_amount?
       if self.zero_charge
         self.amount = 0
+        # self.days = 0
       else
         tariff_old = Network::NewCustomerTariff.tariff_for(self.old_voltage, self.old_power, self.start_date)
         tariff = Network::NewCustomerTariff.tariff_for(self.voltage, self.power, self.start_date)
         if tariff_old.price_gel > tariff.price_gel
           self.amount = 0
+          # self.days = 0
         elsif tariff_old == tariff
           if self.old_power == self.power
             self.amount = 0
+            # self.days = 0
           else
             per_kwh = tariff.price_gel * 1.0 / tariff.power_to
             self.amount = (per_kwh * (self.power - self.old_power)).round(2) - self.minus_amount
+            # self.days = tariff.days if tariff
           end
         else
           self.amount = tariff.price_gel - tariff_old.price_gel - self.minus_amount

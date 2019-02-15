@@ -208,7 +208,7 @@ module Network::ChangePowerHelper
           c.text_field :unit, after: '/'
           c.number_field :power, after: 'კვტ'
         end
-        t.text_field :duration_name, label: 'შესრულების ხანგრძლიობა', required: true
+        # t.text_field :duration_name, label: 'შესრულების ხანგრძლიობა', required: true
         t.text_field :note
         t.text_field :oqmi
         t.text_field :proeqti
@@ -230,12 +230,12 @@ module Network::ChangePowerHelper
           end  unless application.can_change_amount?
 
           unitname = application.use_business_days ? 'სამუშაო დღე' : 'დღე'
-          c.number_field('days', label: 'გეგმიური ვადა', max_digits: 0, after: unitname)
-          c.number_field('real_days', label: 'რეალური ვადა', max_digits: 0, after: unitname)
+          # c.number_field('days', label: 'გეგმიური ვადა', max_digits: 0, after: unitname)
+          # c.number_field('real_days', label: 'რეალური ვადა', max_digits: 0, after: unitname)
 
-          c.number_field :paid, after: 'GEL'
-          c.number_field :remaining, after: 'GEL'
-          c.number_field :penalty_first_stage, after: 'GEL'
+          # c.number_field :paid, after: 'GEL'
+          # c.number_field :remaining, after: 'GEL'
+          # c.number_field :penalty_first_stage, after: 'GEL'
 
           # c.number_field :paid, after: 'GEL'
           # c.number_field :remaining, after: 'GEL'
