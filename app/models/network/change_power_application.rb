@@ -237,15 +237,15 @@ class Network::ChangePowerApplication < Network::BaseClass
         network_item.save!
 
         first_stage = -self.penalty_first_stage
-        if first_stage < 0
-          bs_item1 = Billing::Item.new(billoperkey: 1006, acckey: customer.accounts.first.acckey, custkey: customer.custkey,
-            perskey: 1, signkey: 1, itemdate: item_date, reading: 0, kwt: 0, amount: first_stage,
-            enterdate: Time.now, itemcatkey: 0)
-          bs_item1.save!
-          network_item1 = Billing::NetworkItem.new(zdepozit_cust_id: deposit_customer.zdepozit_cust_id, amount: first_stage,
-            operkey: 1006, enterdate: Time.now, operdate: item_date, perskey: 1, cns: self.number, montage_date: end_date)
-          network_item1.save!
-        end
+        #if first_stage < 0
+        #  bs_item1 = Billing::Item.new(billoperkey: 1006, acckey: customer.accounts.first.acckey, custkey: customer.custkey,
+        #    perskey: 1, signkey: 1, itemdate: item_date, reading: 0, kwt: 0, amount: first_stage,
+        #    enterdate: Time.now, itemcatkey: 0)
+        #  bs_item1.save!
+        #  network_item1 = Billing::NetworkItem.new(zdepozit_cust_id: deposit_customer.zdepozit_cust_id, amount: first_stage,
+        #    operkey: 1006, enterdate: Time.now, operdate: item_date, perskey: 1, cns: self.number, montage_date: end_date)
+        #  network_item1.save!
+        #end
 
       end
 
