@@ -119,6 +119,7 @@ module Network::ChangePowerHelper
         t.number_field :old_power, after: 'kWh', width: 100
         t.combo_field :voltage, collection: voltage_collection_change_power, empty: false, required: true
         t.number_field :power, after: 'kWh', width: 100, required: true
+        t.number_field :abonent_amount, width: 50, required: true
         t.text_field :note, width: 400
         t.text_field :oqmi
         t.text_field :proeqti
@@ -196,6 +197,7 @@ module Network::ChangePowerHelper
           c.text_field :bank_code, tag: 'code'
           c.text_field :bank_account, empty: false
         end
+        t.text_field :abonent_amount, required: true
         t.complex_field label: 'არსებული ძაბვა / სიმძლავრე', required: true do |c|
           c.text_field :old_voltage, tag: 'code'
           c.text_field :old_unit, after: '/'
@@ -206,6 +208,7 @@ module Network::ChangePowerHelper
           c.text_field :unit, after: '/'
           c.number_field :power, after: 'კვტ'
         end
+        t.text_field :duration_name, label: 'შესრულების ხანგრძლიობა', required: true
         t.text_field :note
         t.text_field :oqmi
         t.text_field :proeqti
@@ -225,6 +228,15 @@ module Network::ChangePowerHelper
           c.number_field :minus_amount, after: 'GEL' do |amnt|
             amnt.action(network_change_power_edit_minus_amount_url(id: application.id), label: 'შეცვლა', icon: '/icons/pencil.png')
           end  unless application.can_change_amount?
+
+          unitname = application.use_business_days ? 'სამუშაო დღე' : 'დღე'
+          c.number_field('days', label: 'გეგმიური ვადა', max_digits: 0, after: unitname)
+          c.number_field('real_days', label: 'რეალური ვადა', max_digits: 0, after: unitname)
+
+          c.number_field :paid, after: 'GEL'
+          c.number_field :remaining, after: 'GEL'
+          c.number_field :penalty_first_stage, after: 'GEL'
+
           # c.number_field :paid, after: 'GEL'
           # c.number_field :remaining, after: 'GEL'
           c.date_field :send_date

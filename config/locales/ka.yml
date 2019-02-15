@@ -307,6 +307,7 @@ ka:
       bank_account_alt: საბანკო ანგარიში
       bank_account_hint: თქვენი პირადი ან ორგანიზაციის კუთვნილი საბანკო ანგარიშის ნომერი.
       bank_account_separator: საბანკო ანგარიში
+      abonent_amount: აბონენტების რაოდენობა
       status: სტატუსი
       status_0: გაუგზავნელი
       status_1: გადაგზავნილი

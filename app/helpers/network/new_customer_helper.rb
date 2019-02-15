@@ -135,10 +135,10 @@ module Network::NewCustomerHelper
         t.number_field :abonent_amount, width: 50, required: true
         # t.boolean_field :need_resolution, required: true
         t.combo_field :duration, collection: duration_collection, empty: false, required: true, label: 'შესრულების ხანგრძლიობა'
+        t.text_field :substation, width: 500
         t.text_field :notes, width: 500
         t.text_field :oqmi
         t.text_field :proeqti
-        t.text_field :substation
         t.boolean_field :micro, label: 'მიკროსიმძლავრის ელექტროსადგურის გამანაწილებელ ქსელზე მიერთების მოთხოვნა'
         # t.number_field :microstation_number, label: 'მიკრო სიმძლავრის ელექტროსადგურების რაოდენობა'
         # t.combo_field :micro_source, label: 'მიკროსიმძლავრის ელექტროსადგურის პირველადი ენერგიის წყარო', collection: micro_source_collection, empty: '--'
@@ -250,6 +250,7 @@ module Network::NewCustomerHelper
           c.number_field :power, after: 'კვტ'
         end
         t.text_field :duration_name, label: 'შესრულების ხანგრძლიობა', required: true
+        t.text_field :substation
         t.text_field :notes
         t.text_field :oqmi
         t.text_field :proeqti
@@ -420,6 +421,9 @@ module Network::NewCustomerHelper
           end
         end
       end
+      # gnerc
+      # f.tab title: 'სემეკი', icon: '/icons/database-cloud.png' do |t|
+      # end
       # 8. sys
       f.tab title: 'სისტემური', icon: '/icons/traffic-cone.png' do |t|
         t.complex_field label: 'მომხმარებელი', hint: 'მომხმარებელი, რომელმაც შექმნა ეს განცხადება', required: true do |c|
