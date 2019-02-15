@@ -354,7 +354,6 @@ class Network::ChangePowerApplication < Network::BaseClass
   end
 
   def calculate_total_cost
-    unless self.
     unless self.can_change_amount?
       if self.zero_charge
         self.amount = 0
