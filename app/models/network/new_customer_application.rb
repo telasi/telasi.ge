@@ -20,6 +20,7 @@ class Network::NewCustomerApplication < Network::BaseClass
   belongs_to :user, class_name: 'Sys::User'
   belongs_to :tariff, class_name: 'Network::NewCustomerTariff'
   belongs_to :micro_tariff, class_name: 'Network::MicroTariff'
+  belongs_to :tariff_multiplier, class_name: 'Network::TariffMultiplier'
   field :online, type: Mongoid::Boolean, default: false # ონლაინ არის შევსებული?
   field :number,    type: String
   field :payment_id, type: Integer
@@ -546,6 +547,7 @@ class Network::NewCustomerApplication < Network::BaseClass
   private
 
   def calculate_total_cost
+    calculate_region
     tariff = Network::NewCustomerTariff.tariff_for(self.voltage, self.power, self.start_date)
     if tariff
       if power > 0
@@ -575,10 +577,14 @@ class Network::NewCustomerApplication < Network::BaseClass
       micro_tariff = Network::MicroTariff.tariff_for(self.micro_voltage, self.micro_power, self.start_date)
       if micro_tariff
         self.micro_amount = micro_tariff.price_gel
+        #self.micro_amount = micro_tariff.price_gel * self.tariff_multiplier.multiplier if self.tariff_multiplier
         self.micro_tariff = micro_tariff
       end
+    else
+      self.micro_amount = 0
     end
     self.amount = self.std_amount + self.micro_amount
+    self.amount = self.std_amount * self.tariff_multiplier.multiplier + self.micro_amount if self.tariff_multiplier
   end
 
   def validate_number

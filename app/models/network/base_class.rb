@@ -46,6 +46,12 @@ class Network::BaseClass
     self.class.duration_collection.invert[duration]
   end
 
+  def calculate_region
+    debugger
+    self.tariff_multiplier = Network::TariffMultiplier.multiplier_for(self.address_code, self.start_date)
+    self.region = self.tariff_multiplier.name if self.tariff_multiplier
+  end
+
   def real_days
     d1 = self.send_date
     d2 = self.end_date || Date.today

@@ -281,6 +281,7 @@ ka:
       tariffs:
         tariff: ტარიფები
         mtariff: მიკროსიმძლავრის ტარიფები
+        tariff_multiplier: კოეფიციენტი
         generation: გენერაცია
         generated: ტარიფები გენერირებულია
         sure: ნამდვილად?

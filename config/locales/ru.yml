@@ -275,6 +275,8 @@ ru:
         deleted: Этап удален
       tariffs:
         tariff: Тарифы
+        mtariff: Тарифы
+        tariff_multiplier: Коэффициент
         generation: Генерация
         generated: Тарифы сгенерированы
         sure: Уверены?

@@ -27,3 +27,11 @@ end %>
   end
   t.number_field :price_gel, after: 'GEL'
 end %>
+
+<%= table_for @tariffs_multi, title: t('models.network.tariffs.tariff_multiplier'), icon: '/icons/network.png', collapsible: true do |t|
+  t.date_field :starts, label: 'დაწყება', empty: false
+  t.date_field :ends, label: 'დასრულება', empty: false
+  t.text_field :name, label: 'რეგიონი'
+  t.text_field :id, label: 'კოდი', tag: 'code'
+  t.number_field :multiplier, label: 'კოქფიციენტი'
+end %>

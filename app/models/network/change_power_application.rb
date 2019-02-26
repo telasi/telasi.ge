@@ -31,6 +31,7 @@ class Network::ChangePowerApplication < Network::BaseClass
   include Network::CalculationUtils
 
   belongs_to :user, class_name: 'Sys::User'
+  belongs_to :tariff_multiplier, class_name: 'Network::TariffMultiplier'
   field :number,    type: String
   field :rs_tin,       type: String
   field :rs_foreigner, type: Mongoid::Boolean, default: false
@@ -180,6 +181,7 @@ class Network::ChangePowerApplication < Network::BaseClass
   end
 
   def can_change_amount?; not [TYPE_CHANGE_POWER, TYPE_SAME_PACK].include?(self.type) end
+  def apply_multiplier?; [TYPE_CHANGE_POWER, TYPE_MICROPOWER, TYPE_MICRO_OTHER_PACK, TYPE_MICRO_SAME_PACK].include?(self.type) end
 
   def prepayment_factura_sent?
     prepayment_facturas.present?
@@ -354,6 +356,7 @@ class Network::ChangePowerApplication < Network::BaseClass
   end
 
   def calculate_total_cost
+    calculate_region
     unless self.can_change_amount?
       if self.zero_charge
         self.amount = 0
@@ -361,6 +364,8 @@ class Network::ChangePowerApplication < Network::BaseClass
       else
         tariff_old = Network::NewCustomerTariff.tariff_for(self.old_voltage, self.old_power, self.start_date)
         tariff = Network::NewCustomerTariff.tariff_for(self.voltage, self.power, self.start_date)
+        multiplier = 1 
+        multiplier = self.tariff_multiplier.multiplier if self.tariff_multiplier
         if tariff_old.price_gel > tariff.price_gel
           self.amount = 0
           # self.days = 0
@@ -371,10 +376,12 @@ class Network::ChangePowerApplication < Network::BaseClass
           else
             per_kwh = tariff.price_gel * 1.0 / tariff.power_to
             self.amount = (per_kwh * (self.power - self.old_power)).round(2) - self.minus_amount
+            self.amount = (per_kwh * (self.power - self.old_power) * multiplier ).round(2) - self.minus_amount if apply_multiplier?
             # self.days = tariff.days if tariff
           end
         else
           self.amount = tariff.price_gel - tariff_old.price_gel - self.minus_amount
+          self.amount = ( tariff.price_gel - tariff_old.price_gel ) * multiplier - self.minus_amount if apply_multiplier?
         end
       end
 

@@ -263,12 +263,21 @@ module Network::NewCustomerHelper
           end
           if application.micro
             t.complex_field label: 'ღირებულება', required: true do |c|
-              c.text_field :amount, tag: 'code'
-              c.text_field :std_amount, tag: 'code', before: '(', after: '+'
-              c.text_field :micro_amount, tag: 'code', after: ') GEL'
+              c.text_field :amount, tag: 'code', after: ' = '
+              c.text_field :std_amount, tag: 'code', before: '('
+              c.text_field 'tariff_multiplier.multiplier', tag: 'code', before: ' * ' if application.tariff_multiplier  
+              c.text_field :micro_amount, tag: 'code', before: ' + ', after: ' ) GEL'
             end
           else
-            c.number_field :amount, after: 'GEL'
+            if application.tariff_multiplier
+              t.complex_field label: 'ღირებულება', required: true do |c|
+                c.text_field :amount, tag: 'code', after: ' = '
+                c.text_field :std_amount, tag: 'code', before: ' ( '
+                c.text_field 'tariff_multiplier.multiplier', tag: 'code', before: ' * ', after: ' ) GEL' 
+              end
+            else 
+              c.number_field :amount, after: 'GEL'
+            end
           end
 
           unitname = application.use_business_days ? 'სამუშაო დღე' : 'დღე'

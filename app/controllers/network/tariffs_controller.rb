@@ -4,6 +4,7 @@ class Network::TariffsController < ApplicationController
     @title = I18n.t('models.network.tariffs.tariff')
     @tariffs = Network::NewCustomerTariff.asc(:_id)
     @mtariffs = Network::MicroTariff.asc(:_id)
+    @tariffs_multi = Network::TariffMultiplier.asc(:_id)
   end
 
   def nav

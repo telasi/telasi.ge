@@ -1,0 +1,168 @@
+region_01:
+  id: '01.15'
+  region_name: 'მთაწმინდა'
+  multiplier: '1.8'
+region_02:
+  id: '01.18'
+  region_name: 'კრწანისი'
+  multiplier: '1.8'
+region_03:
+  id: '01.14'
+  region_name: 'ვაკე'
+  multiplier: '1.8'
+region_04:
+  id: '01.10'
+  region_name: 'საბურთალო'
+  multiplier: '1.5'
+region_05:
+  id: '01.16'
+  region_name: 'ჩუღურეთი'
+  multiplier: '1.2'
+region_06:
+  id: '01.19'
+  region_name: 'სამგორი'
+  multiplier: '1.2'
+region_07:
+  id: '01.12'
+  region_name: 'ნაძალადევი'
+  multiplier: '1.2'
+region_08:
+  id: '01.11'
+  region_name: 'გლდანი'
+  multiplier: '1.2'
+region_09:
+  id: '72.13'
+  region_name: 'გლდანი'
+  multiplier: '1.2'
+region_10:
+  id: '81.08'
+  region_name: 'ისანი'
+  multiplier: '1.2'
+region_11:
+  id: '01.13'
+  region_name: 'დიდუბე'
+  multiplier: '1.2'
+region_12:
+  id: '01.20'
+  region_name: 'წყნეთი'
+  multiplier: '1.0'
+region_13:
+  id: '72.14'
+  region_name: 'დიღომი'
+  multiplier: '1.2'
+region_14:
+  id: '01.72.14'
+  region_name: 'დიღომი'
+  multiplier: '1.2'
+region_15:
+  id: '01.10.10'
+  region_name: 'ვაშლიჯვარი'
+  multiplier: '1.2'
+region_16:
+  id: '01.10.11'
+  region_name: 'ვაშლიჯვარი'
+  multiplier: '1.2'
+region_17:
+  id: '01.10.18'
+  region_name: 'ვაშლიჯვარი'
+  multiplier: '1.2'
+region_18:
+  id: '81.05'
+  region_name: 'ფონიჭალა'
+  multiplier: '1.0'
+region_19:
+  id: '81.03'
+  region_name: 'თელეთი'
+  multiplier: '1.0'
+region_20:
+  id: '81.01'
+  region_name: 'კიკეთი'
+  multiplier: '1.0'
+region_21:
+  id: '81.24'
+  region_name: 'კოჯორი'
+  multiplier: '1.0'
+region_22:
+  id: '81.02'
+  region_name: 'ტაბახმელა'
+  multiplier: '1.0'
+region_23:
+  id: '81.02.10'
+  region_name: 'შინდისი'
+  multiplier: '1.0'
+region_24:
+  id: '81.02.12'
+  region_name: 'შინდისი'
+  multiplier: '1.0'
+region_25:
+  id: '81.02.94'
+  region_name: 'შინდისი'
+  multiplier: '1.0'
+region_26:
+  id: '72.13.10'
+  region_name: 'გლდანის დასახლება'
+  multiplier: '1.0'
+region_27:
+  id: '72.13.13'
+  region_name: 'გლდანის დასახლება'
+  multiplier: '1.0'
+region_28:
+  id: '72.13.39'
+  region_name: 'გლდანის დასახლება'
+  multiplier: '1.0'
+region_29:
+  id: '72.13.41'
+  region_name: 'გლდანის დასახლება'
+  multiplier: '1.0'
+region_30:
+  id: '01.19.10'
+  region_name: 'ორხევი'
+  multiplier: '1.0'
+region_31:
+  id: '01.19.16'
+  region_name: 'ორხევი'
+  multiplier: '1.0'
+region_32:
+  id: '01.19.17'
+  region_name: 'ორხევი'
+  multiplier: '1.0'
+region_33:
+  id: '01.19.18'
+  region_name: 'ორხევი'
+  multiplier: '1.0'
+region_34:
+  id: '01.19.14'
+  region_name: 'ლილო'
+  multiplier: '1.0'
+region_35:
+  id: '01.19.15'
+  region_name: 'ლილო'
+  multiplier: '1.0'
+region_36:
+  id: '01.19.26'
+  region_name: 'ლილო'
+  multiplier: '1.0'
+region_37:
+  id: '01.19.27'
+  region_name: 'ლილო'
+  multiplier: '1.0'
+region_38:
+  id: '81.08.16'
+  region_name: 'დიდი ლილო'
+  multiplier: '1.0'
+region_39:
+  id: '81.08.29'
+  region_name: 'დიდი ლილო'
+  multiplier: '1.0'
+region_40:
+  id: '01.19.25'
+  region_name: 'აეროპორტი'
+  multiplier: '1.0'
+region_41:
+  id: '01.19.26'
+  region_name: 'აეროპორტი'
+  multiplier: '1.0'
+region_42:
+  id: '01.19.30'
+  region_name: 'აეროპორტი'
+  multiplier: '1.0'
