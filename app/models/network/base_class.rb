@@ -47,7 +47,6 @@ class Network::BaseClass
   end
 
   def calculate_region
-    debugger
     self.tariff_multiplier = Network::TariffMultiplier.multiplier_for(self.address_code, self.start_date)
     self.region = self.tariff_multiplier.name if self.tariff_multiplier
   end
