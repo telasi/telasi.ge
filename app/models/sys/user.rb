@@ -50,6 +50,7 @@ module Sys
     def includes_role?(role); self.role_ids.include?(Moped::BSON::ObjectId.from_string(role)) end
     def admin?; self.admin end
     def tender_admin?; self.admin? or self.includes_role?(Telasi::PERMISSIONS[:tender_admin_id]) or self.includes_role?(Telasi::PERMISSIONS[:tender_report_id]) end
+    def cancelaria_user?; self.includes_role?(Telasi::PERMISSIONS[:network_cancelaria_id]) end
 
     attr_accessor :password_confirmation
     attr_reader :password
