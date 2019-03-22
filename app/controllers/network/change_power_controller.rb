@@ -427,7 +427,7 @@ class Network::ChangePowerController < ApplicationController
 
   private
 
-  def change_power_params; params.require(:network_change_power_application).permit(:base_type, :base_number, :need_factura, :work_by_telasi, :type, :number, :note, :rs_tin, :rs_foreigner, :rs_name, :vat_options, :mobile, :email, :region, :address, :work_address, :address_code, :bank_code, :bank_account, :voltage, :power, :old_voltage, :old_power, :customer_id, :real_customer_id, :proeqti, :oqmi, :zero_charge, :substation) end
+  def change_power_params; params.require(:network_change_power_application).permit(:base_type, :base_number, :need_factura, :work_by_telasi, :type, :number, :note, :rs_tin, :rs_foreigner, :rs_name, :vat_options, :mobile, :email, :region, :address, :work_address, :address_code, :bank_code, :bank_account, :voltage, :power, :old_voltage, :old_power, :customer_id, :real_customer_id, :proeqti, :oqmi, :zero_charge, :substation, :abonent_amount) end
 
   def send_to_gnerc(application, file)
     content = File.read(file.file.file.file)
