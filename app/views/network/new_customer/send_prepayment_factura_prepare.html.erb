@@ -26,7 +26,7 @@
 						<tbody>
 							<% @items_to_factured.each do |item_to_factured| %>
 								<tr>
-									<td width='30'><div><input type="hidden" name="chosen[]" value="<%= item_to_factured.itemkey %>"><br></div></td>
+									<td width='30'><div><input type="checkbox" name="chosen[]" value="<%= item_to_factured.itemkey %>" checked><br></div></td>
 									<td><div><%= item_to_factured.customer.accnumb %></div></td>
 									<td><div><%= item_to_factured.itemdate.strftime("%d-%m-%Y") %></div></td>
 									<td><div><%= "#{item_to_factured.operation.billopername.to_ka} - #{item_to_factured.operation.billoperkey}" %></div></td>
