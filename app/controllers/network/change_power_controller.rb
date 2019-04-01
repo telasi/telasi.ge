@@ -46,7 +46,7 @@ class Network::ChangePowerController < ApplicationController
     end
     respond_to do |format|
       format.html { @applications = rel.desc(:_id).paginate(page: params[:page_change], per_page: 10) }
-      format.xlsx { @applications = rel.desc(:_id).paginate(per_page: 10000) }
+      format.xlsx { @applications = rel.desc(:_id).paginate(per_page: 50000) }
     end
   end
 
