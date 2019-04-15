@@ -120,6 +120,7 @@ module Network::ChangePowerHelper
         t.combo_field :voltage, collection: voltage_collection_change_power, empty: false, required: true
         t.number_field :power, after: 'kWh', width: 100, required: true
         t.number_field :abonent_amount, width: 50, required: true
+        t.text_field :substation, width: 500
         t.text_field :note, width: 400
         t.text_field :oqmi
         t.text_field :proeqti
@@ -209,6 +210,7 @@ module Network::ChangePowerHelper
           c.number_field :power, after: 'კვტ'
         end
         # t.text_field :duration_name, label: 'შესრულების ხანგრძლიობა', required: true
+        t.text_field :substation
         t.text_field :note
         t.text_field :oqmi
         t.text_field :proeqti
