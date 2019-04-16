@@ -338,6 +338,8 @@ ka:
       start_date: რეგისტრაციის თარიღი
       production_date: წარმოებაში მიღების თარიღი
       end_date: დასრულების თარიღი
+      plan_end_date: გეგმიური დასრულების თარიღი
+      plan_end_date_hint: სამუშაოების დასრულების გეგმიური თარიღი
       status_name: სტატუსი
       old_voltage: არსებული ძაბვა
       old_power: არსებული სიმძლავრე

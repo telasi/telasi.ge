@@ -120,6 +120,7 @@ module Network::ChangePowerHelper
         t.combo_field :voltage, collection: voltage_collection_change_power, empty: false, required: true
         t.number_field :power, after: 'kWh', width: 100, required: true
         t.number_field :abonent_amount, width: 50, required: true
+        t.combo_field :duration, collection: duration_collection, empty: false, required: true, label: 'შესრულების ხანგრძლიობა' if application.apply_duration?
         t.text_field :substation, width: 500
         t.text_field :note, width: 400
         t.text_field :oqmi
@@ -209,7 +210,8 @@ module Network::ChangePowerHelper
           c.text_field :unit, after: '/'
           c.number_field :power, after: 'კვტ'
         end
-        # t.text_field :duration_name, label: 'შესრულების ხანგრძლიობა', required: true
+
+        t.text_field :duration_name, label: 'შესრულების ხანგრძლიობა', required: true if application.apply_duration?
         t.text_field :substation
         t.text_field :note
         t.text_field :oqmi
@@ -231,20 +233,21 @@ module Network::ChangePowerHelper
             amnt.action(network_change_power_edit_minus_amount_url(id: application.id), label: 'შეცვლა', icon: '/icons/pencil.png')
           end  unless application.can_change_amount?
 
-          unitname = application.use_business_days ? 'სამუშაო დღე' : 'დღე'
-          # c.number_field('days', label: 'გეგმიური ვადა', max_digits: 0, after: unitname)
-          # c.number_field('real_days', label: 'რეალური ვადა', max_digits: 0, after: unitname)
+          if application.apply_duration?
+            unitname = application.use_business_days ? 'სამუშაო დღე' : 'დღე'
+            c.number_field('days', label: 'გეგმიური ვადა', max_digits: 0, after: unitname)
+            c.number_field('real_days', label: 'რეალური ვადა', max_digits: 0, after: unitname)
 
-          # c.number_field :paid, after: 'GEL'
-          # c.number_field :remaining, after: 'GEL'
-          # c.number_field :penalty_first_stage, after: 'GEL'
+            c.number_field :paid, after: 'GEL'
+            c.number_field :remaining, after: 'GEL'
+            c.number_field :penalty_first_stage, after: 'GEL'
+          end
 
-          # c.number_field :paid, after: 'GEL'
-          # c.number_field :remaining, after: 'GEL'
           c.date_field :send_date
           c.date_field :start_date
           c.date_field :production_date
           c.date_field :end_date 
+          c.date_field :plan_end_date if application.apply_duration?
           c.date_field :real_end_date, label: 'რეალური დასრულება' do |real|
             real.action network_change_power_edit_real_date_url(id: application.id), label: 'შეცვლა', icon: '/icons/pencil.png'
           end
