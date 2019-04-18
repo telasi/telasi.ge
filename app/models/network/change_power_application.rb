@@ -182,7 +182,8 @@ class Network::ChangePowerApplication < Network::BaseClass
 
   def can_change_amount?; not [TYPE_CHANGE_POWER, TYPE_SAME_PACK].include?(self.type) end
   def apply_multiplier?; [TYPE_CHANGE_POWER, TYPE_MICROPOWER, TYPE_MICRO_OTHER_PACK, TYPE_MICRO_SAME_PACK].include?(self.type) end
-  def apply_duration?; [TYPE_MICROPOWER, TYPE_MICRO_OTHER_PACK, TYPE_MICRO_SAME_PACK].include?(self.type) end
+  # def apply_duration?; [TYPE_MICROPOWER, TYPE_MICRO_OTHER_PACK, TYPE_MICRO_SAME_PACK].include?(self.type) end
+  def apply_duration?; false end
 
   def prepayment_factura_sent?
     prepayment_facturas.present?
