@@ -357,6 +357,11 @@ module Network::ChangePowerHelper
         #   c.text_field 'factura_number', empty: false
         # end
       end
+      # gnerc
+      f.tab title: 'სემეკი', icon: '/icons/database-cloud.png' do |t|
+        t.text_field :gnerc_id, tag: 'code'
+        t.text_field :gnerc_status
+      end
       # 7. sys
       f.tab title: 'სისტემური', icon: '/icons/traffic-cone.png' do |t|
         t.complex_field label: 'მომხმარებელი', hint: 'მომხმარებელი, რომელმაც შექმნა ეს განცხადება', required: true do |c|

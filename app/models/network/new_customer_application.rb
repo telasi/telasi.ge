@@ -98,6 +98,8 @@ class Network::NewCustomerApplication < Network::BaseClass
 
   field :substation, type: String
 
+  field :gnerc_id, type: String
+
   embeds_many :items, class_name: 'Network::NewCustomerItem', inverse_of: :application
   has_many :files, class_name: 'Sys::File', as: 'mountable'
   has_many :messages, class_name: 'Sys::SmsMessage', as: 'messageable', :order => 'created_at ASC'
@@ -544,6 +546,29 @@ class Network::NewCustomerApplication < Network::BaseClass
     newcust.update_attributes!(company_answer: message.message, phone: message.mobile, confirmation: 1)
   end
 
+  def first_sms
+    message = Sys::SmsMessage.new(message: "თქვენი განაცხადი #{self.number} დარეგისტრირდა და მიღებულია წარმოებაში #{self.production_date}. ელ. ჟურნალში რეგისტრაციის N #{self.gnerc_id}")
+    message.messageable = self
+    message.mobile = self.mobile
+    message.send_sms!(lat: true) if message.save
+  end
+
+  def gnerc_status
+    return if self.number.blank?
+    newcust = Gnerc::Newcust.where(letter_number: self.number).first
+    return I18n.t('models.network_new_customer_application.gnerc_statuses.not_sent') unless newcust
+    queue = Gnerc::SendQueue.where(service: service, service_id: newcust.id, stage: current_stage).first
+    if queue.blank?
+      return I18n.t('models.network_new_customer_application.gnerc_statuses.not_sent')
+    else
+      if self.status < STATUS_COMPLETE
+        queue.sent_at.blank? ? I18n.t('models.network_new_customer_application.gnerc_statuses.waiting') : I18n.t('models.network_new_customer_application.gnerc_statuses.sent')
+      else
+        queue.sent_at.blank? ? I18n.t('models.network_new_customer_application.gnerc_statuses.answered_ready') : I18n.t('models.network_new_customer_application.gnerc_statuses.answered')
+      end      
+    end
+  end
+
   private
 
   def calculate_total_cost
@@ -561,6 +586,9 @@ class Network::NewCustomerApplication < Network::BaseClass
             self.plan_end_date = self.send_date + self.days - 1
           end
         end
+        # if self.abonent_amount > 2
+        #   self.amount = self.amount + self.abonent_amount * 100
+        # end
         self.amount = self.std_amount = (self.amount / 1.18 * 100).round / 100.0 unless self.pays_non_zero_vat?
         self.penalty1 = self.penalty_first_stage
         self.penalty2 = self.penalty_second_stage

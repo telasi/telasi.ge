@@ -456,6 +456,14 @@ ka:
       proeqti: "პროექტის #"
       oqmi: "ოქმის #"
       substation: ქვესადგური
+      gnerc_id: ელ. ჟურნალის N
+      gnerc_status: სემეკ-ში გაგზავნის სტატუსი
+      gnerc_statuses:
+        not_sent: არ არის გაგზავნილი
+        waiting: მიმდინარეობს გაგზავნა
+        sent: გაგზავნილია
+        answered_ready: მიმდინარეობს პასუხის გაგზავნა
+        answered: პასუხი გაგზავნილია
       files:
         date: "თარიღი, დრო"
         filename: ფაილის დასახელება

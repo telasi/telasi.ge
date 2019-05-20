@@ -431,8 +431,10 @@ module Network::NewCustomerHelper
         end
       end
       # gnerc
-      # f.tab title: 'სემეკი', icon: '/icons/database-cloud.png' do |t|
-      # end
+       f.tab title: 'სემეკი', icon: '/icons/database-cloud.png' do |t|
+         t.text_field :gnerc_id, tag: 'code'
+         t.text_field :gnerc_status
+       end
       # 8. sys
       f.tab title: 'სისტემური', icon: '/icons/traffic-cone.png' do |t|
         t.complex_field label: 'მომხმარებელი', hint: 'მომხმარებელი, რომელმაც შექმნა ეს განცხადება', required: true do |c|
@@ -449,9 +451,9 @@ module Network::NewCustomerHelper
 
   def sms_message_form(message, opts = {})
     forma_for message, title: opts[:title], icon: opts[:icon], collapsible: true do |f|
-      f.text_field 'message', required: true, autofocus: true, width: 800
-      f.submit opts[:submit]
-      f.bottom_action opts[:cancel_url], label: 'გაუქმება', icon: '/icons/cross.png'
+        f.text_field 'message', required: true, autofocus: true, width: 800 if opts[:no_message].blank?
+        f.submit opts[:submit]
+        f.bottom_action opts[:cancel_url], label: 'გაუქმება', icon: '/icons/cross.png'
     end
   end
 

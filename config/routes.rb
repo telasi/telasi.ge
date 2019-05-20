@@ -252,6 +252,10 @@ TelasiGe::Application.routes.draw do
       get '/status/:id', action: 'status'
       get '/download/:id', action: 'download'
     end
+    scope 'network', controller: 'network' do
+      post '/newcustomer_sms', action: 'newcustomer_sms', as: 'newcustomer_sms'
+      post '/changepower_sms', action: 'changepower_sms', as: 'changepower_sms'
+    end
   end
 
   namespace 'pay' do

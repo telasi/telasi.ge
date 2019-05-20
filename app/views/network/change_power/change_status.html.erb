@@ -19,6 +19,9 @@
 <% end %>
 <%= sms_message_form @message, title: t('models.network.change.sms'),
   icon: '/icons/mail.png', submit: t('models.network.change.status_change'),
-  cancel_url: network_change_power_url(id: @application.id)
+  cancel_url: network_change_power_url(id: @application.id),
+  no_message: [Network::ChangePowerApplication::STATUS_SENT, Network::ChangePowerApplication::STATUS_CONFIRMED].include?(params[:status].to_i) 
 %>
+<% if not [Network::ChangePowerApplication::STATUS_SENT, Network::ChangePowerApplication::STATUS_CONFIRMED].include?(params[:status].to_i) %>
 <%= render partial: '/network/sms_helpers', locals: { application: @application } %>
+<% end %>

@@ -90,6 +90,8 @@ class Network::ChangePowerApplication < Network::BaseClass
 
   field :substation, type: String
 
+  field :gnerc_id, type: String
+
   # relations
   has_many :messages, class_name: 'Sys::SmsMessage', as: 'messageable'
   has_many :files, class_name: 'Sys::File', inverse_of: 'mountable'
@@ -337,6 +339,29 @@ class Network::ChangePowerApplication < Network::BaseClass
     return if docflow.blank?
     
     docflow.update_attributes!(company_answer: message.message, phone: message.mobile, confirm: 1)
+  end
+
+  def first_sms
+    message = Sys::SmsMessage.new(message: "თქვენი განაცხადი #{self.number} დარეგისტრირდა და მიღებულია წარმოებაში #{self.production_date}. ელ. ჟურნალში რეგისტრაციის N #{self.gnerc_id}")
+    message.messageable = self
+    message.mobile = self.mobile
+    message.send_sms!(lat: true) if message.save
+  end
+
+  def gnerc_status
+    return if self.number.blank?
+    newcust = Gnerc::Docflow4.where(letter_number: self.number).first
+    return I18n.t('models.network_new_customer_application.gnerc_statuses.not_sent') unless newcust
+    queue = Gnerc::SendQueue.where(service: service, service_id: newcust.id, stage: current_stage).first
+    if queue.blank?
+      return I18n.t('models.network_new_customer_application.gnerc_statuses.not_sent')
+    else
+      if self.status < STATUS_COMPLETE
+        queue.sent_at.blank? ? I18n.t('models.network_new_customer_application.gnerc_statuses.waiting') : I18n.t('models.network_new_customer_application.gnerc_statuses.sent')
+      else
+        queue.sent_at.blank? ? I18n.t('models.network_new_customer_application.gnerc_statuses.answered_ready') : I18n.t('models.network_new_customer_application.gnerc_statuses.answered')
+      end      
+    end
   end
 
   private
