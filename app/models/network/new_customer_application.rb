@@ -557,7 +557,7 @@ class Network::NewCustomerApplication < Network::BaseClass
     return if self.number.blank?
     newcust = Gnerc::Newcust.where(letter_number: self.number).first
     return I18n.t('models.network_new_customer_application.gnerc_statuses.not_sent') unless newcust
-    queue = Gnerc::SendQueue.where(service: 'Newcust', service_id: newcust.id, stage: current_stage).first
+    queue = Gnerc::SendQueue.where(service: 'Newcust', service_id: newcust.id, stage: 1).first
     if queue.blank?
       return I18n.t('models.network_new_customer_application.gnerc_statuses.not_sent')
     else
