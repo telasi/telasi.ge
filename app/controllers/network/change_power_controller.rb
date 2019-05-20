@@ -236,23 +236,25 @@ class Network::ChangePowerController < ApplicationController
     @title = I18n.t('models.network_new_customer_application.actions.status.title')
     @application = Network::ChangePowerApplication.find(params[:id])
     if request.post?
-      @message = Sys::SmsMessage.new(params.require(:sys_sms_message).permit(:message))
-      @message.messageable = @application
-      @message.mobile = @application.mobile
-      if @message.save
-        @message.send_sms!(lat: true)
-        old_status = @application.status
-        @application.status = params[:status].to_i
-        if @application.save
-          if @application.status==Network::ChangePowerApplication::STATUS_COMPLETE
-            @application.message_to_gnerc(@message) unless old_status == @application.status
-            redirect_to network_change_power_edit_real_date_url(id: @application.id), alert: 'შეიტანეთ რეალური დასრულების თარიღი'
-          else
-            redirect_to network_change_power_url(id: @application.id), notice: I18n.t('models.network_new_customer_application.actions.status.changed')
-          end
-        else
-          @error = @application.errors.full_messages
+      if params[:sys_sms_message].present?
+        @message = Sys::SmsMessage.new(params.require(:sys_sms_message).permit(:message))
+        @message.messageable = @application
+        @message.mobile = @application.mobile
+        if @message.save
+          @message.send_sms!(lat: true)
         end
+      end
+      old_status = @application.status
+      @application.status = params[:status].to_i
+      if @application.save
+        if @application.status==Network::ChangePowerApplication::STATUS_COMPLETE
+          @application.message_to_gnerc(@message) if old_status != @application.status && @message.present?
+          redirect_to network_change_power_edit_real_date_url(id: @application.id), alert: 'შეიტანეთ რეალური დასრულების თარიღი'
+        else
+          redirect_to network_change_power_url(id: @application.id), notice: I18n.t('models.network_new_customer_application.actions.status.changed')
+        end
+      else
+        @error = @application.errors.full_messages
       end
     else
       @message = Sys::SmsMessage.new
