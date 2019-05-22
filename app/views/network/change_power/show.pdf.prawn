@@ -2,8 +2,8 @@ def default_font(pdf, size = 9); pdf.change_font('default', size) end
 
 prawn_document(page_size: 'A4', margin: [40, 40]) do |pdf|
   default_font pdf
-  pdf.text %Q{სს "თელასის" ტექნიკურ დირექტორს\nბატონ ვ. ქინქლაძეს}, align: :right
-  pdf.text %Q{Техническому директору АО "Теласи"\nг-ну В. Кинкладзе}, align: :right
+  pdf.text %Q{სს "თელასის" კორპორაციული განვითარებისა და საწარმოო საქმიანობის უზრუნველყოფის დირექტორს\nბატონ ე. ბონდარენკოს}, align: :right
+  pdf.text %Q{Директору по корпоративному развитию и обеспечению производственной деятельности АО "Теласи"\nг-ну Е. Бондаренко}, align: :right
   pdf.move_down 20
   pdf.table [['', "გ ა ნ ც ხ ა დ ე ბ ა\nЗ А Я В Л Е Н И Е", "№#{@application.number}"]], column_widths: [200, 150, 150] do
     row(0).style borders: [], align: :center, size: 14
