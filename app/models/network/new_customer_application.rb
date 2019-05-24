@@ -547,7 +547,7 @@ class Network::NewCustomerApplication < Network::BaseClass
   end
 
   def first_sms
-    message = Sys::SmsMessage.new(message: "თქვენი განაცხადი #{self.number} დარეგისტრირდა და მიღებულია წარმოებაში #{self.production_date}. ელ. ჟურნალში რეგისტრაციის N #{self.gnerc_id}")
+    message = Sys::SmsMessage.new(message: "თქვენი განაცხადი #{self.number} დარეგისტრირდა და მიღებულია განსახილველად #{self.production_date}. ელ. ჟურნალში რეგისტრაციის N #{self.gnerc_id}")
     message.messageable = self
     message.mobile = self.mobile
     message.send_sms!(lat: true) if message.save
