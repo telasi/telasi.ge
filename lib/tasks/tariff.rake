@@ -54,7 +54,7 @@ namespace :tariff do
 
 
   task sync: :environment do
-    sync_tariffs
+    # sync_tariffs
   end
 
 end
