@@ -261,23 +261,16 @@ module Network::NewCustomerHelper
             c.text_field 'customer.custname'
             c.text_field 'customer.commercial', empty: false, before: '&mdash;'.html_safe
           end
-          if application.micro
+          if application.micro || application.tariff_multiplier || application.add_price_for_customer_amount?
             t.complex_field label: 'ღირებულება', required: true do |c|
-              c.text_field :amount, tag: 'code', after: ' = '
-              c.text_field :std_amount, tag: 'code', before: '('
-              c.text_field 'tariff_multiplier.multiplier', tag: 'code', before: ' * ' if application.tariff_multiplier  
-              c.text_field :micro_amount, tag: 'code', before: ' + ', after: ' ) GEL'
+              c.text_field :amount, tag: 'code', after: '= '
+              c.text_field :std_amount, tag: 'code', hint: 'სტანდარტული თანხა'
+              c.text_field 'tariff_multiplier.multiplier', tag: 'code', before: ' * ' if application.tariff_multiplier
+              c.text_field :micro_amount, tag: 'code', before: ' + ' if application.micro
+              c.text_field :customer_amount_price, before: ' + ', tag: 'code' if application.add_price_for_customer_amount?
             end
           else
-            if application.tariff_multiplier
-              t.complex_field label: 'ღირებულება', required: true do |c|
-                c.text_field :amount, tag: 'code', after: ' = '
-                c.text_field :std_amount, tag: 'code', before: ' ( '
-                c.text_field 'tariff_multiplier.multiplier', tag: 'code', before: ' * ', after: ' ) GEL' 
-              end
-            else 
-              c.number_field :amount, after: 'GEL'
-            end
+            c.number_field :amount, after: 'GEL'
           end
 
           unitname = application.use_business_days ? 'სამუშაო დღე' : 'დღე'

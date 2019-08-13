@@ -14,7 +14,7 @@ namespace :tariff do
   }, {
     file: 'data/new-customer-tariffs3.yml',
     starts: Date.new(2019,8,13),
-    ends: nil
+    ends: END_DATE
   }]
 
 

@@ -8,6 +8,9 @@ class Network::NewCustomerApplication < Network::BaseClass
   GNERC_VOLTAGE_380 = '0.380'
   GNERC_VOLTAGE_610 = '6-10'
 
+  CUSTOMER_AMOUNT_PRICE_MULTI_START_DATE = Date.new(2019,8,13)
+  CUSTOMER_AMOUNT_PRICE_MULTI = 100
+
   include Mongoid::Document
   include Mongoid::Timestamps
   include Network::RsName
@@ -141,6 +144,8 @@ class Network::NewCustomerApplication < Network::BaseClass
   def not_sent?; self.status == STATUS_DEFAULT end
   def docs_are_ok?; self.doc_payment and self.doc_ownership and self.doc_id end
   def can_send?; self.status == STATUS_DEFAULT and self.docs_are_ok? and self.confirm_correctness end
+  def add_price_for_customer_amount?; self.abonent_amount > 1 && ( self.start_date || Date.today ) >= CUSTOMER_AMOUNT_PRICE_MULTI_START_DATE end
+  def customer_amount_price; self.abonent_amount * Network::NewCustomerApplication::CUSTOMER_AMOUNT_PRICE_MULTI end
 
   def facturas
     array = registered_facturas.where('factura_id <> ?',self.factura_id.to_i).dup
@@ -613,6 +618,8 @@ class Network::NewCustomerApplication < Network::BaseClass
     end
     self.amount = self.std_amount + self.micro_amount
     self.amount = self.std_amount * self.tariff_multiplier.multiplier + self.micro_amount if self.tariff_multiplier
+
+    self.amount = self.amount + self.abonent_amount * 100 if self.add_price_for_customer_amount?
   end
 
   def validate_number
