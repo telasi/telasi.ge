@@ -10,10 +10,10 @@ namespace :tariff do
   }, {
     file: 'data/new-customer-tariffs2.yml',
     starts: Date.new(2015,10,1),
-    ends: Date.new(2019,08,12)
+    ends: Date.new(2019,8,12)
   }, {
     file: 'data/new-customer-tariffs3.yml',
-    starts: Date.new(2019,08,13),
+    starts: Date.new(2019,8,13),
     ends: nil
   }]
 
