@@ -256,6 +256,9 @@ TelasiGe::Application.routes.draw do
       post '/newcustomer_sms', action: 'newcustomer_sms', as: 'newcustomer_sms'
       post '/changepower_sms', action: 'changepower_sms', as: 'changepower_sms'
     end
+    scope 'android', controller: 'android' do
+      post '/login', action: 'login', as: 'login'
+    end
   end
 
   namespace 'pay' do
