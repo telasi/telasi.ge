@@ -1,7 +1,9 @@
 # -*- encoding : utf-8 -*-
 class Api::MobileController < Api::ApiController
   def login
-    validate_login
+    validate_login do
+      render json: { success: true, session_id: @session_id }
+    end 
   end
 
   def get_user_info
@@ -28,7 +30,7 @@ class Api::MobileController < Api::ApiController
   def validate_login
     @user = Sys::User.authenticate(params[:username].downcase, params[:password]) if params[:username]
     if @user and @user.email_confirmed and @user.active 
-      session[:user_id] = user.id
+      @session_id = @user.id
       yield if block_given?
     elsif @user and not @user.email_confirmed then 
       render json: { success: false, message: I18n.t('model.sys_user.errors.email_not_confirmed') }
