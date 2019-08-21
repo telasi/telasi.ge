@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-class Api::NetworkController < Api::ApiController
+class Api::MobileController < Api::ApiController
   def login
     validate_login
   end
