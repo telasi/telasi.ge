@@ -23,6 +23,28 @@ class Api::MobileController < Api::ApiController
   end
 
   def debts
+    user = Sys::User.find(params[:session_id])
+    if user
+      registration = Customer::Registration.where(user: user).first
+      if registration
+        customer = Billing::Customer.find(registration.custkey)
+        if customer
+          render json: { success: true, 
+                         energy: customer.payable_balance, 
+                         trash: customer.trash_balance,
+                         water: ustomer.current_water_balance,
+                         last_bill_date: customer.last_bill_date,
+                         last_bill_number: customer.last_bill_number,
+                         cut_deadline: customer.cut_deadline }
+        else 
+          render json: { success: false, message: 'No customer' }
+        end
+      else 
+        render json: { success: false, message: 'No registration' }
+      end
+    else 
+      render json: { success: false, message: 'No user' }
+    end
   end
 
   private
