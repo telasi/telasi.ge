@@ -6,44 +6,27 @@ class Api::MobileController < Api::ApiController
     end 
   end
 
-  def get_user_info
-    validate_loginc do
-      registration = Customer::Registration.where(user: @user).first
-      if registration
-        customer = Billing::Customer.find(registration.custkey)  
-      end
-      if customer
-        render json: { success: true, 
-                       customer_number: customer.accnumb.to_ka, 
-                       customer_name: customer.custname.to_ka } 
-      else 
-        render json: { success: false, message: 'No registration' }
-      end
+  def user_info
+    user = Sys::User.find(params[:session_id])
+    if user
+      @registrations = Customer::Registration.where(user: user)
+    else 
+      render json: { success: false, message: 'No user' }
     end
   end
 
   def bills
-    user = Sys::User.find(params[:session_id])
-    if user
-      registration = Customer::Registration.where(user: user).first
-      if registration
-        customer = Billing::Customer.find(registration.custkey)
-        if customer
-          render json: { success: true, 
-                         energy: customer.payable_balance, 
-                         trash: customer.trash_balance,
-                         water: customer.current_water_balance || 0,
-                         last_bill_date: customer.last_bill_date.strftime('%d/%m/%Y'),
-                         last_bill_number: customer.last_bill_date ? customer.last_bill_number : '',
-                         cut_deadline: customer.cut_deadline.strftime('%d/%m/%Y') }
-        else 
-          render json: { success: false, message: 'No customer' }
-        end
-      else 
-        render json: { success: false, message: 'No registration' }
-      end
+    customer = Billing::Customer.find(params[:custkey])
+    if customer
+      render json: { success: true, 
+                     energy: customer.payable_balance, 
+                     trash: customer.trash_balance,
+                     water: customer.current_water_balance || 0,
+                     last_bill_date: customer.last_bill_date.strftime('%d/%m/%Y'),
+                     last_bill_number: customer.last_bill_date ? customer.last_bill_number : '',
+                     cut_deadline: customer.cut_deadline.strftime('%d/%m/%Y') }
     else 
-      render json: { success: false, message: 'No user' }
+      render json: { success: false, message: 'No customer' }
     end
   end
 
