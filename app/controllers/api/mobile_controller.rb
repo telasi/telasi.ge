@@ -22,7 +22,7 @@ class Api::MobileController < Api::ApiController
     end
   end
 
-  def debts
+  def bills
     user = Sys::User.find(params[:session_id])
     if user
       registration = Customer::Registration.where(user: user).first
