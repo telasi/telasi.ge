@@ -258,7 +258,8 @@ TelasiGe::Application.routes.draw do
     end
     scope 'mobile', controller: 'mobile' do
       post '/login', action: 'login', as: 'login'
-      get 'get_user_info', action: 'get_user_info', as: 'get_user_info'
+      get '/get_user_info', action: 'get_user_info', as: 'get_user_info'
+      get '/debts', action: 'debts', as: 'debts'
     end
   end
 
