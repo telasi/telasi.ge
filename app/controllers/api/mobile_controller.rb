@@ -36,11 +36,11 @@ class Api::MobileController < Api::ApiController
       type = params[:type] || '1'
       case type
         when '1'
-          @payments = Bs::Payment.where(customer: customer).order('paykey desc').limit(10)
+          @payments = Billing::Payment.where(customer: customer).order('paykey desc').limit(10)
         when '2'
-          @payments = Bs::WaterPayment.where(customer: customer).order('paykey desc').limit(10)
+          @payments = Billing::WaterPayment.where(customer: customer).order('paykey desc').limit(10)
         when '3'
-          @payments = Bs::TrashPayment.where(customer: customer).order('paykey desc').limit(10)
+          @payments = Billing::TrashPayment.where(customer: customer).order('paykey desc').limit(10)
       end
     end
   end
