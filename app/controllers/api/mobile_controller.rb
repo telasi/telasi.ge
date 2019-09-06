@@ -30,6 +30,21 @@ class Api::MobileController < Api::ApiController
     end
   end
 
+  def payments
+    customer = Billing::Customer.find(params[:custkey])
+    if customer
+      type = params[:type] || '1'
+      case type
+        when '1'
+          @payments = Bs::Payment.where(customer: customer).order('paykey desc').limit(10)
+        when '2'
+          @payments = Bs::WaterPayment.where(customer: customer).order('paykey desc').limit(10)
+        when '3'
+          @payments = Bs::TrashPayment.where(customer: customer).order('paykey desc').limit(10)
+      end
+    end
+  end
+
   private
 
   def validate_login
