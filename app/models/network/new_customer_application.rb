@@ -128,7 +128,8 @@ class Network::NewCustomerApplication < Network::BaseClass
     if micro
       not not (/^(MCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number) 
     else
-      not not (/^(CNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number) 
+      not not ((/^(CNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number) ||
+              (/^(SCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number) )
     end
   end
 
@@ -800,7 +801,8 @@ class Network::NewCustomerApplication < Network::BaseClass
                                       when 51..80 then '51..80'
                                       when 81..100 then '81..100'
                                       when 101..120 then '101..120'
-                                      when 121..200 then '121..200'
+                                      when 121..150 then '121..150'
+                                      when 151..200 then '151..200'
                                       when 201..320 then '201..320'
                                       when 321..500 then '321..500'
                                       when 501..800 then '501..800'
@@ -812,7 +814,11 @@ class Network::NewCustomerApplication < Network::BaseClass
               gnerc_micro_power   = case self.micro_power
                                       when 1..500 then '1..500'
                                       when 501..1000 then '501..1000'
-                                      when 1001..Float::INFINITY then '>1000'
+                                      when 1001..1500 then '1001..1500'
+                                      when 1501..2000 then '1501..2000'
+                                      when 2001..3000 then '2001..3000'
+                                      when 3001..5000 then '3001..5000'
+                                      when 5001..Float::INFINITY then '>5000'
                                     end
           end
 
