@@ -29,6 +29,21 @@ class Billing::Customer < ActiveRecord::Base
   def last_bill_date; self.item_bills.last.billdate end
   def last_bill_number; self.item_bills.last.billnumber end
 
+  def status
+    status = true
+
+    ch = Billing::CutHistory.where(custkey: self.custkey).order('cr_key desc').first
+    if ch && ch.oper_code == 0
+     status = false
+     reason = 'payment'
+    end
+
+    
+
+
+    return [status, reason]
+  end
+
   def abonent_type
     return 1 if [1, 7, 1111, 1112, 1113, 1120].include?(self.custcatkey)
     return 2

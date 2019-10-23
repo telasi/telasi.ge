@@ -18,7 +18,10 @@ class Api::MobileController < Api::ApiController
   def bills
     customer = Billing::Customer.find(params[:custkey])
     if customer
+      status, reason = customer.status
       render json: { success: true, 
+                     status: status,
+                     reason: reason,
                      energy: customer.payable_balance, 
                      trash: customer.trash_balance,
                      water: customer.current_water_balance || 0,
