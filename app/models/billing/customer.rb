@@ -39,8 +39,13 @@ class Billing::Customer < ActiveRecord::Base
      reason = 'payment'
     end
 
-
-
+    outage = Billing::OutageJournalCust.where(custkey_customer: self.custkey).first
+    if outage.present? && outage.detail.present?
+      if outage.detail.enabled != 1 || outage.detail.on_time == null
+        status = false
+        reason = outage.detail.type_descr
+      end
+    end
 
     return [status, reason]
   end
