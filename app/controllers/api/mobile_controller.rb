@@ -48,6 +48,31 @@ class Api::MobileController < Api::ApiController
     end
   end
 
+  def subscription
+    user = Sys::User.find(params[:session_id])
+    if user
+      @subscription = Sys::Subscription.where(email: user.email).first
+    else 
+      render json: { success: false, message: 'No user' }
+    end
+  end 
+
+  def update_subscription
+    user = Sys::User.find(params[:session_id])
+    if user
+      subscription = user.subscription || Sys::Subscription.new(email: user.email)
+      subscription.company_news = params[:company_news]
+      subscription.procurement_news = params[:procurement_news]
+      subscription.outage_news = params[:outage_news]
+      subscription.locale = params[:locale]
+      if subscription.save
+        render json: { success: true, message: '' }
+      end
+    else 
+      render json: { success: false, message: 'No user' }
+    end
+  end 
+
   private
 
   def validate_login

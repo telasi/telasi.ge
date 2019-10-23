@@ -166,6 +166,7 @@ TelasiGe::Application.routes.draw do
       match '/new', action: 'add_new_customer', as: 'add_new_customer', via: ['get', 'post']
       get   '/:id', action: 'new_customer', as: 'new_customer'
       match '/edit/:id', action: 'edit_new_customer', as: 'edit_new_customer', via: ['get', 'post']
+      match '/postpone/:id', action: 'postpone', as: 'postpone', via: ['get', 'post']
       delete '/delete/:id', action: 'delete_new_customer', as: 'delete_new_customer'
       post '/sync_customers/:id', action: 'sync_customers', as: 'new_customer_sync_customers'
       # status operations
@@ -261,6 +262,8 @@ TelasiGe::Application.routes.draw do
       get '/user_info', action: 'user_info', as: 'get_user_info'
       get '/bills', action: 'bills', as: 'bills'
       get '/payments', action: 'payments', as: 'payments'
+      get '/subscription', action: 'subscription', as: 'subscription'
+      post '/update_subscription', action: 'update_subscription', as: 'update_subscription'
     end
   end
 
