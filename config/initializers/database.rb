@@ -34,6 +34,8 @@ Billing::NewCustomerFactura.establish_connection  :bs
 Billing::NewCustomerFacturaAppl.establish_connection  :bs
 Billing::CustomerCns.establish_connection  :bs
 Sys::SentMessage.establish_connection  :bs
+Billing::OutageJournalCust.establish_connection :report_bs
+Billing::OutageJournalDet.establish_connection :report_bs
 
 Billing::CutHistory.establish_connection :report_bs
 
