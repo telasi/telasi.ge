@@ -31,6 +31,7 @@ class Billing::Customer < ActiveRecord::Base
 
   def status
     status = true
+    reason = ''
 
     ch = Billing::CutHistory.where(custkey: self.custkey).order('cr_key desc').first
     if ch && ch.oper_code == 0
@@ -38,7 +39,7 @@ class Billing::Customer < ActiveRecord::Base
      reason = 'payment'
     end
 
-    
+
 
 
     return [status, reason]
