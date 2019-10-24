@@ -29,6 +29,7 @@ class Network::ChangePowerApplication < Network::BaseClass
   include Network::BsBase
   include Network::Factura
   include Network::CalculationUtils
+  #include Network::Postpone
 
   belongs_to :user, class_name: 'Sys::User'
   belongs_to :tariff_multiplier, class_name: 'Network::TariffMultiplier'
@@ -69,6 +70,8 @@ class Network::ChangePowerApplication < Network::BaseClass
   field :real_end_date, type: Date
   field :plan_end_date, type: Date
   field :end_date, type: Date
+  # cancelation_date არის გაუქმების თარიღი
+  field :cancelation_date, type: Date
   field :note, type: String
   field :oqmi, type: String
   field :proeqti, type: String
@@ -378,6 +381,10 @@ class Network::ChangePowerApplication < Network::BaseClass
 
         send_to_gnerc(1)
       when STATUS_COMPLETE  then self.end_date   = Date.today
+      when STATUS_CANCELED  then
+        raise "ატვირთეთ def ფაილი" unless check_file_uploaded
+        self.cancelation_date = Date.today
+        send_to_gnerc(2)
       end
     end
   end
@@ -421,6 +428,9 @@ class Network::ChangePowerApplication < Network::BaseClass
         else
           self.plan_end_date = self.send_date + self.days - 1
         end
+        #if self.postponed
+        #  self.plan_end_date = self.postpone_set_date
+        #end
       end
     end
   end
@@ -517,5 +527,19 @@ class Network::ChangePowerApplication < Network::BaseClass
     when TYPE_SUB_CUSTOMER then 28
     else 31
     end
+  end
+
+  def check_file_uploaded
+    actfile = self.files.select{ |x| x.file.filename[0..2] == GNERC_ACT_FILE }.first
+    if actfile.blank?
+      deffile = self.files.select{ |x| x.file.filename[0..2] == GNERC_DEF_FILE }.first
+      if deffile.blank?
+        reffile = self.files.select{ |x| x.file.filename[0..4] == GNERC_REFAB_FILE }.first
+         if reffile.blank?
+          return false
+         end
+      end
+    end
+    return true
   end
 end
