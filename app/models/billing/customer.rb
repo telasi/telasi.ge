@@ -41,7 +41,7 @@ class Billing::Customer < ActiveRecord::Base
 
     outage = Billing::OutageJournalCust.where(custkey_customer: self.custkey).first
     if outage.present? && outage.detail.present?
-      if outage.detail.enabled != 1 || outage.detail.on_time == null
+      if outage.detail.enabled != 1 || outage.detail.on_time.blank?
         status = false
         reason = outage.detail.type_descr
       end
