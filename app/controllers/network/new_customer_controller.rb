@@ -157,6 +157,24 @@ class Network::NewCustomerController < ApplicationController
     end
   end
 
+  def postpone 
+    @title = I18n.t('models.network_new_customer_application.actions.edit.title')
+    @application = Network::NewCustomerApplication.find(params[:id])
+    if request.post? and postpone_params[:postpone_file]
+      p = params.require(:network_new_customer_application).permit(:postpone_file)
+      p[:file] = p[:postpone_file]
+      p.delete("postpone_file")
+      @application.postpone_file = Sys::File.new(p)
+      if @application.save
+        if @application.update_attributes(postpone_params.except(:postpone_file))
+          redirect_to network_new_customer_url(id: @application._id, tab: 'general'), notice: I18n.t('models.network_new_customer_application.actions.edit.changed')
+        end
+      end
+    else
+      @application.postpone_file = Sys::File.new
+    end
+  end
+
   def delete_new_customer
     application = Network::NewCustomerApplication.find(params[:id])
     application.destroy
@@ -289,40 +307,12 @@ class Network::NewCustomerController < ApplicationController
     end
   end
 
-  def print; @application = Network::NewCustomerApplication.find(params[:id]) end
+  # def print; @application = Network::NewCustomerApplication.find(params[:id]) end
 
-=begin
-  def sign
-    @application = Network::NewCustomerApplication.find(params[:id])
-    if params[:sdweb_result].present?
-      if params[:sdweb_result] == 'success'
-        @application.signed = true
-        @application.save
-      end
-      redirect_to network_new_customer_url  , notice: "ხელმოწერის შედეგი: #{params[:sdweb_result]}"
-    else
-      begin
-        text = render_to_string 'print', formats: ['pdf']
-        file = Tempfile.new(@application.id.to_s, encoding: 'ascii-8bit')
-        file.write text
-        file.close
-        RestClient.post(Network::SDWEB_UPLOAD_URL, {
-          docdata: File.new(file.path),
-          cmd: Network::SDWEB_CMD_NEWCUSTAPP,
-          resulturl: network_new_customer_sign_url(id: @application.id),
-          docid: @application.id.to_s,
-          dmsid: Network::SDWEB_DMSID
-        }, {
-          'Content-Type' => 'multipart/form-data'
-        }) do |response, request, result, &block|
-          redirect_to response.headers[:location]
-        end
-      ensure
-        file.unlink if file
-      end
-    end
+  def print
+    @application = Network::NewCustomerApplication.find(params[:id]) 
+    send_data(Network::NewCustomerApplicationTemplate.new(@application).print, :filename => @application.id.to_s + 'pdf', :type => 'application/pdf', :disposition => 'inline') 
   end
-=end
 
   def sign
     @application = Network::NewCustomerApplication.find(params[:id])
@@ -331,7 +321,8 @@ class Network::NewCustomerController < ApplicationController
       @application.signed = true
       @application.save
     else
-      binary = render_to_string 'print', formats: ['pdf']
+      #binary = render_to_string 'print', formats: ['pdf']
+      binary = Network::NewCustomerApplicationTemplate.new(@application).print
       name = "NewCustomer_#{params[:id]}.pdf"
       workstepId = Sys::Signature.send("newcustomer", name, binary, params[:id])
       url = Sys::Signature::WORKSTEP_SIGN
@@ -470,4 +461,8 @@ class Network::NewCustomerController < ApplicationController
   end
 
   def account_params; params.require(:network_new_customer_item).permit(:address, :address_code, :rs_tin, :customer_id) end
+
+  def postpone_params
+    params.require(:network_new_customer_application).permit(:postponed, :postpone_organization, :postpone_application_date, :postpone_set_date, :postpone_response_date, :postpone_file, :postpone_note)
+  end
 end
