@@ -25,7 +25,13 @@ class NewCustomersController < ApplicationController
     with_application do
       respond_to do |format|
         format.html { @title, @pill = I18n.t('applications.new_customer.general'), 'general' }
-        format.pdf { render template: 'network/new_customer/print' }
+        format.pdf { 
+          # render template: 'network/new_customer/print' 
+          send_data(Network::NewCustomerApplicationTemplate.new(@application).print, 
+                    :filename => @application.id.to_s + 'pdf', 
+                    :type => 'application/pdf', 
+                    :disposition => 'inline') 
+        }
       end
     end
   end
