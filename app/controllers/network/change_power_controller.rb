@@ -150,17 +150,37 @@ class Network::ChangePowerController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        case @application.type 
-          when Network::ChangePowerApplication::TYPE_CHANGE_POWER then
-            render 'change_power_1cns'
-          when Network::ChangePowerApplication::TYPE_MICROPOWER then
-            render 'change_power_rcns'
-          else 
-            render 'show'
+        if Network::ChangePowerApplicationTemplate.implemented_types.include?(@application.type)
+          send_data(Network::ChangePowerApplicationTemplate.new(@application).print, :filename => @application.id.to_s + 'pdf', :type => 'application/pdf', :disposition => 'inline') 
+        else
+          render 'show'
         end
       end
     end
   end
+
+  # def show 
+  #   @application = Network::ChangePowerApplication.find(params[:id]) 
+  #   send_data(Network::ChangePowerApplicationTemplate.new(@application).print, :filename => @application.id.to_s + 'pdf', :type => 'application/pdf', :disposition => 'inline') 
+  # end  
+
+  # def show
+  #   @application = Network::ChangePowerApplication.find(params[:id])
+  #   @title = I18n.t('models.network_new_customer_application.actions.edit.title')
+  #   respond_to do |format|
+  #     format.html
+  #     format.pdf do
+  #       case @application.type 
+  #         when Network::ChangePowerApplication::TYPE_CHANGE_POWER then
+  #           render 'change_power_1cns'
+  #         when Network::ChangePowerApplication::TYPE_MICROPOWER then
+  #           render 'change_power_rcns'
+  #         else 
+  #           render 'show'
+  #       end
+  #     end
+  #   end
+  # end
 
 #  def sign
 #    @application = Network::ChangePowerApplication.find(params[:id])
@@ -200,13 +220,16 @@ class Network::ChangePowerController < ApplicationController
       @application.signed = true
       @application.save
     else
-      case @application.type 
-        when Network::ChangePowerApplication::TYPE_CHANGE_POWER then
-          binary = render_to_string 'change_power_1cns', formats: ['pdf']
-        when Network::ChangePowerApplication::TYPE_MICROPOWER then
-          binary = render_to_string 'change_power_rcns', formats: ['pdf']
-        else 
-          binary = render_to_string 'show', formats: ['pdf']
+      binary = Network::ChangePowerApplicationTemplate.new(@application).print
+      if binary.blank?
+       case @application.type 
+         when Network::ChangePowerApplication::TYPE_CHANGE_POWER then
+           binary = render_to_string 'change_power_1cns', formats: ['pdf']
+         when Network::ChangePowerApplication::TYPE_MICROPOWER then
+           binary = render_to_string 'change_power_rcns', formats: ['pdf']
+         else 
+           binary = render_to_string 'show', formats: ['pdf']
+       end
       end
       
       name = "ChangePower_#{params[:id]}.pdf"
