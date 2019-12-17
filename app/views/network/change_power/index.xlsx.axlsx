@@ -7,7 +7,7 @@ wb.add_worksheet(name: "change-power") do |sheet|
     "გამოგზ.თარიღი", "დაწყ. თარიღი", "რეალრ. დასრ.",
     'ელ.ფოსტა', 'მობილური', 'რეგიონი', 'იურ.მისამართი', 'საკ.კოდი', 'ფაქტ.მისამართი',
     'ბანკი', 'ანგარიშის #', "აბ.#", "აბონენტი", "თანხა", 
-    "სიმძლავრე", "ძაბვა", "ძველი სიმძლავრე", "ძველი ძაბვა", "პროექტის #"
+    "სიმძლავრე", "ძაბვა", "ძველი სიმძლავრე", "ძველი ძაბვა", "პროექტის #", "ქვესადგური"
   ]
   @applications.each do |app|
     sheet.add_row [
@@ -17,7 +17,7 @@ wb.add_worksheet(name: "change-power") do |sheet|
       app.email, app.mobile, app.region, app.address, app.address_code, app.work_address,
       "#{app.bank_name} (#{app.bank_code})", app.bank_account,
       app.customer ? app.customer.accnumb.to_ka : "", app.customer ? app.customer.custname.to_ka : "",
-      app.amount, app.power, app.voltage, app.old_power, app.old_voltage, app.proeqti
+      app.amount, app.power, app.voltage, app.old_power, app.old_voltage, app.proeqti, app.substation
     ]
   end
 end
