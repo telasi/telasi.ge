@@ -6,9 +6,12 @@ namespace :micro_tariff do
   MICRO_TARIFFS = [{
     file: 'data/micro-tariffs.yml',
     starts: Date.new(2018,10,1),
+    ends: Date.new(2019,12,31)
+  },{
+    file: 'data/micro-tariffs2.yml',
+    starts: Date.new(2020,1,1),
     ends: nil
   }]
-
 
   def sync_micro_tariff(tariff)
     file = tariff[:file]
@@ -27,12 +30,9 @@ namespace :micro_tariff do
     end
   end
 
-
   def sync_micro_tariffs
-    debugger
     MICRO_TARIFFS.each { |tariff| sync_micro_tariff(tariff) }
   end
-
 
   task sync_micro: :environment do
     sync_micro_tariffs
