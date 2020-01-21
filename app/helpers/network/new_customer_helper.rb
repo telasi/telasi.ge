@@ -94,24 +94,25 @@ module Network::NewCustomerHelper
     }
   end
 
-  def micro_source_collection
-    {
-      'მზის' => Network::ApplicationBase::BASE_DOCUMENT,
-      'ქარის' => Network::ApplicationBase::BASE_DOCUMENT,
-      'ჰიდრო' => Network::ApplicationBase::BASE_DOCUMENT,
-      'სხვა' => Network::ApplicationBase::BASE_DOCUMENT
-    }
-  end
-
   def tp_collection
     h = []
     Billing::Customer.tps.order(:accnumb).each{ |x| h << x.accnumb.to_ka }
     h
   end
 
+  def new_customer_type_collection
+    h = {}
+    Network::NewCustomerApplication::TYPES.each do |x|
+      h[Network::NewCustomerApplication.type_name(x)] = x
+    end
+    h
+  end
+
   def new_customer_form(application, opts = {})
     forma_for application, title: opts[:title], collapsible: true, icon: opts[:icon] do |f|
       f.tab do |t|
+        t.combo_field :type, required: true, autofocus: true, collection: new_customer_type_collection, empty: false
+        t.combo_field :customer_type_id, required: true, collection: customer_type_collection, empty: false
         t.text_field  :number, autofocus: true, label: 'ნომერი'
         t.complex_field label: 'საიდ.კოდი/უცხოელია?/დასახელება', required: true do |c|
           c.text_field  :rs_tin
@@ -139,11 +140,12 @@ module Network::NewCustomerHelper
         t.text_field :notes, width: 500
         t.text_field :oqmi
         t.text_field :proeqti
-        t.boolean_field :micro, label: 'მიკროსიმძლავრის ელექტროსადგურის გამანაწილებელ ქსელზე მიერთების მოთხოვნა'
+        # t.boolean_field :micro, label: 'მიკროსიმძლავრის ელექტროსადგურის გამანაწილებელ ქსელზე მიერთების მოთხოვნა'
         # t.number_field :microstation_number, label: 'მიკრო სიმძლავრის ელექტროსადგურების რაოდენობა'
         # t.combo_field :micro_source, label: 'მიკროსიმძლავრის ელექტროსადგურის პირველადი ენერგიის წყარო', collection: micro_source_collection, empty: '--'
         t.combo_field :micro_voltage, collection: voltage_collection, empty: false, label: 'მიკროსიმძლავრის მოთხოვნილი ძაბვა' 
         t.number_field :micro_power, after: 'kWh', width: 100, label: 'მიკროსიმძლავრის მოთხოვნილი სიმძლავრე'
+        t.combo_field :micro_power_source, collection: micro_power_source_collection, empty: false, label: 'მიკროსიმძლავრის პირველადი ენერგიის წყარო' 
         # t.text_field :micro_model, label: 'მიკროსიმძლავრის ელექტროსადგურის მწარმოებელი და მოდელი (თუ ცნობილია)'
         # t.text_field :micro_scheme, label: 'მიკროსიმძლავრის ელექტროსადგურის ქსელში ჩართვის სქემა:', collection: { 'სინქრონული' => 0, 'ინვერტორით' => 1}
       end
@@ -162,7 +164,9 @@ module Network::NewCustomerHelper
     when 'files' then 4
     when 'factura' then 5
     when 'watch' then 6
-    when 'sys' then 7
+    when 'gnerc' then 7
+    when 'overdue' then 8
+    when 'sys' then 9
     else 0 end
   end
 
@@ -214,6 +218,8 @@ module Network::NewCustomerHelper
         application.transitions.each do |status|
           t.action network_change_new_customer_status_url(id: application.id, status: status), label: Network::NewCustomerApplication.status_name(status), icon: Network::NewCustomerApplication.status_icon(status) if show_actions
         end
+        t.text_field 'type_name', required: true, i18n: 'type'
+        t.text_field 'customer_type_name', required: true, i18n: 'customer_type_id'
         t.text_field 'number', required: true, tag: 'code' do |f|
           f.action network_aviso_url(id: application.aviso_id), label: 'ავიზოს ნახვა', icon: '/icons/money.png' if application.aviso_id.present?
         end
@@ -274,7 +280,15 @@ module Network::NewCustomerHelper
           end
 
           unitname = application.use_business_days ? 'სამუშაო დღე' : 'დღე'
-          c.number_field('days', label: 'გეგმიური ვადა', max_digits: 0, after: unitname)
+          if application.total_overdue_days.present? && application.total_overdue_days > 0
+            t.complex_field label: 'ვადა', required: true do |c|
+              c.number_field('total_days', tag: 'code', after: '= ', max_digits: 0)
+              c.number_field('days', tag: 'code', max_digits: 0)
+              c.number_field('total_overdue_days', before: ' + ', tag: 'code', max_digits: 0, after: unitname)
+            end
+          else
+            c.number_field('days', label: 'გეგმიური ვადა', max_digits: 0, after: unitname)
+          end
           c.number_field('real_days', label: 'რეალური ვადა', max_digits: 0, after: unitname)
 
           c.number_field :paid, after: 'GEL'
@@ -428,6 +442,27 @@ module Network::NewCustomerHelper
          t.text_field :gnerc_id, tag: 'code'
          t.text_field :gnerc_status
        end
+      # overdue
+      f.tab title: 'გადაცილება', icon: '/icons/database-cloud.png' do |t|
+       t.table_field :overdue, table: { title: 'გადაცილება', icon: '/icons/database-cloud.png' } do |overdue|
+         overdue.table do |over|
+          over.title_action network_new_customer_new_overdue_item_url(id: application.id), label: 'ახალი გადაცილების ჩანაწერი', icon: '/icons/eye--plus.png'
+          over.item_action ->(x) { network_new_customer_edit_overdue_item_url(id: x.id) }, icon: '/icons/pencil.png'
+          over.item_action ->(x) { network_new_customer_delete_overdue_item_url(id: x.id) }, icon: '/icons/bin.png', method: 'delete', confirm: 'ნამდვილად გინდათ წაშლა?'
+
+          over.text_field :authority_name
+          over.date_field :appeal_date
+          over.date_field :deadline
+          over.date_field :decision_date
+          over.date_field :response_date
+          over.text_field :days, label: 'დღეების რაოდენობა'
+          over.boolean_field :chosen, required: true do |f|
+             f.action ->(x) { network_new_customer_toggle_chose_overdue_url(id: x.id) }, width: 200, label: 'შეცვლა', icon: '/icons/arrow-repeat.png', method: 'post'
+          end
+        end
+       end
+      end
+      
       # 8. sys
       f.tab title: 'სისტემური', icon: '/icons/traffic-cone.png' do |t|
         t.complex_field label: 'მომხმარებელი', hint: 'მომხმარებელი, რომელმაც შექმნა ეს განცხადება', required: true do |c|
@@ -474,5 +509,37 @@ module Network::NewCustomerHelper
       f.submit 'შენახვა'
       f.cancel_button cancel_url
     end
+  end
+
+  def overdue_item_form(item, opts = {})
+    if item.source.class == Network::NewCustomerApplication
+      cancel_url = network_new_customer_url(id: item.source.id, tab: 'overdue')
+    elsif item.source.class == Network::ChangePowerApplication
+      cancel_url = network_change_power_url(id: item.source.id, tab: 'overdue')
+    else
+      raise 'unknown class'
+    end
+    forma_for item, title: opts[:title], collapsible: true, icon: opts[:icon] do |f|
+      f.combo_field 'authority', collection: GnercConstants::OVERDUE_ADM_AUTHORITY.invert, empty: false, required: true, i18n: 'authority'
+      f.date_field 'appeal_date', required: true
+      f.complex_field label: 'სამუშაო დღეები', hint: 'დავთვალოთ სამუშაო დღეები თუ კალენდარული?', required: true do |c|
+          c.boolean_field 'business_days', required: true
+      end
+      f.complex_field label: 'კანონმდებლობით დადგენილი ვადა', required: true do |c|
+          c.boolean_field 'check_days'
+          c.number_field 'planned_days', required: true
+          c.boolean_field 'check_date'
+          c.date_field 'deadline', required: true
+      end
+      f.date_field 'decision_date', required: true
+      f.date_field 'response_date', required: true
+      f.boolean_field 'chosen', required: true
+      f.submit 'შენახვა'
+      f.cancel_button cancel_url
+    end
+  end
+
+  def new_customer_template(application)
+    
   end
 end

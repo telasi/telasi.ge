@@ -81,6 +81,14 @@ module Network::ChangePowerHelper
     end
   end
 
+  def change_power_service_collection
+    h = {}
+    Network::ChangePowerApplication::SERVICES.each do |x|
+      h[Network::ChangePowerApplication.service_name(x)] = x
+    end
+    h
+  end
+
   def change_power_type_collection
     h = {}
     Network::ChangePowerApplication::TYPES.each do |x|
@@ -92,7 +100,10 @@ module Network::ChangePowerHelper
   def change_power_form(application, opts = {})
     forma_for application, title: opts[:title], collapsible: true, icon: opts[:icon] do |f|
       f.tab do |t|
-        t.combo_field :type, required: true, autofocus: true, collection: change_power_type_collection, empty: false
+        t.combo_field :service, required: true, autofocus: true, collection: change_power_service_collection, empty: false
+        t.combo_field :type, required: true, collection: change_power_type_collection, empty: false
+        t.text_field  :tech_condition_cns, label: 'ტექპირობის ნომერი'
+        t.combo_field :customer_type_id, required: true, collection: customer_type_collection, empty: false
         t.text_field  :number, required: true, label: 'ნომერი'
         # t.text_field  :rs_tin, required: true
         t.complex_field label: 'საიდ.კოდი/უცხოელია?/დასახელება', required: true do |c|
@@ -121,6 +132,7 @@ module Network::ChangePowerHelper
         t.number_field :power, after: 'kWh', width: 100, required: true
         t.number_field :abonent_amount, width: 50, required: true
         t.combo_field :duration, collection: duration_collection, empty: false, required: true, label: 'შესრულების ხანგრძლიობა' if application.apply_duration?
+        t.combo_field :micro_power_source, collection: micro_power_source_collection, empty: false, label: 'მიკროსიმძლავრის პირველადი ენერგიის წყარო' 
         t.text_field :substation, width: 500
         t.text_field :note, width: 400
         t.text_field :oqmi
@@ -171,12 +183,14 @@ module Network::ChangePowerHelper
         application.transitions.each do |status|
           t.action network_change_change_power_status_url(id: application.id, status: status), label: Network::ChangePowerApplication.status_name(status), icon: Network::ChangePowerApplication.status_icon(status)
         end
+        t.text_field 'service_name', required: true, i18n: 'service'
         t.text_field 'type_name', required: true, i18n: 'type'
         t.text_field 'number', required: true, tag: 'code'
         t.complex_field i18n: 'status_name', required: true do |c|
           c.image_field :status_icon
           c.text_field :status_name
         end
+        t.text_field 'customer_type_name', required: true, i18n: 'customer_type_id'
         t.complex_field i18n: 'rs_name', required: true do |c|
           c.text_field :rs_tin, tag: 'code'
           c.text_field :rs_name, url: ->(x) { network_change_power_url(id: x.id) }
@@ -361,6 +375,27 @@ module Network::ChangePowerHelper
       f.tab title: 'სემეკი', icon: '/icons/database-cloud.png' do |t|
         t.text_field :gnerc_id, tag: 'code'
         t.text_field :gnerc_status
+      end
+      # overdue
+      f.tab title: 'გადაცილება', icon: '/icons/database-cloud.png' do |t|
+       t.table_field :overdue, table: { title: 'გადაცილება', icon: '/icons/database-cloud.png' } do |overdue|
+         overdue.table do |over|
+          over.title_action network_change_power_new_overdue_item_url(id: application.id), label: 'ახალი გადაცილების ჩანაწერი', icon: '/icons/eye--plus.png'
+          over.item_action ->(x) { network_change_power_edit_overdue_item_url(id: x.id) }, icon: '/icons/pencil.png'
+          over.item_action ->(x) { network_change_power_delete_overdue_item_url(id: x.id) }, icon: '/icons/bin.png', method: 'delete', confirm: 'ნამდვილად გინდათ წაშლა?'
+
+          over.text_field :authority_name
+          over.date_field :appeal_date
+          over.date_field :deadline
+          over.date_field :decision_date
+          over.date_field :decision_date
+          over.date_field :response_date
+          over.text_field :days, label: 'დღეების რაოდენობა'
+          over.boolean_field :chosen, required: true do |f|
+             f.action ->(x) { network_change_power_toggle_chose_overdue_url(id: x.id) }, label: 'შეცვლა', icon: '/icons/arrow-repeat.png', method: 'post'
+           end
+        end
+       end
       end
       # 7. sys
       f.tab title: 'სისტემური', icon: '/icons/traffic-cone.png' do |t|

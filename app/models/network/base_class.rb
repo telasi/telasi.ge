@@ -6,8 +6,9 @@ class Network::BaseClass
   STATUS_CONFIRMED  = 3
   STATUS_COMPLETE   = 4
   STATUS_IN_BS      = 5
-  STATUSES = [ STATUS_DEFAULT, STATUS_SENT, STATUS_CANCELED, STATUS_CONFIRMED, STATUS_COMPLETE, STATUS_IN_BS ]
-  STATUSES_REPORT_BY_STATUS = [ STATUS_SENT, STATUS_CANCELED, STATUS_CONFIRMED, STATUS_COMPLETE, STATUS_IN_BS ]
+  STATUS_USER_DECLINED = 6
+  STATUSES = [ STATUS_DEFAULT, STATUS_SENT, STATUS_CANCELED, STATUS_CONFIRMED, STATUS_COMPLETE, STATUS_IN_BS, STATUS_USER_DECLINED ]
+  STATUSES_REPORT_BY_STATUS = [ STATUS_SENT, STATUS_CANCELED, STATUS_CONFIRMED, STATUS_COMPLETE, STATUS_IN_BS, STATUS_USER_DECLINED ]
   VOLTAGE_220 = '220'
   VOLTAGE_380 = '380'
   VOLTAGE_610 = '6/10'
@@ -24,15 +25,18 @@ class Network::BaseClass
   def self.status_icon(status)
     case status
     # when STATUS_DEFAULT    then '/icons/mail-open.png'
-    when STATUS_SENT       then '/icons/mail-send.png'
-    when STATUS_CANCELED   then '/icons/cross.png'
-    when STATUS_CONFIRMED  then '/icons/clock.png'
-    when STATUS_COMPLETE   then '/icons/tick.png'
-    when STATUS_IN_BS      then '/icons/lock.png'
+    when STATUS_SENT          then '/icons/mail-send.png'
+    when STATUS_CANCELED      then '/icons/cross.png'
+    when STATUS_CONFIRMED     then '/icons/clock.png'
+    when STATUS_COMPLETE      then '/icons/tick.png'
+    when STATUS_IN_BS         then '/icons/lock.png'
+    when STATUS_USER_DECLINED then '/icons/thumb.png'
     else '/icons/mail-open.png' end
   end
   def status_name; Network::BaseClass.status_name(self.status) end
   def status_icon; Network::BaseClass.status_icon(self.status) end
+  def self.customer_type_name(type); I18n.t("models.network_change_power_application.customer_type_id_#{type}") end
+  def customer_type_name; Network::BaseClass.customer_type_name(self.customer_type_id) end
 
   def self.duration_collection
     {
@@ -91,6 +95,38 @@ class Network::BaseClass
         self.amount / 2
       else 0 end
     else 0 end
+  end
+
+  def calculate_plan_end_date
+    return unless self.send_date
+    self.total_overdue_days = 0
+
+    date_array = []
+
+    self.overdue.where(chosen: true).map do |overdue|
+      date_array = date_array | (overdue.appeal_date..overdue.response_date).to_a
+    end
+
+    date_array.compact!
+    date_array.sort!
+
+    prev = date_array[0]
+
+    periods = date_array.slice_before{ |e|
+      prev, prev2 = e, prev
+      prev2 + 1 != e
+    }.map{|b,*,c| c ? (b..c) : b }
+
+    periods.each{ |p| self.total_overdue_days = self.total_overdue_days + p.min.business_days_until(p.max) }
+
+    if self.use_business_days
+      # self.plan_end_date = self.days.business_days.after( self.send_date )
+      self.plan_end_date = (self.days - 1).business_days.after( self.send_date )
+      self.plan_end_date = (self.total_overdue_days - 1).business_days.after( self.plan_end_date )
+    else
+      self.plan_end_date = self.send_date + self.days
+      self.plan_end_date = self.plan_end_date + self.total_overdue_days
+    end
   end
 
 end

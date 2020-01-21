@@ -1,5 +1,11 @@
 # -*- encoding : utf-8 -*-
 class Network::ChangePowerApplication < Network::BaseClass
+  SERVICE_METER_SETUP    = 9
+  SERVICE_CHANGE_POWER   = 10
+  SERVICE_MICRO_POWER    = 11
+  SERVICE_TECH_CONDITION = 12
+  SERVICES = [ SERVICE_METER_SETUP, SERVICE_CHANGE_POWER, SERVICE_MICRO_POWER, SERVICE_TECH_CONDITION ]
+
   TYPE_CHANGE_POWER  = 0
   TYPE_CHANGE_SOURCE = 1
   TYPE_SPLIT         = 2
@@ -29,6 +35,7 @@ class Network::ChangePowerApplication < Network::BaseClass
   include Network::BsBase
   include Network::Factura
   include Network::CalculationUtils
+  include Network::ChangePowerGnerc
   #include Network::Postpone
 
   belongs_to :user, class_name: 'Sys::User'
@@ -45,6 +52,7 @@ class Network::ChangePowerApplication < Network::BaseClass
   field :bank_code,    type: String
   field :bank_account, type: String
   field :status, type: Integer, default: STATUS_DEFAULT
+  field :service, type: Integer, default: SERVICE_CHANGE_POWER
   field :type,   type: Integer, default: TYPE_CHANGE_POWER
   field :work_by_telasi, type: Mongoid::Boolean, default: true
   # old voltage
@@ -55,10 +63,11 @@ class Network::ChangePowerApplication < Network::BaseClass
   field :amount,      type: Float, default: 0
   field :minus_amount,type: Float, default: 0
   field :days,        type: Integer, default: 0
+  field :customer_type_id, type: Integer
   field :customer_id, type: Integer
   field :real_customer_id, type: Integer
 
-  #field :penalty1,    type: Float, default: 0
+  field :penalty1,    type: Float, default: 0
 
   # dates
   field :send_date, type: Date
@@ -87,18 +96,25 @@ class Network::ChangePowerApplication < Network::BaseClass
 
   field :duration, type: Integer, default: DURATION_STANDARD
   field :abonent_amount, type: Integer, default: ABONENT_AMOUNT_DEFAULT
+  field :total_overdue_days, type: Integer
 
   # since Nov,2014: use business days!
   field :use_business_days, type: Mongoid::Boolean, default: false
 
   field :substation, type: String
+  field :micro_power_source, type: Integer
 
+  field :tech_condition_cns, type: String
+
+  field :changing_technical_condition, type: Mongoid::Boolean, default: false
   field :gnerc_id, type: String
+  field :sms_response, type: BSON::ObjectId
 
   # relations
   has_many :messages, class_name: 'Sys::SmsMessage', as: 'messageable'
   has_many :files, class_name: 'Sys::File', inverse_of: 'mountable'
   has_many :requests, class_name: 'Network::RequestItem', as: 'source'
+  has_many :overdue, class_name: 'Network::OverdueItem', as: 'source'
   belongs_to :stage, class_name: 'Network::Stage'
 
   # validates :number, presence: { message: I18n.t('models.network_change_power_application.errors.number_required') }
@@ -116,11 +132,12 @@ class Network::ChangePowerApplication < Network::BaseClass
   #validates :customer, presence: { message: 'აარჩიეთ აბონენტი' }
 
   validate :validate_rs_name, :validate_number
-  before_save :status_manager, :calculate_total_cost, :update_customer
+  before_save :status_manager, :calculate_total_cost, :update_customer, :calculate_plan_end_date
 
   def self.correct_number?(type, number)
     if type == TYPE_CHANGE_POWER
-      not not (/^(1CNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number)
+      not not ((/^(1CNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number) ||
+              (/^(TTCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number))
     elsif type == TYPE_CHANGE_SOURCE
       not not (/^(TCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number)
     elsif type == TYPE_SPLIT
@@ -154,9 +171,25 @@ class Network::ChangePowerApplication < Network::BaseClass
   end
   def real_customer; Billing::Customer.find(self.real_customer_id) if self.real_customer_id.present? end
   def self.type_name(type); I18n.t("models.network_change_power_application.type_#{type}") end
+  def self.service_name(type); I18n.t("models.network_change_power_application.service_#{type}") end
   def status_name; Network::NewCustomerApplication.status_name(self.status) end
   def status_icon; Network::NewCustomerApplication.status_icon(self.status) end
   def type_name; Network::ChangePowerApplication.type_name(self.type) end
+  def service_name; Network::ChangePowerApplication.service_name(self.service) end
+
+  def self.type_by_service(service)
+    case service
+      when SERVICE_METER_SETUP    then [ TYPE_CHANGE_SOURCE, 
+                                         TYPE_SPLIT, 
+                                         TYPE_RESERVATION, 
+                                         TYPE_TEMP_BUILD, 
+                                         TYPE_ABONIREBA, 
+                                         TYPE_SUB_CUSTOMER ]
+      when SERVICE_CHANGE_POWER   then [ TYPE_CHANGE_POWER, TYPE_SAME_PACK ]
+      when SERVICE_MICRO_POWER    then [ TYPE_MICROPOWER, TYPE_MICRO_OTHER_PACK, TYPE_MICRO_SAME_PACK ]
+      when SERVICE_TECH_CONDITION then [ TYPE_CHANGE_SOURCE, TYPE_SPLIT, TYPE_RESERVATION, TYPE_TEMP_BUILD, TYPE_ABONIREBA, TYPE_SUB_CUSTOMER ]
+    end.map{ |x| [ x, type_name(x) ] }
+  end
 
   def prepayment_percent; self.billing_prepayment_total / self.amount * 100 rescue 0 end
 
@@ -188,7 +221,7 @@ class Network::ChangePowerApplication < Network::BaseClass
   def can_change_amount?; not [TYPE_CHANGE_POWER, TYPE_SAME_PACK].include?(self.type) end
   def apply_multiplier?; [TYPE_CHANGE_POWER, TYPE_MICROPOWER, TYPE_MICRO_OTHER_PACK, TYPE_MICRO_SAME_PACK].include?(self.type) end
   # def apply_duration?; [TYPE_MICROPOWER, TYPE_MICRO_OTHER_PACK, TYPE_MICRO_SAME_PACK].include?(self.type) end
-  def apply_duration?; false end
+  def apply_duration?; true end
 
   def prepayment_factura_sent?
     prepayment_facturas.present?
@@ -338,10 +371,13 @@ class Network::ChangePowerApplication < Network::BaseClass
   end
 
   def message_to_gnerc(message)
-    docflow = Gnerc::Docflow4.where(letter_number: self.number).first
-    return if docflow.blank?
+    self.sms_response = message.id
+    self.save
+
+    # docflow = Gnerc::Docflow4.where(letter_number: self.number).first
+    # return if docflow.blank?
     
-    docflow.update_attributes!(company_answer: message.message, phone: message.mobile, confirm: 1)
+    # docflow.update_attributes!(company_answer: message.message, phone: message.mobile, confirm: 1)
   end
 
   def first_sms
@@ -349,22 +385,6 @@ class Network::ChangePowerApplication < Network::BaseClass
     message.messageable = self
     message.mobile = self.mobile
     message.send_sms!(lat: true) if message.save
-  end
-
-  def gnerc_status
-    return if self.number.blank?
-    newcust = Gnerc::Docflow4.where(letter_number: self.number).first
-    return I18n.t('models.network_new_customer_application.gnerc_statuses.not_sent') unless newcust
-    queue = Gnerc::SendQueue.where(service: 'Docflow4', service_id: newcust.id, stage: 1).first
-    if queue.blank?
-      return I18n.t('models.network_new_customer_application.gnerc_statuses.not_sent')
-    else
-      if self.status < STATUS_COMPLETE
-        queue.sent_at.blank? ? I18n.t('models.network_new_customer_application.gnerc_statuses.waiting') : I18n.t('models.network_new_customer_application.gnerc_statuses.sent')
-      else
-        queue.sent_at.blank? ? I18n.t('models.network_new_customer_application.gnerc_statuses.answered_ready') : I18n.t('models.network_new_customer_application.gnerc_statuses.answered')
-      end      
-    end
   end
 
   private
@@ -453,10 +473,12 @@ class Network::ChangePowerApplication < Network::BaseClass
       self.errors.add(:number, 'ჩაწერეთ ნომერი')
     elsif self.number.present?
       self.errors.add(:number, 'არასწორი ფორმატი!') unless Network::ChangePowerApplication.correct_number?(self.type, self.number)
+    elsif self.service == SERVICE_METER_SETUP && self.tech_condition_cns.blank?
+      self.errors.add(:tech_condition_cns, 'ჩაწერეთ ტექპირობის ნომერი')
     end
   end
 
-  def send_to_gnerc(stage)
+  def send_to_gnerc_old(stage)
     if stage == 1
       file = self.files.select{ |x| x.file.filename[0..11] == GNERC_SIGNATURE_FILE }.first
       if file.present?

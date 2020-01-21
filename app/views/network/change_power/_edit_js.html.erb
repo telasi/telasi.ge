@@ -1,7 +1,14 @@
-<script type="text/javascript">
+<script type="text/javascript" charset="utf-8">
+  var service_9 = <%= raw Network::ChangePowerApplication.type_by_service(9) %>;
+  var service_10 = <%= raw Network::ChangePowerApplication.type_by_service(10).to_json %>;
+  var service_11 = <%= raw Network::ChangePowerApplication.type_by_service(11).to_json %>;
+  var service_12 = <%= raw Network::ChangePowerApplication.type_by_service(12).to_json %>;
+
   $(function() {
     resetForeignerField();
+    filterType();
     $('#network_change_power_application_rs_foreigner').click(resetForeignerField);
+    $('[name="network_change_power_application[service]"]').change(filterType);
   });
 
   var resetForeignerField = function() {
@@ -11,6 +18,28 @@
     } else {
       $('#network_change_power_application_rs_name').hide();
       $('#network_change_power_application_rs_tin').focus();
+    }
+  };
+
+  var filterType = function(){
+    var type_combo = $('[name="network_change_power_application[type]"]')[0];
+    type_combo.options.length = 0;
+    var service = $('[name="network_change_power_application[service]"]').val();
+    var array = window['service_' + service];
+    for(index in array) {
+      type_combo.options[type_combo.options.length] = new Option(array[index][1], array[index][0]);
+    };
+
+    if ($('[name="network_change_power_application[service]"]').val() == "<%= Network::ChangePowerApplication::SERVICE_METER_SETUP %>"){
+      $('#fld_network_change_power_application_tech_condition_cns').show();
+    } else {
+      $('#fld_network_change_power_application_tech_condition_cns').hide();
+    }
+
+    if ($('[name="network_change_power_application[service]"]').val() == "<%= Network::ChangePowerApplication::SERVICE_MICRO_POWER %>"){
+      $('#fld_network_change_power_application_micro_power_source').show();
+    } else {
+      $('#fld_network_change_power_application_micro_power_source').hide();
     }
   };
 </script>

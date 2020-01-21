@@ -66,7 +66,7 @@ class Network::ChangePowerController < ApplicationController
          when '1'
           rel = rel.where(:customer_id.ne => nil)
          when '2'
-          rel = rel.where(customer_id: nil)        
+          rel = rel.where(customer_id: nil)
         end
       end
 
@@ -362,6 +362,44 @@ class Network::ChangePowerController < ApplicationController
     redirect_to network_change_power_url(id: app.id, tab: 'watch'), notice: I18n.t('models.network_new_customer_application.actions.control.deleted')
   end
 
+  def new_overdue_item
+    @title = I18n.t('models.network_new_customer_application.actions.control.title')
+    @application = Network::ChangePowerApplication.find(params[:id])
+    if request.post?
+      @item = Network::OverdueItem.new(overdue_params)
+      @item.source = @application
+      if @item.save
+        redirect_to network_change_power_url(id: @application.id, tab: 'overdue'), notice: I18n.t('models.network_new_customer_application.actions.overdue.added')
+      end
+    else
+      @item = Network::OverdueItem.new(source: @application)
+    end
+  end
+
+  def edit_overdue_item
+    @title = I18n.t('models.network_new_customer_application.actions.control.change')
+    @item = Network::OverdueItem.find(params[:id])
+    if request.post?
+      if @item.update_attributes(overdue_params)
+        redirect_to network_change_power_url(id: @item.source.id, tab: 'overdue'), notice: I18n.t('models.network_new_customer_application.actions.overdue.changed')
+      end
+    end
+  end
+
+  def delete_overdue_item
+    item = Network::OverdueItem.find(params[:id])
+    app = item.source
+    item.destroy
+    redirect_to network_change_power_url(id: app.id, tab: 'overdue'), notice: I18n.t('models.network_new_customer_application.actions.overdue.deleted')
+  end
+
+  def toggle_chose_overdue
+    overdue = Network::OverdueItem.find(params[:id])
+    overdue.chosen = (not overdue.chosen)
+    overdue.save
+    redirect_to network_change_power_url(id: overdue.source.id, tab: 'overdue')
+  end
+
   def edit_amount
     @title = I18n.t('models.network_new_customer_application.actions.amount.title')
     @application = Network::ChangePowerApplication.find(params[:id])
@@ -457,7 +495,11 @@ class Network::ChangePowerController < ApplicationController
 
   private
 
-  def change_power_params; params.require(:network_change_power_application).permit(:base_type, :base_number, :need_factura, :work_by_telasi, :type, :number, :note, :rs_tin, :rs_foreigner, :rs_name, :vat_options, :mobile, :email, :region, :address, :work_address, :address_code, :bank_code, :bank_account, :voltage, :power, :old_voltage, :old_power, :customer_id, :real_customer_id, :proeqti, :oqmi, :zero_charge, :substation, :abonent_amount) end
+  def change_power_params; params.require(:network_change_power_application).permit(:base_type, :base_number, :need_factura, :work_by_telasi, :service, :type, :customer_type_id, :number, :note, :rs_tin, :rs_foreigner, :rs_name, :vat_options, :mobile, :email, :region, :address, :work_address, :address_code, :bank_code, :bank_account, :voltage, :power, :old_voltage, :old_power, :customer_id, :real_customer_id, :proeqti, :oqmi, :zero_charge, :substation, :abonent_amount, :tech_condition_cns, :micro_power_source) end
+
+  def overdue_params
+    params.require(:network_overdue_item).permit(:authority, :appeal_date, :planned_days, :deadline, :response_date, :decision_date, :days, :chosen, :business_days, :check_days)
+  end
 
   def send_to_gnerc(application, file)
     content = File.read(file.file.file.file)

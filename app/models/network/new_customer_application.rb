@@ -1,12 +1,16 @@
 # -*- encoding : utf-8 -*-
 class Network::NewCustomerApplication < Network::BaseClass
+  TYPE_INDIVIDUAL    = 1
+  TYPE_MULTI_ABONENT = 2
+  TYPE_MICRO         = 3
+  TYPE_MULTI_MICRO   = 4
+  TYPE_SEPARATED     = 5
+  TYPES = [ TYPE_INDIVIDUAL, TYPE_MULTI_ABONENT, TYPE_MICRO, TYPE_MULTI_MICRO, TYPE_SEPARATED ]
+
   GNERC_SIGNATURE_FILE = 'NewCustomer_'
   GNERC_ACT_FILE = 'act'
   GNERC_DEF_FILE = 'def'
   GNERC_REFAB_FILE = 'refab'
-  GNERC_VOLTAGE_220 = '0.220'
-  GNERC_VOLTAGE_380 = '0.380'
-  GNERC_VOLTAGE_610 = '6-10'
 
   CUSTOMER_AMOUNT_PRICE_MULTI_START_DATE = Date.new(2019,8,13)
   CUSTOMER_AMOUNT_PRICE_MULTI = 100
@@ -19,6 +23,7 @@ class Network::NewCustomerApplication < Network::BaseClass
   include Network::ApplicationBase
   include Network::BsBase
   include Network::Factura
+  include Network::NewCustomerGnerc
 
   belongs_to :user, class_name: 'Sys::User'
   belongs_to :tariff, class_name: 'Network::NewCustomerTariff'
@@ -38,6 +43,7 @@ class Network::NewCustomerApplication < Network::BaseClass
   field :bank_code,    type: String
   field :bank_account, type: String
   field :status,     type: Integer, default: STATUS_DEFAULT
+  field :type,   type: Integer, default: TYPE_INDIVIDUAL
   field :personal_use, type: Mongoid::Boolean, default: true
   field :notes, type: String
   field :oqmi, type: String
@@ -46,6 +52,7 @@ class Network::NewCustomerApplication < Network::BaseClass
   field :need_resolution,  type: Mongoid::Boolean, default: true
   field :duration, type: Integer, default: DURATION_STANDARD
   field :abonent_amount, type: Integer, default: ABONENT_AMOUNT_DEFAULT
+  field :total_overdue_days, type: Integer
 
   field :voltage,     type: String
   field :power,       type: Float
@@ -54,6 +61,7 @@ class Network::NewCustomerApplication < Network::BaseClass
   field :micro_amount,      type: Float, default: 0
   field :days,        type: Integer, default: 0
   field :customer_id, type: Integer
+  field :customer_type_id, type: Integer
   field :penalty1,    type: Float, default: 0
   field :penalty2,    type: Float, default: 0
   field :penalty3,    type: Float, default: 0
@@ -98,15 +106,18 @@ class Network::NewCustomerApplication < Network::BaseClass
   field :micro, type: Mongoid::Boolean, default: false
   field :micro_voltage,     type: String
   field :micro_power,       type: Float
+  field :micro_power_source, type: Integer
 
   field :substation, type: String
 
   field :gnerc_id, type: String
+  field :sms_response, type: BSON::ObjectId
 
   embeds_many :items, class_name: 'Network::NewCustomerItem', inverse_of: :application
   has_many :files, class_name: 'Sys::File', as: 'mountable'
   has_many :messages, class_name: 'Sys::SmsMessage', as: 'messageable', :order => 'created_at ASC'
   has_many :requests, class_name: 'Network::RequestItem', as: 'source'
+  has_many :overdue, class_name: 'Network::OverdueItem', as: 'source'
   belongs_to :stage, class_name: 'Network::Stage'
 
   validates :user, presence: { message: I18n.t('models.network_new_customer_application.errors.user_required') }
@@ -120,7 +131,7 @@ class Network::NewCustomerApplication < Network::BaseClass
   validates :voltage, presence: { message: I18n.t('models.network_new_customer_application.errors.volt_required') }
   validates :power, numericality: { message: I18n.t('models.network_new_customer_item.errors.illegal_power') }
   validate :validate_rs_name, :validate_number, :validate_mobile
-  before_save :status_manager, :calculate_total_cost, :upcase_number, :prepare_mobile
+  before_save :status_manager, :calculate_total_cost, :upcase_number, :prepare_mobile, :calculate_plan_end_date
   before_create :init_payment_id, :set_user_business_days
 
   # Checking correctess of
@@ -140,6 +151,8 @@ class Network::NewCustomerApplication < Network::BaseClass
   def effective_number; self.number.blank? ? self.payment_id : self.number end
   def can_send_to_item?; self.status == STATUS_COMPLETE end #and self.items.any? end
   def formatted_mobile; KA::format_mobile(self.mobile) if self.mobile.present? end
+  def self.type_name(type); I18n.t("models.network_new_customer_application.type_#{type}") end
+  def type_name; Network::NewCustomerApplication.type_name(self.type) end
 
   def editable_online?; self.status == STATUS_DEFAULT end
   def not_sent?; self.status == STATUS_DEFAULT end
@@ -147,6 +160,8 @@ class Network::NewCustomerApplication < Network::BaseClass
   def can_send?; self.status == STATUS_DEFAULT and self.docs_are_ok? and self.confirm_correctness end
   def add_price_for_customer_amount?; self.abonent_amount > 1 && ( self.start_date || Date.today ) >= CUSTOMER_AMOUNT_PRICE_MULTI_START_DATE end
   def customer_amount_price; self.abonent_amount * Network::NewCustomerApplication::CUSTOMER_AMOUNT_PRICE_MULTI end
+  def total_days; self.days + self.total_overdue_days || 0 end
+  # def active_overdues; 
 
   def facturas
     array = registered_facturas.where('factura_id <> ?',self.factura_id.to_i).dup
@@ -161,12 +176,12 @@ class Network::NewCustomerApplication < Network::BaseClass
   # შესაძლო სტატუსების ჩამონათვალი მიმდინარე სტატუსიდან.
   def transitions
     case self.status
-    when STATUS_DEFAULT   then [ STATUS_SENT, STATUS_CANCELED ]
-    when STATUS_SENT      then [ STATUS_DEFAULT, STATUS_CONFIRMED, STATUS_CANCELED ]
-    when STATUS_CONFIRMED then [ STATUS_COMPLETE, STATUS_CANCELED ]
-    when STATUS_COMPLETE  then [ STATUS_CANCELED ]
-    when STATUS_IN_BS     then [ STATUS_CANCELED ]
-    when STATUS_CANCELED  then [ STATUS_DEFAULT, STATUS_SENT ]
+    when STATUS_DEFAULT       then [ STATUS_SENT, STATUS_CANCELED ]
+    when STATUS_SENT          then [ STATUS_DEFAULT, STATUS_CONFIRMED, STATUS_CANCELED ]
+    when STATUS_CONFIRMED     then [ STATUS_COMPLETE, STATUS_CANCELED, STATUS_USER_DECLINED ]
+    when STATUS_COMPLETE      then [ STATUS_CANCELED ]
+    when STATUS_IN_BS         then [ STATUS_CANCELED ]
+    when STATUS_CANCELED      then [ STATUS_DEFAULT, STATUS_SENT ]
     else [ ]
     end
   end
@@ -546,10 +561,12 @@ class Network::NewCustomerApplication < Network::BaseClass
   end
 
   def message_to_gnerc(message)
-    newcust = Gnerc::Newcust.where(letter_number: self.number).first
-    return if newcust.blank?
+    self.sms_response = message.id
+    self.save
+    # newcust = Gnerc::Newcust.where(letter_number: self.number).first
+    # return if newcust.blank?
     
-    newcust.update_attributes!(company_answer: message.message, phone: message.mobile, confirmation: 1)
+    # newcust.update_attributes!(company_answer: message.message, phone: message.mobile, confirmation: 1)
   end
 
   def first_sms
@@ -557,22 +574,6 @@ class Network::NewCustomerApplication < Network::BaseClass
     message.messageable = self
     message.mobile = self.mobile
     message.send_sms!(lat: true) if message.save
-  end
-
-  def gnerc_status
-    return if self.number.blank?
-    newcust = Gnerc::Newcust.where(letter_number: self.number).first
-    return I18n.t('models.network_new_customer_application.gnerc_statuses.not_sent') unless newcust
-    queue = Gnerc::SendQueue.where(service: 'Newcust', service_id: newcust.id, stage: 1).first
-    if queue.blank?
-      return I18n.t('models.network_new_customer_application.gnerc_statuses.not_sent')
-    else
-      if self.status < STATUS_COMPLETE
-        queue.sent_at.blank? ? I18n.t('models.network_new_customer_application.gnerc_statuses.waiting') : I18n.t('models.network_new_customer_application.gnerc_statuses.sent')
-      else
-        queue.sent_at.blank? ? I18n.t('models.network_new_customer_application.gnerc_statuses.answered_ready') : I18n.t('models.network_new_customer_application.gnerc_statuses.answered')
-      end      
-    end
   end
 
   private
@@ -585,13 +586,6 @@ class Network::NewCustomerApplication < Network::BaseClass
         self.tariff = tariff
         self.amount = self.std_amount = tariff.price_gel
         self.days   = tariff.days(self)
-        if self.send_date
-          if self.use_business_days
-            self.plan_end_date = (self.days - 1).business_days.after( self.send_date )
-          else
-            self.plan_end_date = self.send_date + self.days - 1
-          end
-        end
         # if self.abonent_amount > 2
         #   self.amount = self.amount + self.abonent_amount * 100
         # end
@@ -646,18 +640,18 @@ class Network::NewCustomerApplication < Network::BaseClass
       when STATUS_CONFIRMED then
         self.production_date = get_fifth_day
         self.production_enter_date = Date.today
-        if self.use_business_days
-          # self.plan_end_date = self.days.business_days.after( self.send_date )
-          self.plan_end_date = (self.days - 1).business_days.after( self.send_date )
-        else
-          self.plan_end_date = self.send_date + self.days
-        end
         send_to_gnerc(1)
       when STATUS_COMPLETE  then 
         raise 'გამოიწერეთ საავანსო ფაქტურა' if check_advance_factura_needed
         self.end_date   = Date.today
       when STATUS_CANCELED  then
         raise "ატვირთეთ def ფაილი" unless check_file_uploaded
+
+        self.cancelation_date = Date.today
+        send_to_gnerc(2)
+        revert_bs_operations_on_cancel
+      when STATUS_USER_DECLINED then
+        raise "ატვირთეთ refab ფაილი" unless check_file_uploaded
 
         self.cancelation_date = Date.today
         send_to_gnerc(2)
@@ -753,113 +747,9 @@ class Network::NewCustomerApplication < Network::BaseClass
     true
   end
 
-  def send_to_gnerc(stage)
-    if stage == 1
-      file = self.files.select{ |x| x.file.filename[0..11] == GNERC_SIGNATURE_FILE }.first
-      if file.present?
-        content = File.read(file.file.file.file)
-        content = Base64.encode64(content)
-
-        tariff = Network::NewCustomerTariff.tariff_for(self.voltage, self.power, self.start_date)
-        gnerc_power = "#{tariff.power_from+1}-#{tariff.power_to}"
-
-        case self.voltage
-          when VOLTAGE_220 then
-            gnerc_voltage = GNERC_VOLTAGE_220
-          when VOLTAGE_380 then
-            gnerc_voltage = GNERC_VOLTAGE_380
-           when VOLTAGE_610 then
-            gnerc_voltage = GNERC_VOLTAGE_610
-        end
-
-        parameters = { letter_number:       self.number,
-                       applicant:           self.rs_name,
-                       applicant_address:   self.address,
-                       voltage:             gnerc_voltage,
-                       power:               gnerc_power,
-                       appeal_date:         self.start_date,
-                       attach_7_1:          content,
-                       attach_7_1_filename: file.file.filename 
-                     }
-
-        if self.abonent_amount > 2
-          parameters.merge!({ building:            1, 
-                              abonent_amount:      self.abonent_amount })
-        end
-
-        if self.micro
-          case self.micro_voltage
-            when VOLTAGE_220 then
-              gnerc_micro_voltage = GNERC_VOLTAGE_220
-              gnerc_micro_power   = '1..10'
-            when VOLTAGE_380 then
-              gnerc_micro_voltage = GNERC_VOLTAGE_380
-              gnerc_micro_power   = case self.micro_power
-                                      when 1..10 then '1..10'
-                                      when 11..30 then '11..30'
-                                      when 31..50 then '31..50'
-                                      when 51..80 then '51..80'
-                                      when 81..100 then '81..100'
-                                      when 101..120 then '101..120'
-                                      when 121..150 then '121..150'
-                                      when 151..200 then '151..200'
-                                      when 201..320 then '201..320'
-                                      when 321..500 then '321..500'
-                                      when 501..800 then '501..800'
-                                      when 801..1000 then '801..1000'
-                                      when 1001..Float::INFINITY then '>1000'
-                                    end
-             when VOLTAGE_610 then
-              gnerc_micro_voltage = GNERC_VOLTAGE_610
-              gnerc_micro_power   = case self.micro_power
-                                      when 1..500 then '1..500'
-                                      when 501..1000 then '501..1000'
-                                      when 1001..1500 then '1001..1500'
-                                      when 1501..2000 then '1501..2000'
-                                      when 2001..3000 then '2001..3000'
-                                      when 3001..5000 then '3001..5000'
-                                      when 5001..Float::INFINITY then '>5000'
-                                    end
-          end
-
-          parameters.merge!({ voltage_2:    gnerc_micro_voltage, 
-                              power_2:      gnerc_micro_power })
-
-        end
-
-        GnercWorker.perform_async("appeal", 7, parameters)
-      end
-    else 
-      file = self.files.select{ |x| x.file.filename[0..2] == GNERC_ACT_FILE }.first
-      if file.present?
-        content = File.read(file.file.file.file)
-        content = Base64.encode64(content)
-        parameters = { letter_number:       self.number,
-                       attach_7_2:          content,
-                       attach_7_2_filename: file.file.filename
-                     }
-      else
-        file = self.files.select{ |x| x.file.filename[0..2] == GNERC_DEF_FILE }.first
-        if file.present?
-          content = File.read(file.file.file.file)
-          content = Base64.encode64(content)
-          parameters = { letter_number:       self.number,
-                         attach_7_4:          content,
-                         attach_7_4_filename: file.file.filename
-                       }
-        else
-          file = self.files.select{ |x| x.file.filename[0..4] == GNERC_REFAB_FILE }.first
-          content = File.read(file.file.file.file)
-          content = Base64.encode64(content)
-          parameters = { letter_number:           self.number,
-                         refuse_abonent:          content,
-                         refuse_abonent_filename: file.file.filename
-                       }
-        end
-      end
-      GnercWorker.perform_async("answer", 7, parameters)
-    end
-  end
+  # def send_to_gnerc(stage)
+  #   send_gnerc(self)
+  # end
 
   def check_advance_factura_needed
     return false unless self.status == STATUS_CONFIRMED

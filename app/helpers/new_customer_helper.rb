@@ -26,4 +26,19 @@ module NewCustomerHelper
     Network::NewCustomerApplication.duration_collection
   end
 
+  def customer_type_collection
+    { I18n.t('models.network_change_power_application.customer_type_id_1') => 1,
+      I18n.t('models.network_change_power_application.customer_type_id_2') => 2
+    }
+  end
+
+  def micro_power_source_collection
+    {
+      'ქარი' => 1,
+      'მზე' => 2,
+      'ჰიდრო' => 3,
+      'სხვა' => 4
+    }
+  end
+
 end

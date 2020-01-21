@@ -157,23 +157,23 @@ class Network::NewCustomerController < ApplicationController
     end
   end
 
-  def postpone 
-    @title = I18n.t('models.network_new_customer_application.actions.edit.title')
-    @application = Network::NewCustomerApplication.find(params[:id])
-    if request.post? and postpone_params[:postpone_file]
-      p = params.require(:network_new_customer_application).permit(:postpone_file)
-      p[:file] = p[:postpone_file]
-      p.delete("postpone_file")
-      @application.postpone_file = Sys::File.new(p)
-      if @application.save
-        if @application.update_attributes(postpone_params.except(:postpone_file))
-          redirect_to network_new_customer_url(id: @application._id, tab: 'general'), notice: I18n.t('models.network_new_customer_application.actions.edit.changed')
-        end
-      end
-    else
-      @application.postpone_file = Sys::File.new
-    end
-  end
+  # def postpone 
+  #   @title = I18n.t('models.network_new_customer_application.actions.edit.title')
+  #   @application = Network::NewCustomerApplication.find(params[:id])
+  #   if request.post? and postpone_params[:postpone_file]
+  #     p = params.require(:network_new_customer_application).permit(:postpone_file)
+  #     p[:file] = p[:postpone_file]
+  #     p.delete("postpone_file")
+  #     @application.postpone_file = Sys::File.new(p)
+  #     if @application.save
+  #       if @application.update_attributes(postpone_params.except(:postpone_file))
+  #         redirect_to network_new_customer_url(id: @application._id, tab: 'general'), notice: I18n.t('models.network_new_customer_application.actions.edit.changed')
+  #       end
+  #     end
+  #   else
+  #     @application.postpone_file = Sys::File.new
+  #   end
+  # end
 
   def delete_new_customer
     application = Network::NewCustomerApplication.find(params[:id])
@@ -442,6 +442,44 @@ class Network::NewCustomerController < ApplicationController
     @nav
   end
 
+  def new_overdue_item
+    @title = I18n.t('models.network_new_customer_application.actions.control.title')
+    @application = Network::NewCustomerApplication.find(params[:id])
+    if request.post?
+      @item = Network::OverdueItem.new(overdue_params)
+      @item.source = @application
+      if @item.save
+        redirect_to network_new_customer_url(id: @application.id, tab: 'overdue'), notice: I18n.t('models.network_new_customer_application.actions.overdue.added')
+      end
+    else
+      @item = Network::OverdueItem.new(source: @application)
+    end
+  end
+
+  def edit_overdue_item
+    @title = I18n.t('models.network_new_customer_application.actions.control.change')
+    @item = Network::OverdueItem.find(params[:id])
+    if request.post?
+      if @item.update_attributes(overdue_params)
+        redirect_to network_new_customer_url(id: @item.source.id, tab: 'overdue'), notice: I18n.t('models.network_new_customer_application.actions.overdue.changed')
+      end
+    end
+  end
+
+  def delete_overdue_item
+    item = Network::OverdueItem.find(params[:id])
+    app = item.source
+    item.destroy
+    redirect_to network_new_customer_url(id: app.id, tab: 'overdue'), notice: I18n.t('models.network_new_customer_application.actions.overdue.deleted')
+  end
+
+  def toggle_chose_overdue
+    overdue = Network::OverdueItem.find(params[:id])
+    overdue.chosen = (not overdue.chosen)
+    overdue.save
+    redirect_to network_new_customer_url(id: overdue.source.id, tab: 'overdue')
+  end
+
   # def add_operation
   #   application = Network::NewCustomerApplication.find(params[:id])
   #   application.add_operation!(params[:itemkey])
@@ -457,12 +495,12 @@ class Network::NewCustomerController < ApplicationController
   private
 
   def new_customer_params
-    params.require(:network_new_customer_application).permit(:base_type, :base_number, :number, :rs_tin, :rs_foreigner, :rs_name, :personal_use, :mobile, :email, :region, :address, :work_address, :address_code, :bank_code, :bank_account, :duration, :voltage, :power, :abonent_amount, :vat_options, :need_factura, :show_tin_on_print, :notes, :proeqti, :oqmi, :micro, :micro_voltage, :micro_power, :substation)
+    params.require(:network_new_customer_application).permit(:base_type, :base_number, :number, :rs_tin, :rs_foreigner, :rs_name, :personal_use, :mobile, :email, :region, :address, :work_address, :address_code, :bank_code, :bank_account, :duration, :voltage, :power, :abonent_amount, :vat_options, :need_factura, :show_tin_on_print, :notes, :proeqti, :oqmi, :micro, :micro_voltage, :micro_power, :micro_power_source, :substation)
+  end
+
+  def overdue_params
+    params.require(:network_overdue_item).permit(:authority, :appeal_date, :planned_days, :deadline, :response_date, :decision_date, :days, :chosen, :business_days, :check_days)
   end
 
   def account_params; params.require(:network_new_customer_item).permit(:address, :address_code, :rs_tin, :customer_id) end
-
-  def postpone_params
-    params.require(:network_new_customer_application).permit(:postponed, :postpone_organization, :postpone_application_date, :postpone_set_date, :postpone_response_date, :postpone_file, :postpone_note)
-  end
 end

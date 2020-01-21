@@ -1,9 +1,11 @@
 <script type="text/javascript">
   $(function() {
     resetForeignerField();
-    resetMicroField();
+    // resetMicroField();
+    showHideFields();
     $('#network_new_customer_application_rs_foreigner').click(resetForeignerField);
-    $('#network_new_customer_application_micro').click(resetMicroField);
+    // $('#network_new_customer_application_micro').click(resetMicroField);
+    $('[name="network_new_customer_application[type]"]').change(showHideFields);
     autocomplete($('#network_new_customer_application_substation')[0], <%= raw tp_collection.to_json %>);
   });
 
@@ -16,6 +18,40 @@
       $('#network_new_customer_application_rs_tin').focus();
     }
   };
+
+  var showHideFields = function() {
+    switch( $('[name="network_new_customer_application[type]"]').val() ){
+       case "<%= Network::NewCustomerApplication::TYPE_INDIVIDUAL %>":
+        $('#fld_network_new_customer_application_abonent_amount').hide();
+        $('#fld_network_new_customer_application_micro_voltage').hide();
+        $('#fld_network_new_customer_application_micro_power').hide();
+        $('#fld_network_new_customer_application_micro_power_source').hide();
+        break;
+       case "<%= Network::NewCustomerApplication::TYPE_MULTI_ABONENT %>":
+        $('#fld_network_new_customer_application_abonent_amount').show();
+        $('#fld_network_new_customer_application_micro_voltage').hide();
+        $('#fld_network_new_customer_application_micro_power').hide();
+        $('#fld_network_new_customer_application_micro_power_source').hide();
+        break;
+       case "<%= Network::NewCustomerApplication::TYPE_MICRO %>":
+        $('#fld_network_new_customer_application_abonent_amount').hide();
+        $('#fld_network_new_customer_application_micro_voltage').show();
+        $('#fld_network_new_customer_application_micro_power').show();
+        $('#fld_network_new_customer_application_micro_power_source').show();
+        break;
+       case "<%= Network::NewCustomerApplication::TYPE_MULTI_MICRO %>":
+        $('#fld_network_new_customer_application_abonent_amount').show();
+        $('#fld_network_new_customer_application_micro_voltage').show();
+        $('#fld_network_new_customer_application_micro_power').show();
+        $('#fld_network_new_customer_application_micro_power_source').show();
+        break;
+       case "<%= Network::NewCustomerApplication::TYPE_SEPARATED %>":
+        $('#fld_network_new_customer_application_abonent_amount').hide();
+        $('#fld_network_new_customer_application_micro_voltage').hide();
+        $('#fld_network_new_customer_application_micro_power').hide();
+        $('#fld_network_new_customer_application_micro_power_source').hide();
+    }
+  }
 
   var resetMicroField = function() {
     if ($('#network_new_customer_application_micro').is(':checked')) {

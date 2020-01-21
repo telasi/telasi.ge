@@ -1,0 +1,86 @@
+<script type="text/javascript">
+  var appeal_input = $('[name="network_overdue_item[appeal_date]"]');
+  var deadline_date_input = $('[name="network_overdue_item[deadline]"]');
+  var f = $('[name="network_overdue_item[deadline]"]').prop('id');
+  var deadline_input = $('[data-altfield="'+f+'"]');
+  var business_days_input = $('[name="network_overdue_item[business_days]"]');
+  var days_field = $('#fld_network_overdue_item_days').children()[1];
+  var planned_days_input = $('[name="network_overdue_item[planned_days]"]');
+
+  $(function() {
+    // disableDate();
+    $('[name="network_overdue_item[check_days]"]').click(disableDate);
+    $('[name="network_overdue_item[check_date]"]').click(disableDays);
+    // deadline_input.on('input', calculate);
+    // deadline_input.change(calculate);
+    // $('#network_overdue_item_planned_days').change(calculate);
+    // $('#network_overdue_item_planned_days').on('input', calculate);
+    // business_days_input.change(calculate);
+  });
+
+  var disableDays = function(e){
+    if( $('#network_overdue_item_check_date').is(':checked') ){
+       $('#network_overdue_item_check_days').prop('checked', false);
+       $('[name="network_overdue_item[planned_days]"]').prop('disabled', true);
+       deadline_input.prop('disabled', false);
+       planned_days_input.prop('disabled', true);
+    } else {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }  
+
+  var disableDate = function(e){
+    if( $('#network_overdue_item_check_days').is(':checked') ){
+       $('#network_overdue_item_check_date').prop('checked', false);
+       $('[name="network_overdue_item[planned_days]"]').prop('disabled', false);
+       deadline_input.prop('disabled',true);
+       planned_days_input.prop('disabled', false);
+    } else {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }
+
+  var calculate = function(){
+    if(business_days_input.prop('checked')){
+      getBusinessDays();
+    } else {
+      if( $('#network_overdue_item_check_days').is(':checked')){
+        calculateDate();
+      } else {
+        calculateDays();
+      }
+    }
+  }
+
+  var getBusinessDays = function(){
+
+  }
+
+  var calculateDate = function(){
+    try {
+      var strArray=['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      if(planned_days_input.val() == "") {
+        var planned_date = new Date();
+      } else {
+        var planned_date = new Date(appeal_input.val());
+      }
+      planned_date.setDate(planned_date.getDate() + parseInt(planned_days_input.val()));
+      deadline_input.val( ('0' + planned_date.getDate()).slice(-2) + '-' + strArray[planned_date.getMonth()] + '-' + planned_date.getFullYear());
+      deadline_date_input.val(planned_date.getFullYear() + '-' + ('0' + (planned_date.getMonth() + 1)).slice(-2) + '-' + planned_date.getDate());
+    } catch(err){
+    }
+  }
+
+  var calculateDays = function(){
+    try {
+      var deadline = new Date(deadline_date_input.val());
+      var appeal   = new Date(appeal_input.val());
+      var differenceInTime = deadline.getTime() - appeal.getTime();
+      planned_days_input.val( differenceInTime / (1000 * 3600 * 24 ));
+    } catch(err){
+
+    }
+  }
+</script>

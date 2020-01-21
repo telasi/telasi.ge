@@ -195,6 +195,12 @@ TelasiGe::Application.routes.draw do
       match '/new_control_item/:id', action: 'new_control_item', as: 'new_customer_new_control_item', via: ['get','post']
       match '/edit_control_item/:id', action: 'edit_control_item', as: 'new_customer_edit_control_item', via: ['get','post']
       delete '/delete_control_item/:id', action: 'delete_control_item', as: 'new_customer_delete_control_item'
+      # overdure items
+      match '/new_overdue_item/:id', action: 'new_overdue_item', as: 'new_customer_new_overdue_item', via: ['get','post']
+      match '/edit_overdue_item/:id', action: 'edit_overdue_item', as: 'new_customer_edit_overdue_item', via: ['get','post']
+      delete '/delete_overdue_item/:id', action: 'delete_overdue_item', as: 'new_customer_delete_overdue_item'
+      post '/toggle_chose_overdue/:id', action: 'toggle_chose_overdue', as: 'new_customer_toggle_chose_overdue'
+
       post '/toggle_need_factura/:id', action: 'toggle_need_factura', as: 'new_customer_toggle_need_factura'
       post '/add_operation', action: 'add_operation', as: 'new_customer_add_operation'
       post '/remove_operation', action: 'remove_operation', as: 'new_customer_remove_operation'
@@ -218,6 +224,11 @@ TelasiGe::Application.routes.draw do
       match '/new_control_item/:id', action: 'new_control_item', as: 'change_power_new_control_item', via: ['get','post']
       match '/edit_control_item/:id', action: 'edit_control_item', as: 'change_power_edit_control_item', via: ['get','post']
       delete '/delete_control_item/:id', action: 'delete_control_item', as: 'change_power_delete_control_item'
+      # overdure items
+      match '/new_overdue_item/:id', action: 'new_overdue_item', as: 'change_power_new_overdue_item', via: ['get','post']
+      match '/edit_overdue_item/:id', action: 'edit_overdue_item', as: 'change_power_edit_overdue_item', via: ['get','post']
+      delete '/delete_overdue_item/:id', action: 'delete_overdue_item', as: 'change_power_delete_overdue_item'
+      post '/toggle_chose_overdue/:id', action: 'toggle_chose_overdue', as: 'change_power_toggle_chose_overdue'
       # change amount manually
       match '/edit_amount/:id', action: 'edit_amount', as: 'change_power_edit_amount', via: ['get', 'post']
       match '/edit_minus_amount/:id', action: 'edit_minus_amount', as: 'change_power_edit_minus_amount', via: ['get', 'post']
