@@ -80,7 +80,8 @@ GEM
     et-orbi (1.0.3)
       tzinfo
     execjs (2.5.2)
-    ffi (1.9.8-x86-mingw32)
+    ffi (1.12.1)
+    ffi (1.12.1-x86-mingw32)
     forma (0.1.10)
       activesupport
       railties (>= 3.1)
