@@ -14,3 +14,9 @@
   color: white;
   text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
 }
+
+@media (min-width: 1200px) {
+    .container{
+        width: 1300px;
+    }
+}
