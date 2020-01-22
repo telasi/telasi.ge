@@ -116,7 +116,7 @@ module Network::ChangePowerGnerc
 
     parameters = { letter_number:         self.number,
                    request_status:        request_status,
-                   sms:                   self.messages.where(id: self.sms_response).first.message }
+                   sms:                   get_message }
     
     if response_status == 1
       file = self.files.select{ |x| x.file.filename[0..2] == GNERC_DEF_FILE }.first
@@ -196,7 +196,7 @@ module Network::ChangePowerGnerc
                    response_id:        response_id,
                    attach_10:          content,
                    attach_10_filename: file.file.filename,
-                   sms_response:       self.messages.where(id: self.sms_response).first.message }
+                   sms_response:       get_message }
 
     if self.overdue.any?
       parameters.merge!({ admin_authority_overdue: 1 })
@@ -277,7 +277,7 @@ module Network::ChangePowerGnerc
                    response_id:        response_id,
                    attach_11:          content,
                    attach_11_filename: file.file.filename,
-                   sms_response:       self.messages.where(id: self.sms_response).first.message }
+                   sms_response:       get_message }
 
     GnercWorker.perform_async("answer", 11, parameters)
   end
@@ -338,7 +338,7 @@ module Network::ChangePowerGnerc
                    response_id:        response_id,
                    attach_12:          content,
                    attach_12_filename: file.file.filename,
-                   sms_response:       self.messages.where(id: self.sms_response).first.message }
+                   sms_response:       get_message }
 
     parameters.merge!({ technical_condition: self.technical_condition }) if response_id == 1
 
@@ -405,6 +405,11 @@ module Network::ChangePowerGnerc
     techcondition = Network::ChangePowerApplication.where(number: self.tech_condition_cns).first
     return I18n.t('Tech condition is not sent') if ( techcondition.blank? || techcondition.gnerc_id.blank? )
     techcondition.gnerc_id
+  end
+
+  def get_message
+    message = self.messages.where(id: self.sms_response).first.message if self.messages.where(id: self.sms_response).first
+    message || ' '
   end
 
 
