@@ -162,6 +162,14 @@ class Network::ChangePowerApplication < Network::BaseClass
     end
   end
 
+  def use_business_days=(use_business_days)
+    write_attribute(:use_business_days, use_business_days)
+  end
+
+  def use_business_days
+    true
+  end
+
   def unit
     if [VOLTAGE_610, VOLTAGE_35110].include?(self.voltage) then I18n.t('models.network_change_power_application.unit_kvolt')
     else I18n.t('models.network_change_power_application.unit_volt') end
@@ -449,9 +457,6 @@ class Network::ChangePowerApplication < Network::BaseClass
         else
           self.plan_end_date = self.send_date + self.days - 1
         end
-        #if self.postponed
-        #  self.plan_end_date = self.postpone_set_date
-        #end
       end
     end
   end

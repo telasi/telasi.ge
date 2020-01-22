@@ -241,6 +241,8 @@ TelasiGe::Application.routes.draw do
       post '/toggle_need_factura/:id', action: 'toggle_need_factura', as: 'change_power_toggle_need_factura'
       # change real date
       match '/edit_real_date/:id', action: 'edit_real_date', as: 'change_power_edit_real_date', via: ['get', 'post']
+      # change dates
+      match '/change_dates/:id', action: 'change_dates', as: 'change_power_change_dates', via: ['get', 'post']
     end
     scope '/stages', controller: 'stages' do
       get '/', action: 'index', as: 'stages'

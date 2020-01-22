@@ -179,6 +179,7 @@ module Network::ChangePowerHelper
         #  t.action network_change_power_sign_url(id: application.id), label: 'ხელმოწერა', icon: '/icons/edit-signiture.png'
         #end
         # t.action network_new_customer_paybill_url(id: application.id, format: 'pdf'), label: 'საგ/დავ ბეჭდვა', icon: '/icons/printer.png'
+        t.action network_change_power_change_dates_url(id: application.id), label: 'თარიღების შეცვლა', icon: '/icons/alarm-clock--pencil.png'
         t.action network_edit_change_power_url(id: application.id), label: 'შეცვლა', icon: '/icons/pencil.png' if change_power_app_editable?(application)
         application.transitions.each do |status|
           t.action network_change_change_power_status_url(id: application.id, status: status), label: Network::ChangePowerApplication.status_name(status), icon: Network::ChangePowerApplication.status_icon(status)

@@ -430,6 +430,16 @@ class Network::ChangePowerController < ApplicationController
     end
   end
 
+  def change_dates
+    @title = 'თარიღების შეცვლა'
+    @application = Network::ChangePowerApplication.find(params[:id])
+    if request.post?
+      if @application.update_attributes(params.require(:network_change_power_application).permit(:send_date, :end_date ))#, :start_date))
+        redirect_to network_change_power_url(id: @application.id), notice: 'თარიღები შეცვლილია'
+      end
+    end
+  end
+
   def send_prepayment_factura_prepare
     @application = Network::ChangePowerApplication.find(params[:id])
     @items_to_factured = @application.billing_prepayment_to_factured
