@@ -105,7 +105,7 @@ module Network::ChangePowerGnerc
 
     debugger
 
-    GnercWorker.perform_async("appeal", 9, parameters)
+    GnercWorkerTest.perform_async("appeal", 9, parameters)
   end
 
   def send_meter_setup_2
@@ -131,7 +131,7 @@ module Network::ChangePowerGnerc
     end
 
     # attach_9_5
-    GnercWorker.perform_async("answer", 9, parameters)
+    GnercWorkerTest.perform_async("answer", 9, parameters)
   end
 
   def send_change_power_1
@@ -166,7 +166,7 @@ module Network::ChangePowerGnerc
 
     parameters.merge!({ abonent_amount: self.abonent_amount }) if self.abonent_amount > 1
 
-    GnercWorker.perform_async("appeal", 10, parameters)
+    GnercWorkerTest.perform_async("appeal", 10, parameters)
   end
 
   def send_change_power_2
@@ -211,7 +211,7 @@ module Network::ChangePowerGnerc
                                 'amount_of_overdue' + suffix, over.days ] )
       end
     end
-    GnercWorker.perform_async("answer", 10, parameters)
+    GnercWorkerTest.perform_async("answer", 10, parameters)
   end
 
   def send_micro_power_1
@@ -246,7 +246,7 @@ module Network::ChangePowerGnerc
 
     debugger
 
-    GnercWorker.perform_async("appeal", 11, parameters)
+    GnercWorkerTest.perform_async("appeal", 11, parameters)
   end
 
   def send_micro_power_2
@@ -279,7 +279,7 @@ module Network::ChangePowerGnerc
                    attach_11_filename: file.file.filename,
                    sms_response:       get_message }
 
-    GnercWorker.perform_async("answer", 11, parameters)
+    GnercWorkerTest.perform_async("answer", 11, parameters)
   end
 
   def send_tech_condition_1
