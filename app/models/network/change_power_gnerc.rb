@@ -103,8 +103,6 @@ module Network::ChangePowerGnerc
 
     parameters.merge!({ abonent_amount: self.abonent_amount }) if self.abonent_amount > 1
 
-    debugger
-
     GnercWorkerTest.perform_async("appeal", 9, parameters)
   end
 
@@ -243,8 +241,6 @@ module Network::ChangePowerGnerc
                  }
 
     parameters.merge!({ abonent_amount: self.abonent_amount }) if self.abonent_amount > 1
-
-    debugger
 
     GnercWorkerTest.perform_async("appeal", 11, parameters)
   end

@@ -133,6 +133,7 @@ class Network::ChangePowerApplication < Network::BaseClass
 
   validate :validate_rs_name, :validate_number
   before_save :status_manager, :calculate_total_cost, :update_customer, :calculate_plan_end_date
+  before_create :set_user_business_days
 
   def self.correct_number?(type, number)
     if type == TYPE_CHANGE_POWER
@@ -453,6 +454,10 @@ class Network::ChangePowerApplication < Network::BaseClass
         #end
       end
     end
+  end
+
+  def set_user_business_days
+    self.use_business_days = true
   end
 
   def update_customer
