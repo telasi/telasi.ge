@@ -327,8 +327,7 @@ module Network::NewCustomerGnerc
         content = Base64.encode64(content)
         parameters = { letter_number:       self.number,
                        attach_7_2:          content,
-                       attach_7_2_filename: file.file.filename,
-                       confirmation:        1
+                       attach_7_2_filename: file.file.filename
                      }
       else
         file = self.files.select{ |x| x.file.filename[0..2] == Network::NewCustomerApplication::GNERC_DEF_FILE }.first
@@ -337,8 +336,7 @@ module Network::NewCustomerGnerc
           content = Base64.encode64(content)
           parameters = { letter_number:       self.number,
                          attach_7_4:          content,
-                         attach_7_4_filename: file.file.filename,
-                         confirmation:        0
+                         attach_7_4_filename: file.file.filename
                        }
         else
           file = self.files.select{ |x| x.file.filename[0..4] == Network::NewCustomerApplication::GNERC_REFAB_FILE }.first
@@ -346,8 +344,7 @@ module Network::NewCustomerGnerc
           content = Base64.encode64(content)
           parameters = { letter_number:           self.number,
                          refuse_abonent:          content,
-                         refuse_abonent_filename: file.file.filename,
-                         confirmation:        0
+                         refuse_abonent_filename: file.file.filename
                        }
         end
       end
