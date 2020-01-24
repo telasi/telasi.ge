@@ -229,7 +229,7 @@ class Network::ChangePowerApplication < Network::BaseClass
 
   def can_change_amount?; not [TYPE_CHANGE_POWER, TYPE_SAME_PACK].include?(self.type) end
   def apply_multiplier?; [TYPE_CHANGE_POWER, TYPE_MICROPOWER, TYPE_MICRO_OTHER_PACK, TYPE_MICRO_SAME_PACK].include?(self.type) end
-  # def apply_duration?; [TYPE_MICROPOWER, TYPE_MICRO_OTHER_PACK, TYPE_MICRO_SAME_PACK].include?(self.type) end
+  # def apply_duration?; [TYPE_CHANGE_POWER, TYPE_MICROPOWER, TYPE_MICRO_OTHER_PACK, TYPE_MICRO_SAME_PACK].include?(self.type) end
   def apply_duration?; true end
 
   def prepayment_factura_sent?
@@ -420,7 +420,16 @@ class Network::ChangePowerApplication < Network::BaseClass
 
   def calculate_total_cost
     calculate_region
+    case self.service
+      when SERVICE_METER_SETUP || SERVICE_TECH_CONDITION then calculate_meter
+      when SERVICE_CHANGE_POWER                          then calculate_change_power
+      when SERVICE_MICRO_POWER                           then calculate_micro
+    end
+  end
+
+  def calculate_change_power
     unless self.can_change_amount?
+
       if self.zero_charge
         self.amount = 0
       else
@@ -450,6 +459,92 @@ class Network::ChangePowerApplication < Network::BaseClass
 
     if apply_duration?
       tariff = Network::NewCustomerTariff.tariff_for(self.voltage, self.power, self.start_date)
+      if tariff.present?
+        self.days = tariff.days(self)
+        if self.use_business_days
+          self.plan_end_date = (self.days - 1).business_days.after( self.send_date )
+        else
+          self.plan_end_date = self.send_date + self.days - 1
+        end
+      end
+    end
+  end
+
+  def calculate_micro
+    unless self.can_change_amount?
+
+      if self.zero_charge
+        self.amount = 0
+      else
+        tariff_old = Network::MicroTariff.tariff_for(self.old_voltage, self.old_power, self.start_date)
+        tariff = Network::MicroTariff.tariff_for(self.voltage, self.power, self.start_date)
+        multiplier = 1 
+        multiplier = self.tariff_multiplier.multiplier if self.tariff_multiplier
+        if tariff_old.price_gel > tariff.price_gel
+          self.amount = 0
+        elsif tariff_old == tariff
+          if self.old_power == self.power
+            self.amount = 0
+          else
+            per_kwh = tariff.price_gel * 1.0 / tariff.power_to
+            self.amount = (per_kwh * (self.power - self.old_power)).round(2) - self.minus_amount
+            self.amount = (per_kwh * (self.power - self.old_power) * multiplier ).round(2) - self.minus_amount if apply_multiplier?
+          end
+        else
+          self.amount = tariff.price_gel - tariff_old.price_gel - self.minus_amount
+          self.amount = ( tariff.price_gel - tariff_old.price_gel ) * multiplier - self.minus_amount if apply_multiplier?
+        end
+      end
+
+      # fixing amount
+      self.amount = 0 if self.amount < 0
+    end
+
+    if apply_duration?
+      tariff = Network::MicroTariff.tariff_for(self.voltage, self.power, self.start_date)
+      if tariff.present?
+        self.days = tariff.days(self)
+        if self.use_business_days
+          self.plan_end_date = (self.days - 1).business_days.after( self.send_date )
+        else
+          self.plan_end_date = self.send_date + self.days - 1
+        end
+      end
+    end
+  end
+
+  def calculate_meter
+    unless self.can_change_amount?
+
+      if self.zero_charge
+        self.amount = 0
+      else
+        tariff_old = Network::MeterSetupTariff.tariff_for(self.old_voltage, self.old_power, self.start_date)
+        tariff = Network::MeterSetupTariff.tariff_for(self.voltage, self.power, self.start_date)
+        multiplier = 1 
+        multiplier = self.tariff_multiplier.multiplier if self.tariff_multiplier
+        if tariff_old.price_gel > tariff.price_gel
+          self.amount = 0
+        elsif tariff_old == tariff
+          if self.old_power == self.power
+            self.amount = 0
+          else
+            per_kwh = tariff.price_gel * 1.0 / tariff.power_to
+            self.amount = (per_kwh * (self.power - self.old_power)).round(2) - self.minus_amount
+            self.amount = (per_kwh * (self.power - self.old_power) * multiplier ).round(2) - self.minus_amount if apply_multiplier?
+          end
+        else
+          self.amount = tariff.price_gel - tariff_old.price_gel - self.minus_amount
+          self.amount = ( tariff.price_gel - tariff_old.price_gel ) * multiplier - self.minus_amount if apply_multiplier?
+        end
+      end
+
+      # fixing amount
+      self.amount = 0 if self.amount < 0
+    end
+
+    if apply_duration?
+      tariff = Network::MeterSetupTariff.tariff_for(self.voltage, self.power, self.start_date)
       if tariff.present?
         self.days = tariff.days(self)
         if self.use_business_days
