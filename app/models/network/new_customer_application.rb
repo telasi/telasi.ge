@@ -563,10 +563,10 @@ class Network::NewCustomerApplication < Network::BaseClass
   def message_to_gnerc(message)
     self.sms_response = message.id
     self.save
-    # newcust = Gnerc::Newcust.where(letter_number: self.number).first
-    # return if newcust.blank?
+    newcust = Gnerc::Newcust.where(letter_number: self.number).first
+    return if newcust.blank?
     
-    # newcust.update_attributes!(company_answer: message.message, phone: message.mobile, confirmation: 1)
+    newcust.update_attributes!(company_answer: message.message, phone: message.mobile, confirmation: 1)
   end
 
   def first_sms
