@@ -1,0 +1,80 @@
+tariff_01:
+  voltage: '220'
+  power_kwt: 1-10
+  days_to_complete: 10
+  price_gel: 100
+tariff_02:
+  voltage: '380'
+  power_kwt: 1-10
+  days_to_complete: 10
+  price_gel: 300
+tariff_03:
+  voltage: '380'
+  power_kwt: 11-30
+  days_to_complete: 10
+  price_gel: 350
+tariff_04:
+  voltage: '380'
+  power_kwt: 31-50
+  days_to_complete: 10
+  price_gel: 600
+tariff_05:
+  voltage: '380'
+  power_kwt: 51-80
+  days_to_complete: 10
+  price_gel: 650
+tariff_06:
+  voltage: '380'
+  power_kwt: 81-100
+  days_to_complete: 15
+  price_gel: 700
+tariff_07:
+  voltage: '380'
+  power_kwt: 101-120
+  days_to_complete: 15
+  price_gel: 750
+tariff_08:
+  voltage: '380'
+  power_kwt: 121-200
+  days_to_complete: 15
+  price_gel: 800
+tariff_09:
+  voltage: '380'
+  power_kwt: 201-320
+  days_to_complete: 15
+  price_gel: 950
+tariff_10:
+  voltage: '380'
+  power_kwt: 321-500
+  days_to_complete: 15
+  price_gel: 1200
+tariff_11:
+  voltage: '380'
+  power_kwt: 501-800
+  days_to_complete: 20
+  price_gel: 1500
+tariff_12:
+  voltage: '380'
+  power_kwt: 801-1000
+  days_to_complete: 20
+  price_gel: 2200
+tariff_13:
+  voltage: '380'
+  power_kwt: 1001-5000
+  days_to_complete: 20
+  price_gel: 3000
+tariff_14:
+  voltage: '6/10'
+  power_kwt: 1-500
+  days_to_complete: 15
+  price_gel: 7000
+tariff_15:
+  voltage: '6/10'
+  power_kwt: 501-1000
+  days_to_complete: 20
+  price_gel: 7500
+tariff_16:
+  voltage: '6/10'
+  power_kwt: 1001-5000
+  days_to_complete: 20
+  price_gel: 8000

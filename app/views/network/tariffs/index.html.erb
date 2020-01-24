@@ -14,6 +14,20 @@
   t.number_field :price_gel, after: 'GEL'
 end %>
 
+<%= table_for @meter_tariffs, title: t('models.network.tariffs.meter_tariff'), icon: '/icons/network.png', collapsible: true do |t|
+  t.date_field :starts, label: 'დაწყება', empty: false
+  t.date_field :ends, label: 'დასრულება', empty: false
+  t.text_field :voltage
+  t.complex_field i18n: 'power' do |c|
+    c.text_field :power_from, tag: 'code', after: '-'
+    c.text_field :power_to, tag: 'code', after: 'kW'
+  end
+  t.complex_field i18n: 'days_to_complete' do |c|
+    c.text_field :days_to_complete, tag: 'code', after: t('models.network_new_customer_item.unit_days')
+  end
+  t.number_field :price_gel, after: 'GEL'
+end %>
+
 <%= table_for @mtariffs, title: t('models.network.tariffs.mtariff'), icon: '/icons/network.png', collapsible: true do |t|
   t.date_field :starts, label: 'დაწყება', empty: false
   t.date_field :ends, label: 'დასრულება', empty: false

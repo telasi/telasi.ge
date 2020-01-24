@@ -3,6 +3,7 @@ class Network::TariffsController < ApplicationController
   def index
     @title = I18n.t('models.network.tariffs.tariff')
     @tariffs = Network::NewCustomerTariff.asc(:ends, :voltage, :power_from)
+    @meter_tariffs = Network::MeterSetupTariff.asc(:_id)
     @mtariffs = Network::MicroTariff.asc(:_id)
     @tariffs_multi = Network::TariffMultiplier.asc(:_id)
   end
