@@ -117,7 +117,7 @@ module Network::ChangePowerGnerc
                    sms:                   get_message }
     
     if response_status == 1
-      file = self.files.select{ |x| x.file.filename[0..2] == GNERC_DEF_FILE }.first
+      file = self.files.select{ |x| x.file.filename[0..2] == Network::ChangePowerApplication::GNERC_DEF_FILE }.first
       if file.present?
         content = File.read(file.file.file.file)
         content = Base64.encode64(content)
@@ -174,17 +174,17 @@ module Network::ChangePowerGnerc
                    when Network::BaseClass::STATUS_CONFIRMED then 3
                  end
 
-    file = self.files.select{ |x| x.file.filename[0..2] == Network::NewCustomerApplication::GNERC_ACT_FILE }.first
+    file = self.files.select{ |x| x.file.filename[0..2] == Network::ChangePowerApplication::GNERC_ACT_FILE }.first
     if file.present?
       content = File.read(file.file.file.file)
       content = Base64.encode64(content)
     else
-      file = self.files.select{ |x| x.file.filename[0..2] == Network::NewCustomerApplication::GNERC_DEF_FILE }.first
+      file = self.files.select{ |x| x.file.filename[0..2] == Network::ChangePowerApplication::GNERC_DEF_FILE }.first
       if file.present?
         content = File.read(file.file.file.file)
         content = Base64.encode64(content)
       else
-        file = self.files.select{ |x| x.file.filename[0..4] == Network::NewCustomerApplication::GNERC_REFAB_FILE }.first
+        file = self.files.select{ |x| x.file.filename[0..4] == Network::ChangePowerApplication::GNERC_REFAB_FILE }.first
         content = File.read(file.file.file.file)
         content = Base64.encode64(content)
       end
@@ -253,17 +253,17 @@ module Network::ChangePowerGnerc
                    else 4
                  end
 
-    file = self.files.select{ |x| x.file.filename[0..2] == GNERC_ACT_FILE }.first
+    file = self.files.select{ |x| x.file.filename[0..2] == Network::ChangePowerApplication::GNERC_ACT_FILE }.first
     if file.present?
       content = File.read(file.file.file.file)
       content = Base64.encode64(content)
     else
-      file = self.files.select{ |x| x.file.filename[0..2] == GNERC_DEF_FILE }.first
+      file = self.files.select{ |x| x.file.filename[0..2] == Network::ChangePowerApplication::GNERC_DEF_FILE }.first
       if file.present?
         content = File.read(file.file.file.file)
         content = Base64.encode64(content)
       else
-        file = self.files.select{ |x| x.file.filename[0..4] == GNERC_REFAB_FILE }.first
+        file = self.files.select{ |x| x.file.filename[0..4] == Network::ChangePowerApplication::GNERC_REFAB_FILE }.first
         content = File.read(file.file.file.file)
         content = Base64.encode64(content)
       end
@@ -314,17 +314,17 @@ module Network::ChangePowerGnerc
                    when Network::BaseClass::STATUS_CONFIRMED then 2
                  end
 
-    file = self.files.select{ |x| x.file.filename[0..2] == GNERC_ACT_FILE }.first
+    file = self.files.select{ |x| x.file.filename[0..2] == Network::ChangePowerApplication::GNERC_ACT_FILE }.first
     if file.present?
       content = File.read(file.file.file.file)
       content = Base64.encode64(content)
     else
-      file = self.files.select{ |x| x.file.filename[0..2] == GNERC_DEF_FILE }.first
+      file = self.files.select{ |x| x.file.filename[0..2] == Network::ChangePowerApplication::GNERC_DEF_FILE }.first
       if file.present?
         content = File.read(file.file.file.file)
         content = Base64.encode64(content)
       else
-        file = self.files.select{ |x| x.file.filename[0..4] == GNERC_REFAB_FILE }.first
+        file = self.files.select{ |x| x.file.filename[0..4] == Network::ChangePowerApplication::GNERC_REFAB_FILE }.first
         content = File.read(file.file.file.file)
         content = Base64.encode64(content)
       end

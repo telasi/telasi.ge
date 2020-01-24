@@ -652,6 +652,11 @@ ka:
       power: სიმძლავრე
       days_to_complete: ვადა
       price_gel: ფასი
+    network_meter_setup_tariff:
+      voltage: ძაბვა
+      power: სიმძლავრე
+      days_to_complete: ვადა
+      price_gel: ფასი
     network_new_customer_calculation:
       power: სიმძლავრე
       voltage: ძაბვა
