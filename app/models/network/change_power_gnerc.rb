@@ -336,7 +336,7 @@ module Network::ChangePowerGnerc
                    attach_12_filename: file.file.filename,
                    sms_response:       get_message }
 
-    parameters.merge!({ technical_condition: self.technical_condition }) if response_id == 1
+    parameters.merge!({ technical_condition: self.technical_condition_cns }) if response_id == 1
 
     GnercWorkerTest.perform_async("answer", 12, parameters)
   end
