@@ -155,7 +155,7 @@ module Network::ChangePowerGnerc
                    current_voltage:       current_voltage,
                    requested_voltage:     requested_voltage,
                    current_volume:        self.old_power,
-                   request_volume:        self.power,
+                   requested_volume:      self.power,
                    changing_technical_condition: self.changing_technical_condition ? 1 : 0,
                    appeal_date:           self.start_date,
                    attach_10_1:           content,
