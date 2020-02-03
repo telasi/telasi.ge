@@ -2,6 +2,7 @@
 class Api::NetworkController < Api::ApiController
   def newcustomer_sms
   	application = Network::NewCustomerApplication.where(number: params[:number]).first
+    #application.gnerc_id = "G0010#{params[:case_id]}F000#{params[:gnerc_id]}"
     application.gnerc_id = "G0010#{params[:case_id]}F000#{params[:response_id]}"
     application.save
     application.first_sms
@@ -10,6 +11,7 @@ class Api::NetworkController < Api::ApiController
 
   def changepower_sms
   	application = Network::ChangePowerApplication.where(number: params[:number]).first
+    #application.gnerc_id = "G0010#{params[:case_id]}F000#{params[:gnerc_id]}"
     application.gnerc_id = "G0010#{params[:case_id]}F000#{params[:response_id]}"
     application.save
     application.first_sms
