@@ -30,6 +30,13 @@
       type_combo.options[type_combo.options.length] = new Option(array[index][1], array[index][0]);
     };
 
+    for(index in type_combo.options) {
+      if(type_combo.options.item(index).value == <%= @application.type %>){
+        type_combo.value = <%= @application.type %>;
+        break;
+      }
+    }
+
     if ($('[name="network_change_power_application[service]"]').val() == "<%= Network::ChangePowerApplication::SERVICE_METER_SETUP %>"){
       $('#fld_network_change_power_application_tech_condition_cns').show();
     } else {
