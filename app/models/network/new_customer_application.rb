@@ -11,6 +11,7 @@ class Network::NewCustomerApplication < Network::BaseClass
   GNERC_ACT_FILE = 'act'
   GNERC_DEF_FILE = 'def'
   GNERC_REFAB_FILE = 'refab'
+  GNERC_CADAST_FILE = 'cadastral'
 
   CUSTOMER_AMOUNT_PRICE_MULTI_START_DATE = Date.new(2019,8,13)
   CUSTOMER_AMOUNT_PRICE_MULTI = 100
@@ -638,6 +639,8 @@ class Network::NewCustomerApplication < Network::BaseClass
       when STATUS_SENT      then 
         self.send_date  = self.start_date = Date.today
       when STATUS_CONFIRMED then
+        raise "ატვირთეთ cadastral ფაილი ან შეიყვანეთ საკადასტრო მისამართი" unless check_cadastral
+
         self.production_date = get_fifth_day
         self.production_enter_date = Date.today
         send_to_gnerc(1)
@@ -757,6 +760,13 @@ class Network::NewCustomerApplication < Network::BaseClass
     return false unless self.need_factura
 
     self.billing_prepayment_to_factured.present? or ( self.billing_prepayment_factura_sum < ( self.effective_amount / 2 ))
+  end
+
+  def check_cadastral
+    return true if self.address_code.present?
+
+    file = self.files.select{ |x| x.file.filename[0..2] == GNERC_CADAST_FILE }.first
+    return file.present?
   end
 
   def check_file_uploaded
