@@ -26,6 +26,7 @@ class Network::ChangePowerApplication < Network::BaseClass
   GNERC_ACT_FILE = 'act'
   GNERC_DEF_FILE = 'def'
   GNERC_REFAB_FILE = 'refab'
+  GNERC_CADAST_FILE = 'cadastral'
 
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -405,6 +406,8 @@ class Network::ChangePowerApplication < Network::BaseClass
       when STATUS_SENT      then self.send_date  = self.start_date = Date.today
       when STATUS_CONFIRMED then 
         raise 'აარჩიეთ რეალური აბონენტი' if self.real_customer_id.blank?
+        raise "ატვირთეთ cadastral ფაილი ან შეიყვანეთ საკადასტრო მისამართი" unless check_cadastral
+
         self.production_date = get_fifth_day
         self.production_enter_date = Date.today
 
@@ -421,7 +424,8 @@ class Network::ChangePowerApplication < Network::BaseClass
   def calculate_total_cost
     calculate_region
     case self.service
-      when SERVICE_METER_SETUP || SERVICE_TECH_CONDITION then calculate_meter
+      when SERVICE_METER_SETUP                           then calculate_meter
+      when SERVICE_TECH_CONDITION                        then calculate_meter
       when SERVICE_CHANGE_POWER                          then calculate_change_power
       when SERVICE_MICRO_POWER                           then calculate_micro
     end
@@ -654,6 +658,13 @@ class Network::ChangePowerApplication < Network::BaseClass
     when TYPE_SUB_CUSTOMER then 28
     else 31
     end
+  end
+
+  def check_cadastral
+    return true if self.address_code.present?
+
+    file = self.files.select{ |x| x.file.filename[0..2] == GNERC_CADAST_FILE }.first
+    return file.present?
   end
 
   def check_file_uploaded
