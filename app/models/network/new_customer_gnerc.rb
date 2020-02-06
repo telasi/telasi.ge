@@ -95,8 +95,8 @@ module Network::NewCustomerGnerc
     if file.present?
       content = File.read(file.file.file.file)
       content = Base64.encode64(content)
-      parameters.merge!({ attach_7_2:          content,
-                          attach_7_2_filename: file.file.filename,
+      parameters.merge!({ attach_7:          content,
+                          attach_7_filename: file.file.filename,
                           sms_response:        self.messages.where(id: self.sms_response).first.message })
     else
       file = self.files.select{ |x| x.file.filename[0..2] == Network::NewCustomerApplication::GNERC_DEF_FILE }.first
