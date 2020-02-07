@@ -108,8 +108,9 @@ module Network::ChangePowerGnerc
 
   def send_meter_setup_2
     request_status = case self.status
-                      when Network::BaseClass::STATUS_CANCELED then 1
-                      when Network::BaseClass::STATUS_CONFIRMED then 2
+                      when Network::BaseClass::STATUS_CONFIRMED then 1
+                      when Network::BaseClass::STATUS_IN_BS     then 1
+                      when Network::BaseClass::STATUS_CANCELED  then 2
                     end
 
     parameters = { letter_number:         self.number,
@@ -169,9 +170,10 @@ module Network::ChangePowerGnerc
 
   def send_change_power_2
     response_id = case self.status
-                   when Network::BaseClass::STATUS_CANCELED then 1
+                   when Network::BaseClass::STATUS_CANCELED      then 1
                    when Network::BaseClass::STATUS_USER_DECLINED then 2
-                   when Network::BaseClass::STATUS_CONFIRMED then 3
+                   when Network::BaseClass::STATUS_CONFIRMED     then 3
+                   when Network::BaseClass::STATUS_IN_BS         then 3
                  end
 
     file = self.files.select{ |x| x.file.filename[0..2] == Network::ChangePowerApplication::GNERC_ACT_FILE }.first
@@ -247,9 +249,10 @@ module Network::ChangePowerGnerc
 
   def send_micro_power_2
     response_id = case self.status
-                   when Network::BaseClass::STATUS_CANCELED then 1
+                   when Network::BaseClass::STATUS_CANCELED      then 1
                    when Network::BaseClass::STATUS_USER_DECLINED then 2
-                   when Network::BaseClass::STATUS_CONFIRMED then 3
+                   when Network::BaseClass::STATUS_CONFIRMED     then 3
+                   when Network::BaseClass::STATUS_IN_BS         then 3
                    else 4
                  end
 
@@ -310,8 +313,9 @@ module Network::ChangePowerGnerc
 
   def send_tech_condition_2
     response_id = case self.status
-                   when Network::BaseClass::STATUS_CANCELED then 1
-                   when Network::BaseClass::STATUS_CONFIRMED then 2
+                   when Network::BaseClass::STATUS_CONFIRMED then 1
+                   when Network::BaseClass::STATUS_IN_BS     then 1
+                   when Network::BaseClass::STATUS_CANCELED  then 2
                  end
 
     file = self.files.select{ |x| x.file.filename[0..2] == Network::ChangePowerApplication::GNERC_ACT_FILE }.first
