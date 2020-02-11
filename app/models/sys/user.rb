@@ -138,7 +138,6 @@ module Sys
       
       if Magti::SEND
         msg = self.sms_confirm_code
-        msg = msg.to_lat if opts[:lat]
         begin 
          Magti.send_sms(self.mobile, msg)
         rescue 
