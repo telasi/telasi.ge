@@ -54,7 +54,9 @@ class DashboardController < ApplicationController
       if params[:resend]
         @user.send_sms_confirmation if @user
       else 
-        if @user and @user.confirm_sms!(params[:sms_code]) then @success = I18n.t('models.sys_user.actions.confirm_success')
+        if @user and @user.confirm_sms!(params[:sms_code]) then 
+          @success = I18n.t('models.sys_user.actions.confirm_success')
+          redirect_to root_url
         else @error = I18n.t('models.sys_user.actions.confirm_failure') end
       end
     end
