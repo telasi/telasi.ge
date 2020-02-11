@@ -12,7 +12,10 @@ class DashboardController < ApplicationController
         session[:user_id] = user.id
         url = session.delete(:return_url) || root_url
         redirect_to url || root_url
-      elsif user and not user.email_confirmed then @error = I18n.t('model.sys_user.errors.email_not_confirmed')
+      elsif user and not user.email_confirmed then 
+        session[:user_id] = user.id
+        # @error = I18n.t('model.sys_user.errors.email_not_confirmed')
+        redirect_to sms_confirmation_url
       else @error = I18n.t('models.sys_user.errors.illegal_login') end
     end
   end
@@ -27,8 +30,9 @@ class DashboardController < ApplicationController
     if request.post?
       @user = Sys::User.new(params.require(:sys_user).permit(:email, :password, :password_confirmation, :first_name, :last_name, :mobile))
       if @user.save
-        UserMailer.email_confirmation(@user).deliver if @user.email_confirm_hash
-        redirect_to register_complete_url
+        session[:user_id] = @user.id
+        @user.send_confirmation
+        redirect_to sms_confirmation_url
       end
     else
       @user = Sys::User.new
@@ -42,12 +46,33 @@ class DashboardController < ApplicationController
     else @error = I18n.t('models.sys_user.actions.confirm_failure') end
   end
 
+  def sms_confirmation 
+    @title = I18n.t('models.sys_user.actions.register_complete') 
+    @user = current_user
+    redirect_to login_url unless @user
+    if request.post?
+      if params[:resend]
+        @user.send_sms_confirmation if @user
+      else 
+        if @user and @user.confirm_sms!(params[:sms_code]) then @success = I18n.t('models.sys_user.actions.confirm_success')
+        else @error = I18n.t('models.sys_user.actions.confirm_failure') end
+      end
+    end
+    @total_seconds = Sys::User::NEXT_RESEND_IN_MINUTES
+    @seconds = @user.seconds_left_for_resend if @user
+  end
+
+  def resend_sms
+    @user = Sys::User.find(params[:id]) rescue nil
+    @user.send_sms_confirmation if @user
+  end
+
   def restore
     @title = I18n.t('models.sys_user.actions.restore')
     if request.post?
       @user = Sys::User.where(email: params[:email]).first
       if @user and not @user.email_confirmed
-        UserMailer.email_confirmation(@user).deliver if @user.email_confirm_hash
+        @user.send_confirmation
         @confirmation_resent = true
       elsif @user
         UserMailer.restore_password(@user).deliver

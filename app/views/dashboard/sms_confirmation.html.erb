@@ -1,0 +1,85 @@
+<div class="panel panel-success">
+  <div class="panel-heading">
+    <h4 style="margin: 0;"><i class="fa fa-info-circle"></i> <%= @title %></h4>
+  </div>
+  <div class="panel-body">
+    <p><%= t('models.sys_user.actions.register_confirmation').html_safe %></p>
+  </div>
+
+  <div class="panel-body">
+    <% if @error.present? %><div class="alert alert-danger"><%= @error %></div><% end %>
+    <%= form_tag request.url do %>
+      <div class="form-group">
+        <%= label_tag 'password', t('models.sys_user.sms_code') %>
+        <%= text_field_tag 'sms_code', params[:sms_code], class: 'form-control', autofocus: true %>
+      </div>
+      <div>
+        <%= submit_tag t('models.sys_user.password_confirmation'), class: ['btn', 'btn-primary'] %>
+          <button id="dbutton" style="display: inline-block;" name="resend" type="submit" class="btn btn-secondary" 
+          href="<%= sms_confirmation_url %>"
+          <% if @seconds && @seconds > 0 %>
+          disabled
+          <% end %>
+          >
+             <%= t('models.sys_user.actions.resend_sms') %>
+             <% if @seconds && @seconds > 0 %>
+              <span id='countdown' class='badge badge-secondary'><%= @seconds %></span>
+             <% end %>
+           </button>
+      </div>
+    <% end %>
+  </div>
+
+</div>
+
+<!-- <div class="modal fade" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div id="captcha2"></div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<!-- <script src="https://www.google.com/recaptcha/api.js?render=6LcqndYUAAAAAITp6M5ftYOsiTNiyc3QJ7jyvU2T"></script> -->
+<script>
+  <% if @seconds && @seconds > 0 %>
+  var x = setInterval(function() {
+
+    var cd = $("#countdown");
+
+    var i = parseInt(cd[0].innerHTML);
+    i--;
+    if(i<0){
+      cd.hide();
+      $("#dbutton").attr("disabled", false);
+      clearInterval(x);
+    } else {
+      cd[0].innerHTML = i.toString();
+    }
+
+  // document.getElementById("countdown").innerHTML = days + "d " + hours + "h "
+  // + minutes + "m " + seconds + "s ";
+
+  // If the count down is finished, write some text
+  // if (distance < 0) {
+  //   clearInterval(x);
+  //   document.getElementById("demo").innerHTML = "EXPIRED";
+  // }
+}, 1000);
+  <% end %>
+// grecaptcha.ready(function() {
+    // grecaptcha.execute('6LcqndYUAAAAAITp6M5ftYOsiTNiyc3QJ7jyvU2T', {action: 'homepage'}).then(function(token) {
+    // });
+// });
+// $("#showModal").click(function() {
+//     $("#myModal").modal("show");
+// });
+// $('#myModal').on('shown.bs.modal', function () {
+//   grecaptcha.render("captcha2", {sitekey: "6LcqndYUAAAAAITp6M5ftYOsiTNiyc3QJ7jyvU2T", theme: "light"});
+// });
+// $('#myModal').on('hide.bs.modal', function () {
+//     $("#recaptcha2").empty();
+// });
+</script>

@@ -29,7 +29,7 @@ class Sys::Permission
       permission = Sys::Permission.where(controller: controller, action: action).first
       if permission
         if permission.public_page then true # everyone has access to public page
-        elsif user.blank? then false # authentication required for non-public pages
+        elsif user.blank? or not user.email_confirmed then false # authentication required for non-public pages
         elsif permission.admin_page then false # only admin has access to admin page
         else
           if permission.roles.empty? then true # no role required for this action

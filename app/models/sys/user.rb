@@ -5,9 +5,15 @@ module Sys
     include Mongoid::Document
     include Mongoid::Timestamps
 
+    EXPIRATION_MINUTES = 60
+    NEXT_RESEND_IN_MINUTES = 1
+
     field :email,                 type: String
     field :email_confirmed,       type: Mongoid::Boolean
     field :email_confirm_hash,    type: String
+    field :sms_confirm_code,      type: String
+    field :sms_code_expires_at,   type: DateTime
+    field :sms_next_resend_at,    type: DateTime
     field :hashed_password,       type: String
     field :salt,                  type: String
     field :password_restore_hash, type: String
@@ -41,6 +47,7 @@ module Sys
     def full_name; "#{first_name} #{last_name}" end
     def self.encrypt_password(password, salt); Digest::SHA1.hexdigest("#{password}dimitri#{salt}") end
     def self.generate_hash(user); Digest::MD5.hexdigest("#{Time.now}#{rand(20111111)/11.0}#{user.email}") end
+    def self.generate_sms_code; rand(99999).to_s.rjust(5,'0') end
     def to_s; full_name end
     def formatted_mobile
       if self.country_code == '995' then "(+995)#{KA::format_mobile(self.mobile)}"
@@ -49,7 +56,7 @@ module Sys
 
     def includes_role?(role); self.role_ids.include?(Moped::BSON::ObjectId.from_string(role)) end
     def admin?; self.admin end
-    def tender_admin?; self.admin? or self.includes_role?(Telasi::PERMISSIONS[:tender_admin_id]) or self.includes_role?(Telasi::PERMISSIONS[:tender_report_id]) end
+    def tender_admin?; true end #self.admin? || self.includes_role?(Telasi::PERMISSIONS[:tender_admin_id]) || self.includes_role?(Telasi::PERMISSIONS[:tender_report_id]) end
     def cancelaria_user?; self.includes_role?(Telasi::PERMISSIONS[:network_cancelaria_id]) end
 
     attr_accessor :password_confirmation
@@ -84,6 +91,20 @@ module Sys
       end
     end
 
+    def confirm_sms!(confirm_code)
+      if self.email_confirmed
+        true
+      elsif Time.now > ( self.sms_code_expires_at || Date.new(1900, 1, 1) )
+        false
+      elsif self.sms_confirm_code == confirm_code
+        self.email_confirmed = true
+        self.sms_confirm_code = nil
+        self.save
+      else
+        false
+      end
+    end
+
     # When user requires password restore this hash is generated for
     # identifing the user.
     def generate_restore_hash!
@@ -92,6 +113,50 @@ module Sys
     end
 
     def subscription; Sys::Subscription.where(email: self.email).first end
+
+    def send_confirmation
+      UserMailer.email_confirmation(self).deliver if self.email_confirm_hash 
+      send_sms_confirmation
+    end
+
+    def seconds_left_for_resend
+      if Time.now < ( self.sms_next_resend_at || Date.new(1900, 1, 1) )
+        return (self.sms_next_resend_at.to_i - Time.now.to_i) || 0
+      else 
+        return 0
+      end
+    end
+
+    def send_sms_confirmation
+      # return if self.email_confirmed
+      return if seconds_left_for_resend > 0
+
+      self.sms_confirm_code = User.generate_sms_code
+      self.sms_code_expires_at = Time.now + EXPIRATION_MINUTES.minutes
+      self.sms_next_resend_at = Time.now + NEXT_RESEND_IN_MINUTES.minutes
+      self.save
+      
+      if Magti::SEND
+        msg = self.sms_confirm_code
+        msg = msg.to_lat if opts[:lat]
+        begin 
+         Magti.send_sms(self.mobile, msg)
+        rescue 
+         self.destroy
+         return
+        end
+
+        # #bacho 
+        smsg = Sys::SentMessage.new
+        smsg.company='MAGTI'
+        smsg.receiver_mobile = '995' + self.mobile.to_s
+        smsg.text = msg
+        smsg.status='S'
+        smsg.sent_at=Time.now
+        smsg.sender_user='MyTelasiGe'
+        smsg.save
+      end
+    end
 
     private
 
@@ -117,5 +182,6 @@ module Sys
     end
 
     def user_before_save; self.mobile = compact_mobile(self.mobile) end
+
   end
 end

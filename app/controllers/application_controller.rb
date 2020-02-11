@@ -26,7 +26,11 @@ class ApplicationController < ActionController::Base
   def validate_permission
     unless Sys::Permission.has_permission?(current_user, controller_path, action_name)
       if current_user 
-        render text: I18n.t('models.sys_user.errors.no_permission')
+        if current_user.email_confirmed
+         render text: I18n.t('models.sys_user.errors.no_permission')
+        else
+         redirect_to sms_confirmation_url
+        end
       else
         redirect_to login_url, alert: I18n.t('models.sys_user.errors.login_required')
       end
