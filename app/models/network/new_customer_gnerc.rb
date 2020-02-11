@@ -86,6 +86,7 @@ module Network::NewCustomerGnerc
                     when Network::BaseClass::STATUS_CANCELED then 1
                     when Network::BaseClass::STATUS_USER_DECLINED then 2
                     when Network::BaseClass::STATUS_CONFIRMED then 3
+                    when Network::BaseClass::STATUS_IN_BS     then 3
                   end
 
     parameters = { response_id:         response_id,
