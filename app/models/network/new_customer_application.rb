@@ -572,7 +572,7 @@ class Network::NewCustomerApplication < Network::BaseClass
     newcusttest = Gnerc::NewcustTest.where(letter_number: self.number).first
     return if newcusttest.blank?
     
-    newcusttest.update_attributes!(sms_response: message.message, phone: message.mobile)
+    newcusttest.update_attributes!(sms_response: message.message)
   end
 
   def first_sms
