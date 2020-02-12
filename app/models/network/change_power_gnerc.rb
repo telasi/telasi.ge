@@ -117,7 +117,7 @@ module Network::ChangePowerGnerc
                    request_status:        request_status,
                    sms:                   get_message }
     
-    if request_status == 1
+    if request_status == 2
       file = self.files.select{ |x| x.file.filename[0..2] == Network::ChangePowerApplication::GNERC_DEF_FILE }.first
       if file.present?
         content = File.read(file.file.file.file)
