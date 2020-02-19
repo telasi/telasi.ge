@@ -138,14 +138,15 @@ class Network::ChangePowerApplication < Network::BaseClass
 
   def self.correct_number?(type, number)
     if type == TYPE_CHANGE_POWER
-      not not ((/^(1CNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number) ||
-              (/^(TTCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number))
+      not not (/^(1CNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number)
     elsif type == TYPE_CHANGE_SOURCE
-      not not (/^(TCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number)
+      not not ((/^(TCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number) ||
+              (/^(TTCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number))
     elsif type == TYPE_SPLIT
       not not (/^(1TCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number)
     elsif [TYPE_RESERVATION, TYPE_TEMP_BUILD, TYPE_ABONIREBA].include?(type)
-      not not (/^(TCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number)
+      not not ((/^(TCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number) ||
+              (/^(TTCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number))
     elsif type == TYPE_MICROPOWER
       not not (/^(RCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number)
     elsif type == TYPE_SAME_PACK
@@ -153,7 +154,8 @@ class Network::ChangePowerApplication < Network::BaseClass
     elsif type == TYPE_HIGH_VOLTAGE
       not not (/^(HCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number)
     elsif type == TYPE_SUB_CUSTOMER
-      not not (/^(TCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number)
+      not not ((/^(TCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number) ||
+              (/^(TTCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number))
     elsif type == TYPE_MICRO_OTHER_PACK
       not not (/^(1RCNS)-[0-9]{2}\/[0-9]{4}\/[0-9]{2}$/i =~ number)
     elsif type == TYPE_MICRO_SAME_PACK
