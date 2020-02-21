@@ -7,9 +7,9 @@ class Api::MobileController < Api::ApiController
   end
 
   def user_info
-    user = Sys::User.find(params[:session_id])
-    if user
-      @registrations = Customer::Registration.where(user: user)
+    @user = Sys::User.find(params[:session_id])
+    if @user
+      @registrations = Customer::Registration.where(user: @user)
     else 
       render json: { success: false, message: 'No user' }
     end
@@ -48,7 +48,7 @@ class Api::MobileController < Api::ApiController
     end
   end
 
-  def subscription
+  def Subscription
     user = Sys::User.find(params[:session_id])
     if user
       @subscription = Sys::Subscription.where(email: user.email).first
@@ -72,6 +72,38 @@ class Api::MobileController < Api::ApiController
       render json: { success: false, message: 'No user' }
     end
   end 
+
+  def register
+    user = Sys::User.new(params.permit(:email, :password, :password_confirmation, :first_name, :last_name, :mobile))
+    if user.save
+      user.send_confirmation
+      render json: { success: true, message: '' }
+    else 
+      render json: { success: false, message: '' }
+    end
+  end
+
+  def resend_sms
+    user = Sys::User.find(params[:session_id])
+    if user
+      user.send_sms_confirmation 
+      render json: { success: true, message: '' }
+    else
+      render json: { success: false, message: 'No user' }
+    end
+  end
+
+  def confirm_sms
+    user = Sys::User.find(params[:session_id])
+    if user 
+      if user.confirm_sms!(params[:sms_code]) 
+        render json: { success: true, message: '' }
+      else 
+        render json: { success: false, message: user.seconds_left_for_resend, total: Sys::User::NEXT_RESEND_IN_MINUTES }
+    else
+      render json: { success: false, message: 'No user' }
+    end
+  end
 
   private
 

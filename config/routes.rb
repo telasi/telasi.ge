@@ -278,6 +278,9 @@ TelasiGe::Application.routes.draw do
       get '/payments', action: 'payments', as: 'payments'
       get '/subscription', action: 'subscription', as: 'subscription'
       post '/update_subscription', action: 'update_subscription', as: 'update_subscription'
+      post '/register', action: 'register', as: 'register'
+      post '/resend_sms', action: 'resend_sms', as: 'resend_sms'
+      post '/confirm_sms', action: 'confirm_sms', as: 'confirm_sms'
     end
   end
 
