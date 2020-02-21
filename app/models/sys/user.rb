@@ -152,7 +152,7 @@ module Sys
         smsg.text = msg
         smsg.status='S'
         smsg.sent_at=Time.now
-        smsg.sender_user='MyTelasiGe'
+        smsg.sender_user='MyTelasiGe Registration'
         smsg.save
       end
     end
