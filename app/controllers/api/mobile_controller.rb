@@ -100,6 +100,7 @@ class Api::MobileController < Api::ApiController
         render json: { success: true, message: '' }
       else 
         render json: { success: false, message: user.seconds_left_for_resend, total: Sys::User::NEXT_RESEND_IN_MINUTES }
+      end
     else
       render json: { success: false, message: 'No user' }
     end
