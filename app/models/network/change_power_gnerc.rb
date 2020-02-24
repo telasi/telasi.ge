@@ -306,7 +306,7 @@ module Network::ChangePowerGnerc
                    attach_12_1_filename:  file.file.filename
                  }
 
-    parameters.merge!({ abonent_amount: self.abonent_amount }) if self.customer_request == 2
+    parameters.merge!({ abonent_amount: self.abonent_amount }) if customer_request == 2
 
     GnercWorkerTest.perform_async("appeal", 12, parameters)
   end
