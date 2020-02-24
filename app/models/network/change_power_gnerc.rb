@@ -397,7 +397,7 @@ module Network::ChangePowerGnerc
     if file.present?
       content = File.read(file.file.file.file)
       content = Base64.encode64(content)
-    endwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+    end
     return [ file, content ]
   end
 
