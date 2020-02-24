@@ -306,7 +306,7 @@ module Network::ChangePowerGnerc
                    attach_12_1_filename:  file.file.filename
                  }
 
-    parameters.merge!({ abonent_amount: self.abonent_amount }) if self.abonent_amount > 1
+    parameters.merge!({ abonent_amount: self.abonent_amount }) if self.customer_request == 2
 
     GnercWorkerTest.perform_async("appeal", 12, parameters)
   end
@@ -397,7 +397,7 @@ module Network::ChangePowerGnerc
     if file.present?
       content = File.read(file.file.file.file)
       content = Base64.encode64(content)
-    end
+    endwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
     return [ file, content ]
   end
 
