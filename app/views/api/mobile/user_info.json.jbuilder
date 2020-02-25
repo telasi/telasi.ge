@@ -4,5 +4,5 @@ json.registrations @registrations.each do |registration|
   json.custkey         registration.custkey
   json.customer_number customer.accnumb.to_ka
   json.customer_name   customer.custname.to_ka
-  json.status   	   customer.status
+  json.status   	   registration.status
 end
