@@ -2,7 +2,7 @@
 class Api::MobileController < Api::ApiController
   def login
     validate_login do
-      render json: { success: true, session_id: @session_id }
+      render json: { success: true, session_id: @session_id, confirmed: true }
     end 
   end
 
@@ -79,7 +79,7 @@ class Api::MobileController < Api::ApiController
       user.send_confirmation
       render json: { success: true, message: '' }
     else 
-      render json: { success: false, message: '' }
+      render json: { success: false, message: user.errors.full_messages }
     end
   end
 
@@ -153,9 +153,9 @@ class Api::MobileController < Api::ApiController
       @session_id = @user.id
       yield if block_given?
     elsif @user and not @user.email_confirmed then 
-      render json: { success: false, message: I18n.t('model.sys_user.errors.email_not_confirmed') }
+      render json: { success: true, session_id: @session_id, confirmed: false  }
     else 
-      render json: { success: false, message:  I18n.t('models.sys_user.errors.illegal_login') } 
+      render json: { success: false, message: I18n.t('models.sys_user.errors.illegal_login') } 
     end
   end
 
