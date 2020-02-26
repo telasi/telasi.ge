@@ -115,7 +115,7 @@ class Api::MobileController < Api::ApiController
     if user
       customer = Billing::Customer.where(accnumb: params[:accnumb]).first
       if customer 
-        registration = Customer::Registration.new(params)
+        registration = Customer::Registration.new(customer_params)
         registration.custkey = customer.custkey
         registration.user = user
         if registration.save
@@ -154,4 +154,6 @@ class Api::MobileController < Api::ApiController
       render json: { success: false, message:  I18n.t('models.sys_user.errors.illegal_login') } 
     end
   end
+
+  def customer_params; params.permit(:category, :rs_tin, :address, :address_code) end
 end
