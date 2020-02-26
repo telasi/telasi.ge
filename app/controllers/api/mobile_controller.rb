@@ -51,7 +51,7 @@ class Api::MobileController < Api::ApiController
   def Subscription
     user = Sys::User.find(params[:session_id])
     if user
-      @subscription = Sys::Subscription.where(email: user.email).first
+      @subscription = Sys::Subscription.where(email: user.email).first || Sys::Subscription.new
     else 
       render json: { success: false, message: 'No user' }
     end
@@ -104,6 +104,10 @@ class Api::MobileController < Api::ApiController
     else
       render json: { success: false, message: 'No user' }
     end
+  end
+
+  def prepare_payment
+    @payment = Pay::Payment.new(accnumb: params[:accnumb], clientname: params[:accnumb], rs_tin: rs_tin, amount: ( params[:amount] || 0 ), serviceid: params[:serviceid], merchant: get_current_merchant(params[:serviceid]) )
   end
 
   private
