@@ -20,8 +20,8 @@ class Network::OverdueItem
   validates :appeal_date, presence: { message: 'Required' }
   validates :deadline, presence: { message: 'Required' }
   validates :response_date, presence: { message: 'Required' }
-  validates :days, presence: { message: 'Required' }
-  validate :max_chosem_items
+  # validates :days, presence: { message: 'Required' }
+  validate :max_chosen_items
   before_save :calculate_days
   after_save :calculate_plan_end_date
 
@@ -29,7 +29,7 @@ class Network::OverdueItem
 
   private 
 
-  def max_chosem_items
+  def max_chosen_items
   	if self.chosen && self.source.overdue.where(chosen: true).count >= GnercConstants::OVERDUE_MAX_ITEMS
   		self.errors.add(:chosen, 'max 4')
   	end
