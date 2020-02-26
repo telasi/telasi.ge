@@ -113,7 +113,7 @@ class Api::MobileController < Api::ApiController
   def delete_registration
     user = Sys::User.find(params[:session_id])
     if user
-      Sys::Registration.find(params[:id]).delete
+      Customer::Registration.find(params[:id]).destroy
       render json: { success: true, message: '' }
     else
       render json: { success: false, message: 'No user' }
