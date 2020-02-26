@@ -153,7 +153,7 @@ class Api::MobileController < Api::ApiController
       @session_id = @user.id
       yield if block_given?
     elsif @user and not @user.email_confirmed then 
-      render json: { success: true, session_id: @session_id, confirmed: false  }
+      render json: { success: true, session_id: @user.id, confirmed: false  }
     else 
       render json: { success: false, message: I18n.t('models.sys_user.errors.illegal_login') } 
     end
