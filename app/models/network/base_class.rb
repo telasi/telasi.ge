@@ -122,7 +122,7 @@ class Network::BaseClass
     if self.use_business_days
       # self.plan_end_date = self.days.business_days.after( self.send_date )
       self.plan_end_date = (self.days - 1).business_days.after( self.send_date )
-      self.plan_end_date = (self.total_overdue_days - 1).business_days.after( self.plan_end_date )
+      self.plan_end_date = (self.total_overdue_days).business_days.after( self.plan_end_date )
     else
       self.plan_end_date = self.send_date + self.days
       self.plan_end_date = self.plan_end_date + self.total_overdue_days
