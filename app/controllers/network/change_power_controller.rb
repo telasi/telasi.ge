@@ -372,7 +372,7 @@ class Network::ChangePowerController < ApplicationController
         redirect_to network_change_power_url(id: @application.id, tab: 'overdue'), notice: I18n.t('models.network_new_customer_application.actions.overdue.added')
       end
     else
-      @item = Network::OverdueItem.new(source: @application)
+      @item = Network::OverdueItem.new(source: @application, authority: 28, business_days: true)
     end
   end
 
