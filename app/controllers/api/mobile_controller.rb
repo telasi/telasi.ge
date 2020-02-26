@@ -110,6 +110,27 @@ class Api::MobileController < Api::ApiController
     @payment = Pay::Payment.new(accnumb: params[:accnumb], clientname: params[:accnumb], rs_tin: rs_tin, amount: ( params[:amount] || 0 ), serviceid: params[:serviceid], merchant: get_current_merchant(params[:serviceid]) )
   end
 
+  def add_registration
+    user = Sys::User.find(params[:session_id])
+    if user
+      customer = Billing::Customer.where(accnumb: params[:accnumb]).first
+      if customer 
+        registration = Customer::Registration.new(params)
+        registration.custkey = customer.custkey
+        registration.user = user
+        if registration.save
+          render json: { success: true, message: '' }
+        else
+          render json: { success: false, message: registration.errors.full_messages }  
+        end
+      else 
+        render json: { success: false, message: 'Cant find customer' }
+      end
+    else
+      render json: { success: false, message: 'No user' }
+    end
+  end
+
   def delete_registration
     user = Sys::User.find(params[:session_id])
     if user
