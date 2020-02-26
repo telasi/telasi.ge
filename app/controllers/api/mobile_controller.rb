@@ -48,7 +48,7 @@ class Api::MobileController < Api::ApiController
     end
   end
 
-  def Subscription
+  def subscription
     user = Sys::User.find(params[:session_id])
     if user
       @subscription = Sys::Subscription.where(email: user.email).first || Sys::Subscription.new
