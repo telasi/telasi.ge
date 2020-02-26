@@ -6,4 +6,5 @@ json.registrations @registrations.each do |registration|
   json.customer_number customer.accnumb.to_ka
   json.customer_name   customer.custname.to_ka
   json.status   	   registration.status
+  json.regionkey	   customer.address.region.regionkey
 end
