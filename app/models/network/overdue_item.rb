@@ -41,9 +41,9 @@ class Network::OverdueItem
 
   def calculate_days
     if self.business_days
-      self.days = self.appeal_date.business_days_until(self.response_date)
+      self.days = self.deadline.business_days_until(self.response_date)
     else
-      self.days = self.response_date - self.appeal_date
+      self.days = self.response_date - self.deadline
     end
   end
 
