@@ -13,7 +13,7 @@ class Network::OverdueItem
   field :response_date, type: Date
   field :days, type: Integer
   field :chosen, type: Mongoid::Boolean, default: false
-  field :business_days, type: Mongoid::Boolean, default: false
+  field :business_days, type: Mongoid::Boolean, default: true
   field :check_days, type: Mongoid::Boolean, default: false
 
   validates :authority, presence: { message: 'Required' }
