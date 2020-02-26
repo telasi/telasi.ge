@@ -104,7 +104,7 @@ class Network::BaseClass
     date_array = []
 
     self.overdue.where(chosen: true).map do |overdue|
-      date_array = date_array | (overdue.appeal_date..overdue.response_date).to_a
+      date_array = date_array | (overdue.deadline..overdue.response_date).to_a
     end
 
     date_array.compact!
