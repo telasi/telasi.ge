@@ -115,13 +115,17 @@ class Api::MobileController < Api::ApiController
     if user
       customer = Billing::Customer.where(accnumb: params[:accnumb]).first
       if customer 
-        registration = Customer::Registration.new(customer_params)
-        registration.custkey = customer.custkey
-        registration.user = user
-        if registration.save
-          render json: { success: true, message: '' }
+        if Customer::Registration.where(user: user, custkey: customer.custkey).blank?
+          registration = Customer::Registration.new(customer_params)
+          registration.custkey = customer.custkey
+          registration.user = user
+          if registration.save
+            render json: { success: true, message: '' }
+          else
+            render json: { success: false, message: registration.errors.full_messages }  
+          end
         else
-          render json: { success: false, message: registration.errors.full_messages }  
+          render json: { success: false, message: 'Already exists' }  
         end
       else 
         render json: { success: false, message: 'Cant find customer' }
