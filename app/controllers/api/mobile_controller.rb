@@ -110,6 +110,16 @@ class Api::MobileController < Api::ApiController
     @payment = Pay::Payment.new(accnumb: params[:accnumb], clientname: params[:accnumb], rs_tin: rs_tin, amount: ( params[:amount] || 0 ), serviceid: params[:serviceid], merchant: get_current_merchant(params[:serviceid]) )
   end
 
+  def delete_registration
+    user = Sys::User.find(params[:session_id])
+    if user
+      Sys::Registration.find(params[:id]).delete
+      render json: { success: true, message: '' }
+    else
+      render json: { success: false, message: 'No user' }
+    end
+  end
+
   private
 
   def validate_login
