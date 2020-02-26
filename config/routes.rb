@@ -281,6 +281,7 @@ TelasiGe::Application.routes.draw do
       post '/register', action: 'register', as: 'register'
       post '/resend_sms', action: 'resend_sms', as: 'resend_sms'
       post '/confirm_sms', action: 'confirm_sms', as: 'confirm_sms'
+      post '/add_registration', action: 'add_registration', as: 'add_registration'
       post '/delete_registration', action: 'delete_registration', as: 'delete_registration'
     end
   end
