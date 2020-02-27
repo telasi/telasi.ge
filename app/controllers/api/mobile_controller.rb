@@ -9,7 +9,25 @@ class Api::MobileController < Api::ApiController
   def user_info
     @user = Sys::User.find(params[:session_id])
     if @user
-      @registrations = Customer::Registration.where(user: @user)
+      @registrations = []
+      Billing::Customer.where(fax: @user.mobile).each do |customer|
+        @registrations << { id: "-1", 
+                            custkey:         customer.custkey, 
+                            customer_number: customer.accnumb.to_ka, 
+                            customer_name:   customer.custname.to_ka,
+                            status:          Customer::Registration::STATUS_COMPLETE,
+                            regionkey:       customer.address.region.regionkey }
+      end 
+      Customer::Registration.where(user: @user).each do |registration|
+        customer = Billing::Customer.find(registration.custkey)
+        @registrations << { id:              registration.id.to_s, 
+                            custkey:         registration.custkey, 
+                            customer_number: customer.accnumb.to_ka, 
+                            customer_name:   customer.custname.to_ka,
+                            status:          registration.status,
+                            regionkey:       customer.address.region.regionkey }
+      end 
+      render json: { success: true, registrations: @registrations }
     else 
       render json: { success: false, message: 'No user' }
     end
