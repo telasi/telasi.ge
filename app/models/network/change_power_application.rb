@@ -407,7 +407,7 @@ class Network::ChangePowerApplication < Network::BaseClass
       when STATUS_DEFAULT   then self.send_date = nil
       when STATUS_SENT      then self.send_date  = self.start_date = Date.today
       when STATUS_CONFIRMED then 
-        raise 'აარჩიეთ რეალური აბონენტი' if self.service in [ SERVICE_CHANGE_POWER, SERVICE_MICRO_POWER ] && self.real_customer_id.blank?
+        raise 'აარჩიეთ რეალური აბონენტი' if [SERVICE_CHANGE_POWER, SERVICE_MICRO_POWER].include?(self.service) && self.real_customer_id.blank?
         raise "ატვირთეთ cadastral ფაილი ან შეიყვანეთ საკადასტრო მისამართი" unless check_cadastral
 
         self.production_date = get_fifth_day
