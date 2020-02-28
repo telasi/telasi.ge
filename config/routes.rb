@@ -283,6 +283,7 @@ TelasiGe::Application.routes.draw do
       post '/confirm_sms', action: 'confirm_sms', as: 'confirm_sms'
       post '/add_registration', action: 'add_registration', as: 'add_registration'
       post '/delete_registration', action: 'delete_registration', as: 'delete_registration'
+      post '/prepare_payment', action: 'prepare_payment', as: 'prepare_payment'
     end
   end
 
