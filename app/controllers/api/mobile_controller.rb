@@ -125,10 +125,9 @@ class Api::MobileController < Api::ApiController
   end
 
   def prepare_payment
-    user = Sys::User.find(params[:session_id])
     merchant = Payge::PAY_SERVICES.find{ |h| h[:ServiceID] == service_id }[:Merchant]
     @payment = Pay::Payment.new(
-          user:       user, 
+          # user:       user, 
           accnumb:    params[:accnumb],
           rs_tin:     '',
           serviceid:  params[:service_id],
@@ -141,7 +140,7 @@ class Api::MobileController < Api::ApiController
 
       @payment.generate_description
       @payment.prepare_for_step(Payge::STEP_SEND)
-      @payment.user = user
+      @payment.user = Sys::User.find(params[:session_id])
       @payment.createdate = Time.now
       @payment.successurl = Payge::URLS[:success]
       @payment.cancelurl = Payge::URLS[:cancel]
