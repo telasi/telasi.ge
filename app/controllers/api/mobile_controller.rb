@@ -125,7 +125,50 @@ class Api::MobileController < Api::ApiController
   end
 
   def prepare_payment
-    @payment = Pay::Payment.new(accnumb: params[:accnumb], clientname: params[:accnumb], rs_tin: rs_tin, amount: ( params[:amount] || 0 ), serviceid: params[:serviceid], merchant: get_current_merchant(params[:serviceid]) )
+    user = Sys::User.find(params[:session_id])
+    merchant = Payge::PAY_SERVICES.find{ |h| h[:ServiceID] == service_id }[:Merchant]
+    @payment = Pay::Payment.new(
+          user:       user, 
+          accnumb:    params[:accnumb],
+          rs_tin:     '',
+          serviceid:  params[:service_id],
+          merchant:   merchant,
+          amount:     params[:amount],
+          clientname: params[:accnumb],
+          testmode: Payge::TESTMODE, 
+          ordercode: self.gen_order_code(merchant), currency: 'GEL', 
+          lng: 'ka', ispreauth: 0, postpage: 0, gstatus: Pay::Payment::GSTATUS_SENT)
+
+      @payment.generate_description
+      @payment.prepare_for_step(Payge::STEP_SEND)
+      @payment.user = user
+      @payment.createdate = Time.now
+      @payment.successurl = Payge::URLS[:success]
+      @payment.cancelurl = Payge::URLS[:cancel]
+      @payment.errorurl = Payge::URLS[:error]
+      @payment.callbackurl = Payge::URLS[:callback]
+
+      if @payment.save
+        render json: { success: true, payment: { merchant:     @payment.merchant,
+                                                 serviceid:    @payment.serviceid,
+                                                 description:  @payment.description,
+                                                 amount:       @payment.amount,
+                                                 currency:     @payment.currency
+                                                 clientname:   @payment.clientname
+                                                 ordercode:    @payment.ordercode
+                                                 lng:          @payment.lng
+                                                 check:        @payment.check
+                                                 testmode:     @payment.testmode
+                                                 ispreauth:    @payment.ispreauth
+                                                 postpage:     @payment.postpage
+                                                 successurl:   @payment.successurl
+                                                 cancelurl:    @payment.cancelurl
+                                                 errorurl:     @payment.errorurl
+                                                 callbackurl:  @payment.callbackurl
+                                                } }
+      else
+        render json: { success: false, message: @payment.errors.full_messages }
+      end
   end
 
   def add_registration
@@ -178,4 +221,21 @@ class Api::MobileController < Api::ApiController
   end
 
   def customer_params; params.permit(:category, :rs_tin, :address, :address_code) end
+
+  def gen_order_code(merchant)
+    @seq = Pay::Sequence.find_and_modify( { "$inc" => { sequence: 1 } },
+                                          { new: true }
+                                          ) 
+    if !@seq 
+      @seq = Pay::Sequence.new
+
+      @payment = Pay::Payment.where("merchant" => merchant).sort([['ordercode', -1]]).first
+
+      @seq.sequence = @payment.ordercode + 1 if @payment
+      @seq.sequence = 1 unless @payment
+      @seq.save
+    end
+
+    @seq["sequence"]
+  end
 end
