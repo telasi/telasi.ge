@@ -135,7 +135,7 @@ class Api::MobileController < Api::ApiController
           amount:     params[:amount],
           clientname: params[:accnumb],
           testmode: Payge::TESTMODE, 
-          ordercode: self.gen_order_code(merchant), currency: 'GEL', 
+          ordercode: gen_order_code(merchant), currency: 'GEL', 
           lng: 'ka', ispreauth: 0, postpage: 0, gstatus: Pay::Payment::GSTATUS_SENT)
 
       @payment.generate_description
