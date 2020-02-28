@@ -153,17 +153,17 @@ class Api::MobileController < Api::ApiController
                                                  serviceid:    @payment.serviceid,
                                                  description:  @payment.description,
                                                  amount:       @payment.amount,
-                                                 currency:     @payment.currency
-                                                 clientname:   @payment.clientname
-                                                 ordercode:    @payment.ordercode
-                                                 lng:          @payment.lng
-                                                 check:        @payment.check
-                                                 testmode:     @payment.testmode
-                                                 ispreauth:    @payment.ispreauth
-                                                 postpage:     @payment.postpage
-                                                 successurl:   @payment.successurl
-                                                 cancelurl:    @payment.cancelurl
-                                                 errorurl:     @payment.errorurl
+                                                 currency:     @payment.currency,
+                                                 clientname:   @payment.clientname,
+                                                 ordercode:    @payment.ordercode,
+                                                 lng:          @payment.lng,
+                                                 check:        @payment.check,
+                                                 testmode:     @payment.testmode,
+                                                 ispreauth:    @payment.ispreauth,
+                                                 postpage:     @payment.postpage,
+                                                 successurl:   @payment.successurl,
+                                                 cancelurl:    @payment.cancelurl,
+                                                 errorurl:     @payment.errorurl,
                                                  callbackurl:  @payment.callbackurl
                                                 } }
       else
