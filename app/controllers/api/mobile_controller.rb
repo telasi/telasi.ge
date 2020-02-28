@@ -125,7 +125,7 @@ class Api::MobileController < Api::ApiController
   end
 
   def prepare_payment
-    merchant = Payge::PAY_SERVICES.find{ |h| h[:ServiceID] == service_id }[:Merchant]
+    merchant = Payge::PAY_SERVICES.find{ |h| h[:ServiceID] == params[:service_id] }[:Merchant]
     @payment = Pay::Payment.new(
           # user:       user, 
           accnumb:    params[:accnumb],
