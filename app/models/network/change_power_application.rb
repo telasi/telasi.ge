@@ -307,6 +307,7 @@ class Network::ChangePowerApplication < Network::BaseClass
       self.status = STATUS_IN_BS
       self.save
 
+      raise 'Error'
       send_to_gnerc(2)
     end
   end
@@ -413,11 +414,13 @@ class Network::ChangePowerApplication < Network::BaseClass
         self.production_date = get_fifth_day
         self.production_enter_date = Date.today
 
+        raise 'Error'
         send_to_gnerc(1)
       when STATUS_COMPLETE  then self.end_date   = Date.today
       when STATUS_CANCELED  then
         raise "ატვირთეთ def ფაილი" unless check_file_uploaded
         self.cancelation_date = Date.today
+        raise 'Error'
         send_to_gnerc(2)
       end
     end
