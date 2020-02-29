@@ -307,7 +307,6 @@ class Network::ChangePowerApplication < Network::BaseClass
       self.status = STATUS_IN_BS
       self.save
 
-      raise 'Error'
       send_to_gnerc(2)
     end
   end
@@ -414,13 +413,11 @@ class Network::ChangePowerApplication < Network::BaseClass
         self.production_date = get_fifth_day
         self.production_enter_date = Date.today
 
-        raise 'Error'
         send_to_gnerc(1)
       when STATUS_COMPLETE  then self.end_date   = Date.today
       when STATUS_CANCELED  then
         raise "ატვირთეთ def ფაილი" unless check_file_uploaded
         self.cancelation_date = Date.today
-        raise 'Error'
         send_to_gnerc(2)
       end
     end
@@ -594,26 +591,26 @@ class Network::ChangePowerApplication < Network::BaseClass
 
   def send_to_gnerc_old(stage)
     if stage == 1
-      file = self.files.select{ |x| x.file.filename[0..11] == GNERC_SIGNATURE_FILE }.first
-      if file.present?
-        content = File.read(file.file.file.file)
-        content = Base64.encode64(content)
+      # file = self.files.select{ |x| x.file.filename[0..11] == GNERC_SIGNATURE_FILE }.first
+      # if file.present?
+      #   content = File.read(file.file.file.file)
+      #   content = Base64.encode64(content)
 
-        letter_category = get_letter_category
+      #   letter_category = get_letter_category
 
-        parameters = { letter_number:       self.number,
-                       abonent:             self.rs_name,
-                       abonent_number:      self.real_customer.accnumb,
-                       abonent_type:        self.real_customer.abonent_type, 
-                       abonent_address:     self.address,
-                       appeal_date:         self.start_date,
-                       attach_4_1:          content,
-                       attach_4_1_filename: file.file.filename,
-                       letter_category:     letter_category
-                     }
+      #   parameters = { letter_number:       self.number,
+      #                  abonent:             self.rs_name,
+      #                  abonent_number:      self.real_customer.accnumb,
+      #                  abonent_type:        self.real_customer.abonent_type, 
+      #                  abonent_address:     self.address,
+      #                  appeal_date:         self.start_date,
+      #                  attach_4_1:          content,
+      #                  attach_4_1_filename: file.file.filename,
+      #                  letter_category:     letter_category
+      #                }
 
-        GnercWorker.perform_async("appeal", 4, parameters)
-      end
+      #   GnercWorkerOld.perform_async("appeal", 4, parameters)
+      # end
     else 
       file = self.files.select{ |x| x.file.filename[0..2] == GNERC_ACT_FILE }.first
       if file.present?
@@ -645,7 +642,7 @@ class Network::ChangePowerApplication < Network::BaseClass
                        }
         end
       end
-      GnercWorker.perform_async("answer", 4, parameters)
+      GnercWorkerOld.perform_async("answer", 4, parameters)
     end
   end
 

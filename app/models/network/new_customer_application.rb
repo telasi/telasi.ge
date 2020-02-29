@@ -415,7 +415,6 @@ class Network::NewCustomerApplication < Network::BaseClass
     self.status = STATUS_IN_BS
     self.save
 
-    raise 'Error'
     send_to_gnerc(2)
   end
 
@@ -650,7 +649,6 @@ class Network::NewCustomerApplication < Network::BaseClass
         self.production_date = get_fifth_day
         self.production_enter_date = Date.today
 
-        raise 'Error'
         send_to_gnerc(1)
       when STATUS_COMPLETE  then 
         raise 'გამოიწერეთ საავანსო ფაქტურა' if check_advance_factura_needed
@@ -660,7 +658,6 @@ class Network::NewCustomerApplication < Network::BaseClass
 
         self.cancelation_date = Date.today
 
-        raise 'Error'
         send_to_gnerc(2)
         revert_bs_operations_on_cancel
       when STATUS_USER_DECLINED then
@@ -668,7 +665,6 @@ class Network::NewCustomerApplication < Network::BaseClass
 
         self.cancelation_date = Date.today
 
-        raise 'Error'
         send_to_gnerc(2)
         revert_bs_operations_on_cancel
       end

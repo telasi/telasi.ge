@@ -77,7 +77,7 @@ module Network::NewCustomerGnerc
                             power_2:            gnerc_micro_power })
       end
 
-      GnercWorkerTest.perform_async("appeal", 7, parameters)
+      GnercWorker.perform_async("appeal", 7, parameters)
     end
   end
 
@@ -137,11 +137,10 @@ module Network::NewCustomerGnerc
       end
     end
 
-    GnercWorkerTest.perform_async("answer", 7, parameters)
+    GnercWorker.perform_async("answer", 7, parameters)
   end
 
   def requested_volume
-    debugger
     case self.type
         when Network::NewCustomerApplication::TYPE_INDIVIDUAL, 
              Network::NewCustomerApplication::TYPE_MULTI_ABONENT, 
@@ -247,80 +246,80 @@ module Network::NewCustomerGnerc
 
   def send_to_gnerc_old(stage)
     if stage == 1
-      file = self.files.select{ |x| x.file.filename[0..11] == Network::NewCustomerApplication::GNERC_SIGNATURE_FILE }.first
-      if file.present?
-        content = File.read(file.file.file.file)
-        content = Base64.encode64(content)
+      # file = self.files.select{ |x| x.file.filename[0..11] == Network::NewCustomerApplication::GNERC_SIGNATURE_FILE }.first
+      # if file.present?
+      #   content = File.read(file.file.file.file)
+      #   content = Base64.encode64(content)
 
-        tariff = Network::NewCustomerTariff.tariff_for(self.voltage, self.power, self.start_date)
-        gnerc_power = "#{tariff.power_from+1}-#{tariff.power_to}"
+      #   tariff = Network::NewCustomerTariff.tariff_for(self.voltage, self.power, self.start_date)
+      #   gnerc_power = "#{tariff.power_from+1}-#{tariff.power_to}"
 
-        case self.voltage
-          when Network::NewCustomerApplication::VOLTAGE_220 then
-            gnerc_voltage = GNERC_VOLTAGE_220
-          when Network::NewCustomerApplication::VOLTAGE_380 then
-            gnerc_voltage = GNERC_VOLTAGE_380
-           when Network::NewCustomerApplication::VOLTAGE_610 then
-            gnerc_voltage = GNERC_VOLTAGE_610
-        end
+      #   case self.voltage
+      #     when Network::NewCustomerApplication::VOLTAGE_220 then
+      #       gnerc_voltage = GNERC_VOLTAGE_220
+      #     when Network::NewCustomerApplication::VOLTAGE_380 then
+      #       gnerc_voltage = GNERC_VOLTAGE_380
+      #      when Network::NewCustomerApplication::VOLTAGE_610 then
+      #       gnerc_voltage = GNERC_VOLTAGE_610
+      #   end
 
-        parameters = { letter_number:       self.number,
-                       applicant:           self.rs_name,
-                       applicant_address:   self.address,
-                       voltage:             gnerc_voltage,
-                       power:               gnerc_power,
-                       appeal_date:         self.start_date,
-                       attach_7_1:          content,
-                       attach_7_1_filename: file.file.filename 
-                     }
+      #   parameters = { letter_number:       self.number,
+      #                  applicant:           self.rs_name,
+      #                  applicant_address:   self.address,
+      #                  voltage:             gnerc_voltage,
+      #                  power:               gnerc_power,
+      #                  appeal_date:         self.start_date,
+      #                  attach_7_1:          content,
+      #                  attach_7_1_filename: file.file.filename 
+      #                }
 
-        if self.abonent_amount > 2
-          parameters.merge!({ building:            1, 
-                              abonent_amount:      self.abonent_amount })
-        end
+      #   if self.abonent_amount > 2
+      #     parameters.merge!({ building:            1, 
+      #                         abonent_amount:      self.abonent_amount })
+      #   end
 
-        if self.micro
-          case self.micro_voltage
-            when Network::NewCustomerApplication::VOLTAGE_220 then
-              gnerc_micro_voltage = GNERC_VOLTAGE_220
-              gnerc_micro_power   = '1..10'
-            when Network::NewCustomerApplication::VOLTAGE_380 then
-              gnerc_micro_voltage = GNERC_VOLTAGE_380
-              gnerc_micro_power   = case self.micro_power
-                                      when 1..10 then '1..10'
-                                      when 11..30 then '11..30'
-                                      when 31..50 then '31..50'
-                                      when 51..80 then '51..80'
-                                      when 81..100 then '81..100'
-                                      when 101..120 then '101..120'
-                                      when 121..150 then '121..150'
-                                      when 151..200 then '151..200'
-                                      when 201..320 then '201..320'
-                                      when 321..500 then '321..500'
-                                      when 501..800 then '501..800'
-                                      when 801..1000 then '801..1000'
-                                      when 1001..Float::INFINITY then '>1000'
-                                    end
-             when Network::NewCustomerApplication::VOLTAGE_610 then
-              gnerc_micro_voltage = GNERC_VOLTAGE_610
-              gnerc_micro_power   = case self.micro_power
-                                      when 1..500 then '1..500'
-                                      when 501..1000 then '501..1000'
-                                      when 1001..1500 then '1001..1500'
-                                      when 1501..2000 then '1501..2000'
-                                      when 2001..3000 then '2001..3000'
-                                      when 3001..5000 then '3001..5000'
-                                      when 5001..Float::INFINITY then '>5000'
-                                    end
-          end
+      #   if self.micro
+      #     case self.micro_voltage
+      #       when Network::NewCustomerApplication::VOLTAGE_220 then
+      #         gnerc_micro_voltage = GNERC_VOLTAGE_220
+      #         gnerc_micro_power   = '1..10'
+      #       when Network::NewCustomerApplication::VOLTAGE_380 then
+      #         gnerc_micro_voltage = GNERC_VOLTAGE_380
+      #         gnerc_micro_power   = case self.micro_power
+      #                                 when 1..10 then '1..10'
+      #                                 when 11..30 then '11..30'
+      #                                 when 31..50 then '31..50'
+      #                                 when 51..80 then '51..80'
+      #                                 when 81..100 then '81..100'
+      #                                 when 101..120 then '101..120'
+      #                                 when 121..150 then '121..150'
+      #                                 when 151..200 then '151..200'
+      #                                 when 201..320 then '201..320'
+      #                                 when 321..500 then '321..500'
+      #                                 when 501..800 then '501..800'
+      #                                 when 801..1000 then '801..1000'
+      #                                 when 1001..Float::INFINITY then '>1000'
+      #                               end
+      #        when Network::NewCustomerApplication::VOLTAGE_610 then
+      #         gnerc_micro_voltage = GNERC_VOLTAGE_610
+      #         gnerc_micro_power   = case self.micro_power
+      #                                 when 1..500 then '1..500'
+      #                                 when 501..1000 then '501..1000'
+      #                                 when 1001..1500 then '1001..1500'
+      #                                 when 1501..2000 then '1501..2000'
+      #                                 when 2001..3000 then '2001..3000'
+      #                                 when 3001..5000 then '3001..5000'
+      #                                 when 5001..Float::INFINITY then '>5000'
+      #                               end
+      #     end
 
-          parameters.merge!({ voltage_2:    gnerc_micro_voltage, 
-                              power_2:      gnerc_micro_power })
+      #     parameters.merge!({ voltage_2:    gnerc_micro_voltage, 
+      #                         power_2:      gnerc_micro_power })
 
-        end
+      #   end
 
-        GnercWorker.perform_async("appeal", 7, parameters)
-      end
+      #   GnercWorkerOld.perform_async("appeal", 7, parameters)
+      # end
     else 
       file = self.files.select{ |x| x.file.filename[0..2] == Network::NewCustomerApplication::GNERC_ACT_FILE }.first
       if file.present?
@@ -349,7 +348,7 @@ module Network::NewCustomerGnerc
                        }
         end
       end
-      GnercWorker.perform_async("answer", 7, parameters)
+      GnercWorkerOld.perform_async("answer", 7, parameters)
     end
   end
 

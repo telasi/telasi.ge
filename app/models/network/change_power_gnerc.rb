@@ -103,7 +103,7 @@ module Network::ChangePowerGnerc
 
     parameters.merge!({ abonent_amount: self.abonent_amount }) if self.abonent_amount > 1
 
-    GnercWorkerTest.perform_async("appeal", 9, parameters)
+    GnercWorker.perform_async("appeal", 9, parameters)
   end
 
   def send_meter_setup_2
@@ -130,7 +130,7 @@ module Network::ChangePowerGnerc
     end
 
     # attach_9_5
-    GnercWorkerTest.perform_async("answer", 9, parameters)
+    GnercWorker.perform_async("answer", 9, parameters)
   end
 
   def send_change_power_1
@@ -165,7 +165,7 @@ module Network::ChangePowerGnerc
 
     parameters.merge!({ abonent_amount: self.abonent_amount }) if self.abonent_amount > 1
 
-    GnercWorkerTest.perform_async("appeal", 10, parameters)
+    GnercWorker.perform_async("appeal", 10, parameters)
   end
 
   def send_change_power_2
@@ -211,7 +211,7 @@ module Network::ChangePowerGnerc
                                 'amount_of_overdue' + suffix, over.days ] )
       end
     end
-    GnercWorkerTest.perform_async("answer", 10, parameters)
+    GnercWorker.perform_async("answer", 10, parameters)
   end
 
   def send_micro_power_1
@@ -244,7 +244,7 @@ module Network::ChangePowerGnerc
 
     parameters.merge!({ abonent_amount: self.abonent_amount }) if self.abonent_amount > 1
 
-    GnercWorkerTest.perform_async("appeal", 11, parameters)
+    GnercWorker.perform_async("appeal", 11, parameters)
   end
 
   def send_micro_power_2
@@ -278,7 +278,7 @@ module Network::ChangePowerGnerc
                    attach_11_filename: file.file.filename,
                    sms_response:       get_message }
 
-    GnercWorkerTest.perform_async("answer", 11, parameters)
+    GnercWorker.perform_async("answer", 11, parameters)
   end
 
   def send_tech_condition_1
@@ -308,7 +308,7 @@ module Network::ChangePowerGnerc
 
     parameters.merge!({ abonent_amount: self.abonent_amount }) if customer_request == 2
 
-    GnercWorkerTest.perform_async("appeal", 12, parameters)
+    GnercWorker.perform_async("appeal", 12, parameters)
   end
 
   def send_tech_condition_2
@@ -340,9 +340,12 @@ module Network::ChangePowerGnerc
                    attach_12_filename: file.file.filename,
                    sms_response:       get_message }
 
-    parameters.merge!({ technical_condition: self.tech_condition_cns }) if response_id == 1
+    if response_id == 1
+      raise I18n.t('Tech condition is not sent') if self.tech_condition_cns.blank?
+      parameters.merge!({ technical_condition: self.tech_condition_cns }) 
+    end
 
-    GnercWorkerTest.perform_async("answer", 12, parameters)
+    GnercWorker.perform_async("answer", 12, parameters)
   end
 
   def current_voltage

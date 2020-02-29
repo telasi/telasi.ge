@@ -4,12 +4,19 @@ class GnercWorker
   def perform(func, type, parameters)
     case type 
       when 7 then
-        service = "Newcust"
+        model = service = "Newcust"
       when 4 then
-        service = "Docflow4"
+        model = service = "Docflow4"
+      when 9 then
+        model = service = "MeterSetup"
+      when 10 then
+        model = service = "ChangePower"
+      when 11 then
+        model = service = "MicroPower"
+      when 12 then
+        model = service = "TechCondition"
     end
-  	
-  	clazz = "Gnerc::#{service}".constantize
+  	clazz = "Gnerc::#{model}".constantize
   	clazz.connection
 
     newcust = clazz.where(letter_number: parameters["letter_number"]).first
