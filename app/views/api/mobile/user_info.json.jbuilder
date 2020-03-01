@@ -8,7 +8,7 @@ json.registrations @registrations.each do |registration|
   json.status   	   registration.status
   json.regionkey	   customer.address.region.regionkey
 end
-json.logininfo
+json.logininfo do
   json.first_name @user.first_name
   json.last_name  @user.last_name
   json.mobile	  @user.mobile
