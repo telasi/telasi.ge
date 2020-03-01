@@ -27,7 +27,10 @@ class Api::MobileController < Api::ApiController
                             status:          registration.status,
                             regionkey:       customer.address.region.regionkey } unless customer.fax == @user.mobile
       end 
-      render json: { success: true, registrations: @registrations }
+      render json: { success: true, registrations: @registrations, logininfo: { first_name: @user.first_name,
+                                                                                last_name:  @user.last_name,
+                                                                                mobile:     @user.mobile,
+                                                                                email:      @user.email } }
     else 
       render json: { success: false, message: 'No user' }
     end
