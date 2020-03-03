@@ -185,7 +185,7 @@ class Api::MobileController < Api::ApiController
           if registration.save
             render json: { success: true, message: '' }
           else
-            render json: { success: false, message: registration.errors.full_messages }  
+            render json: { success: false, message: registration.errors.full_messages[0] }  
           end
         else
           render json: { success: false, message: 'Already exists' }  
