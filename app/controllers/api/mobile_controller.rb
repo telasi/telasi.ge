@@ -45,7 +45,7 @@ class Api::MobileController < Api::ApiController
                      reason: reason,
                      energy: customer.payable_balance, 
                      trash: customer.trash_balance,
-                     water: customer.current_water_balance || 0,
+                     water: customer.current_water_balance || "0",
                      last_bill_date: customer.last_bill_date.strftime('%d/%m/%Y'),
                      last_bill_number: customer.last_bill_date ? customer.last_bill_number : '',
                      cut_deadline: customer.cut_deadline.strftime('%d/%m/%Y') }
