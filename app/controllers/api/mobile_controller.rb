@@ -169,7 +169,7 @@ class Api::MobileController < Api::ApiController
                                                  callbackurl:  @payment.callbackurl
                                                 } }
       else
-        render json: { success: false, message: @payment.errors.full_messages }
+        render json: { success: false, message: @payment.errors.full_messages[0] }
       end
   end
 
