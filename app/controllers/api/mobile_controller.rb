@@ -100,7 +100,7 @@ class Api::MobileController < Api::ApiController
       user.send_confirmation
       render json: { success: true, message: '' }
     else 
-      render json: { success: false, message: user.errors.full_messages }
+      render json: { success: false, message: user.errors.full_messages[0] }
     end
   end
 
