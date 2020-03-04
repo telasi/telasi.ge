@@ -43,9 +43,9 @@ class Api::MobileController < Api::ApiController
       render json: { success: true, 
                      status: status,
                      reason: reason,
-                     energy: customer.payable_balance.to_s, 
-                     trash: customer.trash_balance.to_s,
-                     water: (customer.current_water_balance || 0).to_s,
+                     energy: number_with_precision(customer.payable_balance, 2).to_s, 
+                     trash: number_with_precision(customer.trash_balance, 2).to_s,
+                     water: number_with_precision((customer.current_water_balance || 0), 2).to_s,
                      last_bill_date: customer.last_bill_date.strftime('%d/%m/%Y'),
                      last_bill_number: customer.last_bill_date ? customer.last_bill_number : '',
                      cut_deadline: customer.cut_deadline.strftime('%d/%m/%Y') }
