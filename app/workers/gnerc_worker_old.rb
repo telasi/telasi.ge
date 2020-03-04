@@ -4,12 +4,14 @@ class GnercWorkerOld
   def perform(func, type, parameters)
     case type 
       when 7 then
-        service = "NewcustOld"
+        model = "NewcustOld"
+        service = "Newcust"
       when 4 then
-        service = "Docflow4Old"
+        model = "Docflow4Old"
+        service = 'Docflow4'
     end
   	
-  	clazz = "Gnerc::#{service}".constantize
+  	clazz = "Gnerc::#{model}".constantize
   	clazz.connection
 
     newcust = clazz.where(letter_number: parameters["letter_number"]).first
