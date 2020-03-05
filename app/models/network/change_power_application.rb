@@ -21,6 +21,8 @@ class Network::ChangePowerApplication < Network::BaseClass
   TYPES = [ TYPE_CHANGE_POWER, TYPE_CHANGE_SOURCE, TYPE_SPLIT, TYPE_RESERVATION, TYPE_TEMP_BUILD, TYPE_ABONIREBA,
             TYPE_SAME_PACK, TYPE_HIGH_VOLTAGE, TYPE_SUB_CUSTOMER, TYPE_MICROPOWER, TYPE_MICRO_OTHER_PACK, TYPE_MICRO_SAME_PACK ]
 
+  SERVICE_TECH_CONDITION_DAYS = 10
+
   GNERC_SIGNATURE_FILE = 'ChangePower_'
   GNERC_RES_FILE = 'res'
   GNERC_ACT_FILE = 'act'
@@ -427,7 +429,7 @@ class Network::ChangePowerApplication < Network::BaseClass
     calculate_region
     case self.service
       when SERVICE_METER_SETUP                           then calculate_meter
-      when SERVICE_TECH_CONDITION                        then calculate_meter
+      when SERVICE_TECH_CONDITION                        then calculate_tech
       when SERVICE_CHANGE_POWER                          then calculate_change_power
       when SERVICE_MICRO_POWER                           then calculate_micro
     end
@@ -553,6 +555,50 @@ class Network::ChangePowerApplication < Network::BaseClass
       tariff = Network::MeterSetupTariff.tariff_for(self.voltage, self.power, self.start_date)
       if tariff.present?
         self.days = tariff.days(self)
+        if self.use_business_days
+          self.plan_end_date = (self.days - 1).business_days.after( self.send_date )
+        else
+          self.plan_end_date = self.send_date + self.days - 1
+        end
+      end
+    end
+  end
+
+  def calculate_tech
+    unless self.can_change_amount?
+
+      if self.zero_charge
+        self.amount = 0
+      else
+        tariff_old = Network::MeterSetupTariff.tariff_for(self.old_voltage, self.old_power, self.start_date)
+        tariff = Network::MeterSetupTariff.tariff_for(self.voltage, self.power, self.start_date)
+        multiplier = 1 
+        multiplier = self.tariff_multiplier.multiplier if self.tariff_multiplier
+        if tariff_old.price_gel > tariff.price_gel
+          self.amount = 0
+        elsif tariff_old == tariff
+          if self.old_power == self.power
+            self.amount = 0
+          else
+            per_kwh = tariff.price_gel * 1.0 / tariff.power_to
+            self.amount = (per_kwh * (self.power - self.old_power)).round(2) - self.minus_amount
+            self.amount = (per_kwh * (self.power - self.old_power) * multiplier ).round(2) - self.minus_amount if apply_multiplier?
+          end
+        else
+          self.amount = tariff.price_gel - tariff_old.price_gel - self.minus_amount
+          self.amount = ( tariff.price_gel - tariff_old.price_gel ) * multiplier - self.minus_amount if apply_multiplier?
+        end
+      end
+
+      # fixing amount
+      self.amount = 0 if self.amount < 0
+    end
+
+    if apply_duration?
+      tariff = Network::MeterSetupTariff.tariff_for(self.voltage, self.power, self.start_date)
+      if tariff.present?
+        self.days = tariff.days(self)
+        self.days = SERVICE_TECH_CONDITION_DAYS if self.days == 0
         if self.use_business_days
           self.plan_end_date = (self.days - 1).business_days.after( self.send_date )
         else
