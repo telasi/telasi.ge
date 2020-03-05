@@ -406,8 +406,8 @@ module Network::ChangePowerGnerc
 
   def get_unique_code
     techcondition = Network::ChangePowerApplication.where(number: self.tech_condition_cns).first
-    raise I18n.t('Tech condition is not sent') if ( techcondition.blank? || techcondition.gnerc_id.blank? )
-    techcondition.gnerc_id
+    #raise I18n.t('Tech condition is not sent') if ( techcondition.blank? || techcondition.gnerc_id.blank? )
+    techcondition.gnerc_id if techcondition.present?
   end
 
   def get_message
