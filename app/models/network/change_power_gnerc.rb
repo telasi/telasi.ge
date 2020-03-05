@@ -400,6 +400,8 @@ module Network::ChangePowerGnerc
     if file.present?
       content = File.read(file.file.file.file)
       content = Base64.encode64(content)
+    else 
+      raise I18n.t('ატვირთეთ ChangePower ფაილი')
     end
     return [ file, content ]
   end
