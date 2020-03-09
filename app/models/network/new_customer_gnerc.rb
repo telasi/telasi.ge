@@ -327,7 +327,8 @@ module Network::NewCustomerGnerc
         content = Base64.encode64(content)
         parameters = { letter_number:       self.number,
                        attach_7_2:          content,
-                       attach_7_2_filename: file.file.filename
+                       attach_7_2_filename: file.file.filename,
+                       confirmation:        1 
                      }
       else
         file = self.files.select{ |x| x.file.filename[0..2] == Network::NewCustomerApplication::GNERC_DEF_FILE }.first
