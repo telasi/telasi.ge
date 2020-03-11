@@ -5,22 +5,22 @@ module Network::ChangePowerGnerc
   GNERC_VOLTAGE_380 = '0.380'
   GNERC_VOLTAGE_610 = '6-10'
 
-  # def table_by_service
-  #   case self.service
-  #     when Network::ChangePowerApplication::SERVICE_METER_SETUP
-  #       'Gnerc::MeterSetup'
-  #     when Network::ChangePowerApplication::SERVICE_CHANGE_POWER 
-  #       'Gnerc::ChangePower'
-  #     when Network::ChangePowerApplication::SERVICE_MICRO_POWER
-  #       'Gnerc::MicroPower'
-  #      when Network::ChangePowerApplication::SERVICE_TECH_CONDITION
-  #       'Gnerc::TechCondition'
-  #   end
-  # end
-
   def table_by_service
-    'Gnerc::Docflow4'
+    case self.service
+      when Network::ChangePowerApplication::SERVICE_METER_SETUP
+        'Gnerc::MeterSetup'
+      when Network::ChangePowerApplication::SERVICE_CHANGE_POWER 
+        'Gnerc::ChangePower'
+      when Network::ChangePowerApplication::SERVICE_MICRO_POWER
+        'Gnerc::MicroPower'
+       when Network::ChangePowerApplication::SERVICE_TECH_CONDITION
+        'Gnerc::TechCondition'
+    end
   end
+
+  # def table_by_service
+  #   'Gnerc::Docflow4'
+  # end
 
   def gnerc_status
     return if self.number.blank?
