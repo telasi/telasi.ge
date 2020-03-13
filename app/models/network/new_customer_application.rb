@@ -567,12 +567,12 @@ class Network::NewCustomerApplication < Network::BaseClass
     newcust = Gnerc::Newcust.where(letter_number: self.number).first
     return if newcust.blank?
     
-    newcust.update_attributes!(company_answer: message.message, phone: message.mobile, confirmation: 1)
+    newcust.update_attributes!(company_answer: message.message, phone_number: message.mobile, confirmation: 1)
 
-    newcusttest = Gnerc::NewcustTest.where(letter_number: self.number).first
-    return if newcusttest.blank?
+    # newcusttest = Gnerc::NewcustTest.where(letter_number: self.number).first
+    # return if newcusttest.blank?
     
-    newcusttest.update_attributes!(sms_response: message.message)
+    # newcusttest.update_attributes!(sms_response: message.message)
   end
 
   def first_sms
