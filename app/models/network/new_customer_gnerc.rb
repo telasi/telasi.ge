@@ -104,14 +104,14 @@ module Network::NewCustomerGnerc
       if file.present?
         content = File.read(file.file.file.file)
         content = Base64.encode64(content)
-        parameters.merge!({ attach_7_4:          content,
-                            attach_7_4_filename: file.file.filename })
+        parameters.merge!({ attach_7:          content,
+                            attach_7_filename: file.file.filename })
       else
         file = self.files.select{ |x| x.file.filename[0..4] == Network::NewCustomerApplication::GNERC_REFAB_FILE }.first
         content = File.read(file.file.file.file)
         content = Base64.encode64(content)
-        parameters.merge!({ refuse_abonent:          content,
-                            refuse_abonent_filename: file.file.filename })
+        parameters.merge!({ attach_7:          content,
+                            attach_7_filename: file.file.filename })
       end
     end
 
