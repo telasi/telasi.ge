@@ -53,7 +53,7 @@ module Network::NewCustomerGnerc
                      identification_number: self.rs_tin,
                      phone_number:          self.mobile,
                      email:                 self.email,
-                     applicant_address:     self.address,
+                     applicant_address:     self.work_address,
                      location:              1,
                      cadastral_number:      self.address_code,
                      voltage:               gnerc_voltage,
