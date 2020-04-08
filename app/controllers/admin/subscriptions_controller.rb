@@ -7,7 +7,19 @@ class Admin::SubscriptionsController < ApplicationController
 
   def subscribers
     @title='სიახლეებზე ხელმოწერები'
-    @subscriptions = Sys::Subscription.desc(:_id).paginate(page: params[:page], per_page: 10)
+    # @subscriptions = Sys::Subscription.desc(:_id).paginate(page: params[:page], per_page: 10)
+    @subscriptions = Sys::Subscription
+    search = params[:search] == 'clear' ? nil : params[:search]
+    if search
+      @subscriptions = @subscriptions.where(email: search[:email]) if search[:email].present?
+    end
+    @subscriptions = @subscriptions.desc(:_id).paginate(page: params[:page], per_page: 10)
+  end
+
+  def delete
+    @subscriptions = Sys::Subscription.where(email: params[:email]).first
+    @subscriptions.destroy if @subscriptions.present?
+    redirect_to admin_subscribers_url, notice: '!!!'
   end
 
   def headlines

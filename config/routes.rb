@@ -47,6 +47,7 @@ TelasiGe::Application.routes.draw do
   end
 
   scope '/subscription', controller: 'subscription' do
+    get '/', action: 'index', as: 'subscriptions'
     match '/subscribe', action: 'subscribe', as: 'subscribe', via: ['get', 'post', 'patch']
     match '/subscribe_item', action: 'subscribe_item', as: 'subscribe_item', via: ['get', 'post', 'patch']
     get '/subscribe_complete', action: 'subscribe_complete', as: 'subscribe_complete'
@@ -128,6 +129,7 @@ TelasiGe::Application.routes.draw do
     scope '/subscriptions', controller: 'subscriptions' do
       get '/', action: 'index', as: 'subscriptions'
       get '/subscribers', action: 'subscribers', as: 'subscribers'
+      delete '/delete/email', action: 'delete', as: 'delete_subscriber'
       get '/headlines', action: 'headlines', as: 'headlines'
       get '/headline/:id', action: 'headline', as: 'headline'
       post '/generate_messages', action: 'generate_messages'

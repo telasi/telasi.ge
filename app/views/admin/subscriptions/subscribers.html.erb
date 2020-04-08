@@ -1,3 +1,6 @@
+<%= search_form @search do |f|
+  f.text_field 'email', label: 'ელ.ფოსტა'
+end %>
 <%= table_for @subscriptions, title: @title, collapsible: true, icon: '/icons/newspaper--pencil.png' do |t|
   t.email_field 'email', label: 'ელ.ფოსტა'
   t.text_field 'user', label: 'მომხმარებელი', url: ->(x) { admin_user_url(id: x.user.id) }
@@ -5,5 +8,6 @@
   t.boolean_field 'company_news', label: 'კომპანია'
   t.boolean_field 'procurement_news', label: 'ტენდერები'
   t.boolean_field 'outage_news', label: 'გათიშვები'
+  t.item_action ->(x) { admin_delete_subscriber_url(email: x.email) }, icon: '/icons/bin.png', method: 'delete', confirm: 'ნამდვილად გინდათ წაშლა?'
   t.paginate records: t('models.general.records')
 end %>
