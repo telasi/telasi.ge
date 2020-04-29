@@ -32,6 +32,7 @@ class Customer::Registration
   validates :rs_tin, presence: { message: I18n.t('models.customer_registration.errors.tin_required') }
   validates :address, presence: { message: I18n.t('models.customer_registration.errors.address_required') }
   validates :address_code, presence: { message: I18n.t('models.customer_registration.errors.address_code_required') }
+  validates :user, presence: { message: I18n.t('models.customer_registration.errors.address_code_required') }
   validate  :validate_rs_name
   before_create :on_before_create
   before_save :on_save
