@@ -187,6 +187,7 @@ module Network::ChangePowerHelper
         t.text_field 'service_name', required: true, i18n: 'service'
         t.text_field 'type_name', required: true, i18n: 'type'
         t.text_field 'number', required: true, tag: 'code'
+        t.text_field 'tech_condition_cns', label: 'ტექპირობის ნომერი'
         t.complex_field i18n: 'status_name', required: true do |c|
           c.image_field :status_icon
           c.text_field :status_name

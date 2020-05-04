@@ -266,6 +266,8 @@ class Network::ChangePowerApplication < Network::BaseClass
   def can_send_to_bs?; self.status == STATUS_COMPLETE and (self.amount||0) > 0 end
 
   def send_to_bs!
+    checks_for_gnerc_2
+
     # customer
     customer = self.customer
 
@@ -407,7 +409,7 @@ class Network::ChangePowerApplication < Network::BaseClass
     if self.status_changed?
       case self.status
       when STATUS_DEFAULT   then self.send_date = nil
-      when STATUS_SENT      then self.send_date  = self.start_date = Date.today
+      when STATUS_SENT      then self.send_date = self.start_date = Date.today
       when STATUS_CONFIRMED then 
         raise 'აარჩიეთ რეალური აბონენტი' if [SERVICE_CHANGE_POWER, SERVICE_MICRO_POWER].include?(self.service) && self.real_customer_id.blank?
         raise "ატვირთეთ cadastral ფაილი ან შეიყვანეთ საკადასტრო მისამართი" unless check_cadastral

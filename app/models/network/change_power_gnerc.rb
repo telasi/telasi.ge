@@ -341,7 +341,7 @@ module Network::ChangePowerGnerc
                    sms_response:       get_message }
 
     if response_id == 1
-      raise I18n.t('Tech condition is not sent') if self.tech_condition_cns.blank?
+      raise I18n.t('ტექპირობის ნომერი') if self.tech_condition_cns.blank?
       parameters.merge!({ technical_condition: self.tech_condition_cns }) 
     end
 
@@ -394,6 +394,30 @@ module Network::ChangePowerGnerc
   end
 
   private 
+
+  def checks_for_gnerc_2
+    case self.service
+      when Network::ChangePowerApplication::SERVICE_METER_SETUP
+        true
+      when Network::ChangePowerApplication::SERVICE_CHANGE_POWER 
+        true
+      when Network::ChangePowerApplication::SERVICE_MICRO_POWER
+        true
+       when Network::ChangePowerApplication::SERVICE_TECH_CONDITION
+        check_tech_condition_2
+    end
+  end
+
+  def check_tech_condition_2
+    response_id = case self.status
+                   when Network::BaseClass::STATUS_CONFIRMED then 1
+                   when Network::BaseClass::STATUS_IN_BS     then 1
+                   when Network::BaseClass::STATUS_CANCELED  then 2
+                 end
+    if response_id == 1
+      raise I18n.t('შეიყვანეთ ტექპირობის ნომერი') if self.tech_condition_cns.blank?
+    end
+  end
 
   def find_main_file
     file = self.files.select{ |x| x.file.filename[0..11] == Network::ChangePowerApplication::GNERC_SIGNATURE_FILE }.first
