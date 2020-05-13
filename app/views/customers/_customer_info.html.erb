@@ -12,6 +12,21 @@
 <ul class="list-group">
   <li class="list-group-item">
     <div class="pull-right">
+      <code>
+        <% status = customer.status
+          if status[0] %>
+            <%= image_tag("/icons/light-bulb.png", size: "20x20") %>
+            <span class="text-success"><%= t('models.billing_customer.status_1') %></span>
+        <% else %>
+            <%= image_tag("/icons/light-bulb-off.png", size: "20x20") %> 
+            <span class="text-danger"><%= t('models.billing_customer.status_0') + " (" + status[2] +")" %></span>
+        <% end %>
+      </code>
+    </div>
+    <%= t('models.billing_customer.status') %>
+  </li>
+  <li class="list-group-item">
+    <div class="pull-right">
       <i class="fa fa-bolt"></i>
       <code><%= number_with_precision customer.payable_balance, precision: 2 %></code> GEL
       &nbsp;

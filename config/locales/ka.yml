@@ -164,6 +164,16 @@ ka:
     billing_customer:
       accnumb: აბონენტის ნომერი
       custname: დასახელება
+      status: სტატუსი
+      reason:
+        reason_payment: დავალიანება
+        reason_aragegmiuri: არაგეგმიური 
+        reason_aragegmiuri_gadarTva: არაგეგმიური 
+        reason_gegmiuri: გეგმიური
+        reason_gegmiuri_gadarTva: გეგმიური
+        reason_khandzari: ფორს-მაჟორი
+      status_0: შეზღუდული
+      status_1: ჩართულია
       balance: ელ.ენერგიის დავალიანება
       trash_balance: დასუფთავების დავალიანება
       current_water_balance: წყალმომარაგების დავალიანება

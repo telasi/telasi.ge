@@ -161,6 +161,16 @@ ru:
     billing_customer:
       accnumb: Номер абонента
       custname: Название
+      status: Статус
+      status_0: Оключено
+      status_1: Включено
+      reason:
+        reason_payment: Задолженность
+        reason_aragegmiuri: Внеплановый
+        reason_aragegmiuri_gadarTva: Внеплановый
+        reason_gegmiuri: Плановый
+        reason_gegmiuri_gadarTva: Плановый
+        reason_khandzari: Форс-мажор
       balance: Задолженность (Электричество)
       trash_balance: Задолж. (Сан.Очистка)
       current_water_balance: Задолж. (Водоснабжение)

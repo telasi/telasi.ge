@@ -11,7 +11,6 @@ class Billing::Customer < ActiveRecord::Base
   self.primary_key = :custkey
 
   belongs_to :address,      class_name: 'Billing::Address',       foreign_key: :premisekey
-  belongs_to :send_address, class_name: 'Billing::Address',       foreign_key: :sendkey
   has_one  :trash_customer, class_name: 'Billing::TrashCustomer', foreign_key: :custkey
   has_one  :water_customer, class_name: 'Billing::WaterCustomer', foreign_key: :custkey
   has_many :water_items,    -> { order 'year, month' }, class_name: 'Billing::WaterItem', foreign_key: :custkey
@@ -31,23 +30,26 @@ class Billing::Customer < ActiveRecord::Base
 
   def status
     status = true
-    reason = ''
+    reason = reason_desc = ''
 
-    ch = Billing::CutHistory.where(custkey: self.custkey).order('cr_key desc').first
+    ch = Billing::CutHistory.where(custkey: self.custkey).where('OPER_DATE >= SYSDATE - 7').order('cr_key desc').first
     if ch && ch.oper_code == 0
      status = false
      reason = 'payment'
     end
 
-    outage = Billing::OutageJournalCust.where(custkey_customer: self.custkey).first
-    if outage.present? && outage.detail.present?
-      if outage.detail.enabled != 1 || outage.detail.on_time.blank?
-        status = false
-        reason = outage.detail.type_descr
-      end
-    end
+    # outage = Billing::OutageJournalCust.where(custkey_customer: self.custkey).open.accepted.any?
+    # if outage.present?
+    # if outage.present? && outage.detail.present?
+    #   if outage.detail.enabled != 1 || outage.detail.on_time.blank?
+         status = false
+         # reason = outage.detail.type_descr
+         reason = 'aragegmiuri'
+         reason_desc = I18n.t("models.billing_customer.reason.reason_#{reason}")
+       # end
+    # end
 
-    return [status, reason]
+    return [status, reason, reason_desc]
   end
 
   def abonent_type

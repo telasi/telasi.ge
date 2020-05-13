@@ -1,0 +1,13 @@
+en:
+  models:
+    billing_customer:
+      status: სტატუსი
+      status_0: შეზღუდული
+      status_1: ჩართულია
+      reason:
+        reason_payment: დავალიანება
+        reason_aragegmiuri: არაგეგმიური 
+        reason_aragegmiuri_gadarTva: არაგეგმიური 
+        reason_gegmiuri: გეგმიური
+        reason_gegmiuri_gadarTva: გეგმიური
+        reason_khandzari: ფორს-მაჟორი
