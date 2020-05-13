@@ -38,16 +38,15 @@ class Billing::Customer < ActiveRecord::Base
      reason = 'payment'
     end
 
-    # outage = Billing::OutageJournalCust.where(custkey_customer: self.custkey).open.accepted.any?
-    # if outage.present?
+    outage = Billing::OutageJournalCust.where(custkey_customer: self.custkey).open.accepted.any?
+    if outage.present?
     # if outage.present? && outage.detail.present?
     #   if outage.detail.enabled != 1 || outage.detail.on_time.blank?
          status = false
-         # reason = outage.detail.type_descr
-         reason = 'aragegmiuri'
+         reason = outage.detail.type_descr
          reason_desc = I18n.t("models.billing_customer.reason.reason_#{reason}")
        # end
-    # end
+    end
 
     return [status, reason, reason_desc]
   end
