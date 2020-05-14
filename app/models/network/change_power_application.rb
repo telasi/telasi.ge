@@ -242,6 +242,7 @@ class Network::ChangePowerApplication < Network::BaseClass
   end
 
   def prepayment_enough?
+    return false unless self.amount
     ( billing_prepayment_to_factured_sum + billing_items_raw_to_factured_sum ) > 0 and 
     ( billing_prepayment_to_factured_sum + billing_items_raw_to_factured_sum >= self.amount / 2 )
   end
