@@ -168,8 +168,8 @@ ru:
         reason_payment: Задолженность
         reason_aragegmiuri: Внеплановый
         reason_aragegmiuri_gadarTva: Внеплановый
-        reason_gegmiuri: Плановый
-        reason_gegmiuri_gadarTva: Плановый
+        reason_gegmiuri: Неотложные работы
+        reason_gegmiuri_gadarTva: Неотложные работы
         reason_khandzari: Форс-мажор
       balance: Задолженность (Электричество)
       trash_balance: Задолж. (Сан.Очистка)

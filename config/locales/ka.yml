@@ -169,8 +169,8 @@ ka:
         reason_payment: დავალიანება
         reason_aragegmiuri: არაგეგმიური 
         reason_aragegmiuri_gadarTva: არაგეგმიური 
-        reason_gegmiuri: გეგმიური
-        reason_gegmiuri_gadarTva: გეგმიური
+        reason_gegmiuri: გადაუდებელი
+        reason_gegmiuri_gadarTva: გადაუდებელი
         reason_khandzari: ფორს-მაჟორი
       status_0: შეზღუდული
       status_1: ჩართულია
