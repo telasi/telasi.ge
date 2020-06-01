@@ -18,12 +18,7 @@ class Sys::SmsMessage
       msg = msg.to_lat if opts[:lat]
 
       msg << FOOTER
-      begin 
-       Magti.send_sms(self.mobile, msg)
-      rescue 
-       self.destroy
-       return
-      end
+      Magti.send_sms(self.mobile, msg)
 
       #bacho 
       smsg = Sys::SentMessage.new
