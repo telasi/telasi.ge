@@ -67,7 +67,7 @@ class Sys::SubscriptionMessage
                         </h1>
                         #{m.body}
                         </body></html>},
-                     :'recipient-variables' => recipient_variables.to_json
+                     # :'recipient-variables' => recipient_variables.to_json
                       },
           verify_ssl: false
         )
