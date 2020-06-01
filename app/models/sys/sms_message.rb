@@ -3,6 +3,8 @@ class Sys::SmsMessage
   include Mongoid::Document
   include Mongoid::Timestamps
 
+  FOOTER = ' detaluri inf: *303#'
+
   belongs_to :messageable, polymorphic: true
   field :mobile, type: String
   field :message, type: String
@@ -14,7 +16,14 @@ class Sys::SmsMessage
     if Magti::SEND
       msg = self.message
       msg = msg.to_lat if opts[:lat]
-      Magti.send_sms(self.mobile, msg)
+
+      msg << FOOTER
+      begin 
+       Magti.send_sms(self.mobile, msg)
+      rescue 
+       self.destroy
+       return
+      end
 
       #bacho 
       smsg = Sys::SentMessage.new
