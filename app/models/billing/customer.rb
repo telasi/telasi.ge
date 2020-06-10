@@ -36,6 +36,7 @@ class Billing::Customer < ActiveRecord::Base
     if ch && ch.oper_code == 0
      status = false
      reason = 'payment'
+     reason_desc = I18n.t("models.billing_customer.reason.reason_#{reason}")
     end
 
     outage = Billing::OutageJournalCust.where(custkey_customer: self.custkey).open.accepted.first
