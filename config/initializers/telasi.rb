@@ -2,6 +2,7 @@
 module Telasi
   HOST = "http://my.telasi.ge"
   MAILGUN_KEY = "key-20k5k0urfnewhu8a6of2to26uscsm-71"
+  SMS_SIGNATURE = "asd" 
   NEWCUSTAPP_UNDERCONSTRUCTION = true
   PERMISSIONS = {
     network_admin_id:       '52f4c9493bd0417158000004',

@@ -137,7 +137,7 @@ module Sys
       self.save
       
       if Magti::SEND
-        msg = "Telasi code: " + self.sms_confirm_code
+        msg = "Telasi code: " + self.sms_confirm_code + "\n\n" + Telasi::SMS_SIGNATURE
         begin 
          Magti.send_sms(self.mobile, msg)
         rescue 
