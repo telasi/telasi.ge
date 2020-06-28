@@ -277,6 +277,7 @@ TelasiGe::Application.routes.draw do
       post '/login', action: 'login', as: 'login'
       get '/user_info', action: 'user_info', as: 'get_user_info'
       get '/bills', action: 'bills', as: 'bills'
+      get '/bills_accnumb', action: 'bills_accnumb', as: 'bills_accnumb'
       get '/payments', action: 'payments', as: 'payments'
       get '/subscription', action: 'subscription', as: 'subscription'
       post '/update_subscription', action: 'update_subscription', as: 'update_subscription'

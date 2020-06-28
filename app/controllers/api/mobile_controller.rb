@@ -39,16 +39,16 @@ class Api::MobileController < Api::ApiController
   def bills
     customer = Billing::Customer.find(params[:custkey])
     if customer
-      status, reason = customer.status
-      render json: { success: true, 
-                     status: status,
-                     reason: reason,
-                     energy: "%0.2f" % customer.payable_balance, 
-                     trash: "%0.2f" % customer.trash_balance,
-                     water: "%0.2f" % (customer.current_water_balance || 0),
-                     last_bill_date: customer.last_bill_date.strftime('%d/%m/%Y'),
-                     last_bill_number: customer.last_bill_date ? customer.last_bill_number : '',
-                     cut_deadline: customer.cut_deadline.strftime('%d/%m/%Y') }
+      render json: customer_data(customer)
+    else 
+      render json: { success: false, message: 'No customer' }
+    end
+  end
+
+  def bills_accnumb
+    customer = Billing::Customer.where(accnumb: params[:accnumb]).first
+    if customer
+      render json: customer_data(customer)
     else 
       render json: { success: false, message: 'No customer' }
     end
@@ -239,5 +239,18 @@ class Api::MobileController < Api::ApiController
     end
 
     @seq["sequence"]
+  end
+
+  def customer_data(customer)
+    status, reason = customer.status
+    { success: true, 
+      status: status,
+      reason: reason,
+      energy: "%0.2f" % customer.payable_balance, 
+      trash: "%0.2f" % customer.trash_balance,
+      water: "%0.2f" % (customer.current_water_balance || 0),
+      last_bill_date: customer.last_bill_date.strftime('%d/%m/%Y'),
+      last_bill_number: customer.last_bill_date ? customer.last_bill_number : '',
+      cut_deadline: customer.cut_deadline.strftime('%d/%m/%Y') }
   end
 end
