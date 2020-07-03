@@ -26,15 +26,22 @@ module Network::ChangePowerGnerc
     return if self.number.blank?
     newcust = self.table_by_service.constantize.where(letter_number: self.number).first
     return I18n.t('models.network_new_customer_application.gnerc_statuses.not_sent') unless newcust
-    queue = Gnerc::SendQueue.where(service: self.table_by_service.split('::')[1], service_id: newcust.id, stage: 1).first
-    if queue.blank?
+    queue_stage1 = Gnerc::SendQueue.where(service: self.table_by_service.split('::')[1], service_id: newcust.id, stage: 1).first
+    if queue_stage1.blank?
       return I18n.t('models.network_new_customer_application.gnerc_statuses.not_sent')
     else
-      if self.status < Network::BaseClass::STATUS_COMPLETE
-        queue.sent_at.blank? ? I18n.t('models.network_new_customer_application.gnerc_statuses.waiting') : I18n.t('models.network_new_customer_application.gnerc_statuses.sent')
+      
+      if queue_stage1.sent_at.blank?
+        I18n.t('models.network_new_customer_application.gnerc_statuses.waiting')
       else
-        queue.sent_at.blank? ? I18n.t('models.network_new_customer_application.gnerc_statuses.answered_ready') : I18n.t('models.network_new_customer_application.gnerc_statuses.answered')
-      end      
+        queue_stage2 = Gnerc::SendQueue.where(service: self.table_by_service.split('::')[1], service_id: newcust.id, stage: 2).first
+        if queue_stage2.present?
+          queue_stage2.sent_at.blank? ? I18n.t('models.network_new_customer_application.gnerc_statuses.answered_ready') : I18n.t('models.network_new_customer_application.gnerc_statuses.answered')
+        else
+          I18n.t('models.network_new_customer_application.gnerc_statuses.sent')
+        end
+      end
+  
     end
   end
 
@@ -111,6 +118,7 @@ module Network::ChangePowerGnerc
                       when Network::BaseClass::STATUS_CONFIRMED then 1
                       when Network::BaseClass::STATUS_IN_BS     then 1
                       when Network::BaseClass::STATUS_CANCELED  then 2
+                      when Network::BaseClass::STATUS_USER_DECLINED then 2
                     end
 
     parameters = { letter_number:         self.number,
@@ -391,6 +399,17 @@ module Network::ChangePowerGnerc
                                 end
     end
     gnerc_requested_volume
+  end
+
+  def send_res(file)
+    content = File.read(file.file.file.file)
+    content = Base64.encode64(content)
+    parameters = { letter_number:       self.number,
+                   attach_9_2:          content,
+                   attach_9_2_filename: file.file.filename,
+                   request_status:      2 }
+
+    GnercWorker.perform_async("answer", self.service, parameters)
   end
 
   private 

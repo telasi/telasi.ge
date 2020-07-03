@@ -296,7 +296,7 @@ class Network::ChangePowerController < ApplicationController
       @file = Sys::File.new(params.require(:sys_file).permit(:file))
       if @file.save
         @application.files << @file
-        send_to_gnerc(@application, @file) if @file.file.filename[0..2] == Network::ChangePowerApplication::GNERC_RES_FILE
+        @application.send_res(@file) if @file.file.filename[0..2] == Network::ChangePowerApplication::GNERC_RES_FILE
 
         redirect_to network_change_power_url(id: @application.id, tab: 'files'), notice: I18n.t('models.network_new_customer_application.actions.file.loaded')
       end
