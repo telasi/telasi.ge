@@ -91,7 +91,7 @@ class Network::BaseClass
   # პირველი ეტაპის ჯარიმა.
   def penalty_first_stage
     if self.status != STATUS_CANCELED and self.send_date and self.start_date
-      if real_days > ( days + total_overdue_days )
+      if real_days > ( days + ( total_overdue_days || 0 ) )
         self.amount / 2
       else 0 end
     else 0 end
