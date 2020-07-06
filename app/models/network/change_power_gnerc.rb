@@ -409,10 +409,18 @@ module Network::ChangePowerGnerc
   def send_res(file)
     content = File.read(file.file.file.file)
     content = Base64.encode64(content)
-    parameters = { letter_number:       self.number,
-                   "attach_#{self.service}_2".to_sym:          content,
-                   "attach_#{self.service}_2_filename".to_sym: file.file.filename,
+    case self.service 
+      when 9
+        parameters = { letter_number:       self.number,
+                   attach_9_2:          content,
+                   attach_9_2_filename: file.file.filename,
                    request_status:      2 }
+      when 12
+        parameters = { letter_number:       self.number,
+                   attach_12:          content,
+                   attach_12_2_filename: file.file.filename,
+                   request_status:      2 }
+    end
 
     GnercWorker.perform_async("answer", self.service, parameters)
   end
