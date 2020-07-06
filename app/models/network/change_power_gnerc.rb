@@ -418,7 +418,7 @@ module Network::ChangePowerGnerc
       when 12
         parameters = { letter_number:       self.number,
                    attach_12:          content,
-                   attach_12_2_filename: file.file.filename,
+                   attach_12_filename: file.file.filename,
                    request_status:      2 }
     end
 
