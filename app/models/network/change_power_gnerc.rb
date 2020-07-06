@@ -130,9 +130,14 @@ module Network::ChangePowerGnerc
       if file.present?
         content = File.read(file.file.file.file)
         content = Base64.encode64(content)
-        parameters.merge!({ attach_9_2:          content,
-                            attach_9_2_filename: file.file.filename })
+      else
+        file = self.files.select{ |x| x.file.filename[0..4] == Network::ChangePowerApplication::GNERC_REFAB_FILE }.first
+        content = File.read(file.file.file.file)
+        content = Base64.encode64(content)
       end
+
+      parameters.merge!({ attach_9_2:          content,
+                          attach_9_2_filename: file.file.filename })
     else
       parameters.merge!({ abonent_number:  self.customer.accnumb }) 
     end
