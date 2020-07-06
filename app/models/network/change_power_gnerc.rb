@@ -419,7 +419,7 @@ module Network::ChangePowerGnerc
         parameters = { letter_number:       self.number,
                    attach_12:          content,
                    attach_12_filename: file.file.filename,
-                   request_status:      2 }
+                   response_id:      2 }
     end
 
     GnercWorker.perform_async("answer", self.service, parameters)
