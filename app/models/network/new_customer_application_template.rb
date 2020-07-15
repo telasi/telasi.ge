@@ -14,7 +14,15 @@ class Network::NewCustomerApplicationTemplate
 		# Sys::PdfTemplate.send_to_client(get_template, @application.id.to_s + '.pdf', generate_parameters)
 	end
 
+	def print_cost_form
+		Sys::PdfTemplate.render_to_content(get_cost_template, cost_parameters)
+	end
+
 	private 
+
+	def get_cost_template
+		File.join(Rails.root, "#{TEMPLATE_DIR}", 'cost_form.pdf')
+	end
 
 	def get_template
 		file = if @application.abonent_amount == 1
@@ -106,6 +114,34 @@ class Network::NewCustomerApplicationTemplate
     	params[:micro_amount] = @application.micro_amount
     	return params
     end
+
+    def cost_parameters
+		params = {}
+		params[:number] = @application.number
+		params[:advance] = @application.billing_prepayment_total
+		params[:rs_name] = @application.rs_name
+		params[:start_date] = @application.start_date.strftime('%d.%m.%Y') if @application.start_date
+		params[:power] = @application.power
+		params[:days] = @application.days
+		params[:plan_end_date] = @application.plan_end_date.strftime('%d.%m.%Y') if @application.plan_end_date
+		params[:end_date] = @application.end_date.strftime('%d.%m.%Y') if @application.end_date
+		params[:total_penalty] = @application.total_penalty
+		params[:amount] = @application.amount
+		if @application.penalty_first_stage > 0
+			params[:penalty1_start_date] = params[:start_date]
+			params[:penalty1_end_date] = params[:end_date]
+			params[:penalty1_first_stage] = @application.penalty_first_stage
+		end
+		if @application.penalty_second_stage > 0
+			params[:penalty2_first_stage] = @application.penalty_first_stage
+		end
+		if @application.penalty_second_stage > 0
+			params[:penalty2_first_stage] = @application.penalty_first_stage
+		end
+		params[:customer_accnumb] = @application.customer.try(:accnumb)
+		params[:today] = Time.now.strftime('%d.%m.%Y')
+		return params
+	end
 
 	def month_name(month)
 	  case month

@@ -159,6 +159,11 @@ class Network::ChangePowerController < ApplicationController
     end
   end
 
+  def print_cost_form
+    @application = Network::ChangePowerApplication.find(params[:id])
+    send_data(Network::ChangePowerApplicationTemplate.new(@application).print_cost_form, :filename => @application.id.to_s + 'pdf', :type => 'application/pdf', :disposition => 'inline') 
+  end
+
   # def show 
   #   @application = Network::ChangePowerApplication.find(params[:id]) 
   #   send_data(Network::ChangePowerApplicationTemplate.new(@application).print, :filename => @application.id.to_s + 'pdf', :type => 'application/pdf', :disposition => 'inline') 

@@ -188,6 +188,7 @@ TelasiGe::Application.routes.draw do
       # print
       get '/paybill/:id', action: 'paybill', as: 'new_customer_paybill'
       get '/print/:id', action: 'print', as: 'new_customer_print'
+      get '/print_cost_form/:id', action: 'print_cost_form', as: 'new_customer_print_cost_form'
       get '/sign/:id', action: 'sign', as: 'new_customer_sign'
       post '/send_prepayment_factura/:id', action: 'send_prepayment_factura', as: 'new_customer_send_prepayment_factura'
       get '/send_prepayment_factura_prepare/:id', action: 'send_prepayment_factura_prepare', as: 'new_customer_send_prepayment_factura_prepare'
@@ -215,6 +216,7 @@ TelasiGe::Application.routes.draw do
       match '/new', action: 'new', as: 'add_change_power', via: ['get', 'post']
       match '/edit/:id', action: 'edit', as: 'edit_change_power', via: ['get', 'post']
       get   '/:id', action: 'show', as: 'change_power'
+      get '/print_cost_form/:id', action: 'print_cost_form', as: 'change_power_print_cost_form'
       get '/sign/:id', action: 'sign', as: 'change_power_sign'
       delete '/delete/:id', action: 'delete', as: 'delete_change_power'
       # status operations

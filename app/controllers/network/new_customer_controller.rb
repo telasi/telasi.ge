@@ -314,6 +314,11 @@ class Network::NewCustomerController < ApplicationController
     send_data(Network::NewCustomerApplicationTemplate.new(@application).print, :filename => @application.id.to_s + 'pdf', :type => 'application/pdf', :disposition => 'inline') 
   end
 
+  def print_cost_form
+    @application = Network::NewCustomerApplication.find(params[:id]) 
+    send_data(Network::NewCustomerApplicationTemplate.new(@application).print_cost_form, :filename => @application.id.to_s + 'pdf', :type => 'application/pdf', :disposition => 'inline') 
+  end
+
   def sign
     @application = Network::NewCustomerApplication.find(params[:id])
 
