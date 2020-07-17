@@ -70,7 +70,7 @@ module Network::ChangePowerGnerc
   def send_stage_2
     case self.service
       when Network::ChangePowerApplication::SERVICE_METER_SETUP
-         send_meter_setup_2
+        send_meter_setup_2
       when Network::ChangePowerApplication::SERVICE_CHANGE_POWER 
         send_change_power_2
       when Network::ChangePowerApplication::SERVICE_MICRO_POWER

@@ -119,6 +119,9 @@ class Network::ChangePowerApplicationTemplate
 			params[:penalty1_end_date] = params[:end_date]
 			params[:penalty1_first_stage] = @application.penalty_first_stage
 		end
+		stage = Network::Stage.where(numb: 4).first
+		request = @application.requests.where(stage: stage).first
+		params[:commission_date] = request.date.strftime('%d.%m.%Y') if request.present?
 		params[:customer_accnumb] = @application.customer.try(:accnumb)
 		params[:today] = Time.now.strftime('%d.%m.%Y')
 		return params

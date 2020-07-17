@@ -139,6 +139,10 @@ class Network::NewCustomerApplicationTemplate
 			params[:penalty2_first_stage] = @application.penalty_first_stage
 		end
 		params[:customer_accnumb] = @application.customer.try(:accnumb)
+
+		stage = Network::Stage.where(numb: 4).first
+		request = @application.requests.where(stage: stage).first
+		params[:commission_date] = request.date.strftime('%d.%m.%Y') if request.present?
 		params[:today] = Time.now.strftime('%d.%m.%Y')
 		return params
 	end
