@@ -269,7 +269,7 @@ module Network::NewCustomerHelper
             c.text_field 'customer.custname'
             c.text_field 'customer.commercial', empty: false, before: '&mdash;'.html_safe
           end
-          с.text_field :mtnumb, label: 'მრიცხველი'
+          c.text_field :mtnumb, label: 'მრიცხველი'
           if application.micro || application.tariff_multiplier || application.add_price_for_customer_amount?
             t.complex_field label: 'ღირებულება', required: true do |c|
               c.text_field :amount, tag: 'code', after: '= '

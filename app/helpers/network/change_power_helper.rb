@@ -244,7 +244,7 @@ module Network::ChangePowerHelper
             c.text_field 'real_customer.accnumb', tag: 'code'
             c.text_field 'real_customer.custname'
           end
-          с.text_field :mtnumb, label: 'მრიცხველი'
+          c.text_field :mtnumb, label: 'მრიცხველი'
           c.number_field :amount, after: 'GEL' do |amnt|
             amnt.action(network_change_power_edit_amount_url(id: application.id), label: 'შეცვლა', icon: '/icons/pencil.png') if application.can_change_amount?
           end
