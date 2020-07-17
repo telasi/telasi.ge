@@ -62,6 +62,7 @@ class Network::NewCustomerApplication < Network::BaseClass
   field :micro_amount,      type: Float, default: 0
   field :days,        type: Integer, default: 0
   field :customer_id, type: Integer
+  field :mtnumb,      type: String
   field :customer_type_id, type: Integer
   field :penalty1,    type: Float, default: 0
   field :penalty2,    type: Float, default: 0

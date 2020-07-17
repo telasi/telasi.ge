@@ -69,6 +69,7 @@ class Network::ChangePowerApplication < Network::BaseClass
   field :customer_type_id, type: Integer
   field :customer_id, type: Integer
   field :real_customer_id, type: Integer
+  field :mtnumb, type: String
 
   field :penalty1,    type: Float, default: 0
 

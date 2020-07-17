@@ -510,7 +510,7 @@ class Network::ChangePowerController < ApplicationController
 
   private
 
-  def change_power_params; params.require(:network_change_power_application).permit(:base_type, :base_number, :need_factura, :work_by_telasi, :service, :type, :customer_type_id, :number, :note, :rs_tin, :rs_foreigner, :rs_name, :vat_options, :mobile, :email, :region, :address, :work_address, :address_code, :bank_code, :bank_account, :voltage, :power, :old_voltage, :old_power, :customer_id, :real_customer_id, :proeqti, :oqmi, :zero_charge, :substation, :abonent_amount, :tech_condition_cns, :micro_power_source) end
+  def change_power_params; params.require(:network_change_power_application).permit(:base_type, :base_number, :need_factura, :work_by_telasi, :service, :type, :customer_type_id, :number, :note, :rs_tin, :rs_foreigner, :rs_name, :vat_options, :mobile, :email, :region, :address, :work_address, :address_code, :bank_code, :bank_account, :voltage, :power, :old_voltage, :old_power, :customer_id, :real_customer_id, :proeqti, :oqmi, :zero_charge, :substation, :abonent_amount, :tech_condition_cns, :micro_power_source, :mtnumb) end
 
   def overdue_params
     params.require(:network_overdue_item).permit(:authority, :appeal_date, :planned_days, :deadline, :response_date, :decision_date, :days, :chosen, :business_days, :check_days)

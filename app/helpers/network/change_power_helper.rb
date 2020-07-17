@@ -126,6 +126,7 @@ module Network::ChangePowerHelper
         t.text_field  :bank_account, width: 300
         f.select_field :customer, select_customer_url, label: 'დროებითი აბონენტი', search_width: 900
         f.select_field :real_customer, select_customer_url, label: 'რეალური აბონენტი', search_width: 900
+        f.text_field :mtnumb, label: 'მრიცხველი'
         t.combo_field :old_voltage, collection: voltage_collection_change_power, empty: false
         t.number_field :old_power, after: 'kWh', width: 100
         t.combo_field :voltage, collection: voltage_collection_change_power, empty: false, required: true
@@ -243,6 +244,7 @@ module Network::ChangePowerHelper
             c.text_field 'real_customer.accnumb', tag: 'code'
             c.text_field 'real_customer.custname'
           end
+          с.text_field :mtnumb, label: 'მრიცხველი'
           c.number_field :amount, after: 'GEL' do |amnt|
             amnt.action(network_change_power_edit_amount_url(id: application.id), label: 'შეცვლა', icon: '/icons/pencil.png') if application.can_change_amount?
           end

@@ -134,6 +134,7 @@ module Network::NewCustomerHelper
         t.combo_field :voltage, collection: voltage_collection, empty: false, required: true
         t.number_field :power, after: 'kWh', width: 100, required: true
         t.number_field :abonent_amount, width: 50, required: true
+        t.text_field :mtnumb, label: 'მრიცხველი'
         # t.boolean_field :need_resolution, required: true
         t.combo_field :duration, collection: duration_collection, empty: false, required: true, label: 'შესრულების ხანგრძლიობა'
         t.text_field :substation, width: 500
@@ -268,6 +269,7 @@ module Network::NewCustomerHelper
             c.text_field 'customer.custname'
             c.text_field 'customer.commercial', empty: false, before: '&mdash;'.html_safe
           end
+          с.text_field :mtnumb, label: 'მრიცხველი'
           if application.micro || application.tariff_multiplier || application.add_price_for_customer_amount?
             t.complex_field label: 'ღირებულება', required: true do |c|
               c.text_field :amount, tag: 'code', after: '= '

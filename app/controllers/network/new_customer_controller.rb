@@ -500,7 +500,7 @@ class Network::NewCustomerController < ApplicationController
   private
 
   def new_customer_params
-    params.require(:network_new_customer_application).permit(:base_type, :base_number, :number, :rs_tin, :rs_foreigner, :rs_name, :personal_use, :mobile, :email, :region, :address, :work_address, :address_code, :bank_code, :bank_account, :duration, :voltage, :power, :abonent_amount, :vat_options, :need_factura, :show_tin_on_print, :notes, :proeqti, :oqmi, :micro, :micro_voltage, :micro_power, :micro_power_source, :substation)
+    params.require(:network_new_customer_application).permit(:base_type, :base_number, :number, :rs_tin, :rs_foreigner, :rs_name, :personal_use, :mobile, :email, :region, :address, :work_address, :address_code, :bank_code, :bank_account, :duration, :voltage, :power, :abonent_amount, :vat_options, :need_factura, :show_tin_on_print, :notes, :proeqti, :oqmi, :micro, :micro_voltage, :micro_power, :micro_power_source, :substation, :mtnumb)
   end
 
   def overdue_params
