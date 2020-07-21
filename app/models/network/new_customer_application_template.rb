@@ -140,7 +140,7 @@ class Network::NewCustomerApplicationTemplate
 		end
 		params[:customer_accnumb] = @application.customer.try(:accnumb)
 
-		stage = Network::Stage.where(numb: 4).first
+		stage = Network::Stage.where(numb: 6).first
 		request = @application.requests.where(stage: stage).first
 		params[:commission_date] = request.date.strftime('%d.%m.%Y') if request.present?
 		params[:mtnumb] = @application.mtnumb
