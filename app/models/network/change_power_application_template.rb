@@ -123,6 +123,7 @@ class Network::ChangePowerApplicationTemplate
 		request = @application.requests.where(stage: stage).first
 		params[:commission_date] = request.date.strftime('%d.%m.%Y') if request.present?
 		params[:customer_accnumb] = @application.customer.try(:accnumb)
+		params[:mtnumb] = @application.mtnumb
 		params[:today] = Time.now.strftime('%d.%m.%Y')
 		return params
 	end

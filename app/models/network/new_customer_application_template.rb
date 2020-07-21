@@ -143,6 +143,7 @@ class Network::NewCustomerApplicationTemplate
 		stage = Network::Stage.where(numb: 4).first
 		request = @application.requests.where(stage: stage).first
 		params[:commission_date] = request.date.strftime('%d.%m.%Y') if request.present?
+		params[:mtnumb] = @application.mtnumb
 		params[:today] = Time.now.strftime('%d.%m.%Y')
 		return params
 	end
