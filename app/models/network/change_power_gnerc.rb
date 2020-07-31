@@ -102,7 +102,7 @@ module Network::ChangePowerGnerc
                    voltage:               requested_voltage,
                    request_package:       requested_package(self.voltage, self.power),
                    power:                 self.power,
-                   appeal_date:           self.start_date,
+                   appeal_date:           self.send_date,
                    attach_9_1:            content,
                    attach_9_1_filename:   file.file.filename,
                    unique_code:           unique_code
@@ -171,7 +171,7 @@ module Network::ChangePowerGnerc
                    current_volume:        self.old_power,
                    requested_volume:      self.power,
                    changing_technical_condition: self.changing_technical_condition ? 1 : 0,
-                   appeal_date:           self.start_date,
+                   appeal_date:           self.send_date,
                    attach_10_1:           content,
                    attach_10_1_filename:  file.file.filename
                  }
@@ -250,7 +250,7 @@ module Network::ChangePowerGnerc
                    voltage:               current_voltage,
                    requested_volume:      requested_package(self.voltage, self.power),
                    power:                 self.power,
-                   appeal_date:           self.start_date,
+                   appeal_date:           self.send_date,
                    attach_11_1:           content,
                    attach_11_1_filename:  file.file.filename
                  }
@@ -314,7 +314,7 @@ module Network::ChangePowerGnerc
                    customer_type_id:      self.customer_type_id,
                    voltage:               current_voltage,
                    power:                 self.power,
-                   appeal_date:           self.start_date,
+                   appeal_date:           self.send_date,
                    attach_12_1:           content,
                    attach_12_1_filename:  file.file.filename
                  }

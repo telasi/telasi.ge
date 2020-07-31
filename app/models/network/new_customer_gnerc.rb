@@ -59,7 +59,7 @@ module Network::NewCustomerGnerc
                      voltage:               gnerc_voltage,
                      requested_volume:      gnerc_requested_volume,
                      power:                 self.power,
-                     appeal_date:           self.start_date,
+                     appeal_date:           self.send_date,
                      attach_7_1:            content,
                      attach_7_1_filename:   file.file.filename
                    }
