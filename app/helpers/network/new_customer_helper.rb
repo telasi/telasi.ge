@@ -18,6 +18,10 @@ module Network::NewCustomerHelper
         c.number_field :voltage, before: '/'
       end
       t.number_field :amount, after: 'GEL'
+
+      t.complex_field label: 'რეალური დასრულება', required: true do |c|
+       c.date_field :end_date
+      end 
       t.number_field :days, max_digits: 0, after: 'დღე'
       t.paginate param_name: 'page_new', records: 'ჩანაწერი'
     end
@@ -304,6 +308,9 @@ module Network::NewCustomerHelper
           c.date_field :production_date
           c.date_field :end_date
           c.date_field :plan_end_date
+          # c.date_field :real_end_date, label: 'რეალური დასრულება' do |real|
+          #   real.action network_new_customer_edit_real_date_url(id: application.id), label: 'შეცვლა', icon: '/icons/pencil.png'
+          # end
         end
       end
       # 2. customers
