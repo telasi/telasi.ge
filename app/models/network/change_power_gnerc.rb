@@ -123,7 +123,7 @@ module Network::ChangePowerGnerc
 
     parameters = { letter_number:         self.number,
                    request_status:        request_status,
-                   sms:                   get_message }
+                   sms:                   get_message[0..254] }
     
     if request_status == 2
       file = self.files.select{ |x| x.file.filename[0..2] == Network::ChangePowerApplication::GNERC_DEF_FILE }.first
@@ -209,7 +209,7 @@ module Network::ChangePowerGnerc
                    response_id:        response_id,
                    attach_10:          content,
                    attach_10_filename: file.file.filename,
-                   sms_response:       get_message }
+                   sms_response:       get_message[0..254] }
 
     if self.overdue.any?
       parameters.merge!({ admin_authority_overdue: 1 })
@@ -289,7 +289,7 @@ module Network::ChangePowerGnerc
                    response_id:        response_id,
                    attach_11:          content,
                    attach_11_filename: file.file.filename,
-                   sms_response:       get_message }
+                   sms_response:       get_message[0..254] }
 
     GnercWorker.perform_async("answer", 11, parameters)
   end
@@ -351,7 +351,7 @@ module Network::ChangePowerGnerc
                    response_id:        response_id,
                    attach_12:          content,
                    attach_12_filename: file.file.filename,
-                   sms_response:       get_message }
+                   sms_response:       get_message[0..254] }
 
     if response_id == 1
       raise I18n.t('ტექპირობის ნომერი') if self.tech_condition_cns.blank?
