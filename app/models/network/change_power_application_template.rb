@@ -21,7 +21,7 @@ class Network::ChangePowerApplicationTemplate
 		return true if application.service == Network::ChangePowerApplication::SERVICE_METER_SETUP
 		[Network::ChangePowerApplication::TYPE_SPLIT, 
 		 Network::ChangePowerApplication::TYPE_CHANGE_POWER, 
-		 Network::ChangePowerApplication::TYPE_MICROPOWER].includes?(application.type)
+		 Network::ChangePowerApplication::TYPE_MICROPOWER].include?(application.type)
 	end
 
 	private 
