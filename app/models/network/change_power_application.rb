@@ -268,7 +268,7 @@ class Network::ChangePowerApplication < Network::BaseClass
   def can_send_to_bs?; self.status == STATUS_COMPLETE and (self.amount||0) > 0 end
 
   def send_to_bs!
-    checks_for_gnerc_2
+    checks_for_gnerc_on_confirm
 
     # customer
     customer = self.customer

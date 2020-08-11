@@ -427,17 +427,22 @@ module Network::ChangePowerGnerc
 
   private 
 
-  def checks_for_gnerc_2
+  def checks_for_gnerc_on_confirm
     case self.service
       when Network::ChangePowerApplication::SERVICE_METER_SETUP
-        true
+        check_act_file
       when Network::ChangePowerApplication::SERVICE_CHANGE_POWER 
-        true
+        check_act_file
       when Network::ChangePowerApplication::SERVICE_MICRO_POWER
-        true
+        check_act_file
        when Network::ChangePowerApplication::SERVICE_TECH_CONDITION
+        check_act_file
         check_tech_condition_2
     end
+  end
+
+  def check_act_file
+    raise I18n.t('ატვირთეთ act ფაილი') if self.files.select{ |x| x.file.filename[0..2] == Network::ChangePowerApplication::GNERC_ACT_FILE }.empty?
   end
 
   def check_tech_condition_2
