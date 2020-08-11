@@ -150,7 +150,7 @@ class Network::ChangePowerController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        if Network::ChangePowerApplicationTemplate.implemented_types.include?(@application.type)
+        if Network::ChangePowerApplicationTemplate.template_applies?(@application)
           send_data(Network::ChangePowerApplicationTemplate.new(@application).print, :filename => @application.id.to_s + 'pdf', :type => 'application/pdf', :disposition => 'inline') 
         else
           render 'show'
@@ -225,7 +225,7 @@ class Network::ChangePowerController < ApplicationController
       @application.signed = true
       @application.save
     else
-      if Network::ChangePowerApplicationTemplate.implemented_types.include?(@application.type)
+      if Network::ChangePowerApplicationTemplate.template_applies?(@application)
         binary = Network::ChangePowerApplicationTemplate.new(@application).print
       else
         binary = render_to_string 'show', formats: ['pdf']

@@ -17,8 +17,11 @@ class Network::ChangePowerApplicationTemplate
 		Sys::PdfTemplate.render_to_content(get_cost_template, cost_parameters)
 	end
 
-	def self.implemented_types
-		[Network::ChangePowerApplication::TYPE_SPLIT, Network::ChangePowerApplication::TYPE_CHANGE_POWER, Network::ChangePowerApplication::TYPE_MICROPOWER]
+	def self.template_applies?(application)
+		return true if application.service == Network::ChangePowerApplication::SERVICE_METER_SETUP
+		[Network::ChangePowerApplication::TYPE_SPLIT, 
+		 Network::ChangePowerApplication::TYPE_CHANGE_POWER, 
+		 Network::ChangePowerApplication::TYPE_MICROPOWER].includes?(application.type)
 	end
 
 	private 
@@ -28,19 +31,28 @@ class Network::ChangePowerApplicationTemplate
 	end
 
 	def get_template
-		file = case @application.type 
+		if @application.service == Network::ChangePowerApplication::SERVICE_METER_SETUP
+			file = 'meter_setup.pdf'
+		else 
+			file = case @application.type 
 			     when Network::ChangePowerApplication::TYPE_SPLIT then 'change_power_split.pdf'
 			     when Network::ChangePowerApplication::TYPE_CHANGE_POWER then 'change_power_rise.pdf'
 			     when Network::ChangePowerApplication::TYPE_MICROPOWER then 'change_power_micro.pdf'
+			     when Network::ChangePowerApplication::TYPE_MICROPOWER then 'change_power_micro.pdf'
 				end
+		end
 		File.join(Rails.root, "#{TEMPLATE_DIR}", file)
 	end
 
 	def generate_parameters
-		case @application.type 
-	     when Network::ChangePowerApplication::TYPE_SPLIT then return change_power_split_parameters
-	     when Network::ChangePowerApplication::TYPE_CHANGE_POWER then return change_power_rise_parameters
-	     when Network::ChangePowerApplication::TYPE_MICROPOWER then return change_power_micro_parameters
+		if @application.service == Network::ChangePowerApplication::SERVICE_METER_SETUP
+			return meter_setup_parameters
+		else
+			case @application.type 
+		     when Network::ChangePowerApplication::TYPE_SPLIT then return change_power_split_parameters
+		     when Network::ChangePowerApplication::TYPE_CHANGE_POWER then return change_power_rise_parameters
+		     when Network::ChangePowerApplication::TYPE_MICROPOWER then return change_power_micro_parameters
+			end
 		end
 	end
 
@@ -98,6 +110,11 @@ class Network::ChangePowerApplicationTemplate
     end
 
     def change_power_micro_parameters
+		params = main_parameters
+		return params
+    end
+
+    def meter_setup_parameters
 		params = main_parameters
 		return params
     end
