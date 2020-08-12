@@ -79,6 +79,9 @@ class Network::ChangePowerApplicationTemplate
 			params[:customer_taxid] = @application.customer.taxid
 		end
 
+		params[:customer_type_id_y] = 'Yes' unless @application.customer_type_id == 1
+		params[:customer_type_id_n] = 'Yes' unless @application.customer_type_id == 2
+
 		params[:accnumb] = @application.customer.accnumb.to_ka if @application.customer
 
 		params[:old_low_v] = 'Yes' unless @application.old_voltage != '6/10'
@@ -116,6 +119,7 @@ class Network::ChangePowerApplicationTemplate
 
     def meter_setup_parameters
 		params = main_parameters
+		params[:tech_condition_cns] = @application.tech_condition_cns
 		return params
     end
 
