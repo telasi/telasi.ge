@@ -59,7 +59,7 @@ class Sys::SubscriptionMessage
           url: "https://api:#{Telasi::MAILGUN_KEY}@api.mailgun.net/v2/telasi.ge/messages", 
           method: :post, 
           payload: { from: "Telasi <subscriptions@telasi.ge>",
-                     bcc:   node_messages.map{|x| x.email}.join(', '),
+                     to:   node_messages.map{|x| x.email}.join(', '),
                      subject: m.subject, 
                      html: %Q{<html><body>
                         <h1 class="page-header">
@@ -67,7 +67,7 @@ class Sys::SubscriptionMessage
                         </h1>
                         #{m.body}
                         </body></html>},
-                     # :'recipient-variables' => recipient_variables.to_json
+                     :'recipient-variables' => recipient_variables.to_json
                       },
           verify_ssl: false
         )
