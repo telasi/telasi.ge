@@ -414,24 +414,16 @@ module Network::ChangePowerGnerc
   end
 
   def send_res(file)
+    return unless [9, 12].include?(self.service)
     content = File.read(file.file.file.file)
     content = Base64.encode64(content)
+
     case self.service 
       when 9
         parameters = { letter_number:       self.number,
                    attach_9_2:          content,
                    attach_9_2_filename: file.file.filename,
                    request_status:      3 }
-      when 11
-        parameters = { letter_number:       self.number,
-                   attach_11_2:          content,
-                   attach_11_2_filename: file.file.filename,
-                   request_status:      3 }
-      when 10
-        parameters = { letter_number:       self.number,
-                       attach_10:          content,
-                       attach_10_filename: file.file.filename,
-                       response_id:      3 }
       when 12
         parameters = { letter_number:       self.number,
                    attach_12:          content,
