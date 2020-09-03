@@ -5,6 +5,12 @@ module Network::ChangePowerGnerc
   GNERC_VOLTAGE_380 = '0.380'
   GNERC_VOLTAGE_610 = '6-10'
 
+  GNERC_STATUS_STEP_0 = 'draft'
+  GNERC_STATUS_STEP_1 = 'stage_1_prepared'
+  GNERC_STATUS_STEP_2 = 'stage_1_sent'
+  GNERC_STATUS_STEP_3 = 'stage_2_prepared'
+  GNERC_STATUS_STEP_4 = 'stage_2_sent'
+
   def table_by_service
     case self.service
       when Network::ChangePowerApplication::SERVICE_METER_SETUP
@@ -186,6 +192,7 @@ module Network::ChangePowerGnerc
                    when Network::BaseClass::STATUS_CANCELED      then 1
                    when Network::BaseClass::STATUS_USER_DECLINED then 2
                    when Network::BaseClass::STATUS_CONFIRMED     then 3
+                   when Network::BaseClass::STATUS_COMPLETE      then 3
                    when Network::BaseClass::STATUS_IN_BS         then 3
                  end
 
@@ -414,12 +421,22 @@ module Network::ChangePowerGnerc
         parameters = { letter_number:       self.number,
                    attach_9_2:          content,
                    attach_9_2_filename: file.file.filename,
-                   request_status:      2 }
+                   request_status:      3 }
+      when 11
+        parameters = { letter_number:       self.number,
+                   attach_11_2:          content,
+                   attach_11_2_filename: file.file.filename,
+                   request_status:      3 }
+      when 10
+        parameters = { letter_number:       self.number,
+                       attach_10:          content,
+                       attach_10_filename: file.file.filename,
+                       response_id:      3 }
       when 12
         parameters = { letter_number:       self.number,
                    attach_12:          content,
                    attach_12_filename: file.file.filename,
-                   response_id:      2 }
+                   response_id:      1 }
     end
 
     GnercWorker.perform_async("answer", self.service, parameters)
