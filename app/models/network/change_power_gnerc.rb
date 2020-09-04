@@ -429,7 +429,8 @@ module Network::ChangePowerGnerc
                        attach_12:           content,
                        attach_12_filename:  file.file.filename,
                        response_id:         1,
-                       technical_condition: self.tech_condition_cns || self.number }
+                       technical_condition: self.tech_condition_cns || self.number, 
+                       sms_response:        get_message[0..254] }
     end
 
     GnercWorker.perform_async("answer", self.service, parameters)
