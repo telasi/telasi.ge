@@ -430,7 +430,7 @@ module Network::ChangePowerGnerc
                        attach_12_filename:  file.file.filename,
                        response_id:         1,
                        technical_condition: self.tech_condition_cns || self.number, 
-                       sms_response:        get_message[0..254] }
+                       sms_response:        self.messages.last || ' ' }
     end
 
     GnercWorker.perform_async("answer", self.service, parameters)
@@ -488,7 +488,6 @@ module Network::ChangePowerGnerc
     message = self.messages.where(id: self.sms_response).first.message if self.messages.where(id: self.sms_response).first
     message || ' '
   end
-
 
   # ====================================== TEST ==========================================
 
