@@ -429,8 +429,8 @@ module Network::ChangePowerGnerc
                        attach_12:           content,
                        attach_12_filename:  file.file.filename,
                        response_id:         1,
-                       technical_condition: self.tech_condition_cns || self.number, 
-                       sms_response:        self.messages.last || ' ' }
+                       technical_condition: self.tech_condition_cns.present? ? self.tech_condition_cns : self.number, 
+                       sms_response:        self.messages.last.message || ' ' }
     end
 
     GnercWorker.perform_async("answer", self.service, parameters)
