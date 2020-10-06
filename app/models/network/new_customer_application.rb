@@ -80,6 +80,7 @@ class Network::NewCustomerApplication < Network::BaseClass
   # ამ განცხადებით გათვალიწინებული ყველა სამუშაო
   field :plan_end_date, type: Date
   field :end_date, type: Date
+  field :real_end_date, type: Date
   # cancelation_date არის გაუქმების თარიღი
   field :cancelation_date, type: Date
   # factura fields
@@ -215,7 +216,7 @@ class Network::NewCustomerApplication < Network::BaseClass
   # მეორე ეტაპის ჯარიმა.
   def penalty_second_stage
     if self.status != STATUS_CANCELED and self.send_date and self.start_date
-      if real_days > 2 * days
+      if real_days > 2 * ( days + ( total_overdue_days || 0 ) )
         self.amount / 2
       else 0 end
     else 0 end
@@ -646,6 +647,7 @@ class Network::NewCustomerApplication < Network::BaseClass
         self.send_date  = self.start_date = Date.today
       when STATUS_CONFIRMED then
         raise "ატვირთეთ cadastral ფაილი ან შეიყვანეთ საკადასტრო მისამართი" unless check_cadastral
+        raise "ატვირთეთ NewCustomer ფაილი" unless check_main_file
 
         self.production_date = get_fifth_day
         self.production_enter_date = Date.today
@@ -775,6 +777,11 @@ class Network::NewCustomerApplication < Network::BaseClass
     return true if self.address_code.present?
 
     file = self.files.select{ |x| x.file.filename[0..2] == GNERC_CADAST_FILE }.first
+    return file.present?
+  end
+
+  def check_main_file
+    file = self.files.select{ |x| x.file.filename[0..11] == GNERC_SIGNATURE_FILE }.first
     return file.present?
   end
 
