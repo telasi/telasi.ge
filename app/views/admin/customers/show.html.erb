@@ -94,7 +94,7 @@ end %>
         'მისამართი'  => [customer.address.to_s,@registration.address,nil],
         'საკად.კოდი' => [(lastcust.register_code if lastcust.present?),@registration.address_code,nil],
         'ელ.ფოსტა'   => [customer.email,@registration.user.email,'email'],
-        'მობილური'   => [customer.tel,@registration.user.mobile,'phone'],
+        'მობილური'   => [customer.fax,@registration.user.mobile,'phone'],
       }
     %>
     <%values.each do |k,v|%>

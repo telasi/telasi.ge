@@ -107,12 +107,7 @@ class Customer::Registration
     when 'custname' then customer.custname=self.suggested_name.to_geo
     when 'taxid' then customer.taxid=self.rs_tin
     when 'email' then customer.email=self.user.email
-    when 'phone'
-      if customer.tel.blank?
-        customer.tel=self.user.mobile
-      elsif customer.tel and not customer.tel.include?(self.user.mobile)
-        customer.tel="#{customer.tel}; #{self.user.mobile}"
-      end
+    when 'phone' then customer.fax=self.user.mobile
     end
     customer.save if customer.changed?
   end
