@@ -51,6 +51,7 @@ TelasiGe::Application.routes.draw do
     match '/subscribe', action: 'subscribe', as: 'subscribe', via: ['get', 'post', 'patch']
     match '/subscribe_item', action: 'subscribe_item', as: 'subscribe_item', via: ['get', 'post', 'patch']
     get '/subscribe_complete', action: 'subscribe_complete', as: 'subscribe_complete'
+    get '/subscribe_confirm', action: 'subscribe_confirm', as: 'subscribe_confirm'
     match '/unsubscribe', action: 'unsubscribe', as: 'unsubscribe', via: ['get', 'post', 'patch']
     get '/unsubscribe_complete', action: 'unsubscribe_complete', as: 'unsubscribe_complete'
   end
@@ -183,6 +184,8 @@ TelasiGe::Application.routes.draw do
       # link customer
       match '/link_bs_customer/:id', action: 'link_bs_customer', as: 'link_bs_customer', via: ['get','post']
       delete '/remove_bs_customer/:id', action: 'remove_bs_customer', as: 'remove_bs_customer'
+      # change real date
+      match '/edit_real_date/:id', action: 'edit_real_date', as: 'new_customer_edit_real_date', via: ['get', 'post']
       # change dates
       match '/change_dates/:id', action: 'change_dates', as: 'change_dates', via: ['get', 'post']
       # print
@@ -248,6 +251,8 @@ TelasiGe::Application.routes.draw do
       match '/edit_real_date/:id', action: 'edit_real_date', as: 'change_power_edit_real_date', via: ['get', 'post']
       # change dates
       match '/change_dates/:id', action: 'change_dates', as: 'change_power_change_dates', via: ['get', 'post']
+      # send to gnerc
+      match '/gnerc/:id', action: 'gnerc', as: 'change_power_gnerc', via: ['get', 'post']
     end
     scope '/stages', controller: 'stages' do
       get '/', action: 'index', as: 'stages'

@@ -26,6 +26,25 @@ class SubscriptionController < ApplicationController
     end
   end
 
+  def subscribe_confirm
+    @title = I18n.t('models.sys_subscription.actions.subscribe')
+    if request.get?
+      hash = params[:hash]
+      @subscription = Sys::Subscription.where(email: params[:email]).first
+      if hash != @subscription.generate_hash
+        redirect_to unsubscribe_complete_url
+      end
+    else
+      subs_params = params[:sys_subscription]
+      @subscription = Sys::Subscription.where(email: subs_params[:email]).first
+      @subscription.assign_attributes(params.require(:sys_subscription).permit(:company_news, :procurement_news, :outage_news))
+      @subscription.assign_attributes(locale: I18n.locale, confirmed: true)
+      if @subscription.save
+        redirect_to subscribe_complete_url
+      end
+    end
+  end
+
   def subscribe_item
     @title = I18n.t("models.sys_subscription.actions.#{params[:item]}")
     if request.get?

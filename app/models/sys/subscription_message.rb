@@ -54,7 +54,6 @@ class Sys::SubscriptionMessage
         #     </h1>
         #     #{m.body}
         #     </body></html>},
-        #   :'recipient-variables' => recipient_variables.to_json
         RestClient::Request.execute(
           url: "https://api:#{Telasi::MAILGUN_KEY}@api.mailgun.net/v2/telasi.ge/messages", 
           method: :post, 
@@ -73,6 +72,85 @@ class Sys::SubscriptionMessage
         )
         node_messages.each { |msg| msg.sent=true ; msg.save }
       end
+    end
+  end
+
+  def self.send_confirmation_message
+    BATCH_SIZE = 500
+    count = 0
+    subscribers = Sys::Subscription.where(email: 'temo.chutlashvili*'.mongonize)
+    # subscribers = Sys::Subscription.all
+    emails = []
+    subscribers.each_with_index do |subscriber, index|
+      count = count + 1
+      emails << { email: subscriber.email, id: index }
+      if count == BATCH_SIZE || index == subscribers.size - 1
+        recipient_variables={}
+        emails.each{ |email| recipient_variables[email[:email]]={id:email[:id]} }
+
+        send_confirm_mail(emails, recipient_variabless, subscriber.generate_hash)
+
+        emails = []
+        count = 0
+      end
+    end
+  end
+
+  def send_confirm_mail(emails, recipient_variables, hash)
+    emails.each do |email|
+      RestClient::Request.execute(
+        url: "https://api:#{Telasi::MAILGUN_KEY}@api.mailgun.net/v2/telasi.ge/messages", 
+        method: :post, 
+        payload: { from: "Telasi <subscriptions@telasi.ge>",
+                   to:   email,
+                   subject: 'Subscription comfirmation', 
+                   html: %Q{<html>
+                        <body>
+                            <table cellspacing="0" cellpadding="0" style="height:100%;width:100%; position: absolute; top: 0; bottom: 0; left: 0; right: 0;">
+                                <tr style="height: 45%; background-color: white;">
+                                    <td colspan="3">
+                                        <p style="color: teal; text-align: center;">Header</p>
+                                    </td>
+                                </tr>
+                                <tr style="height: 10%; background-color:white;">
+                                    <td width="33%">
+                                    </td>
+                                    <td width="33%">
+                                        <a href="http://telasi.ge/subscription/subscribe_confirm?email=#{email}&hash=#{hash}"
+                                                           style="-webkit-appearance: button;
+                                                           -moz-appearance: button;
+                                                           appearance: button;
+                                                           text-decoration: none;
+                                                           text-align: center;
+                                                           vertical-align: middle;
+                                                           width: 100%; 
+                                                           padding: 12px 20px;
+                                                           font-size:large; font-weight: bold;
+                                                           border: 4px solid #226fbe;
+                                                           color: #fff;
+                                                           background: #226fbe;
+                                                           -webkit-transition: none;
+                                                           -moz-transition: none;
+                                                           transition: none;
+                                                           border-radius: 15px;">
+                                            Subscribe
+                                    </a>
+                                    </td>
+                                    <td width="33%">
+                                    </td>
+                                </tr>
+                                <tr style="height: 45%; background-color: white;">
+                                    <td colspan="3">
+                                        <p style="color: teal; text-align: center;">Footer</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </body>
+                    </html>},
+                   :'recipient-variables' => recipient_variables.to_json
+                    },
+        verify_ssl: false
+      )
     end
   end
 end
