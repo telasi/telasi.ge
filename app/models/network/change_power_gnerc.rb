@@ -449,6 +449,30 @@ module Network::ChangePowerGnerc
     GnercWorker.perform_async("answer", self.service, parameters)
   end
 
+  def send_res_service(as_service = self.service)
+    return unless [9, 12].include?(self.service)
+    file = self.files.select{ |x| x.file.filename[0..11] == Network::ChangePowerApplication::GNERC_RES_FILE }.first
+    content = File.read(file.file.file.file)
+    content = Base64.encode64(content)
+
+    case self.service 
+      when 9
+        parameters = { letter_number:       self.number,
+                       attach_9_2:          content,
+                       attach_9_2_filename: file.file.filename,
+                       request_status:      3 }
+      when 12
+        parameters = { letter_number:       self.number,
+                       attach_12:           content,
+                       attach_12_filename:  file.file.filename,
+                       response_id:         1,
+                       technical_condition: self.tech_condition_cns.present? ? self.tech_condition_cns : self.number, 
+                       sms_response:        self.messages.last.message || ' ' }
+    end
+
+    GnercWorker.perform_async("answer", self.service, parameters)
+  end
+
   private 
 
   def checks_for_gnerc_on_confirm
