@@ -451,7 +451,7 @@ module Network::ChangePowerGnerc
 
   def send_res_service(as_service = self.service)
     return unless [9, 12].include?(self.service)
-    file = self.files.select{ |x| x.file.filename[0..11] == Network::ChangePowerApplication::GNERC_RES_FILE }.first
+    file = self.files.select{ |x| x.file.filename[0..2] == Network::ChangePowerApplication::GNERC_RES_FILE }.first
     content = File.read(file.file.file.file)
     content = Base64.encode64(content)
 
