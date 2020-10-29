@@ -86,6 +86,19 @@ module Network::ChangePowerGnerc
     end
   end
 
+  def send_stage_2_service(as_service = self.service)
+    case as_service
+      when Network::ChangePowerApplication::SERVICE_METER_SETUP
+        send_meter_setup_2
+      when Network::ChangePowerApplication::SERVICE_CHANGE_POWER 
+        send_change_power_2
+      when Network::ChangePowerApplication::SERVICE_MICRO_POWER
+        send_micro_power_2
+       when Network::ChangePowerApplication::SERVICE_TECH_CONDITION
+        send_tech_condition_2
+    end
+  end
+
   def send_meter_setup_1
     if self.abonent_amount > 1 
       customer_request = 2
