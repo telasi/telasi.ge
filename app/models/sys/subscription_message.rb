@@ -76,7 +76,7 @@ class Sys::SubscriptionMessage
   end
 
   def self.send_confirmation_message
-    BATCH_SIZE = 500
+    batch_size = 500
     count = 0
     subscribers = Sys::Subscription.where(email: 'temo.chutlashvili*'.mongonize)
     # subscribers = Sys::Subscription.all
@@ -84,7 +84,7 @@ class Sys::SubscriptionMessage
     subscribers.each_with_index do |subscriber, index|
       count = count + 1
       emails << { email: subscriber.email, id: index }
-      if count == BATCH_SIZE || index == subscribers.size - 1
+      if count == batch_size || index == subscribers.size - 1
         recipient_variables={}
         emails.each{ |email| recipient_variables[email[:email]]={id:email[:id]} }
 
