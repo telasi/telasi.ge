@@ -470,7 +470,7 @@ module Network::ChangePowerGnerc
                        sms_response:        self.messages.last.message || ' ' }
     end
 
-    GnercWorker.perform_async("answer", self.service, parameters)
+    GnercWorker.perform_async("answer", as_service, parameters)
   end
 
   private 
