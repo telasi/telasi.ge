@@ -450,12 +450,12 @@ module Network::ChangePowerGnerc
   end
 
   def send_res_service(as_service = self.service)
-    return unless [9, 12].include?(self.service)
+    return unless [9, 12].include?(as_service)
     file = self.files.select{ |x| x.file.filename[0..2] == Network::ChangePowerApplication::GNERC_RES_FILE }.first
     content = File.read(file.file.file.file)
     content = Base64.encode64(content)
 
-    case self.service 
+    case as_service 
       when 9
         parameters = { letter_number:       self.number,
                        attach_9_2:          content,
