@@ -374,8 +374,7 @@ module Network::ChangePowerGnerc
                    sms_response:       get_message[0..254] }
 
     if response_id == 1
-      raise I18n.t('ტექპირობის ნომერი') if self.tech_condition_cns.blank?
-      parameters.merge!({ technical_condition: self.tech_condition_cns }) 
+      parameters.merge!({ technical_condition: self.tech_condition_cns || self.number }) 
     end
 
     GnercWorker.perform_async("answer", 12, parameters)
