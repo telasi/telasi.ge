@@ -374,7 +374,7 @@ module Network::ChangePowerGnerc
                    sms_response:       get_message[0..254] }
 
     if response_id == 1
-      parameters.merge!({ technical_condition: self.tech_condition_cns || self.number }) 
+      parameters.merge!({ technical_condition: self.tech_condition_cns.present? ? self.tech_condition_cns : self.number }) 
     end
 
     GnercWorker.perform_async("answer", 12, parameters)
