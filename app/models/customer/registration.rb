@@ -38,6 +38,7 @@ class Customer::Registration
   before_save :on_save
 
   index({custkey: 1})
+  # index({custkey: 1, user: 1, status: 1}, {unique: true, drop_dups: true, name: 'unique_indx_cust'})
 
   def self.status_name(stat)
     case stat

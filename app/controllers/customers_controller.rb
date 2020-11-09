@@ -21,11 +21,15 @@ class CustomersController < ApplicationController
     @title = I18n.t('models.billing_customer.actions.info')
     @customer = Billing::Customer.find(params[:custkey])
     if request.post?
-      @registration = Customer::Registration.new(customer_params)
-      @registration.custkey = @customer.custkey
-      @registration.user = current_user
-      if @registration.save
-        redirect_to customers_url, notice: I18n.t('models.customer_registration.actions.save_complete')
+      if Customer::Registration.where(user: current_user, custkey: @customer.custkey, status: Customer::Registration::STATUS_START).blank?
+        @registration = Customer::Registration.new(customer_params)
+        @registration.custkey = @customer.custkey
+        @registration.user = current_user
+        if @registration.save
+          redirect_to customers_url, notice: I18n.t('models.customer_registration.actions.save_complete')
+        end
+      else 
+        redirect_to customers_url, notice: 'already exists'
       end
     else
       @registration = Customer::Registration.new
