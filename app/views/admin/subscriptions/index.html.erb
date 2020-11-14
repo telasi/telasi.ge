@@ -12,6 +12,14 @@
     <img src="/icons/newspaper.png"/>
     ყველა სიახლე (<%=Site::Node.where(type: 'news').count%>)
   </a>
+  <a href="<%=admin_generate_confirmations_source_url%>" class="btn btn-danger btn-lg">
+    <img src="/icons/newspaper--exclamation.png" />
+    დასტურის სიის გენერაცია
+  </a>
+  <a href="<%=admin_confirmations_url%>" class="btn btn-danger btn-lg">
+    <img src="/icons/newspaper.png"/>
+    დასტურების სია
+  </a>
 </div>
 <div style="margin-top: 16px;">
   <% if @not_sent.empty? %>

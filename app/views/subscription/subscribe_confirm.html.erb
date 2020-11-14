@@ -1,0 +1,53 @@
+<div class="panel panel-success">
+  <div class="panel-heading">
+    <%= @title %>
+  </div>
+  <div class="panel-body">
+    <%= t('models.sys_subscription.actions.subscribe_confirm_full') %>
+  </div>
+</div>
+<!-- <h2 class="page-header">
+  <i class="fa fa-envelope"></i>
+  <%= @title %>
+</h2>
+<div class="row">
+  <div class="col-sm-6">
+    <%= form_for @subscription, url: subscribe_confirm_url do |f| %>
+      <div class="control-group <%= @subscription.errors[:email].present? ? 'has-error' : 'common' %>">
+        <%= f.label :email, t('models.sys_subscription.email') %>
+        <% if @subscription.email.present? %>
+          <%= f.hidden_field :email %>
+          <div class="form-control">
+            <%= @subscription.email %>
+          </div>
+        <% else %>
+          <%= f.email_field :email, autofocus: true, class: ['form-control'] %>
+        <% end %>
+        <div class="text-danger"><%= @subscription.errors[:email].join('; ') %></div>
+      </div>
+      <div style="margin: 16px;">
+        <div class="control-group">
+          <%= f.label :company_news do %>
+            <%= f.check_box :company_news %>
+            <%= t('models.sys_subscription.company_news') %>
+          <% end %>
+        </div>
+        <div class="control-group">
+          <%= f.label :procurement_news do %>
+            <%= f.check_box :procurement_news %>
+            <%= t('models.sys_subscription.procurement_news') %>
+          <% end %>
+        </div>
+        <div class="control-group">
+          <%= f.label :outage_news do %>
+            <%= f.check_box :outage_news %>
+            <%= t('models.sys_subscription.outage_news') %>
+          <% end %>
+        </div>
+      </div>
+      <div>
+        <%= f.submit t('models.sys_subscription.actions.subscribe_short'), class: ['btn', 'btn-primary'] %>
+      </div>
+    <% end %>
+  </div>
+</div> -->

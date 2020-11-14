@@ -28,17 +28,12 @@ class SubscriptionController < ApplicationController
 
   def subscribe_confirm
     @title = I18n.t('models.sys_subscription.actions.subscribe')
-    if request.get?
-      hash = params[:hash]
-      @subscription = Sys::Subscription.where(email: params[:email]).first
-      if hash != @subscription.generate_hash
-        redirect_to unsubscribe_complete_url
-      end
+    hash = params[:hash]
+    @subscription = Sys::Subscription.where(email: params[:email]).first
+    if hash != @subscription.generate_hash
+      redirect_to unsubscribe_complete_url
     else
-      subs_params = params[:sys_subscription]
-      @subscription = Sys::Subscription.where(email: subs_params[:email]).first
-      @subscription.assign_attributes(params.require(:sys_subscription).permit(:company_news, :procurement_news, :outage_news))
-      @subscription.assign_attributes(locale: I18n.locale, confirmed: true)
+      @subscription.assign_attributes(confirmed: true)  
       if @subscription.save
         redirect_to subscribe_complete_url
       end
@@ -71,6 +66,14 @@ class SubscriptionController < ApplicationController
       subscription.destroy if subscription
       redirect_to unsubscribe_complete_url
     end
+  end
+
+  def unsubscribe_confirm
+    @title = I18n.t('models.sys_subscription.actions.unsubscribe')
+    @subscription = Sys::Subscription.where(email: params[:email]).first
+    @subscription.assign_attributes(company_news: false, outage_news: false)
+    @subscription.save
+    redirect_to unsubscribe_complete_url
   end
 
   def subscribe_complete; @title = I18n.t('models.sys_subscription.actions.subscribe_complete') end

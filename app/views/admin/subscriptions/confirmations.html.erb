@@ -1,0 +1,12 @@
+<%= search_form @search do |f|
+  f.text_field 'email', label: 'ელ.ფოსტა'
+  f.combo_field 'sent', collection: { 'კი' => 'true', 'არა' => 'false' }, label: 'გაგზავნილი'
+end %>
+<%= table_for @confirmations, title: @title, collapsible: true, icon: '/icons/newspaper--pencil.png' do |t|
+  t.email_field 'email', label: 'ელ.ფოსტა'
+  t.boolean_field 'sent', tag: 'code', label: 'Sent'
+  t.number_field 'attempts', tag: 'code', label: 'Attempts'
+  t.text_field 'subject', tag: 'code', label: 'Subject', url: ->(x) { admin_show_message_url(id: x.id) }
+  t.text_field 'locale', tag: 'code', label: 'ენა'
+  t.paginate records: t('models.general.records')
+end %>

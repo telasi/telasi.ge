@@ -1,0 +1,105 @@
+<html>
+    <body style="font-family: Arial, Helvetica sans-serif;">
+        <div style="color: black; background-color:white;">
+            <table style="max-width: 640px; margin: 0 auto; width: 100%;">
+                <tr>
+                    <td style="text-align: center;">
+                        <a style="display: block; width: 300px; height: 102px;
+                            background: url(http://www.telasi.ge/sites/default/themes/telasi/images/logo_ru.png) no-repeat ;
+                            text-indent: -5000px; margin: auto;"
+                            href="http://www.telasi.ge">Telasi</a>
+                    </td>
+                </tr>
+            </table>
+            <table style="max-width: 640px; margin: 0 auto; width: 100%;">
+                <tr>
+                    <td style="padding: 20px 20px;">
+                        <p style="text-align: center; font-size: xx-large;">Уважаемый подписчик!</p>
+                        <p style="text-align: center; font-size: large;">
+                            На Ваш email была оформлена подписка на следующие рассылки:
+                            <ul style="font-size: large;">
+                              <% if @sub.company_news %>
+                                <li>
+                                    <%= t('models.sys_subscription.company_news', locale: :ru) %>
+                                </li>
+                              <% end %>
+                              <% if @sub.procurement_news %>
+                                <li>
+                                    <%= t('models.sys_subscription.procurement_news', locale: :ru) %>
+                                </li>
+                              <% end %>
+                              <% if @sub.outage_news %>
+                                <li>
+                                    <%= t('models.sys_subscription.outage_news', locale: :ru) %>
+                                </li>
+                              <% end %>
+                            </ul>
+                        </p>
+                        <p style="text-align: justify; font-size: large;">
+                            Если Вы действительно подписывались на эти рассылки, то, пожалуйста, подтвердите подписку кликнув на ссылку
+                        </p>
+                    </td>
+                </tr>
+            </table>
+            <table style="max-width: 640px; margin: 0 auto; width: 100%;">
+                <tr>
+                    <td style="padding: 20px 20px; align: center;">
+                        <a href="http://localhost:3000/subscription/subscribe_confirm?email=<%= @sub.email %>&hash=<%= @sub.generate_hash %>" style='display: flex; text-decoration: none;'>
+                            <div style="text-decoration: none;
+                                        text-align: center;
+                                        font-size:large; font-weight: bold;
+                                        border: 4px solid #102b4e;
+                                        color: #fff;
+                                        background: #102b4e;
+                                        background-color: #102b4e;
+                                        border-radius: 20px;
+                                        margin: 0 auto;">
+                                <div style="width: 300px; padding: 10px 10px 10px 10px; border-radius: 20px; text-align: center;">
+                                    Подтверждение подписки
+                                </div>
+                            </div>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+            <table style="max-width: 640px; margin: 0 auto; width: 100%;">
+                <tr>
+                    <td style="padding: 20px 20px;">
+                        <p style="text-align: justify; font-size: large;">
+                            В случае, если Вы не желаете получать указанные рассылки, то просто не реагируйте на это письмо и Ваш email-адрес автоматически будет исключен из списка рассылки.
+                        </p>
+                        <p style="text-align: justify; font-size: large;">
+                            Либо, Вы можете прямо сейчас удалить свой email-адрес из списка рассылки, кликнув на ссылку
+                        </p>
+                    </td>
+                </tr>
+            </table>
+            <table style="max-width: 640px; margin: 0 auto; width: 100%;">
+                <tr>
+                    <td style="padding: 20px 20px; align: center;">
+                        <a href="http://localhost:3000/subscription/unsubscribe_confirm?email=<%= @sub.email %>"style='display: flex; text-decoration: none;'>
+                            <div style="text-decoration: none;
+                                        text-align: center;
+                                        font-size:large; font-weight: bold;
+                                        border: 4px solid #102b4e;
+                                        color: #fff;
+                                        background: #102b4e;
+                                        background-color: #102b4e;
+                                        border-radius: 20px;
+                                        margin: 0 auto;">
+                                <div style="width: 300px; padding: 10px 10px 10px 10px; border-radius: 20px; text-align: center;">
+                                    Отмена подписки
+                                </div>
+                            </div>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+            <table style="max-width: 640px; margin: 0 auto; width: 100%;">
+                <tr>
+                    <td>&nbsp;</td>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,31 @@
+<h1 class="page-header"><%=@title%></h1>
+<%= form_for :source, url: admin_generate_confirmations_url do |f| %>
+	<div class="row">
+		<div class="col-sm-3">
+          <div class="form-group">
+            <%= f.radio_button :type, 'db' %>
+            <%= f.label :type_db, 'Base' %>
+          </div>
+        </div>
+  	  <div class="col-sm-6">
+		<div class="row">
+            <div class="col-sm-3">
+              <div class="form-group">
+                <%= f.radio_button :type, 'text_area', checked: true, width: '50%' %>
+                <%= f.label :source_type_text_area, 'List' %>
+              </div>
+            </div>
+        </div>
+		<div class="row">
+            <div class="col-sm-3">
+              <div class="form-group">
+                <%= f.text_area :list %>
+              </div>
+            </div>
+        </div>
+      </div>
+     </div>
+     <div class="row">
+	  <%= f.submit 'Генерация' %>
+	</div>
+<% end %>

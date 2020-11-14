@@ -51,8 +51,9 @@ TelasiGe::Application.routes.draw do
     match '/subscribe', action: 'subscribe', as: 'subscribe', via: ['get', 'post', 'patch']
     match '/subscribe_item', action: 'subscribe_item', as: 'subscribe_item', via: ['get', 'post', 'patch']
     get '/subscribe_complete', action: 'subscribe_complete', as: 'subscribe_complete'
-    get '/subscribe_confirm', action: 'subscribe_confirm', as: 'subscribe_confirm'
+    match '/subscribe_confirm', action: 'subscribe_confirm', as: 'subscribe_confirm', via: ['get', 'post', 'patch']
     match '/unsubscribe', action: 'unsubscribe', as: 'unsubscribe', via: ['get', 'post', 'patch']
+    match '/unsubscribe_confirm', action: 'unsubscribe_confirm', as: 'unsubscribe_confirm', via: ['get', 'post', 'patch']
     get '/unsubscribe_complete', action: 'unsubscribe_complete', as: 'unsubscribe_complete'
   end
 
@@ -135,6 +136,10 @@ TelasiGe::Application.routes.draw do
       get '/headline/:id', action: 'headline', as: 'headline'
       post '/generate_messages', action: 'generate_messages'
       post '/send_messages', action: 'send_messages'
+      get '/generate_confirmations_source', action: 'generate_confirmations_source'
+      post '/generate_confirmations', action: 'generate_confirmations'
+      get '/confirmations', action: 'confirmations'
+      get '/show_message/:id', action: 'show_message', as: 'show_message'
     end
     get '/network' => redirect('/network')
   end

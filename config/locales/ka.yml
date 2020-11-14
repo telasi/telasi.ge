@@ -716,6 +716,7 @@ ka:
         subscribe_short: გამოწერა
         subscribe_complete: გამოწერა დასრულებულია!
         subscribe_complete_full: თქვენ წარმატებით გამოიწერეთ თელასის სიახლეები!
+        subscribe_confirm_full: თქვენ წარმატებით დაადასტურეთ თელასის სიახლეების გამოიწერა!
         unsubscribe_complete: სიახლეების გამოწერა გაუქმებულია.
         unsubscribe_confirm: ნამდვილად გინდათ სიახლეების გამოწერაზე უარის თქმა?
       errors:
