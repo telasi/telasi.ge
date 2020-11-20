@@ -141,6 +141,12 @@ TelasiGe::Application.routes.draw do
       get '/confirmations', action: 'confirmations'
       get '/show_message/:id', action: 'show_message', as: 'show_message'
     end
+    scope '/gnerc', controller: 'gnerc' do
+      match '/', action: 'index', as: 'gnerc', via: ['get', 'post']
+      post '/parameters', action: 'parameters', as: 'parameters'
+      post '/check', action: 'check', as: 'check'
+      post '/realsend', action: 'realsend', as: 'realsend'
+    end
     get '/network' => redirect('/network')
   end
 

@@ -1,0 +1,58 @@
+<%= csrf_meta_tags %>
+<div>
+	<form method="post" action="<%= admin_check_url %>">
+		<%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+		<div class="table-responsive">
+			<table class="table">
+				<tr>
+					<td>სერვისი</td>
+					<td>
+					 <input type="hidden" name="service" value="<%= @param[:service] %>">
+					 <input type="hidden" name="stage" value="<%= @param[:phase] %>">
+		    		 <%= Network::ChangePowerApplication.service_name(@param[:service]) %>
+					</td>
+				</tr>
+				<% @parameters.each do |key, value| %>
+					<% next if key[-8..-1] == 'filename' %>
+					<% if key[0..5] == 'attach' %>
+					<tr>
+						<td><%= key %></td>
+						<td>
+							<label>
+								<input type="hidden" name="@parameters[:file_param]" value="<%= key %>">
+						    	<input type="checkbox" name="postdata['send_file']">
+						    	გადავაგზავნოთ
+							</label>
+						    <select class="form-control" name="@parameters[:file]">
+						    	<% @application.files.each do |file| %>
+						    		<option value="<%= file.id %>"><%= file.file.filename %></option>
+						    	<% end %>
+							</select>
+						</td>
+					</tr>
+					<% elsif key[0..2] == "sms" %>
+						<tr>
+							<td><%= key %></td>
+							<td>
+								<select class="form-control" name="postdata['sms_response']">
+							    	<% @application.messages.each do |message| %>
+							    		<option><%= message.message %></option>
+							    	<% end %>
+								</select>
+							</td>
+						</tr>
+					<% else %>
+					<tr>
+						<td><%= key %></td>
+						<td>
+							<input type="text" class="form-control" name="postdata[<%= key %>]" value="<%= value %>">
+						</td>
+					</tr>
+					<% end %>
+				<% end %>
+			</table>
+		</div>
+
+		<button type="submit" class="btn btn-primary">გაგზავნა</button>
+	</form>
+</div>

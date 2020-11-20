@@ -1,0 +1,7 @@
+<%= forma_for @application, title: @title, icon: '/icons/pencil.png', url: admin_parameters_url do |f|
+  f.text_field :number, required: true, autofocus: true, label: 'number', required: true
+  f.combo_field 'phase', label: 'Phase', collection: { 'I' => 1, 'II' => 2 }, required: true
+  f.combo_field 'service', label: 'Service', collection: change_power_service_collection, required: true
+
+  f.submit 'Next'
+end %>

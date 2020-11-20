@@ -39,6 +39,7 @@ class Network::ChangePowerApplication < Network::BaseClass
   include Network::Factura
   include Network::CalculationUtils
   include Network::ChangePowerGnerc
+  include Network::ChangePowerGnercAdmin
   #include Network::Postpone
 
   belongs_to :user, class_name: 'Sys::User'
@@ -420,7 +421,10 @@ class Network::ChangePowerApplication < Network::BaseClass
         self.production_enter_date = Date.today
 
         send_to_gnerc(1)
-      when STATUS_COMPLETE  then self.end_date   = Date.today
+      when STATUS_COMPLETE  then 
+        raise "ატვირთეთ act ფაილი" unless check_file_uploaded
+        self.end_date   = Date.today
+        send_to_gnerc(2)
       when STATUS_CANCELED  then
         raise "ატვირთეთ def ფაილი" unless check_file_uploaded
         self.cancelation_date = Date.today
