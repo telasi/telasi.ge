@@ -34,7 +34,7 @@
 						<tr>
 							<td><%= key %></td>
 							<td>
-								<select class="form-control" name="postdata['sms_response']">
+								<select class="form-control" name="postdata[<%= key %>]">
 							    	<% @application.messages.each do |message| %>
 							    		<option><%= message.message %></option>
 							    	<% end %>
