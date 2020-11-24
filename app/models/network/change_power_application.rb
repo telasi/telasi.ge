@@ -667,6 +667,20 @@ class Network::ChangePowerApplication < Network::BaseClass
       # end
     else 
       file = self.files.select{ |x| x.file.filename[0..2] == GNERC_ACT_FILE }.first
+      affirmative = 1
+      if file.blank?
+        file = self.files.select{ |x| x.file.filename[0..2] == GNERC_DEF_FILE }.first
+        affirmative = 0
+        if file.blank?
+          file = self.files.select{ |x| x.file.filename[0..4] == GNERC_REFAB_FILE }.first
+          affirmative = 0
+          if file.blank?
+            file = self.files.select{ |x| x.file.filename[0..2] == GNERC_RES_FILE }.first
+            affirmative = 1
+          end
+        end
+      end
+
       if file.present?
         content = File.read(file.file.file.file)
         content = Base64.encode64(content)
@@ -675,26 +689,6 @@ class Network::ChangePowerApplication < Network::BaseClass
                        attach_4_2_filename: file.file.filename,
                        affirmative:         1
                      }
-      else
-        file = self.files.select{ |x| x.file.filename[0..2] == GNERC_DEF_FILE }.first
-        if file.present?
-          content = File.read(file.file.file.file)
-          content = Base64.encode64(content)
-          parameters = { letter_number:       self.number,
-                         attach_4_2:          content,
-                         attach_4_2_filename: file.file.filename,
-                         affirmative:         0
-                       }
-        else
-          file = self.files.select{ |x| x.file.filename[0..4] == GNERC_REFAB_FILE }.first
-          content = File.read(file.file.file.file)
-          content = Base64.encode64(content)
-          parameters = { letter_number:       self.number,
-                         attach_4_2:          content,
-                         attach_4_2_filename: file.file.filename,
-                         affirmative:         0
-                       }
-        end
       end
       GnercWorkerOld.perform_async("answer", 4, parameters)
     end
