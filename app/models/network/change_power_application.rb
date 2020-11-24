@@ -729,9 +729,12 @@ class Network::ChangePowerApplication < Network::BaseClass
       deffile = self.files.select{ |x| x.file.filename[0..2] == GNERC_DEF_FILE }.first
       if deffile.blank?
         reffile = self.files.select{ |x| x.file.filename[0..4] == GNERC_REFAB_FILE }.first
-         if reffile.blank?
-          return false
-         end
+        if reffile.blank?
+          resfile = self.files.select{ |x| x.file.filename[0..2] == GNERC_RES_FILE }.first
+          if resfile.blank?
+            return false
+          end
+        end
       end
     end
     return true
