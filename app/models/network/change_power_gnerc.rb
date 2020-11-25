@@ -146,18 +146,23 @@ module Network::ChangePowerGnerc
     
     if request_status == 2
       file = self.files.select{ |x| x.file.filename[0..2] == Network::ChangePowerApplication::GNERC_DEF_FILE }.first
-      if file.present?
-        content = File.read(file.file.file.file)
-        content = Base64.encode64(content)
-      else
+      if file.blank?
         file = self.files.select{ |x| x.file.filename[0..4] == Network::ChangePowerApplication::GNERC_REFAB_FILE }.first
-        content = File.read(file.file.file.file)
-        content = Base64.encode64(content)
       end
+      content = File.read(file.file.file.file)
+      content = Base64.encode64(content)
 
       parameters.merge!({ attach_9_2:          content,
                           attach_9_2_filename: file.file.filename })
     else
+      file = self.files.select{ |x| x.file.filename[0..2] == Network::ChangePowerApplication::GNERC_RES_FILE }.first
+      if file.present?
+        content = File.read(file.file.file.file)
+        content = Base64.encode64(content)
+        parameters.merge!({ request_status:      3,
+                            attach_9_2:          content,
+                            attach_9_2_filename: file.file.filename })
+      end
       parameters.merge!({ abonent_number:  self.customer.accnumb }) 
     end
 
@@ -352,20 +357,18 @@ module Network::ChangePowerGnerc
                  end
 
     file = self.files.select{ |x| x.file.filename[0..2] == Network::ChangePowerApplication::GNERC_ACT_FILE }.first
-    if file.present?
-      content = File.read(file.file.file.file)
-      content = Base64.encode64(content)
-    else
+    if file.blank?
       file = self.files.select{ |x| x.file.filename[0..2] == Network::ChangePowerApplication::GNERC_DEF_FILE }.first
-      if file.present?
-        content = File.read(file.file.file.file)
-        content = Base64.encode64(content)
-      else
+      if file.blank?
         file = self.files.select{ |x| x.file.filename[0..4] == Network::ChangePowerApplication::GNERC_REFAB_FILE }.first
-        content = File.read(file.file.file.file)
-        content = Base64.encode64(content)
+        if file.blank?
+          file = self.files.select{ |x| x.file.filename[0..2] == Network::ChangePowerApplication::GNERC_RES_FILE }.first
+        end
       end
     end
+
+    content = File.read(file.file.file.file)
+    content = Base64.encode64(content)
 
     parameters = { letter_number:      self.number,
                    response_id:        response_id,
