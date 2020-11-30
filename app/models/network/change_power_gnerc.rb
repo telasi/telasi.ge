@@ -353,6 +353,7 @@ module Network::ChangePowerGnerc
     response_id = case self.status
                    when Network::BaseClass::STATUS_CONFIRMED then 1
                    when Network::BaseClass::STATUS_IN_BS     then 1
+                   when Network::BaseClass::STATUS_COMPLETE  then 1
                    when Network::BaseClass::STATUS_CANCELED  then 2
                  end
 
