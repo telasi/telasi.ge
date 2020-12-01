@@ -525,7 +525,11 @@ module Network::ChangePowerGnerc
   end
 
   def get_message
-    message = self.messages.where(id: self.sms_response).first.message if self.messages.where(id: self.sms_response).first
+    if self.messages.where(id: self.sms_response).first
+      message = self.messages.where(id: self.sms_response).first.message 
+    else 
+      message = self.messages.last.message 
+    end
     message || ' '
   end
 
