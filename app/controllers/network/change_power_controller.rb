@@ -279,9 +279,11 @@ class Network::ChangePowerController < ApplicationController
       end
       old_status = @application.status
       @application.status = params[:status].to_i
+      if @application.status==Network::ChangePowerApplication::STATUS_COMPLETE
+        @application.message_to_gnerc(@message) if old_status != @application.status && @message.present?
+      end
       if @application.save
         if @application.status==Network::ChangePowerApplication::STATUS_COMPLETE
-          @application.message_to_gnerc(@message) if old_status != @application.status && @message.present?
           redirect_to network_change_power_edit_real_date_url(id: @application.id), alert: 'შეიტანეთ რეალური დასრულების თარიღი'
         else
           redirect_to network_change_power_url(id: @application.id), notice: I18n.t('models.network_new_customer_application.actions.status.changed')
@@ -506,6 +508,24 @@ class Network::ChangePowerController < ApplicationController
       end
     end
     @nav
+  end
+
+  def gnerc
+    @application = Network::ChangePowerApplication.find(params[:id])
+    @status = @application.gnerc_status_step
+    if request.post?
+      debugger
+      
+    else
+      @parameters = {}
+      if @status == Network::ChangePowerApplication::GNERC_STATUS_STEP_0
+        step = 1
+      end
+      if @status == Network::ChangePowerApplication::GNERC_STATUS_STEP_2
+        step = 2
+      end
+      @parameters = @application.send_to_gnerc_admin(step)
+    end
   end
 
   private
