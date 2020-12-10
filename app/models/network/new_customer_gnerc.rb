@@ -49,6 +49,7 @@ module Network::NewCustomerGnerc
 
       parameters = { letter_number:         self.number,
                      customer_request:      self.type,
+                     customer_type_id:      self.customer_type_id,
                      applicant:             self.rs_name,
                      identification_number: self.rs_tin,
                      phone_number:          self.mobile,
