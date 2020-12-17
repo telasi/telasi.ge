@@ -141,6 +141,9 @@ class Pay::PaymentsController < ApplicationController
 
       @payment.status = params[:status]
       @payment.check_callback = params[:check]
+      @payment.transactioncode = params[:transactioncode]
+      @payment.paymethod = params[:paymethod]
+      @payment.twoid = params[:TWOID]
 
       # if payment successfully was sent and we recieved COMPLETED status
       if @payment.status == Pay::Payment::STATUS_COMPLETED # && @payment.instatus == Pay::Payment::INSTATUS_OK

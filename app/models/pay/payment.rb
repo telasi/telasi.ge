@@ -40,6 +40,7 @@ class Pay::Payment
   field :resultcode,       type: Integer
   field :resultdesc,       type: String
   field :resultdata,       type: String
+  field :twoid,            type: String
 
   validates :merchant, presence: { message: 'ჩაწერეთ მერჩანტი' }
   validates :ordercode, presence: { message: 'ჩაწერეთ შეკვეთის კოდი' }
