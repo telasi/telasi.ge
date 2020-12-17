@@ -560,7 +560,7 @@ class Network::NewCustomerApplication < Network::BaseClass
 
   def number_required?
     if self.online then not [STATUS_DEFAULT, STATUS_SENT].include?(self.status)
-    else not [STATUS_DEFAULT].include?(self.status) end
+    else not [STATUS_DEFAULT, STATUS_CANCELED].include?(self.status) end
   end
 
   def message_to_gnerc(message)
