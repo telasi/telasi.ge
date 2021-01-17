@@ -140,9 +140,13 @@ module Network::ChangePowerGnerc
                       when Network::BaseClass::STATUS_USER_DECLINED then 2
                     end
 
+    message, sms_date = get_message
+
     parameters = { letter_number:         self.number,
                    request_status:        request_status,
-                   sms:                   get_message[0..254] }
+                   sms:                   message,
+                   sms_date:              sms_date,
+                   actual_date:           Time.now }
     
     if request_status == 2
       file = self.files.select{ |x| x.file.filename[0..2] == Network::ChangePowerApplication::GNERC_DEF_FILE }.first
@@ -230,11 +234,15 @@ module Network::ChangePowerGnerc
       end
     end
 
+    message, sms_date = get_message
+
     parameters = { letter_number:      self.number,
                    response_id:        response_id,
                    attach_10:          content,
                    attach_10_filename: file.file.filename,
-                   sms_response:       get_message[0..254] }
+                   sms_response:       message,
+                   sms_date:           sms_date,
+                   actual_date:        Time.now }
 
     if self.overdue.any?
       parameters.merge!({ admin_authority_overdue: 1 })
@@ -310,11 +318,15 @@ module Network::ChangePowerGnerc
       end
     end
 
+    message, sms_date = get_message
+
     parameters = { letter_number:      self.number,
                    response_id:        response_id,
                    attach_11:          content,
                    attach_11_filename: file.file.filename,
-                   sms_response:       get_message[0..254] }
+                   sms_response:       message,
+                   sms_date:           sms_date,
+                   actual_date:        Time.now }
 
     GnercWorker.perform_async("answer", 11, parameters)
   end
@@ -371,11 +383,15 @@ module Network::ChangePowerGnerc
     content = File.read(file.file.file.file)
     content = Base64.encode64(content)
 
+    message, sms_date = get_message
+
     parameters = { letter_number:      self.number,
                    response_id:        response_id,
                    attach_12:          content,
                    attach_12_filename: file.file.filename,
-                   sms_response:       get_message[0..254] }
+                   sms_response:       message,
+                   sms_date:           sms_date,
+                   actual_date:        Time.now }
 
     if response_id == 1
       parameters.merge!({ technical_condition: self.tech_condition_cns.present? ? self.tech_condition_cns : self.number }) 
@@ -439,14 +455,17 @@ module Network::ChangePowerGnerc
         parameters = { letter_number:       self.number,
                        attach_9_2:          content,
                        attach_9_2_filename: file.file.filename,
-                       request_status:      3 }
+                       request_status:      3,
+                       actual_date:         Time.now }
       when 12
         parameters = { letter_number:       self.number,
                        attach_12:           content,
                        attach_12_filename:  file.file.filename,
                        response_id:         1,
                        technical_condition: self.tech_condition_cns.present? ? self.tech_condition_cns : self.number, 
-                       sms_response:        self.messages.last.message || ' ' }
+                       sms_response:        self.messages.last.message || ' ',
+                       sms_date:            self.messages.last.created_at,
+                       actual_date:         Time.now }
     end
 
     GnercWorker.perform_async("answer", self.service, parameters)
@@ -463,14 +482,17 @@ module Network::ChangePowerGnerc
         parameters = { letter_number:       self.number,
                        attach_9_2:          content,
                        attach_9_2_filename: file.file.filename,
-                       request_status:      3 }
+                       request_status:      3,
+                       actual_date:         Time.now }
       when 12
         parameters = { letter_number:       self.number,
                        attach_12:           content,
                        attach_12_filename:  file.file.filename,
                        response_id:         1,
                        technical_condition: self.tech_condition_cns.present? ? self.tech_condition_cns : self.number, 
-                       sms_response:        self.messages.last.message || ' ' }
+                       sms_response:        self.messages.last.message || ' ',
+                       sms_date:            self.messages.last.created_at,
+                       actual_date:         Time.now }
     end
 
     GnercWorker.perform_async("answer", as_service, parameters)
@@ -526,11 +548,13 @@ module Network::ChangePowerGnerc
 
   def get_message
     if self.messages.where(id: self.sms_response).first
-      message = self.messages.where(id: self.sms_response).first.message 
+      message = self.messages.where(id: self.sms_response).first.message
+      date    = self.messages.where(id: self.sms_response).first.created_at
     else 
-      message = self.messages.last.message 
+      message = self.messages.last.message
+      date    = self.messages.last.created_at
     end
-    message || ' '
+    return [message[0..254] || ' ', date]
   end
 
   # ====================================== TEST ==========================================

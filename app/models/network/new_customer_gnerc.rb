@@ -91,7 +91,8 @@ module Network::NewCustomerGnerc
                   end
 
     parameters = { response_id:         response_id,
-                   letter_number:       self.number }
+                   letter_number:       self.number,
+                   actual_date:         Time.now }
 
     file = self.files.select{ |x| x.file.filename[0..2] == Network::NewCustomerApplication::GNERC_ACT_FILE }.first
     if file.present?
@@ -99,7 +100,8 @@ module Network::NewCustomerGnerc
       content = Base64.encode64(content)
       parameters.merge!({ attach_7:          content,
                           attach_7_filename: file.file.filename,
-                          sms_response:        self.messages.where(id: self.sms_response).first.message })
+                          sms_response:      self.messages.where(id: self.sms_response).first.message,
+                          sms_date:          self.messages.where(id: self.sms_response).first.created_at })
     else
       file = self.files.select{ |x| x.file.filename[0..2] == Network::NewCustomerApplication::GNERC_DEF_FILE }.first
       if file.present?
@@ -172,9 +174,9 @@ module Network::NewCustomerGnerc
                                         when 1..500 then '1-500'
                                         when 501..1000 then '500-1000'
                                         when 1001..1500 then '1000-1500'
-                                        when 1501..2000 then '1501-2000'
-                                        when 2001..3000 then '2001-3000'
-                                        when 3001..5000 then '300105000'
+                                        when 1501..2000 then '1500-2000'
+                                        when 2001..3000 then '2000-3000'
+                                        when 3001..5000 then '3000-5000'
                                       end
           end
 
