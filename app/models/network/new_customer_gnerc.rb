@@ -47,6 +47,8 @@ module Network::NewCustomerGnerc
 
       gnerc_requested_volume = requested_volume
 
+      raise "error" if ( self.type.blank? || self.type == 0 )
+
       parameters = { letter_number:         self.number,
                      customer_request:      self.type,
                      customer_type_id:      self.customer_type_id,
