@@ -43,8 +43,8 @@ class Admin::SubscriptionsController < ApplicationController
   end
 
   def send_messages
-    Sys::SubscriptionMessage.send_subscription_messages
-    redirect_to admin_subscriptions_url, notice: 'წერილები დაგზავნილია.'
+    result = Sys::SubscriptionMessage.send_subscription_messages
+    redirect_to admin_subscriptions_url, notice: result
   end
 
   def generate_confirmations_source

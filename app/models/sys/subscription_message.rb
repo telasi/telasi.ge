@@ -1,5 +1,8 @@
 # -*- encoding : utf-8 -*-
 class Sys::SubscriptionMessage
+  URL_MAILGUN = "https://api:#{Telasi::MAILGUN_KEY}@api.mailgun.net/v2/telasi.ge/messages"
+  URL_PROXY = '92.241.77.44:9999/api/shoot'
+
   include Mongoid::Document
   include Mongoid::Timestamps
 
@@ -34,6 +37,7 @@ class Sys::SubscriptionMessage
   end
 
   def self.send_subscription_messages
+    ret = 'წერილები დაგზავნილია.'
     messages=Sys::SubscriptionMessage.where(sent: false)
     nodes=messages.map{|x| x.nid}.uniq
     nodes.each do |node|
@@ -43,35 +47,30 @@ class Sys::SubscriptionMessage
         m=node_messages.first
         recipient_variables={}
         node_messages.each{ |msg| recipient_variables[msg.email]={id:msg.id.to_s} }
-        # RestClient.post "https://api:#{Telasi::MAILGUN_KEY}"\
-        #   "@api.mailgun.net/v2/telasi.ge/messages",
-        #   from: "Telasi <subscriptions@telasi.ge>",
-        #   to: node_messages.map{|x| x.email}.join(', '),
-        #   subject: m.subject,
-        #   html: %Q{<html><body>
-        #     <h1 class="page-header">
-        #     <a href="http://telasi.ge/#{m.locale}/node/#{m.nid}?ref=email">#{m.subject}</a>
-        #     </h1>
-        #     #{m.body}
-        #     </body></html>},
-        RestClient::Request.execute(
-          url: "https://api:#{Telasi::MAILGUN_KEY}@api.mailgun.net/v2/telasi.ge/messages", 
-          method: :post, 
-          payload: { from: "Telasi <subscriptions@telasi.ge>",
-                     to:   node_messages.map{|x| x.email}.join(', '),
-                     subject: m.subject, 
-                     html: %Q{<html><body>
-                        <h1 class="page-header">
-                        <a href="http://telasi.ge/#{m.locale}/node/#{m.nid}?ref=email">#{m.subject}</a>
-                        </h1>
-                        #{m.body}
-                        </body></html>},
-                     :'recipient-variables' => recipient_variables.to_json
-                      },
-          verify_ssl: false
-        )
-        node_messages.each { |msg| msg.sent=true ; msg.save }
+        begin
+          result = RestClient::Request.execute(
+            url: URL_PROXY, 
+            method: :post, 
+            payload: { from: "Telasi <subscriptions@telasi.ge>",
+                       to:   node_messages.map{|x| x.email}.join(', '),
+                       subject: m.subject, 
+                       html: %Q{<html><body>
+                          <h1 class="page-header">
+                          <a href="http://telasi.ge/#{m.locale}/node/#{m.nid}?ref=email">#{m.subject}</a>
+                          </h1>
+                          #{m.body}
+                          </body></html>},
+                       :'recipient-variables' => recipient_variables.to_json
+                        },
+            # verify_ssl: false
+          )
+          res_json = JSON.parse(result)
+          node_messages.each { |msg| msg.sent=true ; msg.save } if res_json["success"]
+        rescue
+          ret = 'ზოგი წერილი არ გაიგზავანა'
+        end
       end
     end
+    ret
   end
 end
