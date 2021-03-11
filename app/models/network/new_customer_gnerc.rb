@@ -77,7 +77,7 @@ module Network::NewCustomerGnerc
         parameters.merge!({ micro_power_source: self.micro_power_source,
                             voltage_2:          gnerc_micro_voltage, 
                             requested_volume_2: gnerc_requested_volume2,
-                            power_2:            gnerc_micro_power })
+                            power_2:            self.micro_power })
       end
 
       GnercWorker.perform_async("appeal", 7, parameters)
