@@ -221,7 +221,7 @@ class Network::ChangePowerApplication < Network::BaseClass
     case self.status
     when STATUS_DEFAULT   then [ STATUS_SENT, STATUS_CANCELED ]
     when STATUS_SENT      then [ STATUS_CONFIRMED, STATUS_CANCELED ]
-    when STATUS_CONFIRMED then [ STATUS_COMPLETE, STATUS_CANCELED ]
+    when STATUS_CONFIRMED then [ STATUS_COMPLETE, STATUS_CANCELED, STATUS_USER_DECLINED ]
     when STATUS_COMPLETE  then [ STATUS_CANCELED ]
     when STATUS_CANCELED  then [ ]
     else [ ]
@@ -429,6 +429,13 @@ class Network::ChangePowerApplication < Network::BaseClass
         raise "ატვირთეთ def ფაილი" unless check_file_uploaded
         self.cancelation_date = Date.today
         send_to_gnerc(2)
+      when STATUS_USER_DECLINED then
+        raise "ატვირთეთ refab ფაილი" unless check_file_uploaded
+
+        self.cancelation_date = Date.today
+
+        send_to_gnerc(2)
+        revert_bs_operations_on_cancel
       end
     end
   end
