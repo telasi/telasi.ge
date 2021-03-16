@@ -435,7 +435,6 @@ class Network::ChangePowerApplication < Network::BaseClass
         self.cancelation_date = Date.today
 
         send_to_gnerc(2)
-        revert_bs_operations_on_cancel
       end
     end
   end
